@@ -1,0 +1,201 @@
+<?php
+
+
+  if(!defined('BASEPATH'))
+          exit('No direct script access allowed');
+
+  class MY_Controller extends CI_Controller {
+
+
+          public $data = array();
+          private $controller_name = '';
+          private $method_name = '';
+          public $keeplogin_name = 'sourcify_user_keeplog';
+          public $page_name = '';
+          public $curr_lang = 'en';
+          public $login_user_id = '0';
+          public $login_user_type = '0';
+          public $login_user_name = '';
+          public $login_user_image = '';
+          public $ip = '';
+          public $items_per_page = 20;
+          public $ajax = FALSE;
+          public $user_data = array();
+          public $number_of_search_row = 10;
+          public $number_of_row = 3;
+          public $sslkey = 'book_';
+
+
+          function __construct() {
+                  parent::__construct();
+                  $this->ip = getenv('REMOTE_ADDR');
+                  $this->ajax = $this->input->is_ajax_request();
+                  $this->controller_name = $this->data['controller_name'] = $this->router->class;
+                  $this->method_name = $this->data['method_name'] = $this->router->method;
+                  //$this->number_of_row = $this->all_function->get_site_options('per_page_show');
+                  // redirect all to normal
+                  if(preg_match('/$this->sslkey/' , $this->method_name) != 1)
+                  {
+                          $this->all_function->redirectBaseUrl();
+                  }
+                 
+                  $this->_check_user_login();
+                  if(!$this->ajax)
+                  {
+                          //$this->_check_auto_login();
+                  }
+                  $this->_remember_me();
+          }
+
+
+          public function set_lang() {
+                  $this->curr_lang = $this->input->cookie('user_pref_lang');
+          }
+
+
+          public function is_login($redirect = FALSE) {
+                  if($redirect)
+                  {
+                          if($this->login_user_id == '0')
+                          {
+                                  redirect(base_url());
+                          }
+                  }
+                  else
+                  {
+                          if($this->login_user_id != '0')
+                          {
+                                  return true;
+                          }
+                          else
+                          {
+                                  return false;
+                          }
+                  }
+                  return;
+          }
+
+
+          public function not_login($redirect = FALSE) {
+                  if($redirect && $this->is_login())
+                  {
+                          redirect(base_url());
+                  }
+                  else if($this->is_login())
+                  {
+                          return FALSE;
+                  }
+                  else
+                  {
+                          return TRUE;
+                  }
+                  return;
+          }
+
+
+          public function get_seo() {
+                  if($this->page_name != '')
+                  {
+                          $query = $this->db->select('meta_title as `MetaTitle`, meta_desc as `MetaDesc`, meta_keyword as `MetaKeyword`')
+                                  ->from(TBL_SEO_MASTER)
+                                  ->where('page_name' , $this->page_name);                                  
+                          $rs = $query->get()->result_array();
+                  }
+                  else
+                  {
+                          $rs = array();
+                  }
+                  $this->data['meta_tag'] = $rs;
+          }
+
+
+          public function view($template , $data = array() , $return = FALSE) {
+                  $this->get_seo();                  
+                  $data = array_merge($this->data , $data);
+
+                  //Console::log("view :: " . $template . '.php');
+                  if(!$return)
+                  {
+                          $this->load->view($template , $data , FALSE);
+                  }
+                  else
+                  {
+                          return $this->load->view($template , $data , TRUE);
+                  }
+                  return;
+          }
+
+
+          private function _check_user_login() {
+
+                  if($this->session->userdata('mdg_login_user_id') != '0')
+                  {
+                          $login_user_id = $this->session->userdata('mdg_login_user_id');
+                          $login_user_name = $this->session->userdata('mdg_login_user_name');
+                          $login_user_type = $this->session->userdata('mdg_login_user_type');
+                          $login_user_image = $this->session->userdata('mdg_login_user_image');
+                          $login_user_email = $this->session->userdata('mdg_login_user_email');
+
+                          $login_user_prefered_lang = $this->session->userdata('mdg_login_prefered_lang');
+
+                          //$this->curr_lang = $login_user_prefered_lang;
+                          $this->user_data = $this->_get_user_info($login_user_id);
+                  }
+                  else
+                  {
+                          $login_user_id = '0';
+                          $login_user_name = '';
+                          $login_user_type = '';
+                          $login_user_image = '';
+                          $login_user_email = '';
+                          $login_user_prefered_lang = '';
+                  }
+                  $this->login_user_id = $this->data['login_user_id'] = $login_user_id;
+                  $this->user_type = $this->data['login_user_type'] = $login_user_type;
+
+                  $this->login_user_name = $this->data['login_user_name'] = $login_user_name;
+                  $this->login_user_image = $this->data['login_user_image'] = $login_user_image;
+                  $this->login_user_image = $this->data['login_user_email'] = $login_user_email;
+                  $this->login_user_prefered_lang = $this->data['login_user_prefered_lang'] = $login_user_prefered_lang;
+          }
+
+
+          private function _remember_me() {
+                  $autolog = $this->encrypt->decode(get_cookie('remember_me'));
+                  $get_autolog = explode('_mardegalicia_' , $autolog);
+
+                  $this->data['username'] = isset($get_autolog[0]) ? $get_autolog[0] : '';
+                  $this->data['password'] = isset($get_autolog[1]) ? $get_autolog[1] : '';
+                  if(isset($_COOKIE['remember_me']))
+                  {
+                          $this->data['remember_me'] = 1;
+                  }
+          }
+
+
+          private function _get_user_info($user_id) {
+                 /* $this->db->select('pm.*,pd.*')
+                          ->from(TBL_USER_MASTER . ' as pm')
+                          ->join(TBL_USER_DETAILS . ' as pd' , 'pd.user_id = pm.user_id')
+                          ->where('pm.user_id' , $user_id)
+                          ->where('is_active' , 'A');
+
+                  return $this->db->get()->row_array();*/
+          }
+
+
+          public function _genaratePDF($content , $data , $filename = null) {
+                  /*                   * * generate pdf for booking inf. * */
+                  $this->load->helper('dompdf');
+                  $html = '<html xmlns="http://www.w3.org/1999/xhtml"><head>';
+                  $html .= '<link href="' . base_url('assets/style/style.css') . '" rel="stylesheet" type="text/css" />';
+                  $html .= '</head><body>';
+                  $html .= $content;
+                  $html .= '</body></html>';
+                  pdf_create($html , $filename != NULL ? $filename : time());
+          }
+          
+          
+
+
+  }

@@ -1,0 +1,279 @@
+
+.ddsmoothmenu{
+	position:relative;
+	z-index:200;
+	padding-top:0px;
+	padding-left:0px;
+	font-size:15px;
+
+}
+
+.ddsmoothmenu ul{
+	margin:0px;
+	padding:0px;
+	text-align:left;
+	line-height:35px;
+	margin-left:0px;
+}
+
+/*Top level list items*/
+.ddsmoothmenu ul li{
+	display: inline;
+	float:left;
+	position:relative;
+	list-style:none;
+	padding-right:0px;
+	background-position:right top;
+	background-repeat:no-repeat;
+	margin-right:0px;
+	padding:0;
+	
+	
+}
+.ddsmoothmenu ul li + li{/* margin-left:28px;*/
+border-left:1px solid #CCC;
+}
+
+/*Top level menu link items style*/
+.ddsmoothmenu ul li a{
+	color:#7D7D7D;
+	text-decoration: none;
+	line-height:35px;
+	padding:0 15px;
+}
+
+.ddsmoothmenu ul li a:link{
+color: 04384c;
+}
+
+
+.ddsmoothmenu ul li a.selected{ /*CSS class that's dynamically added to the currently active menu items' LI A element*/
+	color:#ffffff !important;
+	background: #028f3d; /* Old browsers */
+background: -moz-linear-gradient(top,  #CD0A16 0%, #A11821 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#CD0A16), color-stop(100%,#A11821)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #CD0A16 0%,#A11821 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CD0A16', endColorstr='#A11821',GradientType=0 ); /* IE6-9 */
+
+	display:block;
+	
+}
+.ddsmoothmenu ul li a.select{ /*CSS class that's dynamically added to the currently active menu items' LI A element*/
+	color:#ffffff !important;
+	background: #028f3d; /* Old browsers */
+background: -moz-linear-gradient(top,  #CD0A16 0%, #A11821 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#CD0A16), color-stop(100%,#A11821)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #CD0A16 0%,#A11821 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CD0A16', endColorstr='#A11821',GradientType=0 ); /* IE6-9 */
+
+	display:block;
+	
+}
+
+.ddsmoothmenu ul li a:hover{
+	color:#ffffff!important;
+	background: #028f3d; /* Old browsers */
+background: -moz-linear-gradient(top,  #CD0A16 0%, #A11821 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#CD0A16), color-stop(100%,#A11821)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #CD0A16 0%,#A11821 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CD0A16', endColorstr='#A11821',GradientType=0 ); /* IE6-9 */
+
+	display:block;
+	
+}
+/*************************************** corner *********************************/
+.ddsmoothmenu ul .left a {
+	padding:0px;
+	
+}
+
+
+.ddsmoothmenu ul .right ul li a{
+	padding-left:8px !important;
+}
+
+	
+/*1st sub level menu******************************************************/
+.ddsmoothmenu ul li ul{
+position: absolute;
+display: none; /*collapse all sub menus to begin with*/
+visibility: hidden;
+background:#FFF;
+width:210px;
+left:50% !important;
+margin-left:-105px !important;
+border:1px solid #CCC;
+ 
+}
+
+/*Sub level menu list items (undo style from Top level List Items)*/
+.ddsmoothmenu ul li ul li{
+	display: list-item;
+	float: none;
+	background:none !important;
+	padding-right:0px !important;
+
+}
+/*All subsequent sub menu levels vertical offset after 1st level sub menu */
+/*.ddsmoothmenu ul li ul li ul{
+top: 0;
+}
+
+
+.ddsmoothmenu ul li ul li a {
+	color:#333333 !important;
+}
+.ddsmoothmenu ul li ul li a:hover {
+	color:#828080 !important;
+	margin-right:0px !important;
+}
+.ddsmoothmenu ul li ul li a.selected {
+	color:#828080 !important;
+}
+*/
+
+.ddsmoothmenu ul li ul li + li{ margin-left:0px;
+	border-top:1px solid #CCC;
+	border-left:0px solid #CCC;
+}
+
+/* Sub level menu links style */
+.ddsmoothmenu ul li ul li a{
+	
+	background:none;
+   
+	color:#7D7D7D;
+	margin: 0;
+	padding:0 10px;
+	text-align:left;
+
+	line-height:35px !important;
+	font-size:14px;
+	display:block;
+	
+}
+.ddsmoothmenu ul li ul li a:hover {
+	color:#ffffff !important;
+	background: #028f3d; /* Old browsers */
+background: -moz-linear-gradient(top,  #CD0A16 0%, #A11821 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#CD0A16), color-stop(100%,#A11821)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #CD0A16 0%,#A11821 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CD0A16', endColorstr='#A11821',GradientType=0 ); /* IE6-9 */
+
+
+line-height:35px !important;	
+
+	
+}
+.ddsmoothmenu ul li ul li a.selected {
+	color:#ffffff;
+	background: #028f3d; /* Old browsers */
+background: -moz-linear-gradient(top,  #CD0A16 0%, #A11821 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#CD0A16), color-stop(100%,#A11821)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #CD0A16 0%,#A11821 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #CD0A16 0%,#A11821 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CD0A16', endColorstr='#A11821',GradientType=0 ); /* IE6-9 */
+
+}
+
+
+.ddsmoothmenu ul li ul li .btm{
+	border:0px !important;
+	margin-bottom:0px;
+}
+
+
+/*.ddsmoothmenu ul li ul li ul li a {
+	background-image:none;
+	background-color:#dedede;
+}
+.ddsmoothmenu ul li ul li ul li a:hover {
+	background-image:none !important;
+	background-color:#f1f1f2;
+}*/
+
+
+/* ######### CSS classes applied to down and right arrow images  ######### */
+
+.downarrowclass{
+position: absolute;
+}
+*html .downarrowclass{
+position: absolute;
+top: 5px;
+right:4px;
+}
+
+.rightarrowclass{
+position: absolute;
+top: 6px;
+right: 5px;
+}
+
+/* ######### CSS for shadow added to sub menus  ######### */
+
+.ddshadow{
+	position: absolute;
+	/*background:url(../images/nav-bg.png) bottom left;*/
+	z-index:200;
+	margin-left:1px;
+}
+
+.toplevelshadow{ /*shadow opacity. Doesn't work in IE*/
+opacity:100;
+}
+
+.bg_none {
+	background: none!important;
+}
+/******************************************************************/
+
+
+/*.home {
+padding-left:6px !important;
+background:none !important;
+}
+.home:hover {
+background:url(../images/nav-arrow.gif) no-repeat 15px 4px !important;
+padding-left:6px !important;
+}
+.contact {
+background:none !important;
+padding-right:0px !important;
+border-right:0px !important;
+}
+.contact:hover {
+background:url(../images/nav-arrow.gif) no-repeat 45px 4px !important;
+padding-right:0px !important;
+border-right:0px !important;
+}
+
+.select a {
+background:url(../images/nav-arrow.gif) no-repeat center 4px;
+color:#3dafd5 !important;
+}
+
+
+.home-select a {
+color:#3dafd5 !important;
+background:url(../images/nav-arrow.gif) no-repeat 15px 4px !important;
+}
+.contact-select a {
+color:#3dafd5 !important;
+background:url(../images/nav-arrow.gif) no-repeat 45px 4px !important;
+}
+*/
