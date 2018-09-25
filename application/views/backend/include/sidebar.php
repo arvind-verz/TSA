@@ -8,22 +8,22 @@
 <ul class="sidebar-menu" data-widget="tree">
 <li class="active">
 <a href="#">
-<i class="fa fa-dashboard"></i> <span>Dashboard</span>
+<i class="fa fa-dashboard"></i> <span><?php echo DASHBOARD ?></span>
 </a>
 </li>
 <li class="">
 <a href="#">
-<i class="fa fa-dashboard"></i> <span>Subject</span>
+<i class="fa fa-dashboard"></i> <span><?php echo SUBJECT ?></span>
 </a>
 </li>
 <li class="">
 <a href="#">
-<i class="fa fa-dashboard"></i> <span>Tutor</span>
+<i class="fa fa-dashboard"></i> <span><?php echo TUTOR ?></span>
 </a>
 </li>
 <li class="">
 <a href="<?php echo site_url('admin/classes'); ?>">
-<i class="fa fa-dashboard"></i> <span>Class</span>
+<i class="fa fa-dashboard"></i> <span><?php echo CLASSES ?></span>
 </a>
 </li>
 </ul>

@@ -11,6 +11,8 @@
 </script>
 <!-- Bootstrap 3.3.7 -->
 <script src="<?php echo base_url('assets/plugins/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/plugins/datatables.net/js/jquery.dataTables.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/plugins/datatables.net-bs/js/dataTables.bootstrap.min.js'); ?>"></script>
 <!-- Morris.js charts -->
 <script src="<?php echo base_url('assets/plugins/raphael/raphael.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/plugins/morris.js/morris.min.js'); ?>"></script>
@@ -38,5 +40,11 @@
 <script src="<?php echo base_url('assets/dist/js/pages/dashboard.js'); ?>"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo base_url('assets/dist/js/demo.js'); ?>"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#datatable").DataTable();
+	});
+</script>
 </body>
 </html>
