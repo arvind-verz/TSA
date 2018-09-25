@@ -8,7 +8,7 @@ class Classes extends CI_Controller
     {
         parent::__construct();
         //is_logged_in();
-        $this->title = ADMINPANEL . ' ' . CLASSES;
+        $this->title = ADMINPANEL . ' | ' . CLASSES;
     }
 
     public function index()
@@ -22,6 +22,7 @@ class Classes extends CI_Controller
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
         $this->load->view('backend/classes/index');
+        $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
 
@@ -37,6 +38,7 @@ class Classes extends CI_Controller
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
         $this->load->view('backend/classes/create');
+        $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
 
@@ -58,6 +60,7 @@ class Classes extends CI_Controller
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
         $this->load->view('backend/classes/edit');
+        $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
 
