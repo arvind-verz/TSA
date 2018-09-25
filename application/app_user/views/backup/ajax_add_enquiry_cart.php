@@ -1,1 +1,0 @@
-<span class="send">This item is successfully added.</span>
