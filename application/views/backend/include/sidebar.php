@@ -22,7 +22,7 @@
 </a>
 </li>
 <li class="">
-<a href="<?php echo site_url(''); ?>">
+<a href="<?php echo site_url('admin/classes'); ?>">
 <i class="fa fa-dashboard"></i> <span>Class</span>
 </a>
 </li>
