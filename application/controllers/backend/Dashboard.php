@@ -19,6 +19,7 @@ class Dashboard extends CI_Controller
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
         $this->load->view('backend/dashboard');
+        $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
 }
