@@ -2,21 +2,25 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <?php print_r($page_title); ?>
+        <?php print_r($page_title);?>
         </h1>
-        <?php print_r($breadcrumbs); ?>
+        <?php print_r($breadcrumbs);?>
     </section>
-
+    <?php $this->load->view('backend/include/messages')?>
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <div class="box-header text-right">
+                    <div class="box-header">
                         <a class="btn btn-info" href="<?php echo site_url('admin/classes/create') ?>">
                             <i aria-hidden="true" class="fa fa-plus-circle">
                             </i> <?php echo CREATE . ' ' . CLASSES ?>
+                        </a>
+                        <a class="pull-right" href="<?php echo site_url('admin/classes/archived') ?>">
+                            <i aria-hidden="true" class="fa fa-archive">
+                            </i> <?php echo ARCHIVED . ' ' . CLASSES ?>
                         </a>
                     </div>
                     <div class="box-body">
@@ -51,57 +55,84 @@
                                         Level
                                     </th>
                                     <th>
-                                        Session ID
-                                    </th>
-                                    <th>
                                         Class Size
                                     </th>
+                                    <?php
+                                    if (current_url() == site_url('admin/classes/archived')) {
+                                    ?>
+                                    <th>
+                                        Archived Date
+                                    </th>
+                                    <?php
+                                    } else {
+                                    ?>
                                     <th>
                                         Action
                                     </th>
+                                    <?php }?>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php
+                                if (count($classes)) {
+                                foreach ($classes as $class) {
+                                ?>
                                 <tr>
                                     <td>
-                                        Maths
+                                        <?php echo isset($class->class_name) ? $class->class_name : '-' ?>
                                     </td>
                                     <td>
-                                        01200
+                                        <?php echo isset($class->class_code) ? $class->class_code : '-' ?>
                                     </td>
                                     <td>
-                                        111
+                                        <?php echo isset($class->tutor_id) ? $class->tutor_id : '-' ?>
                                     </td>
                                     <td>
-                                        Maths
+                                        <?php echo isset($class->subject) ? $class->subject : '-' ?>
                                     </td>
                                     <td>
-                                        4:00pm - 6:00pm
+                                        <?php echo isset($class->class_time) ? $class->class_time : '-' ?>
                                     </td>
                                     <td>
-                                        Monthly
+                                        <?php echo isset($class->class_day) ? $class->class_day : '-' ?>
                                     </td>
                                     <td>
-                                        Monday
+                                        <?php echo isset($class->class_month) ? $class->class_month : '-' ?>
                                     </td>
                                     <td>
-                                        100$
+                                        <?php echo isset($class->monthly_fees) ? $class->monthly_fees : '-' ?>
                                     </td>
                                     <td>
-                                        II
+                                        <?php echo level($class->level); ?>
                                     </td>
                                     <td>
-                                        A
+                                        <?php echo isset($class->class_size) ? '-/' . $class->class_size : '-' ?>
                                     </td>
+                                    <?php
+                                    if (current_url() == site_url('admin/classes/archived')) {
+                                    ?>
                                     <td>
-                                        8/10
+                                        <?php echo isset($class->archive_at) ? date('d-m-Y H:i A', strtotime($class->archive_at)) : '-' ?>
                                     </td>
+                                    <?php
+                                    } else {
+                                    ?>
                                     <td>
-                                        Action
+                                        <a href="<?php echo site_url('admin/classes/edit/' . $class->class_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                                        <a href="<?php echo site_url('admin/classes/delete/' . $class->class_id) ?>" onclick="return confirm('Are you sure you want to archive?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
                                     </td>
+                                    <?php }?>
                                 </tr>
+                                <?php
+                                }} else {
+                                ?>
+                                <tr>
+                                    <td colspan="11" class="text-center">No data found.</td>
+                                </tr>
+                                <?php
+                                }
+                                ?>
                             </tbody>
-
                         </table>
                     </div>
                 </div>

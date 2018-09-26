@@ -2,29 +2,32 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <?php print_r($page_title); ?>
+        <?php print_r($page_title);?>
         </h1>
-        <?php print_r($breadcrumbs); ?>
+        <?php print_r($breadcrumbs);?>
     </section>
 
+    <?php $this->load->view('backend/include/messages') ?>
+    
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
+                    <?php echo form_open('admin/classes/store'); ?>
                     <div class="box-body">
                         <div class="form-group">
                             <label for=""><?php echo CLASSES ?> Name</label>
-                            <input type="text" name="class_name" class="form-control" value="" pattern="" title="">
+                            <input type="text" name="class_name" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for=""><?php echo TUTOR ?> ID</label>
-                            <input type="text" name="tutor" class="form-control" value="" pattern="" title="">
+                            <input type="text" name="tutor_id" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Level</label>
-                            <select name="level" class="form-control">
+                            <select name="level" class="form-control select2">
                                 <option value="">-- Select One --</option>
                                 <option value="0">S1</option>
                                 <option value="1">S2</option>
@@ -36,26 +39,26 @@
                         </div>
                         <div class="form-group">
                             <label for="">Subject</label>
-                            <select name="level" class="form-control">
+                            <select name="subject" class="form-control select2">
                                 <option value="">-- Select One --</option>
                                 <option value="Maths">Maths</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for=""><?php echo CLASSES ?> Code</label>
-                            <input type="text" name="class_code" class="form-control" value="" pattern="" title="">
+                            <input type="text" name="class_code" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Frequency <span class="text-muted">(per month)</span></label>
-                            <input type="text" name="frequency" class="form-control" value="" pattern="" title="">
+                            <input type="text" name="frequency" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Time</label>
-                            <input type="text" name="class_time" class="form-control" value="" pattern="" title="">
+                            <input type="text" name="class_time" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Day</label>
-                            <select name="class_day" class="form-control">
+                            <select name="class_day" class="form-control select2">
                                 <option value="">-- Select One --</option>
                                 <option value="Monday">Monday</option>
                                 <option value="Tuesday">Tuesday</option>
@@ -68,7 +71,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Month</label>
-                            <select name="class_day" class="form-control">
+                            <select name="class_month" class="form-control select2">
                                 <option value="">-- Select One --</option>
                                 <option value="January">January</option>
                                 <option value="February">February</option>
@@ -86,15 +89,15 @@
                         </div>
                         <div class="form-group">
                             <label for="">Monthly Fees</label>
-                            <input type="text" name="monthly_fees" class="form-control" value="" pattern="" title="">
+                            <input type="text" name="monthly_fees" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Deposit Fees</label>
-                            <input type="text" name="deposit_fees" class="form-control" value="" pattern="" title="">
+                            <input type="text" name="deposit_fees" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for=""><?php echo CLASSES ?> Size</label>
-                            <input type="text" name="class_size" class="form-control" value="" pattern="" title="">
+                            <input type="text" name="class_size" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Remark</label>
@@ -102,9 +105,10 @@
                         </div>
                     </div>
                     <div class="box-footer">
-                        <a href="<?php echo site_url('admin/classes'); ?>" class="btn btn-default">Cancel</a>
-                        <button type="submit" class="btn btn-info pull-right">Submit</button>
+                        <a href="<?php echo site_url('admin/classes'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
+                        <button type="submit" class="btn btn-info pull-right"><?php echo SUBMIT ?></button>
                     </div>
+                    <?php echo form_close(); ?>
                 </div>
             </div>
         </div>
