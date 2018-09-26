@@ -9,6 +9,7 @@ define('DASHBOARD', 'Dashboard');
 define('SUBJECT', 'Subject');
 define('TUTOR', 'Tutor');
 define('CLASSES', 'Class');
+define('ATTENDANCE', 'Attendance');
 
 /* CRUD */
 define('CREATE', 'Create');
