@@ -26,6 +26,11 @@
 <i class="fa fa-dashboard"></i> <span><?php echo CLASSES ?></span>
 </a>
 </li>
+<li class="">
+<a href="<?php echo site_url('admin/attendance'); ?>">
+<i class="fa fa-dashboard"></i> <span><?php echo ATTENDANCE ?></span>
+</a>
+</li>
 </ul>
 </section>
 <!-- /.sidebar -->

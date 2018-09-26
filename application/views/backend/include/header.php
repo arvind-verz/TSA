@@ -16,7 +16,7 @@
         <link href="<?php echo base_url('assets/plugins/Ionicons/css/ionicons.min.css'); ?>" rel="stylesheet">
         <link rel="stylesheet" href="<?php echo base_url('assets/plugins/select2/dist/css/select2.min.css'); ?>">
         <!-- Theme style -->
-        <link href="<?php echo base_url('assets/dist/css/AdminLTE.min.css'); ?>" rel="stylesheet">
+        <link href="<?php echo base_url('assets/dist/css/AdminLTE.css'); ?>" rel="stylesheet">
         <!-- AdminLTE Skins. Choose a skin from the css/skins
         folder instead of downloading all of them to reduce the load. -->
         <link href="<?php echo base_url('assets/dist/css/skins/_all-skins.min.css'); ?>" rel="stylesheet">
@@ -39,6 +39,11 @@
         <![endif]-->
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
+
+        <script src="<?php echo base_url('assets/plugins/jquery/dist/jquery.min.js'); ?>"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="<?php echo base_url('assets/plugins/jquery-ui/jquery-ui.min.js'); ?>"></script>
+        <script src="<?php echo base_url('assets/plugins/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
         <div class="wrapper">

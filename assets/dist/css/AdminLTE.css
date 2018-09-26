@@ -5263,3 +5263,15 @@ table.text-center th {
 .px-5 {
   padding-left: 3rem !important;
 }
+
+.w-50 {
+  width: 50px;
+}
+
+.d-inline {
+  display: inline-block;
+}
+
+.border-0 {
+  border: initial;
+}
