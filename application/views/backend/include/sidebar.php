@@ -7,12 +7,12 @@
 <!-- sidebar menu: : style can be found in sidebar.less -->
 <ul class="sidebar-menu" data-widget="tree">
 <li class="active">
-<a href="#">
+<a href="<?php echo site_url('admin/dashboard'); ?>">
 <i class="fa fa-dashboard"></i> <span><?php echo DASHBOARD ?></span>
 </a>
 </li>
 <li class="">
-<a href="#">
+<a href="<?php echo site_url('admin/subject'); ?>">
 <i class="fa fa-dashboard"></i> <span><?php echo SUBJECT ?></span>
 </a>
 </li>

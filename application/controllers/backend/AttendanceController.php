@@ -14,6 +14,7 @@ class AttendanceController extends CI_Controller
 
     public function index()
     {
+        //print_r(get_weekdays_of_month('September', 'Sunday'));
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
         $data['breadcrumbs'] = $this->breadcrumbs->show();

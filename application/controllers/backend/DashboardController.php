@@ -7,14 +7,16 @@ class DashboardController extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+
+        $this->title = ADMINPANEL . ' | ' . DASHBOARD;
     }
 
     public function index()
     {
-        $this->breadcrumbs->push('Dashboard', 'admin/dashboard');
+        $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
-        $data['title'] = "Admin Panel | Dashboard";
-        $data['page_title'] = "Dashboard";
+        $data['title'] = $this->title;
+        $data['page_title'] = DASHBOARD;
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');

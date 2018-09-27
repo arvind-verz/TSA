@@ -28,16 +28,16 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Class Name
+                                        <?php echo CLASSES ?> Name
                                     </th>
                                     <th>
-                                        Class Code
+                                        <?php echo CLASSES ?> Code
                                     </th>
                                     <th>
-                                        Tutor ID
+                                        <?php echo TUTOR ?> ID
                                     </th>
                                     <th>
-                                        Subject
+                                        <?php echo SUBJECT ?>
                                     </th>
                                     <th>
                                         Time
@@ -61,13 +61,13 @@
                                     if (current_url() == site_url('admin/classes/archived')) {
                                     ?>
                                     <th>
-                                        Archived Date
+                                        <?php echo ARCHIVED ?> Date
                                     </th>
                                     <?php
                                     } else {
                                     ?>
                                     <th>
-                                        Action
+                                        <?php echo ACTION ?>
                                     </th>
                                     <?php }?>
                                 </tr>
@@ -88,7 +88,7 @@
                                         <?php echo isset($class->tutor_id) ? $class->tutor_id : '-' ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($class->subject) ? $class->subject : '-' ?>
+                                        <?php echo isset($class->subject) ? get_subject_classes($class->subject) : '-' ?>
                                     </td>
                                     <td>
                                         <?php echo isset($class->class_time) ? $class->class_time : '-' ?>
@@ -103,7 +103,7 @@
                                         <?php echo isset($class->monthly_fees) ? $class->monthly_fees : '-' ?>
                                     </td>
                                     <td>
-                                        <?php echo level($class->level); ?>
+                                        <?php echo isset($class->level) ? level($class->level) : '-'; ?>
                                     </td>
                                     <td>
                                         <?php echo isset($class->class_size) ? '-/' . $class->class_size : '-' ?>
@@ -124,13 +124,7 @@
                                     <?php }?>
                                 </tr>
                                 <?php
-                                }} else {
-                                ?>
-                                <tr>
-                                    <td colspan="11" class="text-center">No data found.</td>
-                                </tr>
-                                <?php
-                                }
+                                }}
                                 ?>
                             </tbody>
                         </table>
