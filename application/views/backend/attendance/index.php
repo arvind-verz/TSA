@@ -24,10 +24,10 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Student ID
+                                        <?php echo STUDENT ?> ID
                                     </th>
                                     <th>
-                                        Student Name
+                                        <?php echo STUDENT ?> Name
                                     </th>
                                 </tr>
                             </thead>

@@ -39,7 +39,14 @@
                             <label for="">Subject</label>
                             <select name="subject" class="form-control select2">
                                 <option value="">-- Select One --</option>
-                                <option value="Maths" <?php if($classes->subject=='Maths') {echo 'selected';} ?>>Maths</option>
+                                <?php
+                                if(count($subjects)) {
+                                foreach($subjects as $subject) {
+                                ?>
+                                <option value="<?php echo $subject->id; ?>" <?php if($classes->subject==$subject->id) {echo 'selected';} ?>><?php echo $subject->subject_name; ?></option>
+                                <?php
+                                }}
+                                ?>
                             </select>
                         </div>
                         <div class="form-group">

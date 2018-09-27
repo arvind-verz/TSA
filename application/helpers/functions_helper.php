@@ -29,6 +29,17 @@ function level($value = null)
         return "-";
     }
 }
+
+function get_archived($module = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $query = $ci->db->get_where($module, ['is_archive' => 1]);
+    if($query) {
+        return $query->result();
+    }
+}
+
 function get_classes($id = null)
 {
     $ci = &get_instance();
@@ -38,17 +49,21 @@ function get_classes($id = null)
     } else {
         $query = $ci->db->get_where(CLASSES, ['is_archive' => 0]);
     }
-    return $query->result();
+    if($query) {
+        return $query->result();
+    }
 }
-function get_archived_classes()
+
+function get_attendance_sheet($class_code = null)
 {
     $ci = &get_instance();
     $ci->load->database();
-    $query = $ci->db->get_where(CLASSES, ['is_archive' => 1]);
-    return $query->result();
-}
-function get_attendance_sheet($class_code = null)
-{
+    $ci->db->select('*');
+    $ci->db->from('student');
+    $ci->db->join('class', 'student.class_id = class.id');
+    $ci->db->where(['class.class_code' => $class_code]);
+    $query = $ci->db->get();
+    $query = $query->result();
     ?>
 <tr>
 	<td></td>
@@ -62,9 +77,12 @@ function get_attendance_sheet($class_code = null)
 	</td>
 	<td></td>
 </tr>
+<?php
+foreach($query as $result) {
+?>
 <tr>
-	<td>121</td>
-	<td>121</td>
+	<td><?php echo $result->student_id; ?></td>
+	<td><?php echo $result->name; ?></td>
 	<td>
 		<input type="text" name="attendance_value[]" class="form-control text-center w-50 d-inline" value="0" placeholder="L">
 		<input type="text" name="attendance_value[]" class="form-control text-center w-50 d-inline" value="0" placeholder="M">
@@ -75,4 +93,44 @@ function get_attendance_sheet($class_code = null)
 	<td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
 </tr>
 <?php
+}
+}
+
+function get_weekdays_of_month($month = null, $day = null) {
+    $counter_list = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
+    $storage = [];
+    $match1 = date('M', strtotime('now'));
+    for($i=0;$i<count($counter_list);$i++) {
+        $dates = date('d-m-Y', strtotime($counter_list[$i] . ' ' . $day . ' of ' . $month));
+        $match2 = date('M', strtotime($dates));
+        if($match1==$match2) {
+            $storage[] = $dates;
+        }
+    }
+    return $storage;
+}
+
+function get_subject($id = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    if ($id) {
+        $query = $ci->db->get_where(SUBJECT, ['is_archive' => 0, 'subject_id' => $id]);
+    } else {
+        $query = $ci->db->get_where(SUBJECT, ['is_archive' => 0]);
+    }
+    if($query) {
+        return $query->result();
+    }
+}
+
+function get_subject_classes($id = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $query = $ci->db->get_where(SUBJECT, ['id' => $id]);
+    $result = $query->row();
+    if($result) {
+        return $result->subject_name;
+    }
 }

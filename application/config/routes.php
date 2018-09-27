@@ -6,7 +6,16 @@ $route['default_controller'] = 'welcome';
 
 
 /* BACKEND */
-$route['admin/dashboard'] = 'backend/dashboard/index';
+$route['admin/dashboard'] = 'backend/dashboardcontroller/index';
+
+/* SUBJECT */
+$route['admin/subject'] = 'backend/subjectcontroller/index';
+$route['admin/subject/archived'] = 'backend/subjectcontroller/archived';
+$route['admin/subject/create'] = 'backend/subjectcontroller/create';
+$route['admin/subject/store'] = 'backend/subjectcontroller/store';
+$route['admin/subject/edit/(:any)'] = 'backend/subjectcontroller/edit/$1';
+$route['admin/subject/update/(:any)'] = 'backend/subjectcontroller/update/$1';
+$route['admin/subject/delete/(:any)'] = 'backend/subjectcontroller/delete/$1';
 
 /* CLASS */
 $route['admin/classes'] = 'backend/classcontroller/index';
