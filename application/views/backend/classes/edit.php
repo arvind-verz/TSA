@@ -37,13 +37,14 @@
                         </div>
                         <div class="form-group">
                             <label for="">Subject</label>
-                            <select name="subject" class="form-control select2">
+                            <select name="subject[]" class="form-control select2" multiple="multiple">
                                 <option value="">-- Select One --</option>
                                 <?php
                                 if(count($subjects)) {
                                 foreach($subjects as $subject) {
+                                    $subject_id = json_decode($classes->subject);
                                 ?>
-                                <option value="<?php echo $subject->id; ?>" <?php if($classes->subject==$subject->id) {echo 'selected';} ?>><?php echo $subject->subject_name; ?></option>
+                                <option value="<?php echo $subject->id; ?>" <?php if(in_array($subject->id, $subject_id)) {echo 'selected';} ?>><?php echo $subject->subject_name; ?></option>
                                 <?php
                                 }}
                                 ?>

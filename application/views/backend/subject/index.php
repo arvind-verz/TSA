@@ -87,6 +87,9 @@
                                     <td>
                                         <?php echo isset($subject->archive_at) ? date('Y-m-d H:i A', strtotime($subject->archive_at)) : '-' ?>
                                     </td>
+                                    <td>
+                                        <a href="<?php echo site_url('admin/subject/moveto_active_list/' . $subject->subject_id) ?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
+                                    </td>
                                     <?php
                                     }
                                     ?>

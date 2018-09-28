@@ -93,4 +93,9 @@ class SubjectController extends CI_Controller
     {
         $this->subject->delete($id, $_POST);
     }
+
+    public function moveto_active_list($id)
+    {
+        $this->subject->moveto_active_list($id, $_POST);
+    }
 }

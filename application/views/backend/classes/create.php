@@ -39,7 +39,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Subject</label>
-                            <select name="subject" class="form-control select2">
+                            <select name="subject[]" class="form-control select2" multiple="multiple">
                                 <option value="">-- Select One --</option>
                                 <?php
                                 if(count($subjects)) {

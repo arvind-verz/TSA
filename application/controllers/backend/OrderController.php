@@ -1,78 +1,55 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class AttendanceController extends CI_Controller
+class OrderController extends CI_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
         //is_logged_in();
-        $this->load->model('backend/attendance', 'attendance');
-        $this->title = ADMINPANEL . ' | ' . ATTENDANCE;
+        $this->load->model('backend/order', 'order');
+        $this->title = ADMINPANEL . ' | ' . ORDER;
     }
 
     public function index()
     {
-        //print_r(get_weekdays_of_month('September', 'Sunday'));
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
+        $this->breadcrumbs->push(ORDER, 'admin/order');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
-        $data['page_title']  = ATTENDANCE;
+        $data['page_title']  = ORDER;
+        $data['orders']    = get_order();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/attendance/index');
+        $this->load->view('backend/order/index');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
-    }
-
-    public function archived()
-    {
-        
     }
 
     public function create()
     {
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
-        $this->breadcrumbs->push(CREATE, 'admin/attendance/create');
+        $this->breadcrumbs->push(ORDER, 'admin/order');
+        $this->breadcrumbs->push(CREATE, 'admin/order/create');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
-        $data['page_title']  = ATTENDANCE . " <small> " . CREATE . " </small>";
+        $data['page_title']  = ORDER . " <small> " . CREATE . " </small>";
+        $data['subjects']    = get_subject();
+        $data['students']    = get_student();
         $data['classes']     = get_classes();
+        $data['books']       = get_book();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/attendance/create');
+        $this->load->view('backend/order/create');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
 
-    public function get_attendance_sheet()
-    {
-        $class_code = $_GET['class_code'];
-        print_r(get_attendance_sheet($class_code));
-    }
-
     public function store()
     {
-        $this->classes->store($_POST);
-    }
-
-    public function edit($id)
-    {
-
-    }
-
-    public function update($id)
-    {
-        
-    }
-
-    public function delete($id)
-    {
-       
+        $this->order->store($_POST);
     }
 }

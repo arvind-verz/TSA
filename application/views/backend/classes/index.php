@@ -64,12 +64,11 @@
                                         <?php echo ARCHIVED ?> Date
                                     </th>
                                     <?php
-                                    } else {
+                                    }
                                     ?>
                                     <th>
                                         <?php echo ACTION ?>
                                     </th>
-                                    <?php }?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -113,6 +112,9 @@
                                     ?>
                                     <td>
                                         <?php echo isset($class->archive_at) ? date('d-m-Y H:i A', strtotime($class->archive_at)) : '-' ?>
+                                    </td>
+                                    <td>
+                                        <a href="<?php echo site_url('admin/classes/moveto_active_list/' . $class->class_id) ?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
                                     </td>
                                     <?php
                                     } else {

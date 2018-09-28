@@ -96,4 +96,9 @@ class ClassController extends CI_Controller
     {
         $this->classes->delete($id, $_POST);
     }
+
+    public function moveto_active_list($id)
+    {
+        $this->classes->moveto_active_list($id, $_POST);
+    }
 }

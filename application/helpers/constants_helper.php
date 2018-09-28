@@ -11,6 +11,9 @@ define('TUTOR', 'Tutor');
 define('CLASSES', 'Class');
 define('ATTENDANCE', 'Attendance');
 define('STUDENT', 'Student');
+define('ORDER', 'Order');
+define('BOOK', 'Book');
+define('MATERIAL', 'Material');
 
 /* CRUD */
 define('CREATE', 'Create');
@@ -31,5 +34,6 @@ define('ACTION', 'Action');
 define('MSG_CREATED', ' has been created successfully.');
 define('MSG_UPDATED', ' has been updated successfully.');
 define('MSG_DELETED', ' has been deleted successfully.');
-define('MSG_ARCHIVED', ' has been archived successfully.');
-define('MSG_ERROR', ' Error occured while storing data.');
+define('MSG_ARCHIVED', ' has been moved to archived successfully.');
+define('MSG_ERROR', ' Error occured while manipulating data.');
+define('MSG_MOVED', ' has been moved to active list successfully.');
