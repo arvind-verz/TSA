@@ -50,7 +50,7 @@ class Subject extends CI_Model
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
-            return redirect('admin/subject/update');
+            return redirect('admin/subject/update' . $id);
         } else {
             $this->session->set_flashdata('success', SUBJECT . ' ' . MSG_UPDATED);
             return redirect('admin/subject');
@@ -66,9 +66,25 @@ class Subject extends CI_Model
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
-            return redirect('admin/subject/update');
+            return redirect('admin/subject');
         } else {
             $this->session->set_flashdata('success', SUBJECT . ' ' . MSG_ARCHIVED);
+            return redirect('admin/subject');
+        }
+    }
+
+    public function moveto_active_list($id)
+    {
+        $this->db->trans_start();
+        $this->db->where('subject_id', $id);
+        $this->db->update(SUBJECT, ['is_archive' => 0, 'updated_at' => $this->date]);
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === false) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return redirect('admin/subject/archived');
+        } else {
+            $this->session->set_flashdata('success', SUBJECT . ' ' . MSG_MOVED);
             return redirect('admin/subject');
         }
     }

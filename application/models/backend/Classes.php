@@ -18,7 +18,7 @@ class Classes extends CI_Model
             'class_name'   => !empty($_POST['class_name']) ? $_POST['class_name'] : null,
             'tutor_id'     => !empty($_POST['tutor_id']) ? $_POST['tutor_id'] : null,
             'level'        => !empty($_POST['level']) ? $_POST['level'] : null,
-            'subject'      => !empty($_POST['subject']) ? $_POST['subject'] : null,
+            'subject'      => !empty($_POST['subject']) ? json_encode($_POST['subject']) : null,
             'class_code'   => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
             'frequency'    => !empty($_POST['frequency']) ? $_POST['frequency'] : null,
             'class_time'   => !empty($_POST['class_time']) ? $_POST['class_time'] : null,
@@ -52,7 +52,7 @@ class Classes extends CI_Model
             'class_name'   => !empty($_POST['class_name']) ? $_POST['class_name'] : null,
             'tutor_id'     => !empty($_POST['tutor_id']) ? $_POST['tutor_id'] : null,
             'level'        => !empty($_POST['level']) ? $_POST['level'] : null,
-            'subject'      => !empty($_POST['subject']) ? $_POST['subject'] : null,
+            'subject'      => !empty($_POST['subject']) ? json_encode($_POST['subject']) : null,
             'class_code'   => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
             'frequency'    => !empty($_POST['frequency']) ? $_POST['frequency'] : null,
             'class_time'   => !empty($_POST['class_time']) ? $_POST['class_time'] : null,
@@ -72,7 +72,7 @@ class Classes extends CI_Model
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
-            return redirect('admin/classes/update');
+            return redirect('admin/classes/update' . $id);
         } else {
             $this->session->set_flashdata('success', CLASSES . ' ' . MSG_UPDATED);
             return redirect('admin/classes');
@@ -88,9 +88,25 @@ class Classes extends CI_Model
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
-            return redirect('admin/classes/update');
+            return redirect('admin/classes');
         } else {
             $this->session->set_flashdata('success', CLASSES . ' ' . MSG_ARCHIVED);
+            return redirect('admin/classes');
+        }
+    }
+
+    public function moveto_active_list($id)
+    {
+        $this->db->trans_start();
+        $this->db->where('class_id', $id);
+        $this->db->update(CLASSES, ['is_archive' => 0, 'updated_at' => $this->date]);
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === false) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return redirect('admin/classes/archived');
+        } else {
+            $this->session->set_flashdata('success', CLASSES . ' ' . MSG_MOVED);
             return redirect('admin/classes');
         }
     }

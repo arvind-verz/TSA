@@ -1,37 +1,43 @@
 <aside class="main-sidebar">
-<!-- sidebar: style can be found in sidebar.less -->
-<section class="sidebar">
-<!-- Sidebar user panel -->
-<div class="user-panel">
-<!-- /.search form -->
-<!-- sidebar menu: : style can be found in sidebar.less -->
-<ul class="sidebar-menu" data-widget="tree">
-<li class="active">
-<a href="<?php echo site_url('admin/dashboard'); ?>">
-<i class="fa fa-dashboard"></i> <span><?php echo DASHBOARD ?></span>
-</a>
-</li>
-<li class="">
-<a href="<?php echo site_url('admin/subject'); ?>">
-<i class="fa fa-dashboard"></i> <span><?php echo SUBJECT ?></span>
-</a>
-</li>
-<li class="">
-<a href="#">
-<i class="fa fa-dashboard"></i> <span><?php echo TUTOR ?></span>
-</a>
-</li>
-<li class="">
-<a href="<?php echo site_url('admin/classes'); ?>">
-<i class="fa fa-dashboard"></i> <span><?php echo CLASSES ?></span>
-</a>
-</li>
-<li class="">
-<a href="<?php echo site_url('admin/attendance'); ?>">
-<i class="fa fa-dashboard"></i> <span><?php echo ATTENDANCE ?></span>
-</a>
-</li>
-</ul>
-</section>
-<!-- /.sidebar -->
+	<!-- sidebar: style can be found in sidebar.less -->
+	<section class="sidebar">
+		<!-- Sidebar user panel -->
+		<div class="user-panel">
+			<!-- /.search form -->
+			<!-- sidebar menu: : style can be found in sidebar.less -->
+			<ul class="sidebar-menu" data-widget="tree">
+				<li class="<?php if(current_url() == site_url('admin/dashboard')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/dashboard'); ?>">
+						<i class="fa fa-dashboard"></i> <span><?php echo DASHBOARD ?></span>
+					</a>
+				</li>
+				<li class="<?php if(current_url() == site_url('admin/subject')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/subject'); ?>">
+						<i class="fa fa-book"></i> <span><?php echo SUBJECT ?></span>
+					</a>
+				</li>
+				<li class="">
+					<a href="#">
+						<i class="fa fa-user"></i> <span><?php echo TUTOR ?></span>
+					</a>
+				</li>
+				<li class="<?php if(current_url() == site_url('admin/classes')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/classes'); ?>">
+						<i class="fa fa-building"></i> <span><?php echo CLASSES ?></span>
+					</a>
+				</li>
+				<li class="<?php if(current_url() == site_url('admin/attendance')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/attendance'); ?>">
+						<i class="fa fa-check-circle-o"></i> <span><?php echo ATTENDANCE ?></span>
+					</a>
+				</li>
+				<li class="<?php if(current_url() == site_url('admin/order')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/order'); ?>">
+						<i class="fa fa-shopping-cart"></i> <span><?php echo ORDER ?></span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</section>
+	<!-- /.sidebar -->
 </aside>

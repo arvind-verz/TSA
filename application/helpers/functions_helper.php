@@ -30,6 +30,19 @@ function level($value = null)
     }
 }
 
+function order_status($value = null)
+{
+    if ($value == 0) {
+        return "Print";
+    } elseif ($value == 1) {
+        return "Given";
+    } elseif ($value == 2) {
+        return "Cancel";
+    } else {
+        return "-";
+    }
+}
+
 function get_archived($module = null)
 {
     $ci = &get_instance();
@@ -126,11 +139,79 @@ function get_subject($id = null)
 
 function get_subject_classes($id = null)
 {
+    $ids = json_decode($id);
+    $storage = [];
     $ci = &get_instance();
     $ci->load->database();
-    $query = $ci->db->get_where(SUBJECT, ['id' => $id]);
-    $result = $query->row();
+    if(isset($ids)) {
+        foreach($ids as $id) {
+            $query = $ci->db->get_where(SUBJECT, ['id' => $id]);
+            $result = $query->row();
+            if($result) {
+                $storage[] = $result->subject_name;
+            }
+        }
+        $storage = implode(", " ,$storage);
+        return $storage;
+    }
+}
+
+function get_order_student($id = null)
+{
+    $storage = [];
+    $ci = &get_instance();
+    $ci->load->database();
+    $query = $ci->db->get_where('order_details', ['order_id' => $id]);
+    $result = $query->result();
     if($result) {
-        return $result->subject_name;
+        foreach($result as $value) {
+            $query = $ci->db->get_where(STUDENT, ['id' => $value->student_id]);
+            $result = $query->row();
+            $storage[] = $result->name;
+        }
+        $storage = implode(", " ,$storage);
+        return $storage;
+    }
+}
+
+function get_student($id = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    if ($id) {
+        $query = $ci->db->get_where(STUDENT, ['is_archive' => 0, 'id' => $id]);
+    } else {
+        $query = $ci->db->get_where(STUDENT, ['is_archive' => 0]);
+    }
+    if($query) {
+        return $query->result();
+    }
+}
+
+function get_book($id = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    if ($id) {
+        $query = $ci->db->get_where(MATERIAL, ['is_archive' => 0, 'id' => $id]);
+    } else {
+        $query = $ci->db->get_where(MATERIAL, ['is_archive' => 0]);
+    }
+    if($query) {
+        return $query->result();
+    }
+}
+
+function get_order($id = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $ci->db->select('*');
+    $ci->db->from(ORDER . 's');
+    $ci->db->join('order_details', 'orders.order_id = order_details.order_id');
+    $ci->db->group_by('orders.order_id');
+    $query = $ci->db->get();
+    if($query) {
+        return $query->result();
     }
 }
