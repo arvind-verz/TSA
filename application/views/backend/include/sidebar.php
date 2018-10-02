@@ -31,9 +31,19 @@
 						<i class="fa fa-check-circle-o"></i> <span><?php echo ATTENDANCE ?></span>
 					</a>
 				</li>
+				<li class="<?php if(current_url() == site_url('admin/material')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/material'); ?>">
+						<i class="fa fa-book"></i> <span><?php echo MATERIAL ?></span>
+					</a>
+				</li>
 				<li class="<?php if(current_url() == site_url('admin/order')) { echo 'active'; } ?>">
 					<a href="<?php echo site_url('admin/order'); ?>">
 						<i class="fa fa-shopping-cart"></i> <span><?php echo ORDER ?></span>
+					</a>
+				</li>
+				<li class="<?php if(current_url() == site_url('admin/invoice')) { echo 'active'; } ?>">
+					<a href="#">
+						<i class="fa fa-file"></i> <span><?php echo INVOICE ?></span>
 					</a>
 				</li>
 			</ul>

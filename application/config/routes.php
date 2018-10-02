@@ -40,5 +40,18 @@ $route['admin/order'] = 'backend/ordercontroller/index';
 $route['admin/order/create'] = 'backend/ordercontroller/create';
 $route['admin/order/store'] = 'backend/ordercontroller/store';
 
+/* MATERIAL */
+$route['admin/material'] = 'backend/materialcontroller/index';
+$route['admin/material/archived'] = 'backend/materialcontroller/archived';
+$route['admin/material/create'] = 'backend/materialcontroller/create';
+$route['admin/material/store'] = 'backend/materialcontroller/store';
+$route['admin/material/edit/(:any)'] = 'backend/materialcontroller/edit/$1';
+$route['admin/material/update/(:any)'] = 'backend/materialcontroller/update/$1';
+$route['admin/material/delete/(:any)'] = 'backend/materialcontroller/delete/$1';
+$route['admin/material/moveto_active_list/(:any)'] = 'backend/materialcontroller/moveto_active_list/$1';
+
+/* INVOICE */
+$route['admin/invoice'] = 'backend/invoicecontroller/index';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

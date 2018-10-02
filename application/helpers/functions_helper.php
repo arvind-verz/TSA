@@ -69,6 +69,7 @@ function get_classes($id = null)
 
 function get_attendance_sheet($class_code = null)
 {
+    $i = 1;
     $ci = &get_instance();
     $ci->load->database();
     $ci->db->select('*');
@@ -82,11 +83,11 @@ function get_attendance_sheet($class_code = null)
 	<td></td>
 	<td></td>
 	<td>
-		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="L">
-		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="M">
-		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E">
-		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X">
-		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G">
+		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="L" readonly>
+		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="M" readonly>
+		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E" readonly>
+		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X" readonly>
+		<input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G" readonly>
 	</td>
 	<td></td>
 </tr>
@@ -97,16 +98,17 @@ foreach($query as $result) {
 	<td><?php echo $result->student_id; ?></td>
 	<td><?php echo $result->name; ?></td>
 	<td>
-		<input type="text" name="attendance_value[]" class="form-control text-center w-50 d-inline" value="0" placeholder="L">
-		<input type="text" name="attendance_value[]" class="form-control text-center w-50 d-inline" value="0" placeholder="M">
-		<input type="text" name="attendance_value[]" class="form-control text-center w-50 d-inline" value="0" placeholder="E">
-		<input type="text" name="attendance_value[]" class="form-control text-center w-50 d-inline" value="0" placeholder="X">
-		<input type="text" name="attendance_value[]" class="form-control text-center w-50 d-inline" value="0" placeholder="G">
+        <input type="hidden" name="student_id" class="form-control" value="<?php echo $result->student_id; ?>">
+		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="L">
+		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="M">
+		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="E">
+		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="X">
+		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="G">
 	</td>
-	<td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
+	<td><input type="text" name="attendance_remark<?php echo $i; ?>[]" class="form-control" value="" placeholder="Remark"></td>
 </tr>
 <?php
-}
+$i++;}
 }
 
 function get_weekdays_of_month($month = null, $day = null) {
