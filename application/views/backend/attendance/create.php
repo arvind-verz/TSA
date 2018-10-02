@@ -34,6 +34,21 @@
                                 <label for="">Date</label>
                                 <input type="text" name="attendance_date" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
                             </div>
+                            <div class="form-group pull-right">
+                                <button type="button" class="btn btn-info copy_fist_line">Copy First Line</button>
+                                <button type="button" class="btn btn-info">Transfer</button>
+                                <select name="class_code" class="select2">
+                                    <option value="">-- Select One --</option>
+                                    <?php
+                                    if (count($classes)) {
+                                    foreach ($classes as $class) {
+                                    ?>
+                                    <option value="<?php echo $class->class_code ?>"><?php echo $class->class_code ?></option>
+                                    <?php
+                                    }}
+                                    ?>
+                                </select>
+                            </div>
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -48,11 +63,11 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="L">
-                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="M">
-                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E">
-                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X">
-                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G">
+                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="L" readonly>
+                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="M" readonly>
+                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E" readonly>
+                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X" readonly>
+                                            <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G" readonly>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -73,7 +88,7 @@
 <script type="text/javascript">
 $("body").on("change", "select[name='class_code']", function() {
     var class_code = $("select[name='class_code']").val();
-    var content = '<tr> <td></td><td></td><td> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="L"> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="M"> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E"> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X"> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G"> </td><td></td></tr>';
+    var content = '<tr> <td></td><td></td><td> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="L" readonly> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="M" readonly> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E" readonly> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X" readonly> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G" readonly> </td><td></td></tr>';
     if (class_code != '') {
         $.ajax({
             type: 'GET',
@@ -90,5 +105,29 @@ $("body").on("change", "select[name='class_code']", function() {
     } else {
         $("tbody.display_data").html(content);
     }
+});
+$("body").on("change", ".attendance", function() {
+    var current = $(this).parents("td").find("input.attendance");
+    var check_storage = [];
+    current.each(function() {
+        if ($(this).val() > 1) {
+            current.val(0);
+        }
+        if ($(this).val() == 1) {
+            check_storage.push(1);
+        }
+        if ($(this).val() == 1 && check_storage.length > 1) {
+            current.val(0);
+        }
+    });
+});
+
+$("button.copy_fist_line").on("click", function() {
+    var current_value = $("input[name='attendance_value1[]']");
+    var i = 2;
+    current_value.each(function() {
+        $("td input.attendance:nth-of-type("+i+")").val($(this).val());
+        i++;
+    });
 });
 </script>

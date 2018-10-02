@@ -14,6 +14,7 @@ define('STUDENT', 'Student');
 define('ORDER', 'Order');
 define('BOOK', 'Book');
 define('MATERIAL', 'Material');
+define('INVOICE', 'Invoice');
 
 /* CRUD */
 define('CREATE', 'Create');

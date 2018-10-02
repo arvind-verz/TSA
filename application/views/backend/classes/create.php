@@ -45,7 +45,7 @@
                                 if(count($subjects)) {
                                 foreach($subjects as $subject) {
                                 ?>
-                                <option value="<?php echo $subject->subject_id ?>"><?php echo $subject->subject_name ?></option>
+                                <option value="<?php echo $subject->id ?>"><?php echo $subject->subject_name ?></option>
                                 <?php
                                 }}
                                 ?>

@@ -61,7 +61,7 @@
                                     if (current_url() == site_url('admin/classes/archived')) {
                                     ?>
                                     <th>
-                                        <?php echo ARCHIVED ?> Date
+                                        <?php echo ARCHIVED ?> At
                                     </th>
                                     <?php
                                     }
