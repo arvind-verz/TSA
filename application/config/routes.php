@@ -31,8 +31,9 @@ $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/mov
 /* ATTENDANCE */
 $route['admin/attendance'] = 'backend/attendancecontroller/index';
 $route['admin/attendance/create'] = 'backend/attendancecontroller/create';
-
+$route['admin/attendance/store'] = 'backend/attendancecontroller/store';
 $route['admin/attendance/get_attendance_sheet'] = 'backend/attendancecontroller/get_attendance_sheet';
+$route['admin/attendance/get_attendance_summary'] = 'backend/attendancecontroller/get_attendance_summary';
 
 
 /* ORDER */

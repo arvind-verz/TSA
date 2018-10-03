@@ -13,6 +13,11 @@ class Subject extends CI_Model
     public function store()
     {
         //die(print_r($_POST));
+        $query = $this->db->get_where(SUBJECT, ['subject_code' => $_POST['subject_code']]);
+        if($query->num_rows()>0) {
+            $this->session->set_flashdata('warning', SUBJECT . ' Code ' . MSG_EXIST);
+            return redirect('admin/subject/create');
+        }
         $data = array(
             'subject_id'    =>  $this->uniq_id,
             'subject_name'   => !empty($_POST['subject_name']) ? $_POST['subject_name'] : null,

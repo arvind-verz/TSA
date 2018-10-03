@@ -22,3 +22,15 @@ if ($this->session->flashdata('success')) {
 </div>
 <?php
 }
+
+if ($this->session->flashdata('warning')) {
+?>
+<div class="pad margin no-print my-0 py-0">
+	<div class="alert alert-warning alert-dismissible">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		<h4><i class="icon fa fa-check"></i> Warning!</h4>
+		<?php echo $this->session->flashdata('warning'); ?>
+	</div>
+</div>
+<?php
+}
