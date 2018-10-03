@@ -13,6 +13,11 @@ class Classes extends CI_Model
     public function store()
     {
         //die(print_r($_POST));
+        $query = $this->db->get_where(CLASSES, ['class_code' => $_POST['class_code']]);
+        if($query->num_rows()>0) {
+            $this->session->set_flashdata('warning', CLASSES . ' Code ' . MSG_EXIST);
+            return redirect('admin/classes/create');
+        }
         $data = array(
             'class_id'     => $this->uniq_id,
             'class_name'   => !empty($_POST['class_name']) ? $_POST['class_name'] : null,

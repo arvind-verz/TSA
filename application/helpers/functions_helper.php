@@ -30,6 +30,17 @@ function level($value = null)
     }
 }
 
+function get_attendance_status($value = null) {
+    $value = json_decode($value);
+    $array_status = ['L', 'M', 'E', 'X', 'G', 'H'];
+    if(in_array('1', $value)) {
+        return $array_status[array_search(1, $value)];
+    }
+    else {
+        return 'H';
+    }
+}
+
 function order_status($value = null)
 {
     if ($value == 0) {
@@ -98,14 +109,14 @@ foreach($query as $result) {
 	<td><?php echo $result->student_id; ?></td>
 	<td><?php echo $result->name; ?></td>
 	<td>
-        <input type="hidden" name="student_id" class="form-control" value="<?php echo $result->student_id; ?>">
+        <input type="hidden" name="student_id[]" class="form-control" value="<?php echo $result->student_id; ?>">
 		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="L">
 		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="M">
 		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="E">
 		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="X">
 		<input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="G">
 	</td>
-	<td><input type="text" name="attendance_remark<?php echo $i; ?>[]" class="form-control" value="" placeholder="Remark"></td>
+	<td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
 </tr>
 <?php
 $i++;}
@@ -114,10 +125,10 @@ $i++;}
 function get_weekdays_of_month($month = null, $day = null) {
     $counter_list = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
     $storage = [];
-    $match1 = date('M', strtotime('now'));
+    $match1 = date('m', strtotime($month));
     for($i=0;$i<count($counter_list);$i++) {
-        $dates = date('d-m-Y', strtotime($counter_list[$i] . ' ' . $day . ' of ' . $month));
-        $match2 = date('M', strtotime($dates));
+        $dates = date('Y-m-d', strtotime($counter_list[$i] . ' ' . $day . ' of ' . $month));
+        $match2 = date('m', strtotime($dates));
         if($match1==$match2) {
             $storage[] = $dates;
         }
@@ -187,6 +198,17 @@ function get_student($id = null)
     }
     if($query) {
         return $query->result();
+    }
+}
+
+function get_student_by_student_id($id = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $query = $ci->db->get_where(STUDENT, ['is_archive' => 0, 'student_id' => $id]);
+    if($query) {
+        $result = $query->row();
+        return $result->name;
     }
 }
 

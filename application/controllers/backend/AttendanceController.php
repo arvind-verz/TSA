@@ -14,12 +14,13 @@ class AttendanceController extends CI_Controller
 
     public function index()
     {
-        //print_r(get_weekdays_of_month('September', 'Sunday'));
+        //print_r(get_weekdays_of_month('September', 'Monday'));
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = ATTENDANCE;
+        $data['classes']     = get_classes();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -56,9 +57,14 @@ class AttendanceController extends CI_Controller
         print_r(get_attendance_sheet($class_code));
     }
 
+    public function get_attendance_summary() {
+        $this->attendance->get_attendance_summary($_GET);
+    }
+
     public function store()
     {
-        $this->classes->store($_POST);
+        $result = $this->attendance->store($_POST);
+        print_r($result);
     }
 
     public function edit($id)

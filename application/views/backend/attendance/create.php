@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/classes/store'); ?>
+                    <?php echo form_open('admin/attendance/store'); ?>
                     <div class="box-body">
                         <div class="col-lg-12">
                             <div class="form-group">
@@ -37,7 +37,7 @@
                             <div class="form-group pull-right">
                                 <button type="button" class="btn btn-info copy_fist_line">Copy First Line</button>
                                 <button type="button" class="btn btn-info">Transfer</button>
-                                <select name="class_code" class="select2">
+                                <select name="class_code_transfer" class="select2">
                                     <option value="">-- Select One --</option>
                                     <?php
                                     if (count($classes)) {

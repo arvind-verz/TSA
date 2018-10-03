@@ -20,27 +20,42 @@
                         </a>
                     </div>
                     <div class="box-body">
-                        <table class="table table-striped table-bordered text-center" id="datatable" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <?php echo STUDENT ?> ID
-                                    </th>
-                                    <th>
-                                        <?php echo STUDENT ?> Name
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        12
-                                    </td>
-                                    <td>
-                                        ASD
-                                    </td>
-                                </tr>
-                            </tbody>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for=""><?php echo CLASSES ?> Code</label>
+                                <select name="class_code" class="form-control select2">
+                                    <option value="">-- Select One --</option>
+                                    <?php
+                                    if (count($classes)) {
+                                    foreach ($classes as $class) {
+                                    ?>
+                                    <option value="<?php echo $class->class_code ?>"><?php echo $class->class_code ?></option>
+                                    <?php
+                                    }}
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Month</label>
+                                <select name="class_month" class="form-control select2">
+                                    <option value="">-- Select One --</option>
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-bordered text-center display_data" id="datatable" style="width:100%">
+                            
                         </table>
                     </div>
                 </div>
@@ -48,3 +63,23 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    $("select[name='class_code'], select[name='class_month']").on("change", function() {
+        var class_code = $("select[name='class_code']").val();
+        var class_month = $("select[name='class_month']").val();
+        if(class_month!='' && class_code!='') {
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/attendance/get_attendance_summary'); ?>',
+                data: 'class_code=' + class_code + '&class_month=' + class_month,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    //alert(data);
+                    $(".display_data").html(data);
+                }
+            })
+        }
+    });
+</script>
