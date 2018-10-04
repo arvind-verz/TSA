@@ -27,12 +27,12 @@
                             <label for="">Level</label>
                             <select name="level" class="form-control select2">
                                 <option value="">-- Select One --</option>
-                                <option value="0" <?php if($classes->level==0) {echo 'selected';} ?>>S1</option>
-                                <option value="1" <?php if($classes->level==1) {echo 'selected';} ?>>S2</option>
-                                <option value="2" <?php if($classes->level==2) {echo 'selected';} ?>>S3</option>
-                                <option value="3" <?php if($classes->level==3) {echo 'selected';} ?>>S4</option>
-                                <option value="4" <?php if($classes->level==4) {echo 'selected';} ?>>S5</option>
-                                <option value="5" <?php if($classes->level==5) {echo 'selected';} ?>>S6</option>
+                                <option value="1" <?php if($classes->level==1) {echo 'selected';} ?>>S1</option>
+                                <option value="2" <?php if($classes->level==2) {echo 'selected';} ?>>S2</option>
+                                <option value="3" <?php if($classes->level==3) {echo 'selected';} ?>>S3</option>
+                                <option value="4" <?php if($classes->level==4) {echo 'selected';} ?>>S4</option>
+                                <option value="5" <?php if($classes->level==5) {echo 'selected';} ?>>S5</option>
+                                <option value="6" <?php if($classes->level==6) {echo 'selected';} ?>>S6</option>
                             </select>
                         </div>
                         <div class="form-group">

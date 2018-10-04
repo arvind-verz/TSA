@@ -36,22 +36,15 @@
                             </div>
                             <div class="form-group pull-right">
                                 <button type="button" class="btn btn-info copy_fist_line">Copy First Line</button>
-                                <button type="button" class="btn btn-info">Transfer</button>
+                                <button type="button" class="btn btn-info transfer_student">Transfer</button>
                                 <select name="class_code_transfer" class="select2">
                                     <option value="">-- Select One --</option>
-                                    <?php
-                                    if (count($classes)) {
-                                    foreach ($classes as $class) {
-                                    ?>
-                                    <option value="<?php echo $class->class_code ?>"><?php echo $class->class_code ?></option>
-                                    <?php
-                                    }}
-                                    ?>
                                 </select>
                             </div>
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
+                                        <th><input type="checkbox" name="student_id_transfer_all" value=""></th>
                                         <th>Student ID</th>
                                         <th>Student Name</th>
                                         <th>Attendance Status</th>
@@ -60,6 +53,7 @@
                                 </thead>
                                 <tbody class="display_data">
                                     <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td>
@@ -105,6 +99,24 @@ $("body").on("change", "select[name='class_code']", function() {
     } else {
         $("tbody.display_data").html(content);
     }
+
+    if(class_code != '') {
+        $.ajax({
+            type: 'GET',
+            url: '<?php echo site_url('admin/attendance/get_class_code_transfer'); ?>',
+            data: 'class_code=' + class_code,
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                //alert(data);
+                $("select[name='class_code_transfer']").html(data);
+            }
+        })
+    }
+    else {
+        $("select[name='class_code_transfer']").html('<option value="">-- Select One --</option>');
+    }
 });
 $("body").on("change", ".attendance", function() {
     var current = $(this).parents("td").find("input.attendance");
@@ -130,4 +142,38 @@ $("button.copy_fist_line").on("click", function() {
         i++;
     });
 });
+
+$("button.transfer_student").on("click", function() {
+    var storage = [];
+    $("input[name='student_id_transfer']:checked").each(function() {
+        storage.push($(this).val());
+    });
+    var class_code_transfer = $("select[name='class_code_transfer']").val();
+    if(storage != '' && class_code_transfer != '') {
+        transfer_students(class_code_transfer, storage);
+    }
+    else {
+        alert("Please select student for transfer to particular class.");
+    }
+})
+
+$("input[name='student_id_transfer_all']").on("change", function() {
+    var storage = [];
+    $("tbody tr td input[name='student_id_transfer']").each(function() {
+        if($("input[name='student_id_transfer_all']").is(":checked")) {
+            $(this).prop("checked", true);
+            storage.push($(this).val());
+        }
+        else {
+            $(this).prop("checked", false);
+            storage.pop($(this).val());
+        }
+    })
+});
+
+function transfer_students(class_code_transfer, storage) {
+    $.get("<?php echo site_url('admin/attendance/transfer_student'); ?>", {class_code : class_code_transfer, student_id : storage}, function(data) {
+            window.location.href = data.trim();
+    })
+}
 </script>
