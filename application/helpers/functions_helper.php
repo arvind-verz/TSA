@@ -13,17 +13,17 @@ function is_logged_in()
 }
 function level($value = null)
 {
-    if ($value == 0) {
+    if ($value == 1) {
         return "S1";
-    } elseif ($value == 1) {
-        return "S2";
     } elseif ($value == 2) {
-        return "S3";
+        return "S2";
     } elseif ($value == 3) {
-        return "S4";
+        return "S3";
     } elseif ($value == 4) {
-        return "J1";
+        return "S4";
     } elseif ($value == 5) {
+        return "J1";
+    } elseif ($value == 6) {
         return "J2";
     } else {
         return "-";
@@ -91,6 +91,7 @@ function get_attendance_sheet($class_code = null)
     $query = $query->result();
     ?>
 <tr>
+    <td></td>
 	<td></td>
 	<td></td>
 	<td>
@@ -106,6 +107,7 @@ function get_attendance_sheet($class_code = null)
 foreach($query as $result) {
 ?>
 <tr>
+    <td><input type="checkbox" name="student_id_transfer" value="<?php echo $result->student_id; ?>"></td>
 	<td><?php echo $result->student_id; ?></td>
 	<td><?php echo $result->name; ?></td>
 	<td>
@@ -187,6 +189,25 @@ function get_order_student($id = null)
     }
 }
 
+function get_order_student_content($id = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $ci->db->select('*, student.id as stud_id');
+    $ci->db->from('student');
+    $ci->db->join('order_details', 'student.id = order_details.student_id');
+    $ci->db->where(['order_details.order_id' => $id]);
+    $query = $ci->db->get();
+    $result = $query->result();
+    if($result) {
+        foreach($result as $value) {
+            ?>
+            <option value="<?php echo $value->stud_id; ?>"><?php echo $value->name; ?></option>
+            <?php
+        }
+    }
+}
+
 function get_student($id = null)
 {
     $ci = &get_instance();
@@ -237,5 +258,25 @@ function get_order($id = null)
     $query = $ci->db->get();
     if($query) {
         return $query->result();
+    }
+}
+
+function get_class_code_transfer($class_code) {
+    $ci = &get_instance();
+    $ci->load->database();
+    $ci->db->select('*');
+    $ci->db->from(CLASSES);
+    $ci->db->where(['is_archive' => 0, 'class_code !=' => $class_code]);
+    $query = $ci->db->get();
+    if($query) {
+        $result = $query->result();
+        ?>
+        <option value="">-- Select One --</option>
+        <?php
+        foreach($result as $row) {
+        ?>
+        <option value="<?php echo $row->class_code ?>"><?php echo $row->class_code ?></option>
+        <?php
+        }
     }
 }

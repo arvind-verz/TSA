@@ -50,6 +50,7 @@
                                 ?>
                                 <tr>
                                     <td>
+                                        <input type="hidden" name="order_id" class="form-control" value="<?php echo $order->order_id;  ?>">
                                         <?php echo isset($order->order_id) ? $order->order_id : '-' ?>
                                     </td>
                                     <td>
@@ -60,23 +61,18 @@
                                     </td>
                                     <td>
                                         <select name="order_status" class="form-control select2">
-                                            <option value="">-- Select One --</option>
-                                            <?php
-                                            if(count($classes)) {
-                                            foreach($classes as $class) {
-                                            ?>
-                                            <option value="<?php echo $class->class_code ?>"><?php echo $class->class_code ?></option>
-                                            <?php
-                                            }}
-                                            ?>
+                                            <option value="0">Print</option>
+                                            <option value="1">Given</option>
+                                            <option value="2">Cancel</option>
                                         </select>
-                                        <?php echo isset($order->status) ? order_status($order->status) : '-' ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($order->student_id) ? get_order_student($order->order_id) : '-' ?>
+                                        <select name="order_student_id" class="form-control select2" multiple="multiple">
+                                            <?php get_order_student_content($order->order_id); ?>
+                                        </select>
                                     </td>
                                     <td>
-                                        -
+                                        <button type="button" class="btn btn-info btn-sm update_status">Submit</button>
                                     </td>
                                 </tr>
                                 <?php
@@ -90,3 +86,18 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    $("button.update_status").on("click", function() {
+        var order_id = $(this).parents("tr").find("input[name='order_id']").val();
+        var status = $(this).parents("tr").find("select[name='order_status']").val();
+        var student_id = $(this).parents("tr").find("select[name='order_student_id']").val();
+        if(status != '' && student_id != '') {
+            $.get("<?php echo site_url('admin/order/update_order_status'); ?>", {status : status, student_id : student_id, order_id : order_id}, function(data) {
+                window.location.href = data.trim();
+            })
+        }
+        else {
+            alert("Please select appropriate option to proceed.");
+        }
+    })
+</script>

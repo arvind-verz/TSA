@@ -101,4 +101,30 @@ class Attendance extends CI_Model
             <?php
         }
     }
+
+    public function transfer_student() {
+        $student_id = $_GET['student_id'];
+        $class_code = $_GET['class_code'];
+
+        $query = $this->db->get_where(CLASSES, ['class_code' => $class_code]);
+        $result = $query->row();
+
+        $this->db->trans_start();
+        foreach($student_id as $id) {
+            $data = [
+                'class_id' =>   $result->id
+            ];
+            $this->db->where('student_id', $id);
+            $this->db->update(STUDENT, $data);
+        }
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === false) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return 'admin/attendance/create';
+        } else {
+            $this->session->set_flashdata('success', STUDENT . ' ' . MSG_TRANSFERRED);
+            return 'admin/attendance';
+        }
+    }
 }

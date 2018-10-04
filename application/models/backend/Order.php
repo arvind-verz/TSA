@@ -45,4 +45,29 @@ class Order extends CI_Model
             return redirect('admin/order');
         }
     }
+
+    public function update_order_status() {
+        $status = $_GET['status'];
+        $student_id = $_GET['student_id'];
+        $order_id = $_GET['order_id'];
+
+        $this->db->trans_start();
+        foreach($student_id as $id) {
+            $data = array(
+                'status'    =>  $status,
+            );
+        
+            $this->db->where(['order_id' => $order_id, 'student_id' => $id]);
+            $this->db->update('order_details', $data);
+        }
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === false) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return 'admin/order';
+        } else {
+            $this->session->set_flashdata('success', ORDER . ' status ' . MSG_UPDATED);
+            return 'admin/order';
+        }
+    }
 }

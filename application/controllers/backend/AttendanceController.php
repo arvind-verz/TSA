@@ -61,6 +61,15 @@ class AttendanceController extends CI_Controller
         $this->attendance->get_attendance_summary($_GET);
     }
 
+    public function transfer_student() {
+        $this->attendance->transfer_student();
+    }
+
+    public function get_class_code_transfer() {
+        $class_code = $_GET['class_code'];
+        print_r(get_class_code_transfer($class_code));
+    }    
+
     public function store()
     {
         $result = $this->attendance->store($_POST);

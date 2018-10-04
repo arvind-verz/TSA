@@ -34,12 +34,16 @@ $route['admin/attendance/create'] = 'backend/attendancecontroller/create';
 $route['admin/attendance/store'] = 'backend/attendancecontroller/store';
 $route['admin/attendance/get_attendance_sheet'] = 'backend/attendancecontroller/get_attendance_sheet';
 $route['admin/attendance/get_attendance_summary'] = 'backend/attendancecontroller/get_attendance_summary';
+$route['admin/attendance/transfer_student'] = 'backend/attendancecontroller/transfer_student';
+$route['admin/attendance/get_class_code_transfer'] = 'backend/attendancecontroller/get_class_code_transfer';
+
 
 
 /* ORDER */
 $route['admin/order'] = 'backend/ordercontroller/index';
 $route['admin/order/create'] = 'backend/ordercontroller/create';
 $route['admin/order/store'] = 'backend/ordercontroller/store';
+$route['admin/order/update_order_status'] = 'backend/ordercontroller/update_order_status';
 
 /* MATERIAL */
 $route['admin/material'] = 'backend/materialcontroller/index';

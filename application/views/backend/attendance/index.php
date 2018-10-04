@@ -53,10 +53,10 @@
                                     <option value="December">December</option>
                                 </select>
                             </div>
-                        </div>
-                        <table class="table table-striped table-bordered text-center display_data" id="datatable" style="width:100%">
+                            <table class="table table-striped table-bordered text-center display_data" style="width:100%">
                             
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                 contentType: false,
                 success: function(data) {
                     //alert(data);
-                    $(".display_data").html(data);
+                    $(".display_data").html(data).dataTable();
                 }
             })
         }

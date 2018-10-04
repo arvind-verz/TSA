@@ -52,4 +52,9 @@ class OrderController extends CI_Controller
     {
         $this->order->store($_POST);
     }
+
+    public function update_order_status()
+    {
+        $this->order->update_order_status($_GET);
+    }
 }

@@ -39,3 +39,5 @@ define('MSG_ARCHIVED', ' has been moved to archived successfully.');
 define('MSG_ERROR', ' Error occured while manipulating data.');
 define('MSG_MOVED', ' has been moved to active list successfully.');
 define('MSG_EXIST', ' already exist within our system.');
+define('MSG_TRANSFERRED', ' has been transferred successfully.');
+
