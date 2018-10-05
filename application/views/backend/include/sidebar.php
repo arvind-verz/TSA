@@ -51,16 +51,27 @@
 						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
 					</a>
 				</li>
-				<li class="<?php if(current_url() == site_url('admin/sms_template')) { echo 'active'; } ?>">
-					<a href="<?php echo site_url('admin/sms_template'); ?>">
-						<i class="fa fa-envelope"></i> <span><?php echo SMS_TEMPLATE ?></span>
+				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
+					<a href="#">
+						<i class="fa fa-envelope"></i> <span>SMS</span>
+						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
+						</span>
 					</a>
+					<ul class="treeview-menu">
+						<li class="<?php if(current_url() == site_url('admin/sms_template')) { echo 'active'; } ?>">
+							<a href="<?php echo site_url('admin/sms_template'); ?>">
+								<span><?php echo SMS_TEMPLATE ?></span>
+							</a>
+						</li>
+						<li class="<?php if(current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
+							<a href="<?php echo site_url('admin/sms_history'); ?>">
+								<span><?php echo SMS_HISTORY ?></span>
+							</a>
+						</li>
+					</ul>
 				</li>
-				<li class="<?php if(current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
-					<a href="<?php echo site_url('admin/sms_history'); ?>">
-						<i class="fa fa-envelope"></i> <span><?php echo SMS_HISTORY ?></span>
-					</a>
-				</li>
+				
 			</ul>
 		</div>
 	</section>
