@@ -9,7 +9,7 @@ define('DASHBOARD', 'Dashboard');
 define('SUBJECT', 'Subject');
 define('TUTOR', 'Tutor');
 define('CLASSES', 'Class');
-
+define('STUDENT', 'Student');
 /* CRUD */
 define('CREATE', 'Create');
 define('STORE', 'Store');
