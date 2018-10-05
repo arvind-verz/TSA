@@ -68,7 +68,7 @@ class SmsController extends CI_Controller
     {
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SMS_TEMPLATE, 'admin/sms_template');
-        $this->breadcrumbs->push(CREATE, 'admin/sms_template/sms_template_create');
+        $this->breadcrumbs->push(EDIT, 'admin/sms_template/sms_template_create');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title'] = $this->title;
         $data['page_title'] = SMS_TEMPLATE . " <small> " . EDIT . " </small>";
