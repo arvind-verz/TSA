@@ -1,30 +1,28 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class ClassController extends CI_Controller
+class MaterialController extends CI_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
-        //is_logged_in();
-        $this->load->model('backend/classes', 'classes');
-        $this->title = ADMINPANEL . ' | ' . CLASSES;
+        $this->load->model('backend/material', 'material');
+        $this->title = ADMINPANEL . ' | ' . MATERIAL;
     }
 
     public function index()
     {
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(CLASSES, 'admin/classes');
+        $this->breadcrumbs->push(MATERIAL, 'admin/material');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
-        $data['title']       = $this->title;
-        $data['page_title']  = CLASSES;
-        $data['classes']     = get_classes();
-        $data['subject_classes']     = get_subject_classes();
+        $data['title'] = $this->title;
+        $data['page_title'] = MATERIAL;
+        $data['books'] = get_book();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/classes/index');
+        $this->load->view('backend/material/index');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
@@ -32,16 +30,16 @@ class ClassController extends CI_Controller
     public function archived()
     {
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(CLASSES, 'admin/classes');
+        $this->breadcrumbs->push(MATERIAL, 'admin/material');
         $this->breadcrumbs->push(ARCHIVED, 'admin/archived');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
-        $data['page_title']  = CLASSES . " <small> " . ARCHIVED . " </small>";
-        $data['classes']     = get_archived(CLASSES);
+        $data['page_title']  = MATERIAL . " <small> " . ARCHIVED . " </small>";
+        $data['books']     = get_archived(MATERIAL);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/classes/index');
+        $this->load->view('backend/material/index');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
@@ -49,56 +47,57 @@ class ClassController extends CI_Controller
     public function create()
     {
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(CLASSES, 'admin/classes');
-        $this->breadcrumbs->push(CREATE, 'admin/classes/create');
+        $this->breadcrumbs->push(MATERIAL, 'admin/material');
+        $this->breadcrumbs->push(CREATE, 'admin/material/create');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
-        $data['page_title']  = CLASSES . " <small> " . CREATE . " </small>";
+        $data['page_title']  = MATERIAL . " <small> " . CREATE . " </small>";
         $data['subjects']     = get_subject();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/classes/create');
+        $this->load->view('backend/material/create');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
 
     public function store()
     {
-        $this->classes->store($_POST);
+        //die(print_r($_POST));
+        $this->material->store($_POST);
     }
 
     public function edit($id)
     {
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(CLASSES, 'admin/classes');
-        $this->breadcrumbs->push(EDIT, 'admin/classes/edit');
+        $this->breadcrumbs->push(MATERIAL, 'admin/material');
+        $this->breadcrumbs->push(EDIT, 'admin/material/edit');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
-        $data['page_title']  = CLASSES . " <small> " . EDIT . ' #' . $id . " </small>";
+        $data['page_title']  = MATERIAL . " <small> " . EDIT . ' #' . $id . " </small>";
         $data['crud_id']     = $id;
-        $data['classes']     = get_classes($id);
+        $data['book']     = get_book($id);
         $data['subjects']     = get_subject();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/classes/edit');
+        $this->load->view('backend/material/edit');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
 
     public function update($id)
     {
-        $this->classes->update($id, $_POST);
+        $this->material->update($id, $_POST);
     }
 
     public function delete($id)
     {
-        $this->classes->delete($id, $_POST);
+        $this->material->delete($id, $_POST);
     }
 
     public function moveto_active_list($id)
     {
-        $this->classes->moveto_active_list($id, $_POST);
+        $this->material->moveto_active_list($id, $_POST);
     }
 }
