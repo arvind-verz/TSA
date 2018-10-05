@@ -9,15 +9,15 @@ define('DASHBOARD', 'Dashboard');
 define('SUBJECT', 'Subject');
 define('TUTOR', 'Tutor');
 define('CLASSES', 'Class');
-
-define('STUDENT', 'Student');
-
 define('ATTENDANCE', 'Attendance');
 define('STUDENT', 'Student');
 define('ORDER', 'Order');
 define('BOOK', 'Book');
 define('MATERIAL', 'Material');
 define('INVOICE', 'Invoice');
+define('SMS', 'SMS');
+define('SMS_TEMPLATE', 'SMS Template');
+define('SMS_HISTORY', 'SMS History');
 
 
 /* CRUD */
