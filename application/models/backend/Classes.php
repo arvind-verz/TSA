@@ -34,7 +34,7 @@ class Classes extends CI_Model
             'class_size'   => !empty($_POST['class_size']) ? $_POST['class_size'] : null,
             'remark'       => !empty($_POST['remark']) ? $_POST['remark'] : null,
             'created_at'   => $this->date,
-            'updated_at'   => $this->date,
+            'updated_at'   => $this->date
         );
 
         $this->db->trans_start();
