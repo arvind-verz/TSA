@@ -86,7 +86,7 @@ function get_attendance_sheet($class_code = null)
     $ci->db->select('*');
     $ci->db->from('student');
     $ci->db->join('class', 'student.class_id = class.id');
-    $ci->db->where(['class.class_code' => $class_code]);
+    $ci->db->where(['class.class_code' => $class_code, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 3]);
     $query = $ci->db->get();
     $query = $query->result();
     ?>
@@ -196,7 +196,7 @@ function get_order_student_content($id = null)
     $ci->db->select('*, student.id as stud_id');
     $ci->db->from('student');
     $ci->db->join('order_details', 'student.id = order_details.student_id');
-    $ci->db->where(['order_details.order_id' => $id]);
+    $ci->db->where(['order_details.order_id' => $id, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 3]);
     $query = $ci->db->get();
     $result = $query->result();
     if($result) {
@@ -227,9 +227,12 @@ function get_student_by_student_id($id = null)
     $ci = &get_instance();
     $ci->load->database();
     $query = $ci->db->get_where(STUDENT, ['is_archive' => 0, 'student_id' => $id]);
-    if($query) {
-        $result = $query->row();
+    $result = $query->row();
+    if($result) {
         return $result->name;
+    }
+    else {
+        return  '-';
     }
 }
 
