@@ -46,7 +46,7 @@ class Attendance extends CI_Model
         $class_code = $_GET['class_code'];
         $class_month = $_GET['class_month'];
 
-        $query = $this->db->get_where(CLASSES, ['class_code' => $class_code, 'class_month' => $class_month]);
+        $query = $this->db->get_where(CLASSES, ['class_code' => $class_code]);
         $result = $query->row();
         if($result) {
             $this->db->select('*');
