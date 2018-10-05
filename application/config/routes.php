@@ -26,7 +26,7 @@ $route['admin/classes/store'] = 'backend/classcontroller/store';
 $route['admin/classes/edit/(:any)'] = 'backend/classcontroller/edit/$1';
 $route['admin/classes/update/(:any)'] = 'backend/classcontroller/update/$1';
 $route['admin/classes/delete/(:any)'] = 'backend/classcontroller/delete/$1';
-<<<<<<< HEAD
+
 /* Student Admin */
 $route['admin/students'] = 'backend/studentcontroller/index';
 $route['admin/students/archive/(:any)'] = 'backend/studentcontroller/archive/$1';
@@ -38,7 +38,7 @@ $route['admin/students/enroll'] = 'backend/studentcontroller/enroll';
 $route['admin/students/edit/(:any)'] = 'backend/studentcontroller/edit/$1';
 $route['admin/students/update/(:any)'] = 'backend/studentcontroller/update/$1';
 $route['admin/students/delete/(:any)'] = 'backend/studentcontroller/delete/$1';
-=======
+
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
 
 /* ATTENDANCE */
@@ -70,7 +70,40 @@ $route['admin/material/moveto_active_list/(:any)'] = 'backend/materialcontroller
 
 /* INVOICE */
 $route['admin/invoice'] = 'backend/invoicecontroller/index';
->>>>>>> master
+
+
+$route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
+
+/* ATTENDANCE */
+$route['admin/attendance'] = 'backend/attendancecontroller/index';
+$route['admin/attendance/create'] = 'backend/attendancecontroller/create';
+$route['admin/attendance/store'] = 'backend/attendancecontroller/store';
+$route['admin/attendance/get_attendance_sheet'] = 'backend/attendancecontroller/get_attendance_sheet';
+$route['admin/attendance/get_attendance_summary'] = 'backend/attendancecontroller/get_attendance_summary';
+$route['admin/attendance/transfer_student'] = 'backend/attendancecontroller/transfer_student';
+$route['admin/attendance/get_class_code_transfer'] = 'backend/attendancecontroller/get_class_code_transfer';
+
+
+
+/* ORDER */
+$route['admin/order'] = 'backend/ordercontroller/index';
+$route['admin/order/create'] = 'backend/ordercontroller/create';
+$route['admin/order/store'] = 'backend/ordercontroller/store';
+$route['admin/order/update_order_status'] = 'backend/ordercontroller/update_order_status';
+
+/* MATERIAL */
+$route['admin/material'] = 'backend/materialcontroller/index';
+$route['admin/material/archived'] = 'backend/materialcontroller/archived';
+$route['admin/material/create'] = 'backend/materialcontroller/create';
+$route['admin/material/store'] = 'backend/materialcontroller/store';
+$route['admin/material/edit/(:any)'] = 'backend/materialcontroller/edit/$1';
+$route['admin/material/update/(:any)'] = 'backend/materialcontroller/update/$1';
+$route['admin/material/delete/(:any)'] = 'backend/materialcontroller/delete/$1';
+$route['admin/material/moveto_active_list/(:any)'] = 'backend/materialcontroller/moveto_active_list/$1';
+
+/* INVOICE */
+$route['admin/invoice'] = 'backend/invoicecontroller/index';
+
 
 /* Student Admin */
 /* Tutor Admin */
