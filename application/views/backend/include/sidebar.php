@@ -1,5 +1,4 @@
 <aside class="main-sidebar">
-
 	<!-- sidebar: style can be found in sidebar.less -->
 	<section class="sidebar">
 		<!-- Sidebar user panel -->
@@ -17,8 +16,8 @@
 						<i class="fa fa-book"></i> <span><?php echo SUBJECT ?></span>
 					</a>
 				</li>
-				<li class="">
-					<a href="#">
+				<li class="<?php if(current_url() == site_url('admin/tutors')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/tutors'); ?>">
 						<i class="fa fa-user"></i> <span><?php echo TUTOR ?></span>
 					</a>
 				</li>
@@ -47,14 +46,23 @@
 						<i class="fa fa-file"></i> <span><?php echo INVOICE ?></span>
 					</a>
 				</li>
-        <li class="">
-<a href="<?php echo site_url('admin/students'); ?>">
-<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
-</a>
-</li>
+				<li class="<?php if(current_url() == site_url('admin/students')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/students'); ?>">
+						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
+					</a>
+				</li>
+				<li class="<?php if(current_url() == site_url('admin/sms_template')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/sms_template'); ?>">
+						<i class="fa fa-envelope"></i> <span><?php echo SMS_TEMPLATE ?></span>
+					</a>
+				</li>
+				<li class="<?php if(current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/sms_history'); ?>">
+						<i class="fa fa-envelope"></i> <span><?php echo SMS_HISTORY ?></span>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</section>
 	<!-- /.sidebar -->
 </aside>
-

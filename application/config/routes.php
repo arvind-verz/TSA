@@ -72,6 +72,16 @@ $route['admin/material/moveto_active_list/(:any)'] = 'backend/materialcontroller
 $route['admin/invoice'] = 'backend/invoicecontroller/index';
 
 
+/* SMS */
+$route['admin/sms_template'] = 'backend/smscontroller/index';
+$route['admin/sms_template/sms_template_create'] = 'backend/smscontroller/sms_template_create';
+$route['admin/sms_template/sms_template_store'] = 'backend/smscontroller/sms_template_store';
+$route['admin/sms_template/sms_template_edit/(:any)'] = 'backend/smscontroller/sms_template_edit/$1';
+$route['admin/sms_template/sms_template_update/(:any)'] = 'backend/smscontroller/sms_template_update/$1';
+
+$route['admin/sms_history'] = 'backend/smscontroller/sms_history';
+
+
 /* Student Admin */
 /* Tutor Admin */
 $route['admin/tutors'] = 'backend/TutorController/index';

@@ -11,6 +11,15 @@ function is_logged_in()
         return redirect('admin/login');
     }
 }
+function get_sms_condition($id = null) {
+    $sms_condition = ['Student absent without leave', 'Fee reminder', 'Late Fee reminder', 'Student filled a miss class request', 'Reminder one day before reservation', 'Centre wide announcements'];
+    if($id) {
+        return $sms_condition[($id-1)];
+    }
+    else {
+        return $sms_condition;
+    }
+}
 function level($value = null)
 {
     if ($value == 1) {
@@ -281,5 +290,21 @@ function get_class_code_transfer($class_code) {
         <option value="<?php echo $row->class_code ?>"><?php echo $row->class_code ?></option>
         <?php
         }
+    }
+}
+
+function get_sms_template($id = null) {
+    $ci = &get_instance();
+    $ci->load->database();
+    if($id) {
+        $query = $ci->db->get_where('sms_template', ['id' => $id]);
+        $result = $query->row();
+    }
+    else {
+        $query = $ci->db->get('sms_template');
+        $result = $query->result();
+    }
+    if($query) {
+        return $result;
     }
 }
