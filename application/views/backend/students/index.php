@@ -180,7 +180,7 @@ $(document).ready(function(){
 								
                                 ?>
                                 <tr <?php if(isset($enr->collected) && $enr->collected==0 && $student->status==0) echo 'bgcolor="#F00"';?>>
-                                <td><?php if($student->status!=0){?><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/><?php }?></td>
+                                <td><?php if($student->status==0){?><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/><?php }?></td>
                                 <td><?php echo $student->name;?></td>
                                 <td><?php echo $student->email;?></td>
                                 <td><?php echo $student->username;?></td>

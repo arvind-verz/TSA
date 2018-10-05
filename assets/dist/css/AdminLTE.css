@@ -1,7 +1,7 @@
 /*!
  *   AdminLTE v2.4.5
  *   Author: Almsaeed Studio
- *	 Website: Almsaeed Studio <https://adminlte.io>
+ *   Website: Almsaeed Studio <https://adminlte.io>
  *   License: Open source - MIT
  *           Please visit http://opensource.org/licenses/MIT for more information
  */
@@ -459,7 +459,7 @@ a:focus {
 .user-panel {
   position: relative;
   width: 100%;
-  padding: 10px;
+  /* padding: 10px; */
   overflow: hidden;
 }
 .user-panel:before,
@@ -5262,4 +5262,20 @@ table.text-center th {
 .pl-5,
 .px-5 {
   padding-left: 3rem !important;
+}
+
+.w-50 {
+  width: 50px;
+}
+
+.d-inline {
+  display: inline-block;
+}
+
+.border-0 {
+  border: initial;
+}
+
+.c-no-drop {
+  cursor: no-drop;
 }
