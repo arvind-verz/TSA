@@ -29,6 +29,7 @@
         <link href="<?php echo base_url('assets/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css'); ?>" rel="stylesheet">
         <!-- Daterange picker -->
         <link href="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/daterangepicker.css'); ?>" rel="stylesheet">
+        <link href="<?php echo base_url('assets/plugins/iCheck/all.css'); ?>" rel="stylesheet">
         <!-- bootstrap wysihtml5 - text editor -->
         <link href="<?php echo base_url('assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'); ?>" rel="stylesheet">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

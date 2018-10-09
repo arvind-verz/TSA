@@ -308,3 +308,23 @@ function get_sms_template($id = null) {
         return $result;
     }
 }
+
+function get_billing($id = null) {
+    $ci = &get_instance();
+    $ci->load->database();
+    if($id) {
+        $query = $ci->db->get_where(BILLING, ['id' => $id]);
+        $result = $query->row();
+    }
+    else {
+        $query = $ci->db->get(BILLING);
+        $result = $query->result();
+    }
+    if($query) {
+        return $result;
+    }
+}
+
+function send_first_month_invoice($student_id) {
+    return print_r($student_id);
+}
