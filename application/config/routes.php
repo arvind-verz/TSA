@@ -82,6 +82,14 @@ $route['admin/sms_template/sms_template_update/(:any)'] = 'backend/smscontroller
 $route['admin/sms_history'] = 'backend/smscontroller/sms_history';
 
 
+/* BILLING */
+$route['admin/billing'] = 'backend/billingcontroller/index';
+$route['admin/billing/create'] = 'backend/billingcontroller/create';
+$route['admin/billing/store'] = 'backend/billingcontroller/store';
+$route['admin/billing/edit/(:any)'] = 'backend/billingcontroller/edit/$1';
+$route['admin/billing/update/(:any)'] = 'backend/billingcontroller/update/$1';
+
+
 /* Student Admin */
 /* Tutor Admin */
 $route['admin/tutors'] = 'backend/TutorController/index';

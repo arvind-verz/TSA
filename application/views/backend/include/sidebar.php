@@ -41,8 +41,13 @@
 						<i class="fa fa-shopping-cart"></i> <span><?php echo ORDER ?></span>
 					</a>
 				</li>
+				<li class="<?php if(current_url() == site_url('admin/billing')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/billing'); ?>">
+						<i class="fa fa-file"></i> <span><?php echo BILLING ?></span>
+					</a>
+				</li>
 				<li class="<?php if(current_url() == site_url('admin/invoice')) { echo 'active'; } ?>">
-					<a href="#">
+					<a href="<?php echo site_url('admin/invoice'); ?>">
 						<i class="fa fa-file"></i> <span><?php echo INVOICE ?></span>
 					</a>
 				</li>
