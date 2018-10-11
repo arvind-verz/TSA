@@ -27,7 +27,7 @@ class Billing extends CI_Model
             'updated_at'              => $this->date,
         );
         $this->db->trans_start();
-        $this->db->insert(BILLING, $data);
+        $this->db->insert(DB_BILLING, $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -56,7 +56,7 @@ class Billing extends CI_Model
         );
         $this->db->trans_start();
         $this->db->where('id', $id);
-        $this->db->update(BILLING, $data);
+        $this->db->update(DB_BILLING, $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
