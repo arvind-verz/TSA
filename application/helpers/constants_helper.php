@@ -4,6 +4,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /* NAMES */
 define('ADMINPANEL', 'Admin Panel');
 
+define('DB_DASHBOARD', 'dashboard');
+define('DB_SUBJECT', 'subject');
+define('DB_TUTOR', 'Tutor');
+define('DB_CLASSES', 'class');
+define('DB_ATTENDANCE', 'attendance');
+define('DB_STUDENT', 'student');
+define('DB_ORDER', 'order');
+define('DB_BOOK', 'Book');
+define('DB_MATERIAL', 'material');
+define('DB_INVOICE', 'invoice');
+define('DB_BILLING', 'billing');
+
 /* MODULES */
 define('DASHBOARD', 'Dashboard');
 define('SUBJECT', 'Subject');
