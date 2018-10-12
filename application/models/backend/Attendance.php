@@ -28,13 +28,13 @@ class Attendance extends CI_Model
                 'created_at'      => $this->date,
                 'updated_at'      => $this->date,
             );
+            $this->db->trans_start();
+            $this->db->insert(DB_ATTENDANCE, $data);
+            $this->db->trans_complete();
             $query = $this->db->get_where(DB_ATTENDANCE, ['student_id' => $_POST['student_id'][$i], 'class_code' => $_POST['class_code']]);
             if($query->num_rows<1) {
                 send_first_month_invoice($_POST['student_id'][$i]);
             }
-            $this->db->trans_start();
-            $this->db->insert(DB_ATTENDANCE, $data);
-            $this->db->trans_complete();
         }
 
         if ($this->db->trans_status() === false) {
@@ -120,6 +120,7 @@ class Attendance extends CI_Model
             ];
             $this->db->where('student_id', $id);
             $this->db->update(STUDENT, $data);
+            send_class_transfer_invoice($id);
         }
         $this->db->trans_complete();
 

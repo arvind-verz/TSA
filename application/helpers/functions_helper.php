@@ -328,17 +328,230 @@ function get_billing($id = null)
 
 function send_first_month_invoice($student_id)
 {
+
     $ci = &get_instance();
     $ci->load->database();
 
-    $invoice_id   = uniqid();
-    $invoice_date = date('Y-m-d H:i:s');
+    $invoice_id = uniqid();
+    $date       = date('Y-m-d H:i:s');
+
+    $result2 = get_invoice_result2($student_id);
+    /*echo $ci->db->last_query();
+    echo '<br/>';*/
+
+    if (!$result2) {
+        return false;
+    }
+
+    $result3 = get_invoice_result2($result2->sid);
+
+    $emailto        = $result2->email;
+    $fees           = $result2->monthly_fees;
+    $extra_charges  = $result2->ex_charges;
+    $credit_value   = $result2->credit_value;
+    $book_charges   = $result3->book_price_amount;
+    $invoice_amount = 0;
+
+    $query        = "select * from " . DB_BILLING . " where MONTH(invoice_generation_date) = MONTH(CURRENT_DATE()) and YEAR(invoice_generation_date) = YEAR(CURRENT_DATE())";
+    $query        = $ci->db->query($query);
+    $result       = $query->row();
+    $billing_data = json_decode($result->billing);
+    $counter      = count($billing_data);
+    $i            = 0;
+
+    if (date("Y-m-d", strtotime($result->invoice_generation_date)) != date('Y-m-d')) {
+        return false;
+    }
+
+    foreach ($billing_data as $billing) {
+        $dates = explode("-", $billing->date_range);
+        if (strtotime($result2->attendance_date) >= strtotime($dates[0]) && strtotime($result2->attendance_date) <= strtotime($dates[1])) {
+            $invoice_amount = (((($counter - $i) * $fees) / 4) + $book_charges + $extra_charges - $credit_value);
+            $data           = [
+                'invoice_id'     => $invoice_id,
+                'student_id'     => $student_id,
+                'invoice_date'   => $date,
+                'invoice_amount' => $invoice_amount,
+                'created_at'     => $date,
+                'updated_at'     => $date,
+            ];
+            $query = $ci->db->insert(DB_INVOICE, $data);
+            if ($query) {
+                $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject = '', $message = '');
+                if ($mail == true) {
+                    //die(print_r($query));
+                }
+            }
+        }
+        $i++;
+    }
+
+}
+
+function send_archived_invoice($student_id)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $invoice_id = uniqid();
+    $date       = date('Y-m-d H:i:s');
+
+    $result2 = get_invoice_result2($student_id);
+    //die(print_r($result2));
+
+    if (!$result2) {
+        return false;
+    }
+
+    $result3 = get_invoice_result3($result2->sid);
+
+    $emailto         = $result2->email;
+    $fees            = $result2->monthly_fees;
+    $extra_charges   = $result2->ex_charges;
+    $deposit         = $result2->deposit;
+    $credit_value    = $result2->credit_value;
+    $frequency       = $result2->frequency;
+    $book_charges    = $result3->book_price_amount;
+    $invoice_amount  = 0;
+    $subject         = '';
+    $message         = '';
+    $invoice_content = [
+        'subject' => $subject,
+        'message' => $message,
+    ];
+
+    $invoice_amount = (((4 / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
 
     $data = [
-        'invoice_id'   => $invoice_id,
-        'student_id'   => $student_id,
-        'invoice_date' => $invoice_date,
+        'invoice_id'      => $invoice_id,
+        'student_id'      => $student_id,
+        'invoice_date'    => $date,
+        'invoice_amount'  => $invoice_amount,
+        'invoice_content' => json_encode($invoice_content),
+        'created_at'      => $date,
+        'updated_at'      => $date,
     ];
+    $query = $ci->db->insert(DB_INVOICE, $data);
+    if ($query) {
+        $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+        if ($mail == true) {
+            //die(print_r($query));
+            return true;
+        }
+    }
+}
+
+function send_final_settlement_invoice($student_id)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $invoice_id = uniqid();
+    $date       = date('Y-m-d H:i:s');
+
+    $result2 = get_invoice_result2($student_id);
+    //die(print_r($result2));
+
+    if (!$result2) {
+        return false;
+    }
+
+    $result3 = get_invoice_result3($result2->sid);
+
+    $emailto         = $result2->email;
+    $fees            = $result2->monthly_fees;
+    $extra_charges   = $result2->ex_charges;
+    $deposit         = $result2->deposit;
+    $credit_value    = $result2->credit_value;
+    $frequency       = $result2->frequency;
+    $book_charges    = $result3->book_price_amount;
+    $invoice_amount  = 0;
+    $subject         = '';
+    $message         = '';
+    $invoice_content = [
+        'subject' => $subject,
+        'message' => $message,
+    ];
+
+    $invoice_amount = (((4 / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+
+    $data = [
+        'invoice_id'      => $invoice_id,
+        'student_id'      => $student_id,
+        'invoice_date'    => $date,
+        'invoice_amount'  => $invoice_amount,
+        'invoice_content' => json_encode($invoice_content),
+        'created_at'      => $date,
+        'updated_at'      => $date,
+    ];
+    $query = $ci->db->insert(DB_INVOICE, $data);
+    if ($query) {
+        $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+        if ($mail == true) {
+            //die(print_r($query));
+            return true;
+        }
+    }
+}
+
+function send_class_transfer_invoice($student_id)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $invoice_id = uniqid();
+    $date       = date('Y-m-d H:i:s');
+
+    $result2 = get_invoice_result2($student_id);
+    //die(print_r($result2));
+
+    if (!$result2) {
+        return false;
+    }
+
+    $result3 = get_invoice_result3($result2->sid);
+
+    $emailto         = $result2->email;
+    $fees            = $result2->monthly_fees;
+    $extra_charges   = $result2->ex_charges;
+    $deposit         = $result2->deposit;
+    $credit_value    = $result2->credit_value;
+    $frequency       = $result2->frequency;
+    $book_charges    = $result3->book_price_amount;
+    $invoice_amount  = 0;
+    $subject         = '';
+    $message         = '';
+    $invoice_content = [
+        'subject' => $subject,
+        'message' => $message,
+    ];
+
+    $invoice_amount = (((4 / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+
+    $data = [
+        'invoice_id'      => $invoice_id,
+        'student_id'      => $student_id,
+        'invoice_date'    => $date,
+        'invoice_amount'  => $invoice_amount,
+        'invoice_content' => json_encode($invoice_content),
+        'created_at'      => $date,
+        'updated_at'      => $date,
+    ];
+    $query = $ci->db->insert(DB_INVOICE, $data);
+    if ($query) {
+        $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+        if ($mail == true) {
+            //die(print_r($query));
+            return true;
+        }
+    }
+}
+
+/* RESULT FOR INVOICE */
+function get_invoice_result2($student_id)
+{
+    $ci = &get_instance();
+    $ci->load->database();
 
     $ci->db->select('*, student.id as sid');
     $ci->db->from(DB_ATTENDANCE);
@@ -348,57 +561,30 @@ function send_first_month_invoice($student_id)
     $ci->db->where('attendance.student_id', $student_id);
     $ci->db->order_by('attendance.attendance_date', 'DESC');
     $ci->db->limit(1);
-    $query2  = $ci->db->get();
-    $result2 = $query2->row();
-    /*echo $ci->db->last_query();
-    echo '<br/>';*/
-    
+    $query2 = $ci->db->get();
+    return $query2->row();
+}
+
+function get_invoice_result3($sid)
+{
+    $ci = &get_instance();
+    $ci->load->database();
 
     $ci->db->select('*, SUM(book_price) as book_price_amount');
     $ci->db->from(DB_ORDER . 's');
     $ci->db->join('order_details', 'orders.order_id = order_details.order_id');
     $ci->db->join(DB_MATERIAL, 'orders.book_id = material.id');
-    $ci->db->where('order_details.student_id', $result2->sid);
+    $ci->db->where('order_details.student_id', $sid);
+    $ci->db->where('order_details.status', 1);
     $ci->db->where('MONTH(orders.order_date) = MONTH(CURRENT_DATE())');
-    $query3  = $ci->db->get();
-    $result3 = $query3->row();
-    
-    $emailto        = $result2->email;
-    $fees           = $result2->monthly_fees;
-    $extra_charges  = $result2->ex_charges;
-    $credit_value   = $result2->credit_value;
-    $book_charges   = $result3->book_price_amount;
-    $invoice_amount = 0;
-    
-    $query        = "select * from " . DB_BILLING . " where MONTH(invoice_generation_date) = MONTH(CURRENT_DATE()) and YEAR(invoice_generation_date) = YEAR(CURRENT_DATE())";
-    $query        = $ci->db->query($query);
-    $result       = $query->row();
-    $billing_data = json_decode($result->billing);
-    $counter      = count($billing_data);
-    $i            = 0;
-    foreach ($billing_data as $billing) {
-        $dates = explode("-", $billing->date_range);
-        if (strtotime($result2->attendance_date) >= strtotime($dates[0]) && strtotime($result2->attendance_date) <= strtotime($dates[1])) {
-            $invoice_amount = (((($counter - $i) * $fees) / 4) + $book_charges + $extra_charges - $credit_value);
-
-            $query = $ci->db->insert(DB_INVOICE, $data);
-            if ($query) {
-                $mail = send_first_month_invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $type = null);
-                if ($mail==true) {
-                    die(print_r($mail));
-                }
-                else {
-                    die(print_r($mail));
-                }
-            }
-        }
-        $i++;}
-    
+    $query3 = $ci->db->get();
+    return $query3->row();
 }
+/* END RESULT FOR INVOICE */
 
-function send_first_month_invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $type)
+function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $type, $subject, $message)
 {
-    $ci = &get_instance();
+    /*$ci = &get_instance();
     $ci->load->library('email');
 
     $config['protocol'] = 'sendmail';
@@ -415,5 +601,6 @@ function send_first_month_invoice_mail($emailto, $invoice_id, $invoice_date, $in
     $ci->email->message('Testing the email class.');
 
     $ci->email->send();
-    echo $ci->email->print_debugger();
+    echo $ci->email->print_debugger();*/
+    return true;
 }

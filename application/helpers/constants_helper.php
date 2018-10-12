@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /* NAMES */
 define('ADMINPANEL', 'Admin Panel');
 
+/* DB TABLES */
 define('DB_DASHBOARD', 'dashboard');
 define('DB_SUBJECT', 'subject');
 define('DB_TUTOR', 'Tutor');
