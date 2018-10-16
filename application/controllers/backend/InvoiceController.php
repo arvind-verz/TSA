@@ -14,7 +14,7 @@ class InvoiceController extends CI_Controller
     public function index()
     {
         //send_class_transfer_invoice('123');
-        //die(print_r(send_first_month_invoice('123')));
+        die(print_r(send_class_transfer_invoice('123')));
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(INVOICE, 'admin/invoice');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
