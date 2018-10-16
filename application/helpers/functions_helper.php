@@ -16,7 +16,7 @@ function get_invoice_no()
     $ci = &get_instance();
     $ci->load->database();
 
-    $query  = $ci->db->select('*')->from(INVOICE)->like('invoice_no', 'INV', 'after')->order_by('id', 'DESC')->limit(1)->get();
+    $query  = $ci->db->select('*')->from(DB_INVOICE)->like('invoice_no', 'INV', 'after')->order_by('id', 'DESC')->limit(1)->get();
     $result = $query->row();
     if ($result) {
         return 'INV00' . (substr($result->invoice_no, 3) + 1);
@@ -685,19 +685,29 @@ function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $ty
     $ci->load->library('email');
 
     $config['protocol'] = 'smtp';
+    $config['smtp_host']    = 'ssl://smtp.gmail.com';
+    $config['smtp_port']    = '465';
+    $config['smtp_user']    = 'purohitarvind777@gmail.com';
+    $config['smtp_pass']    = '@tif@sl@m';
     $config['mailpath'] = '/usr/sbin/sendmail';
     $config['charset']  = 'iso-8859-1';
     $config['wordwrap'] = true;
     $config['mailtype'] = 'html';
 
     $ci->email->initialize($config);
-    $ci->email->from('purohitarvind77@gmail.com', 'The Science Academy');
-    $ci->email->to($emailto);
+    $ci->email->from('purohitarvind777@gmail.com', 'The Science Academy');
+    $ci->email->to('arvind.verz@gmail.com');
 
     $ci->email->subject('Email Test');
     $ci->email->message('Testing the email class.');
 
     $ci->email->send();
-    //echo $ci->email->print_debugger();
+    echo $ci->email->print_debugger();
+    /*$to = "arvind.verz@gmail.com";
+    $subject = "My subject";
+    $txt = "Hello world!";
+    $headers = "From: purohitarvind77@gmail.com";
+
+    mail($to,$subject,$txt,$headers);*/
     return true;
 }

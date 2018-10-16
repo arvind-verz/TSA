@@ -37,7 +37,7 @@ class Invoice extends CI_Model
         if (count($invoice_id)) {
             foreach ($invoice_id as $id) {
                 $this->db->where('invoice_id', $id);
-                $this->db->update(INVOICE, $data);
+                $this->db->update(DB_INVOICE, $data);
             }
         }
         $this->db->trans_complete();
