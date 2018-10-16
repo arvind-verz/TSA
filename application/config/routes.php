@@ -70,6 +70,8 @@ $route['admin/material/moveto_active_list/(:any)'] = 'backend/MaterialController
 
 /* INVOICE */
 $route['admin/invoice'] = 'backend/InvoiceController/index';
+$route['admin/invoice/get_invoice_sheet'] = 'backend/InvoiceController/get_invoice_sheet';
+$route['admin/invoice/payment_status_update'] = 'backend/InvoiceController/payment_status_update';
 
 
 /* SMS */
