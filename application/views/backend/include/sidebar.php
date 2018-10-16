@@ -1,7 +1,10 @@
 <aside class="main-sidebar">
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> master
 	<!-- sidebar: style can be found in sidebar.less -->
 	<section class="sidebar">
 		<!-- Sidebar user panel -->
@@ -44,11 +47,17 @@
 						<i class="fa fa-shopping-cart"></i> <span><?php echo ORDER ?></span>
 					</a>
 				</li>
+				<li class="<?php if(current_url() == site_url('admin/billing')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/billing'); ?>">
+						<i class="fa fa-file"></i> <span><?php echo BILLING ?></span>
+					</a>
+				</li>
 				<li class="<?php if(current_url() == site_url('admin/invoice')) { echo 'active'; } ?>">
-					<a href="#">
+					<a href="<?php echo site_url('admin/invoice'); ?>">
 						<i class="fa fa-file"></i> <span><?php echo INVOICE ?></span>
 					</a>
 				</li>
+<<<<<<< HEAD
             <li class="">
             
             <a href="<?php echo site_url('admin/students'); ?>">
@@ -67,9 +76,36 @@
 <i class="fa fa-dashboard"></i> <span><?php echo CMS ?></span>
 </a>
 </li>
+=======
+				<li class="<?php if(current_url() == site_url('admin/students')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/students'); ?>">
+						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
+					</a>
+				</li>
+				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
+					<a href="#">
+						<i class="fa fa-envelope"></i> <span>SMS</span>
+						<span class="pull-right-container">
+							<i class="fa fa-angle-left pull-right"></i>
+						</span>
+					</a>
+					<ul class="treeview-menu">
+						<li class="<?php if(current_url() == site_url('admin/sms_template')) { echo 'active'; } ?>">
+							<a href="<?php echo site_url('admin/sms_template'); ?>">
+								<span><?php echo SMS_TEMPLATE ?></span>
+							</a>
+						</li>
+						<li class="<?php if(current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
+							<a href="<?php echo site_url('admin/sms_history'); ?>">
+								<span><?php echo SMS_HISTORY ?></span>
+							</a>
+						</li>
+					</ul>
+				</li>
+				
+>>>>>>> master
 			</ul>
 		</div>
 	</section>
 	<!-- /.sidebar -->
 </aside>
-

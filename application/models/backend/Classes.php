@@ -13,7 +13,7 @@ class Classes extends CI_Model
     public function store()
     {
         //die(print_r($_POST));
-        $query = $this->db->get_where(CLASSES, ['class_code' => $_POST['class_code']]);
+        $query = $this->db->get_where(DB_CLASSES, ['class_code' => $_POST['class_code']]);
         if($query->num_rows()>0) {
             $this->session->set_flashdata('warning', CLASSES . ' Code ' . MSG_EXIST);
             return redirect('admin/classes/create');
@@ -38,7 +38,7 @@ class Classes extends CI_Model
         );
 
         $this->db->trans_start();
-        $this->db->insert(CLASSES, $data);
+        $this->db->insert(DB_CLASSES, $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -72,7 +72,7 @@ class Classes extends CI_Model
 
         $this->db->trans_start();
         $this->db->where('class_id', $id);
-        $this->db->update(CLASSES, $data);
+        $this->db->update(DB_CLASSES, $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -88,7 +88,7 @@ class Classes extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('class_id', $id);
-        $this->db->update(CLASSES, ['is_archive' => 1, 'archive_at' => $this->date]);
+        $this->db->update(DB_CLASSES, ['is_archive' => 1, 'archive_at' => $this->date]);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -104,7 +104,7 @@ class Classes extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('class_id', $id);
-        $this->db->update(CLASSES, ['is_archive' => 0, 'updated_at' => $this->date]);
+        $this->db->update(DB_CLASSES, ['is_archive' => 0, 'updated_at' => $this->date]);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {

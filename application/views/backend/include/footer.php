@@ -38,6 +38,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="<?php echo base_url('assets/dist/js/pages/dashboard.js'); ?>"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo base_url('assets/dist/js/demo.js'); ?>"></script>
+<script src="<?php echo base_url('assets/plugins/iCheck/icheck.min.js'); ?>"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#datatable").DataTable();
@@ -46,6 +47,13 @@ $.widget.bridge('uibutton', $.ui.button);
 			autoclose: true,
 			format: 'yyyy-mm-dd',
 		})
+
+		$('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
+		    checkboxClass: 'icheckbox_flat-green',
+		    radioClass: 'iradio_flat-green'
+		})
+
+		$('.date_range').daterangepicker();
 	});
 </script>
 </body>

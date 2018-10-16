@@ -13,11 +13,13 @@ class Attendance extends CI_Model
     public function store()
     {
         //die(print_r($_POST['attendance_value3']));
-        $query = $this->db->get_where(ATTENDANCE, ['class_code' => $_POST['class_code'], 'attendance_date' => $_POST['attendance_date']]);
+        $query = $this->db->get_where(DB_ATTENDANCE, ['class_code' => $_POST['class_code'], 'attendance_date' => $_POST['attendance_date']]);
         if($query->num_rows()>0) {
         	$this->session->set_flashdata('warning', ATTENDANCE . ' ' . MSG_EXIST);
             return redirect('admin/attendance/create');
         }
+
+        $this->db->trans_start();
         for ($i = 0; $i < count($_POST['student_id']); $i++) {
             $data = array(
                 'class_code'      => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
@@ -28,10 +30,13 @@ class Attendance extends CI_Model
                 'created_at'      => $this->date,
                 'updated_at'      => $this->date,
             );
-            $this->db->trans_start();
-            $this->db->insert(ATTENDANCE, $data);
-            $this->db->trans_complete();
+            $this->db->insert(DB_ATTENDANCE, $data);
+            $query = $this->db->get_where(DB_ATTENDANCE, ['student_id' => $_POST['student_id'][$i], 'class_code' => $_POST['class_code']]);
+            if($query->num_rows<1) {
+                send_first_month_invoice($_POST['student_id'][$i]);
+            }
         }
+        $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
@@ -46,7 +51,7 @@ class Attendance extends CI_Model
         $class_code = $_GET['class_code'];
         $class_month = $_GET['class_month'];
 
-        $query = $this->db->get_where(CLASSES, ['class_code' => $class_code]);
+        $query = $this->db->get_where(DB_CLASSES, ['class_code' => $class_code]);
         $result = $query->row();
         if($result) {
             $this->db->select('*');
@@ -106,7 +111,7 @@ class Attendance extends CI_Model
         $student_id = $_GET['student_id'];
         $class_code = $_GET['class_code'];
 
-        $query = $this->db->get_where(CLASSES, ['class_code' => $class_code]);
+        $query = $this->db->get_where(DB_CLASSES, ['class_code' => $class_code]);
         $result = $query->row();
 
         $this->db->trans_start();
@@ -116,6 +121,7 @@ class Attendance extends CI_Model
             ];
             $this->db->where('student_id', $id);
             $this->db->update(STUDENT, $data);
+            send_class_transfer_invoice($id);
         }
         $this->db->trans_complete();
 

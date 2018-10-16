@@ -13,7 +13,7 @@ class Subject extends CI_Model
     public function store()
     {
         //die(print_r($_POST));
-        $query = $this->db->get_where(SUBJECT, ['subject_code' => $_POST['subject_code']]);
+        $query = $this->db->get_where(DB_SUBJECT, ['subject_code' => $_POST['subject_code']]);
         if($query->num_rows()>0) {
             $this->session->set_flashdata('warning', SUBJECT . ' Code ' . MSG_EXIST);
             return redirect('admin/subject/create');
@@ -27,7 +27,7 @@ class Subject extends CI_Model
         );
 
         $this->db->trans_start();
-        $this->db->insert(SUBJECT, $data);
+        $this->db->insert(DB_SUBJECT, $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -50,7 +50,7 @@ class Subject extends CI_Model
 
         $this->db->trans_start();
         $this->db->where('subject_id', $id);
-        $this->db->update(SUBJECT, $data);
+        $this->db->update(DB_SUBJECT, $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -66,7 +66,7 @@ class Subject extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('subject_id', $id);
-        $this->db->update(SUBJECT, ['is_archive' => 1, 'archive_at' => $this->date]);
+        $this->db->update(DB_SUBJECT, ['is_archive' => 1, 'archive_at' => $this->date]);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -82,7 +82,7 @@ class Subject extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('subject_id', $id);
-        $this->db->update(SUBJECT, ['is_archive' => 0, 'updated_at' => $this->date]);
+        $this->db->update(DB_SUBJECT, ['is_archive' => 0, 'updated_at' => $this->date]);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {

@@ -23,7 +23,7 @@ class Order extends CI_Model
         );
 
         $this->db->trans_start();
-        $this->db->insert(ORDER . 's', $data);
+        $this->db->insert(DB_ORDER . 's', $data);
 
         $order_id = $this->db->insert_id();
         foreach ($_POST['student'] as $student) {

@@ -24,7 +24,7 @@ class Material extends CI_Model
         );
 
         $this->db->trans_start();
-        $this->db->insert(MATERIAL, $data);
+        $this->db->insert(DB_MATERIAL, $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -49,7 +49,7 @@ class Material extends CI_Model
 
         $this->db->trans_start();
         $this->db->where('material_id', $id);
-        $this->db->update(MATERIAL, $data);
+        $this->db->update(DB_MATERIAL, $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -65,7 +65,7 @@ class Material extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('material_id', $id);
-        $this->db->update(MATERIAL, ['is_archive' => 1, 'archive_at' => $this->date]);
+        $this->db->update(DB_MATERIAL, ['is_archive' => 1, 'archive_at' => $this->date]);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
@@ -81,7 +81,7 @@ class Material extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('material_id', $id);
-        $this->db->update(MATERIAL, ['is_archive' => 0, 'updated_at' => $this->date]);
+        $this->db->update(DB_MATERIAL, ['is_archive' => 0, 'updated_at' => $this->date]);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {

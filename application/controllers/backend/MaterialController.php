@@ -35,7 +35,7 @@ class MaterialController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = MATERIAL . " <small> " . ARCHIVED . " </small>";
-        $data['books']     = get_archived(MATERIAL);
+        $data['books']     = get_archived(DB_MATERIAL);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
