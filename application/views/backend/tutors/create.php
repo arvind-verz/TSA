@@ -7,7 +7,9 @@
         <?php print_r($breadcrumbs);?>
     </section>
 
-    <?php $this->load->view('backend/include/messages') ?>
+    <?php $this->load->view('backend/include/messages') ;
+	$subjects=$this->tutors->get_subjects();
+	?>
     
     <!-- Main content -->
     <section class="content">
@@ -38,11 +40,8 @@
                             <label for="">Salary Scheme</label>
                             <select name="salary_scheme" id="salary_scheme" class="form-control select2">
                                 <option value="">-- Select One --</option>
-                                <option value="0">Scheme 1</option>
-                                <option value="1">Scheme 2</option>
-                                <option value="2">Scheme 3</option>
-                                <option value="3">Scheme 4</option>
-                               
+                                <option value="0">Fixed</option>
+                                <option value="1">Variable</option>
                             </select>
                         </div>                       
                         <div class="form-group">
@@ -53,10 +52,10 @@
                             <label for="">Subject </label>
                             <select name="subject" id="subject" class="form-control select2">
                                 <option value="">-- Select One --</option>
-                                <option value="0">subject 1</option>
-                                <option value="1">subject 2</option>
-                                <option value="2">subject 3</option>
-                                <option value="3">subject 4</option>
+                               <?php if(count($subjects)>0){
+								      foreach($subjects as $subject):?>
+									  <option value="<?php echo $subject->subject_code;?>"><?php echo $subject->subject_name;?></option>
+								<?php endforeach;}?>
                                
                             </select>
                         </div>  

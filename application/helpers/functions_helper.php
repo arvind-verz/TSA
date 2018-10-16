@@ -77,7 +77,24 @@ function get_classes($id = null)
         return $query->result();
     }
 }
+ function check_image_valid($image) {
+        $mime = array(
+            'image/gif',
+            'image/jpeg',
+            'image/png'
+        );
+        $file_info = getimagesize($image);
 
+        if (empty($file_info)) { // No Image?
+            return false;
+        } else { // An Image?
+            $file_mime = $file_info['mime'];
+            if (in_array($file_mime, $mime))
+                return true;
+            else
+                return false;
+        }
+    }
 function get_attendance_sheet($class_code = null)
 {
     $i = 1;

@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/students/store'); ?>
+                    <?php echo form_open('admin/add-menu-item'); ?>
                     <div class="box-body">
                         <div class="form-group">
                           <label for="">Name</label>

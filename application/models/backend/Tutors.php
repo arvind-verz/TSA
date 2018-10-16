@@ -36,65 +36,75 @@ class Tutors extends CI_Model
 			$this->db->where('is_archive!=',1);	
 			if(isset($_POST['search']) && $_POST['search']==1)
 			{
-				 if(isset($_POST['s_name']) && $_POST['s_name']!="")
-				 $this->db->like('name',$_POST['s_name']);	
+				 if(isset($_POST['t_name']) && $_POST['t_name']!="")
+				 $this->db->like('tutor_name',$_POST['t_name']);	
 				 
-				 if(isset($_POST['s_email']) && $_POST['s_email']!="")
-				 $this->db->like('email',$_POST['s_email']);	
+				 if(isset($_POST['t_email']) && $_POST['t_email']!="")
+				 $this->db->like('email',$_POST['t_email']);	
 				 
-				 if(isset($_POST['s_phone']) && $_POST['s_phone']!="")
-				 $this->db->like('phone',$_POST['s_phone']);
+				 if(isset($_POST['t_phone']) && $_POST['t_phone']!="")
+				 $this->db->like('phone',$_POST['t_phone']);
 				 
-				 if(isset($_POST['p_name']) && $_POST['p_name']!="")
-				 $this->db->like('parent_name',$_POST['p_name']);
+				 if(isset($_POST['class_code']) && $_POST['class_code']!="")
+				 $this->db->like('class_code',$_POST['class_code']);
 				 
-				 if(isset($_POST['p_email']) && $_POST['p_email']!="")
-				 $this->db->like('parent_email',$_POST['p_email']);
+				 if(isset($_POST['t_id']) && $_POST['t_id']!="")
+				 $this->db->like('tutor_id',$_POST['t_id']);
 				 
-				 if(isset($_POST['p_phone']) && $_POST['p_phone']!="")
-				 $this->db->like('parents_phone',$_POST['p_phone']);
+				 if(isset($_POST['t_scheme']) && $_POST['t_scheme']!="")
+				 $this->db->where('salary_scheme',$_POST['t_scheme']);
 			}			 
 			$query = $this->db->get()->result_object();			
 				//echo $this->db->last_query();	
 			return $query;	
 	}
 	
-	public function get_student($id)
+	public function get_tutor($id)
 	{
 	
 			$this->db->select('*')
-					 ->from('student')
-					 ->where('student_id',$id);				 
+					 ->from('tutor')
+					 ->where('tutor_id',$id);				 
 				$query = $this->db->get()->row_object();
 				//echo $this->db->last_query();					
 				return $query;	
 	}
 	
-	public function get_archived_classes()
+	public function get_subjects()
+	{
+	
+			$this->db->select('*')
+					 ->from('subject');				 
+			$query = $this->db->get()->result_object();
+				//echo $this->db->last_query();					
+			return $query;	
+	}
+	
+	public function get_archived_tutors()
 	{
 	
 			$this->db->select('*');
-			$this->db->from('student');
+			$this->db->from('tutor');
 			
 			if(isset($_POST['search']) && $_POST['search']==1)
 			{
-				 if(isset($_POST['s_name']) && $_POST['s_name']!="")
-				 $this->db->like('name',$_POST['s_name']);	
+				 if(isset($_POST['t_name']) && $_POST['t_name']!="")
+				 $this->db->like('tutor_name',$_POST['t_name']);	
 				 
-				 if(isset($_POST['s_email']) && $_POST['s_email']!="")
-				 $this->db->like('email',$_POST['s_email']);	
+				 if(isset($_POST['t_email']) && $_POST['t_email']!="")
+				 $this->db->like('email',$_POST['t_email']);	
 				 
-				 if(isset($_POST['s_phone']) && $_POST['s_phone']!="")
-				 $this->db->like('phone',$_POST['s_phone']);
+				 if(isset($_POST['t_phone']) && $_POST['t_phone']!="")
+				 $this->db->like('phone',$_POST['t_phone']);
 				 
-				 if(isset($_POST['p_name']) && $_POST['p_name']!="")
-				 $this->db->like('parent_name',$_POST['p_name']);
+				 if(isset($_POST['class_code']) && $_POST['class_code']!="")
+				 $this->db->like('class_code',$_POST['class_code']);
 				 
-				 if(isset($_POST['p_email']) && $_POST['p_email']!="")
-				 $this->db->like('parent_email',$_POST['p_email']);
+				 if(isset($_POST['t_id']) && $_POST['t_id']!="")
+				 $this->db->like('tutor_id',$_POST['t_id']);
 				 
-				 if(isset($_POST['p_phone']) && $_POST['p_phone']!="")
-				 $this->db->like('parents_phone',$_POST['p_phone']);
+				 if(isset($_POST['t_scheme']) && $_POST['t_scheme']!="")
+				 $this->db->where('salary_scheme',$_POST['t_scheme']);
 			}	
 				$this->db->where('is_archive',1);				 
 				$query = $this->db->get()->result_object();				
@@ -224,76 +234,84 @@ class Tutors extends CI_Model
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
 			$data = array(
-				'name'   => !empty($_POST['name']) ? $_POST['name'] : null,
-				'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
-				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : null,
-				'username'      => !empty($_POST['username']) ? $_POST['username'] : null,
-				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
-				'age'    => !empty($_POST['age']) ? $_POST['age'] : null,
-				'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : null,
-				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : null,
-				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : null,
-				'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : null,
-				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : null,
-				'password'   => !empty($_POST['password']) ? md5($_POST['password']) : null,
-				'created_at'   => $this->date,
-				'updated_at'   => $this->date
-			);
+            'tutor_name'   => !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null,
+            'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
+            'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
+            'address'    => !empty($_POST['address']) ? $_POST['address'] : null,
+            'subject'   => !empty($_POST['subject']) ? $_POST['subject'] : null,
+            'salary_scheme'    => !empty($_POST['salary_scheme']) ? $_POST['salary_scheme'] : null,
+            'remark'  => !empty($_POST['remarks']) ? $_POST['remarks'] : null,
+            'tutor_permission' => !empty($_POST['tutor_permission']) ? $_POST['tutor_permission'] : null,
+            'password'   => !empty($_POST['password']) ? md5($_POST['password']) : null,
+            'created_at'   => $this->date,
+            'updated_at'   => $this->date);
 		}
 		else
 		{
 		$data = array(
-				'name'   => !empty($_POST['name']) ? $_POST['name'] : null,
-				'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
-				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : null,
-				'username'      => !empty($_POST['username']) ? $_POST['username'] : null,
-				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
-				'age'    => !empty($_POST['age']) ? $_POST['age'] : null,
-				'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : null,
-				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : null,
-				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : null,
-				'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : null,
-				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : null,
-				'created_at'   => $this->date,
-				'updated_at'   => $this->date
-			);	
+            'tutor_name'   => !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null,
+            'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
+            'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
+            'address'    => !empty($_POST['address']) ? $_POST['address'] : null,
+            'subject'   => !empty($_POST['subject']) ? $_POST['subject'] : null,
+            'salary_scheme'    => !empty($_POST['salary_scheme']) ? $_POST['salary_scheme'] : null,
+            'remark'  => !empty($_POST['remarks']) ? $_POST['remarks'] : null,
+            'tutor_permission' => !empty($_POST['tutor_permission']) ? $_POST['tutor_permission'] : null,
+            'created_at'   => $this->date,
+            'updated_at'   => $this->date);
 		
 		
 		}
 
         $this->db->trans_start();
-        $this->db->where('student_id', $id);
-        $this->db->update('student', $data);
+        $this->db->where('tutor_id', $id);
+        $this->db->update('tutor', $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
-            return redirect('admin/students/edit/'.$id);
+            return redirect('admin/tutors/edit/'.$id);
         } else {
             $this->session->set_flashdata('success', TUTOR . ' ' . MSG_UPDATED);
-            return redirect('admin/students/edit/'.$id);
+            return redirect('admin/tutors/edit/'.$id);
         }
     }
 	
-	public function update_archive($id)
+	public function update_archive($id,$data)
     {
         //die(print_r($_POST));
-        $data = array(
-            'is_archive'   => 1,
-			'updated_at'   => 1
-        );
+        
 
         $this->db->trans_start();
-        $this->db->where('student_id', $id);
-        $this->db->update('student', $data);
+        $this->db->where('tutor_id', $id);
+        $this->db->update('tutor', $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
-            return redirect('admin/students');
+            return redirect('admin/tutors');
         } else {
-            $this->session->set_flashdata('success','Student archived successfully.');
-            return redirect('admin/students');
+            $this->session->set_flashdata('success','Tutor archived successfully.');
+            return redirect('admin/tutors');
+        }
+    }
+	
+	public function update_archive2($id,$data)
+    {
+        //die(print_r($_POST));
+        
+
+        $this->db->trans_start();
+        $this->db->where('tutor_id', $id);
+        $this->db->update('tutor', $data);
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === false) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return redirect('admin/tutors/archived');
+        } else {
+            $this->session->set_flashdata('success','Tutor back to active list successfully.');
+            return redirect('admin/tutors/archived');
         }
     }
 

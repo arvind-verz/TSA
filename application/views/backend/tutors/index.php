@@ -45,17 +45,17 @@ $(document).ready(function(){
             <div class="col-lg-12">
                 <div class="box">
                     <div class="box-header">
-                        <a class="btn btn-info" href="<?php echo site_url('admin/students/create') ?>">
+                        <a class="btn btn-info" href="<?php echo site_url('admin/tutors/create') ?>">
                             <i aria-hidden="true" class="fa fa-plus-circle">
                             </i> <?php echo CREATE . ' ' . TUTOR ?>
                         </a>
-                        <a class="btn btn-info" href="<?php echo site_url('admin/students/archived') ?>">
+                        <a class="btn btn-info" href="<?php echo site_url('admin/tutors/archived') ?>">
                             <i aria-hidden="true" class="fa fa-archive">
                             </i> <?php echo ARCHIVED . ' ' . TUTOR ?>
                         </a>
                     </div>
                     
- <?php echo form_open('admin/students'); ?>
+ <?php echo form_open('admin/tutors'); ?>
                 <div class="col-md-4">
                 <div class="form-group">
                           <label for="">Tutor Name</label>
@@ -89,9 +89,15 @@ $(document).ready(function(){
                         </div>
                 </div>
                 <div class="col-md-4">
-                <div class="form-group">
-                          <label for="">Salary Scheme</label>
-                          <input type="text" name="t_scheme" class="form-control" value="<?php echo set_value('p_phone');?>">
+                
+                        <div class="form-group">
+                            <label for="">Salary Scheme</label>
+                            <select name="t_scheme" id="t_scheme" class="form-control select2">
+                                <option value="">-- Select One --</option>
+                                <option  value="0">Fixed</option>
+                                <option value="1">Variable</option>
+                               
+                            </select>
                         </div>
                 </div>
                <div class="col-md-4">
@@ -145,7 +151,7 @@ $(document).ready(function(){
                                 <td><?php echo isset($tutor->subject) ? $tutor->subject : '-' ?></td>
                                 <td><?php echo isset($tutor->phone) ? $tutor->phone : '-' ?></td>
                                 <td></td>
-                                <td>Edit | Archive </td>
+                                <td><a title="Edit" href="<?php echo site_url('admin/tutors/edit/'.$tutor->tutor_id) ?>"><i aria-hidden="true" class="fa fa-pencil-square-o btn btn-warning"></i></a><a title="Edit" href="<?php echo site_url('admin/tutors/archive/'.$tutor->tutor_id) ?>" class="pull-right" onclick="return confirm('Are you sure you want to archive this tutor?');"><i aria-hidden="true" class="fa fa-archive btn btn-danger"></i></a> </td>
                                
                                 </tr>
                                 <?php

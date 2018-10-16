@@ -4,27 +4,41 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /* NAMES */
 define('ADMINPANEL', 'Admin Panel');
 
+
+define('DB_DASHBOARD', 'dashboard');
+define('DB_SUBJECT', 'subject');
+define('DB_TUTOR', 'Tutor');
+define('DB_CLASSES', 'class');
+define('DB_ATTENDANCE', 'attendance');
+define('DB_STUDENT', 'student');
+define('DB_ORDER', 'order');
+define('DB_BOOK', 'Book');
+define('DB_MATERIAL', 'material');
+define('DB_INVOICE', 'invoice');
+define('DB_BILLING', 'billing');
+define('TBL_MENU_POSITION' , 'menu_position');
+define('TBL_MENU' , 'menu'); 
+define('TBL_CMS' ,'pages'); 
 /* MODULES */
 define('DASHBOARD', 'Dashboard');
 define('SUBJECT', 'Subject');
 define('TUTOR', 'Tutor');
 define('CLASSES', 'Class');
-define('STUDENT', 'Student');
-
 define('ATTENDANCE', 'Attendance');
 define('STUDENT', 'Student');
-
-
-define('STUDENT', 'Student');
-
-define('ATTENDANCE', 'Attendance');
-define('STUDENT', 'Student');
-
 define('ORDER', 'Order');
 define('BOOK', 'Book');
 define('MATERIAL', 'Material');
 define('INVOICE', 'Invoice');
-
+define('SMS', 'SMS');
+define('SMS_TEMPLATE', 'SMS Template');
+define('SMS_HISTORY', 'SMS History');
+define('BILLING', 'Billing');
+define('MENU', 'Menu');
+define('MENU_MANAGE', 'Menu Management');
+define('CMS', 'Cms');
+define('CMS_MANAGE', 'Cms Management');
+define('PAGE', 'Page');
 /* CRUD */
 define('CREATE', 'Create');
 define('CREATED', 'Created');
@@ -40,6 +54,7 @@ define('SAVE', 'Save');
 define('CANCEL', 'Cancel');
 define('ACTION', 'Action');
 
+
 /* MESSAGES */
 define('MSG_CREATED', ' has been created successfully.');
 define('MSG_UPDATED', ' has been updated successfully.');
@@ -49,4 +64,6 @@ define('MSG_ERROR', ' Error occured while manipulating data.');
 define('MSG_MOVED', ' has been moved to active list successfully.');
 define('MSG_EXIST', ' already exist within our system.');
 define('MSG_TRANSFERRED', ' has been transferred successfully.');
+
+
 

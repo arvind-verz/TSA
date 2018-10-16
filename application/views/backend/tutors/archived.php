@@ -1,29 +1,3 @@
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#select_all').on('click',function(){
-        if(this.checked){
-            $('.checkbox').each(function(){
-                this.checked = true;
-            });
-        }else{
-             $('.checkbox').each(function(){
-                this.checked = false;
-            });
-        }
-    });
-    
-    $('.checkbox').on('click',function(){
-        if($('.checkbox:checked').length == $('.checkbox').length){
-            $('#select_all').prop('checked',true);
-        }else{
-            $('#select_all').prop('checked',false);
-        }
-    });
-});
-</script>
-
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -42,71 +16,64 @@ $(document).ready(function(){
             <div class="col-lg-12">
                 <div class="box">
                     <div class="box-header">
-                        <a class="btn btn-info" href="<?php echo site_url('admin/students/create') ?>">
+                        <a class="btn btn-info" href="<?php echo site_url('admin/tutors/create') ?>">
                             <i aria-hidden="true" class="fa fa-plus-circle">
-                            </i> <?php echo CREATE . ' ' . STUDENT ?>
+                            </i> <?php echo CREATE . ' ' . TUTOR ?>
                         </a>
-                        <!--<a class="btn btn-info" href="<?php echo site_url('admin/students/archived') ?>">
-                            <i aria-hidden="true" class="fa fa-archive">
-                            </i> <?php echo ARCHIVED . ' ' . STUDENT ?>
-                        </a>
-                        <a class="pull-right add_class">
-                            <i aria-hidden="true" class="fa fa-archive">
-                            </i> Add <?php echo CLASSES ?>
-                        </a>  -->          
                     </div>
                     
- <?php echo form_open('admin/students/archived'); ?>
+ <?php echo form_open('admin/tutors'); ?>
                 <div class="col-md-4">
                 <div class="form-group">
-                          <label for="">Student Name</label>
-                          <input type="text" name="s_name" class="form-control" value="<?php echo set_value('s_name');?>">
+                          <label for="">Tutor Name</label>
+                          <input type="text" name="t_name" class="form-control" value="<?php echo set_value('s_name');?>">
                         </div>
                 </div>
                 <div class="col-md-4">
                 <div class="form-group">
-                          <label for="">Student Email</label>
-                          <input type="text" name="s_email" class="form-control" value="<?php echo set_value('s_email');?>">
+                          <label for="">Tutor Email</label>
+                          <input type="text" name="t_email" class="form-control" value="<?php echo set_value('s_email');?>">
                         </div>
                 </div>
                 <div class="col-md-4">
                 <div class="form-group">
-                          <label for="">Student Phone Number</label>
-                          <input type="text" name="s_phone" class="form-control" value="<?php echo set_value('s_phone');?>">
+                          <label for="">Tutor Phone Number</label>
+                          <input type="text" name="t_phone" class="form-control" value="<?php echo set_value('s_phone');?>">
                         </div>
                 </div>
            
 
                 <div class="col-md-4">
                 <div class="form-group">
-                          <label for="">Parent Name</label>
-                          <input type="text" name="p_name" class="form-control" value="<?php echo set_value('p_name');?>">
+                          <label for="">Class Code</label>
+                          <input type="text" name="class_code" class="form-control" value="<?php echo set_value('p_name');?>">
                         </div>
                 </div>
                 <div class="col-md-4">
                 <div class="form-group">
-                          <label for="">Parent Email</label>
-                          <input type="text" name="p_email" class="form-control" value="<?php echo set_value('p_email');?>">
+                          <label for="">Tutor ID</label>
+                          <input type="text" name="t_id" class="form-control" value="<?php echo set_value('p_email');?>">
                         </div>
                 </div>
                 <div class="col-md-4">
                 <div class="form-group">
-                          <label for="">Parent Phone Number</label>
-                          <input type="text" name="p_phone" class="form-control" value="<?php echo set_value('p_phone');?>">
+                          <label for="">Salary Scheme</label>
+                          <input type="text" name="t_scheme" class="form-control" value="<?php echo set_value('p_phone');?>">
                         </div>
                 </div>
-<div class="col-md-4">
+               <div class="col-md-4">
                 <div class="form-group"> 
                 <input type="hidden" name="search" value="1" />
                 <button type="submit" class="btn btn-info">Search</button>
                 </div>
                 </div>
+
  <?php echo form_close(); ?> 
                     <div class="box-body">
                         <table class="table table-striped table-bordered text-center" id="datatable" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" name="case[]" id="select_all" value="all"/></th>
+                                    <th>ID</th>
                                     <th>
                                         Name
                                     </th>
@@ -114,90 +81,39 @@ $(document).ready(function(){
                                         Email
                                     </th>
                                     <th>
-                                        Username
+                                       Class <br />Code
                                     </th>
                                     <th>
-                                        NRIC
-                                    </th>
-                                    <!--<th>
-                                        Enrolled <br />classes
-                                    </th>-->
-                                    <th>
-                                        Gender
+                                       Subject 
                                     </th>
                                     <th>
-                                        Age
-                                    </th>
-                                    <!--<th>
-                                       Phone <br />Number
-                                    </th>-->
-                                    <!--<th>
-                                       Parents <br />Name
-                                    </th>-->
-                                    <!--<th>
-                                       Parents <br />Email
-                                    </th>-->
-                                    <!--<th>
-                                       Parents <br />Phone
-                                    </th>-->
-                                    <th>
-                                       Siblings
+                                       Phone 
                                     </th>
                                     <th>
-                                       Status
-                                    </th>
-                                    <!--<th>
-                                       Remarks
-                                    </th>-->
-                                    <th>
-                                       Action 
-                                    </th>
-                                    <!--<th>
-                                       Materials <br />Associated 
-                                    </th>
-                                    <th>
-                                       Extra <br />charges <br />applied
+                                       Archive <br />Date
                                     </th>
                                     
                                     <th>
-                                        Deposit <br />Collected 
+                                       Action 
                                     </th>
-                                   -->
+                                    
                                 </tr>
                             </thead>
                             <tbody>
                                <?php
-                                if (count($students)) {
-                                foreach ($students as $student) {
-                                ?>
+                                if (count($tutors)) {
+                                foreach ($tutors as $tutor) {
+								?>
                                 <tr>
-                                <td><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/></td>
-                                <td><?php echo $student->name;?></td>
-                                <td><?php echo $student->email;?></td>
-                                <td><?php echo $student->username;?></td>
-                                <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
-                                <!--<td></td>-->
-                                <td><?php echo isset($student->gender) ? $student->gender : '-' ?></td>
-                                <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
-                                <!--<td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>-->
-                                <!--<td><?php echo isset($student->parent_name ) ? $student->parent_name  : '-' ?></td>-->
-                                <!--<td><?php echo isset($student->parent_email ) ? $student->parent_email  : '-' ?></td>-->
-                                <!--<td><?php echo isset($student->parents_phone ) ? $student->parents_phone  : '-' ?></td>-->
-                                <td><?php echo isset($student->siblings ) ? $student->siblings  : '-' ?></td>
-                                <td><?php echo isset($student->status ) ? $student->status  : '-' ?></td>
-                                <td> <div class="form-group">
-                           
-                            <select name="action" id="action" class="form-control select2 action">
-                                <option value="">-- Select One --</option>
-                                <option value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
-                                <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
-                                <option value="Final Settlement">Final Settlement</option>
-                                <option value="View all details">View all details</option>
-                                <option value="<?php echo base_url();?>index.php/admin/classes/edit/<?php echo $student->class_id;?>">Edit Class </option>
-                            </select>
-                        </div></td>
-                                <!--<td></td>
-                                <td></td>-->
+                                <td><?php echo $tutor->tutor_id;?></td>
+                                <td><?php echo $tutor->tutor_name;?></td>
+                                <td><?php echo $tutor->email;?></td>
+                                <td></td>
+                                <td><?php echo isset($tutor->subject) ? $tutor->subject : '-' ?></td>
+                                <td><?php echo isset($tutor->phone) ? $tutor->phone : '-' ?></td>
+                                <td></td>
+                                <td><a onclick="return confirm('Are you sure you want to back this tutor?');" title="Archive" href="<?php echo site_url('admin/tutors/moveto_active_list/'.$tutor->tutor_id) ?>">Move to<br />Active list</a> </td>
+                               
                                 </tr>
                                 <?php
                                 }} else {
@@ -216,77 +132,3 @@ $(document).ready(function(){
         </div>
     </section>
 </div>
-
-
-<script type="text/javascript">
-var option;
-option+='<div class="form-group">';
-option+='<label for="">Select Class Code</label>';
-option+='<select name="class_code" class="form-control select2">';
-option+='<option value="">-- Select One --</option>';
-option+='<?php if (count($classes)) {
-foreach ($classes as $class) {
-echo '<option value="'.$class->class_id.'">'.$class->class_id.'</option>';
-}} ?>';                              
-option+='</select></div>';
-
-$(document).ready(function() {
-	$("#student_status").on('change', function(){
-		var reservation ="";var enrollment ="";
-		
-		reservation =option+'<div class="form-group"><label for="">Select Reservation Date</label><input type="text" name="reservation_date" class="form-control" value=""></div>';
-		enrollment = '<div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control" value=""></div><div class="form-group"><label for="">Deposit</label>200</div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected" value="0" type="radio" />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Select Reservation Date</label><input type="text" name="reservation_date" class="form-control" value=""></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="ex_charges" class="form-control" value=""></div><div class="form-group"><label for="">Remarks</label><input type="text" name="remarks" class="form-control" value=""></div>';
-				
-		if($(this).val()==0)
-		{
-			$("#dis_content").html(enrollment);
-			
-		}
-		else if($(this).val()==1)
-		{
-			$("#dis_content").html(reservation);
-			
-		}
-		else
-		{
-			$("#dis_content").html('');
-		}
-	}); 
-}); 
-
-
-$(document).ready(function () {
-   $(".add_class").click(function () {
-        if($('input[type=checkbox]').is(':checked') == true){
-			
-				    var val = [];
-					$(':checkbox:checked').each(function(i){
-					val[i] = $(this).val();
-					});
-					$("#student_code").val(val);
-					$("#myModal").modal();
-		}
-		else
-		{
-			alert('Please make atleast one selection.');
-		}
-    });
-});
-
-$(document).ready(function() {
-	$(".action").on('change', function(){
-		var attrname=$(this).find('option:selected').attr("name");
-		if(attrname=='Archive')
-		{
-		var archive=confirm("Are you sure you want to archive this student?");
-			if (archive==true){
-			window.location=$(this).val();
-			} 	
-		}
-		else
-		{
-			window.location=$(this).val();
-		}
-    });
-});
-</script>

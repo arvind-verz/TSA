@@ -105,11 +105,29 @@ $route['admin/material/moveto_active_list/(:any)'] = 'backend/materialcontroller
 $route['admin/invoice'] = 'backend/invoicecontroller/index';
 
 
-/* Student Admin */
+
 /* Tutor Admin */
 $route['admin/tutors'] = 'backend/TutorController/index';
 $route['admin/tutors/create'] = 'backend/TutorController/create';
 $route['admin/tutors/store'] = 'backend/TutorController/store';
+$route['admin/tutors/archive/(:any)'] = 'backend/TutorController/archive/$1';
+$route['admin/tutors/archived'] = 'backend/TutorController/archived';
+$route['admin/tutors/edit/(:any)'] = 'backend/TutorController/edit/$1';
+$route['admin/tutors/update/(:any)'] = 'backend/TutorController/update/$1';
+$route['admin/tutors/moveto_active_list/(:any)'] = 'backend/TutorController/moveto_active_list/$1';
+
 /* Tutor Admin */
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+/* CMS Admin */
+
+  $route['admin/manage-menu'] = "backend/CmsController/manage_menu";
+  $route['admin/manage-menu-list/(:any)'] = "backend/CmsController/manage_menu_list/$1";
+  $route['admin/add-menu-item/(:any)'] = "backend/CmsController/add_menu_item/$1";
+  $route['admin/edit-menu-item/(:any)/(:any)'] = "backend/CmsController/edit_menu_item/$1/$2";
+  $route['admin/del-menu-item/(:any)/(:any)'] = "backend/CmsController/del_menu_item/$1/$2";
+  $route['admin/manage-cms'] = "backend/CmsController/manage_cms";
+  $route['admin/add-cms'] = "backend/CmsController/add_cms";
+  $route['admin/edit-cms/(:any)'] = "backend/CmsController/edit_cms/$1";
+  $route['admin/del-cms/(:any)'] = "backend/CmsController/del_cms/$1";
+/* CMS Admin */

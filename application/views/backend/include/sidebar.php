@@ -19,8 +19,8 @@
 						<i class="fa fa-book"></i> <span><?php echo SUBJECT ?></span>
 					</a>
 				</li>
-				<li class="">
-					<a href="#">
+				<li class="<?php if(current_url() == site_url('admin/tutors')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/tutors'); ?>">
 						<i class="fa fa-user"></i> <span><?php echo TUTOR ?></span>
 					</a>
 				</li>
@@ -49,10 +49,22 @@
 						<i class="fa fa-file"></i> <span><?php echo INVOICE ?></span>
 					</a>
 				</li>
-                <li class="">
+            <li class="">
+            
+            <a href="<?php echo site_url('admin/students'); ?>">
+            <i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
+            </a>
+            </li>
+             <li class="">
 
-<a href="<?php echo site_url('admin/students'); ?>">
-<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
+<a href="<?php echo site_url('admin/manage-menu'); ?>">
+<i class="fa fa-dashboard"></i> <span><?php echo MENU ?></span>
+</a>
+</li>
+<li class="">
+
+<a href="<?php echo site_url('admin/manage-cms'); ?>">
+<i class="fa fa-dashboard"></i> <span><?php echo CMS ?></span>
 </a>
 </li>
 			</ul>
