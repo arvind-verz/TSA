@@ -11,6 +11,19 @@ function is_logged_in()
         return redirect('admin/login');
     }
 }
+function get_invoice_no()
+{
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $query  = $ci->db->select('*')->from(INVOICE)->like('invoice_no', 'INV', 'after')->order_by('id', 'DESC')->limit(1)->get();
+    $result = $query->row();
+    if ($result) {
+        return 'INV00' . (substr($result->invoice_no, 3) + 1);
+    } else {
+        return 'INV001';
+    }
+}
 function get_sms_condition($id = null)
 {
     $sms_condition = ['Student absent without leave', 'Fee reminder', 'Late Fee reminder', 'Student filled a miss class request', 'Reminder one day before reservation', 'Centre wide announcements'];
@@ -131,6 +144,83 @@ foreach ($query as $result) {
 </tr>
 <?php
 $i++;}
+}
+
+function get_invoice_sheet($class_code = null)
+{
+
+    $ci = &get_instance();
+    $ci->load->database();
+    $ci->db->select('*');
+    $ci->db->from(INVOICE);
+    $ci->db->join(STUDENT, 'invoice.student_id = student.student_id');
+    $ci->db->join(CLASSES, 'student.class_id = class.id');
+    $ci->db->where('class.class_code', $class_code);
+    $query  = $ci->db->get();
+    $result = $query->result();
+    foreach ($result as $row) {
+        ?>
+    <tr>
+        <td><input type="checkbox" name="payment_status" value="<?php echo $row->invoice_id; ?>"></td>
+        <td><?php echo isset($row->student_id) ? $row->student_id : '-'; ?></td>
+        <td><?php echo isset($row->invoice_no) ? $row->invoice_no : '-'; ?></td>
+        <td><?php echo isset($row->invoice_date) ? date("d/m/Y", strtotime($row->invoice_date)) : '-'; ?></td>
+        <td><a href="#">View</a><br/><a href="#">Download Invoice</a></td>
+        <td><?php echo isset($row->status) ? get_invoice_status($row->invoice_id, 'status') : '-'; ?></td>
+        <td><?php echo isset($row->payment_method) ? get_invoice_status($row->invoice_id, 'payment_method') : '-'; ?></td>
+    </tr>
+    <?php
+}
+}
+
+function get_invoice_status($invoice_id, $type)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+    $query = $ci->db->get_where(INVOICE, ['invoice_id'   =>  $invoice_id]);
+    $result = $query->row();
+    if($type=='status') {
+        return get_invoice_status_db($result->status);
+    }
+    elseif($type=='payment_method') {
+        return get_invoice_payment_method_db($result->payment_method);
+    }
+    else {
+        return '-';
+    }
+}
+
+function get_invoice_status_db($status) {
+    if($status==1) {
+        return "Cheque Error";
+    }
+    elseif($status==2) {
+        return "Pending Cheque Payment";
+    }
+    elseif($status==3) {
+        return "Paid (Cheque)";
+    }
+    elseif($status==4) {
+        return "Paid (Cash)";
+    }
+    elseif($status==5) {
+        return "Overdue";
+    }
+    else {
+        return '-';
+    }
+}
+
+function get_invoice_payment_method_db($payment_method) {
+    if($payment_method==1) {
+        return "Cash";
+    }
+    elseif($payment_method==2) {
+        return "Cheque";
+    }
+    else {
+        return "-";
+    }
 }
 
 function get_weekdays_of_month($month = null, $day = null)
@@ -352,12 +442,18 @@ function send_first_month_invoice($student_id)
     $book_charges   = $result3->book_price_amount;
     $invoice_amount = 0;
 
-    $query        = "select * from " . DB_BILLING . " where MONTH(invoice_generation_date) = MONTH(CURRENT_DATE()) and YEAR(invoice_generation_date) = YEAR(CURRENT_DATE())";
-    $query        = $ci->db->query($query);
-    $result       = $query->row();
-    $billing_data = json_decode($result->billing);
-    $counter      = count($billing_data);
-    $i            = 0;
+    $query           = "select * from " . DB_BILLING . " where MONTH(invoice_generation_date) = MONTH(CURRENT_DATE()) and YEAR(invoice_generation_date) = YEAR(CURRENT_DATE())";
+    $query           = $ci->db->query($query);
+    $result          = $query->row();
+    $billing_data    = json_decode($result->billing);
+    $counter         = count($billing_data);
+    $i               = 0;
+    $subject         = '';
+    $message         = '';
+    $invoice_content = [
+        'subject' => $subject,
+        'message' => $message,
+    ];
 
     if (date("Y-m-d", strtotime($result->invoice_generation_date)) != date('Y-m-d')) {
         return false;
@@ -377,7 +473,7 @@ function send_first_month_invoice($student_id)
             ];
             $query = $ci->db->insert(DB_INVOICE, $data);
             if ($query) {
-                $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject = '', $message = '');
+                $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
                 if ($mail == true) {
                     //die(print_r($query));
                 }
@@ -530,6 +626,7 @@ function send_class_transfer_invoice($student_id)
 
     $data = [
         'invoice_id'      => $invoice_id,
+        'invoice_no'      => get_invoice_no(),
         'student_id'      => $student_id,
         'invoice_date'    => $date,
         'invoice_amount'  => $invoice_amount,
@@ -584,10 +681,10 @@ function get_invoice_result3($sid)
 
 function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $type, $subject, $message)
 {
-    /*$ci = &get_instance();
+    $ci = &get_instance();
     $ci->load->library('email');
 
-    $config['protocol'] = 'sendmail';
+    $config['protocol'] = 'smtp';
     $config['mailpath'] = '/usr/sbin/sendmail';
     $config['charset']  = 'iso-8859-1';
     $config['wordwrap'] = true;
@@ -601,6 +698,6 @@ function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $ty
     $ci->email->message('Testing the email class.');
 
     $ci->email->send();
-    echo $ci->email->print_debugger();*/
+    //echo $ci->email->print_debugger();
     return true;
 }

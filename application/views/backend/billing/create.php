@@ -133,7 +133,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right datepicker" name="invoice_generation_date">
+                                            <input type="text" class="form-control pull-right datepicker" name="invoice_generation_date" autocomplete="off">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
