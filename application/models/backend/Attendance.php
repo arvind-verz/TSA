@@ -18,25 +18,27 @@ class Attendance extends CI_Model
         	$this->session->set_flashdata('warning', ATTENDANCE . ' ' . MSG_EXIST);
             return redirect('admin/attendance/create');
         }
-
-        $this->db->trans_start();
+        //array_push($_POST['attendance_value'], 0);
+        
         for ($i = 0; $i < count($_POST['student_id']); $i++) {
             $data = array(
                 'class_code'      => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
                 'student_id'      => !empty($_POST['student_id'][$i]) ? $_POST['student_id'][$i] : null,
                 'attendance_date' => !empty($_POST['attendance_date']) ? $_POST['attendance_date'] : null,
                 'status'          => !empty($_POST['attendance_value' . ($i+1)]) ? json_encode($_POST['attendance_value' . ($i+1)]) : null,
-                'remark'          => !empty($_POST['remark'][$i]) ? $_POST['remark'][$i] : null,
+                'remark'          => !empty($_POST['attendance_remark'][$i]) ? $_POST['attendance_remark'][$i] : null,
                 'created_at'      => $this->date,
                 'updated_at'      => $this->date,
             );
+            $this->db->trans_start();
             $this->db->insert(DB_ATTENDANCE, $data);
             $query = $this->db->get_where(DB_ATTENDANCE, ['student_id' => $_POST['student_id'][$i], 'class_code' => $_POST['class_code']]);
             if($query->num_rows<1) {
                 send_first_month_invoice($_POST['student_id'][$i]);
             }
+            $this->db->trans_complete();
         }
-        $this->db->trans_complete();
+        
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
