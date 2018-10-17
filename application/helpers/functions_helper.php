@@ -177,48 +177,41 @@ function get_invoice_status($invoice_id, $type)
 {
     $ci = &get_instance();
     $ci->load->database();
-    $query = $ci->db->get_where(INVOICE, ['invoice_id'   =>  $invoice_id]);
+    $query  = $ci->db->get_where(INVOICE, ['invoice_id' => $invoice_id]);
     $result = $query->row();
-    if($type=='status') {
+    if ($type == 'status') {
         return get_invoice_status_db($result->status);
-    }
-    elseif($type=='payment_method') {
+    } elseif ($type == 'payment_method') {
         return get_invoice_payment_method_db($result->payment_method);
-    }
-    else {
+    } else {
         return '-';
     }
 }
 
-function get_invoice_status_db($status) {
-    if($status==1) {
+function get_invoice_status_db($status)
+{
+    if ($status == 1) {
         return "Cheque Error";
-    }
-    elseif($status==2) {
+    } elseif ($status == 2) {
         return "Pending Cheque Payment";
-    }
-    elseif($status==3) {
+    } elseif ($status == 3) {
         return "Paid (Cheque)";
-    }
-    elseif($status==4) {
+    } elseif ($status == 4) {
         return "Paid (Cash)";
-    }
-    elseif($status==5) {
+    } elseif ($status == 5) {
         return "Overdue";
-    }
-    else {
+    } else {
         return '-';
     }
 }
 
-function get_invoice_payment_method_db($payment_method) {
-    if($payment_method==1) {
+function get_invoice_payment_method_db($payment_method)
+{
+    if ($payment_method == 1) {
         return "Cash";
-    }
-    elseif($payment_method==2) {
+    } elseif ($payment_method == 2) {
         return "Cheque";
-    }
-    else {
+    } else {
         return "-";
     }
 }
@@ -484,6 +477,73 @@ function send_first_month_invoice($student_id)
 
 }
 
+function send_rest_month_invoice($student_id)
+{
+
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $invoice_id = uniqid();
+    $date       = date('Y-m-d H:i:s');
+
+    $result2 = get_invoice_result2($student_id);
+    /*echo $ci->db->last_query();
+    echo '<br/>';*/
+
+    if (!$result2) {
+        return false;
+    }
+
+    $result3 = get_invoice_result2($result2->sid);
+
+    $emailto        = $result2->email;
+    $fees           = $result2->monthly_fees;
+    $extra_charges  = $result2->ex_charges;
+    $credit_value   = $result2->credit_value;
+    $book_charges   = $result3->book_price_amount;
+    $invoice_amount = 0;
+
+    $query           = "select * from " . DB_BILLING . " where MONTH(invoice_generation_date) = MONTH(CURRENT_DATE()) and YEAR(invoice_generation_date) = YEAR(CURRENT_DATE())";
+    $query           = $ci->db->query($query);
+    $result          = $query->row();
+    $billing_data    = json_decode($result->billing);
+    $i               = 0;
+    $subject         = '';
+    $message         = '';
+    $invoice_content = [
+        'subject' => $subject,
+        'message' => $message,
+    ];
+
+    if (date("Y-m-d", strtotime($result->invoice_generation_date)) != date('Y-m-d')) {
+        return false;
+    }
+
+    foreach ($billing_data as $billing) {
+        $dates = explode("-", $billing->date_range);
+        if (strtotime($result2->attendance_date) >= strtotime($dates[0]) && strtotime($result2->attendance_date) <= strtotime($dates[1])) {
+            $invoice_amount = ($fees + $book_charges + $extra_charges - $credit_value);
+            $data           = [
+                'invoice_id'     => $invoice_id,
+                'student_id'     => $student_id,
+                'invoice_date'   => $date,
+                'invoice_amount' => $invoice_amount,
+                'created_at'     => $date,
+                'updated_at'     => $date,
+            ];
+            $query = $ci->db->insert(DB_INVOICE, $data);
+            if ($query) {
+                $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+                if ($mail == true) {
+                    //die(print_r($query));
+                }
+            }
+        }
+        $i++;
+    }
+
+}
+
 function send_archived_invoice($student_id)
 {
     $ci = &get_instance();
@@ -493,8 +553,28 @@ function send_archived_invoice($student_id)
     $date       = date('Y-m-d H:i:s');
 
     $result2 = get_invoice_result2($student_id);
-    //die(print_r($result2));
 
+    $result4 = get_invoice_result4($student_id);
+
+    $L = $M = $E = $X = $G = $H = [];
+    foreach ($result4 as $row) {
+        $status = json_decode($row->status);
+        if ($status[0] == 1) {
+            $L[] = $status[0];
+        }
+        if ($status[1] == 1) {
+            $M[] = $status[1];
+        }
+        if ($status[2] == 1) {
+            $E[] = $status[2];
+        }
+        if ($status[3] == 1) {
+            $X[] = $status[3];
+        }
+        if ($status[4] == 1) {
+            $G[] = $status[4];
+        }
+    }
     if (!$result2) {
         return false;
     }
@@ -516,7 +596,7 @@ function send_archived_invoice($student_id)
         'message' => $message,
     ];
 
-    $invoice_amount = (((4 / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
 
     $data = [
         'invoice_id'      => $invoice_id,
@@ -547,6 +627,27 @@ function send_final_settlement_invoice($student_id)
 
     $result2 = get_invoice_result2($student_id);
     //die(print_r($result2));
+    $result4 = get_invoice_result4($student_id);
+
+    $L = $M = $E = $X = $G = $H = [];
+    foreach ($result4 as $row) {
+        $status = json_decode($row->status);
+        if ($status[0] == 1) {
+            $L[] = $status[0];
+        }
+        if ($status[1] == 1) {
+            $M[] = $status[1];
+        }
+        if ($status[2] == 1) {
+            $E[] = $status[2];
+        }
+        if ($status[3] == 1) {
+            $X[] = $status[3];
+        }
+        if ($status[4] == 1) {
+            $G[] = $status[4];
+        }
+    }
 
     if (!$result2) {
         return false;
@@ -569,7 +670,7 @@ function send_final_settlement_invoice($student_id)
         'message' => $message,
     ];
 
-    $invoice_amount = (((4 / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
 
     $data = [
         'invoice_id'      => $invoice_id,
@@ -600,6 +701,27 @@ function send_class_transfer_invoice($student_id)
 
     $result2 = get_invoice_result2($student_id);
     //die(print_r($result2));
+    $result4 = get_invoice_result4($student_id);
+
+    $L = $M = $E = $X = $G = $H = [];
+    foreach ($result4 as $row) {
+        $status = json_decode($row->status);
+        if ($status[0] == 1) {
+            $L[] = $status[0];
+        }
+        if ($status[1] == 1) {
+            $M[] = $status[1];
+        }
+        if ($status[2] == 1) {
+            $E[] = $status[2];
+        }
+        if ($status[3] == 1) {
+            $X[] = $status[3];
+        }
+        if ($status[4] == 1) {
+            $G[] = $status[4];
+        }
+    }
 
     if (!$result2) {
         return false;
@@ -622,7 +744,7 @@ function send_class_transfer_invoice($student_id)
         'message' => $message,
     ];
 
-    $invoice_amount = (((4 / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
 
     $data = [
         'invoice_id'      => $invoice_id,
@@ -645,6 +767,20 @@ function send_class_transfer_invoice($student_id)
 }
 
 /* RESULT FOR INVOICE */
+function get_invoice_result4($student_id)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $ci->db->select('*');
+    $ci->db->from(DB_ATTENDANCE);
+    $ci->db->where('attendance.student_id', $student_id);
+    $ci->db->where('MONTH(attendance.attendance_date) = MONTH(CURRENT_DATE())');
+    $ci->db->where('YEAR(attendance.attendance_date) = YEAR(CURRENT_DATE())');
+    $query = $ci->db->get();
+    return $query->result();
+}
+
 function get_invoice_result2($student_id)
 {
     $ci = &get_instance();
@@ -657,9 +793,11 @@ function get_invoice_result2($student_id)
     $ci->db->join(DB_STUDENT, 'student.student_id = attendance.student_id');
     $ci->db->where('attendance.student_id', $student_id);
     $ci->db->order_by('attendance.attendance_date', 'DESC');
+    $ci->db->where('MONTH(attendance.attendance_date) = MONTH(CURRENT_DATE())');
+    $ci->db->where('YEAR(attendance.attendance_date) = YEAR(CURRENT_DATE())');
     $ci->db->limit(1);
-    $query2 = $ci->db->get();
-    return $query2->row();
+    $query = $ci->db->get();
+    return $query->row();
 }
 
 function get_invoice_result3($sid)
@@ -674,8 +812,8 @@ function get_invoice_result3($sid)
     $ci->db->where('order_details.student_id', $sid);
     $ci->db->where('order_details.status', 1);
     $ci->db->where('MONTH(orders.order_date) = MONTH(CURRENT_DATE())');
-    $query3 = $ci->db->get();
-    return $query3->row();
+    $query = $ci->db->get();
+    return $query->row();
 }
 /* END RESULT FOR INVOICE */
 
@@ -684,25 +822,25 @@ function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $ty
     $ci = &get_instance();
     $ci->load->library('email');
 
-    $config['protocol'] = 'smtp';
-    $config['smtp_host']    = 'ssl://smtp.gmail.com';
-    $config['smtp_port']    = '465';
-    $config['smtp_user']    = 'purohitarvind777@gmail.com';
-    $config['smtp_pass']    = '@tif@sl@m';
-    $config['mailpath'] = '/usr/sbin/sendmail';
-    $config['charset']  = 'iso-8859-1';
-    $config['wordwrap'] = true;
-    $config['mailtype'] = 'html';
+    /*$config['protocol']  = 'smtp';
+    $config['smtp_host'] = 'smtp.gmail.com';
+    $config['smtp_port'] = '465';
+    $config['smtp_user'] = 'arvind.verz@gmail.com';
+    $config['smtp_pass'] = '@321Verz123';
+    $config['mailpath']  = '/usr/sbin/sendmail';
+    $config['charset']   = 'iso-8859-1';
+    $config['wordwrap']  = true;
+    $config['mailtype']  = 'html';
 
     $ci->email->initialize($config);
-    $ci->email->from('purohitarvind777@gmail.com', 'The Science Academy');
-    $ci->email->to('arvind.verz@gmail.com');
+    $ci->email->from('arvind.verz@gmail.com', 'The Science Academy');
+    $ci->email->to('purohitarvind777@gmail.com');
 
     $ci->email->subject('Email Test');
     $ci->email->message('Testing the email class.');
 
     $ci->email->send();
-    echo $ci->email->print_debugger();
+    echo $ci->email->print_debugger();*/
     /*$to = "arvind.verz@gmail.com";
     $subject = "My subject";
     $txt = "Hello world!";
