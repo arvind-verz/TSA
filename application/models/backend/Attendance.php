@@ -18,7 +18,6 @@ class Attendance extends CI_Model
         	$this->session->set_flashdata('warning', ATTENDANCE . ' ' . MSG_EXIST);
             return redirect('admin/attendance/create');
         }
-        //array_push($_POST['attendance_value'], 0);
         
         for ($i = 0; $i < count($_POST['student_id']); $i++) {
             $data = array(
