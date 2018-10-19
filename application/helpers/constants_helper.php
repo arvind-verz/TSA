@@ -4,11 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /* NAMES */
 define('ADMINPANEL', 'Admin Panel');
 
-<<<<<<< HEAD
 
-=======
 /* DB TABLES */
->>>>>>> master
 define('DB_DASHBOARD', 'dashboard');
 define('DB_SUBJECT', 'subject');
 define('DB_TUTOR', 'Tutor');
@@ -20,13 +17,10 @@ define('DB_BOOK', 'Book');
 define('DB_MATERIAL', 'material');
 define('DB_INVOICE', 'invoice');
 define('DB_BILLING', 'billing');
-<<<<<<< HEAD
 define('TBL_MENU_POSITION' , 'menu_position');
 define('TBL_MENU' , 'menu'); 
 define('TBL_CMS' ,'pages'); 
-=======
 
->>>>>>> master
 /* MODULES */
 define('DASHBOARD', 'Dashboard');
 define('SUBJECT', 'Subject');
@@ -42,16 +36,13 @@ define('SMS', 'SMS');
 define('SMS_TEMPLATE', 'SMS Template');
 define('SMS_HISTORY', 'SMS History');
 define('BILLING', 'Billing');
-<<<<<<< HEAD
 define('MENU', 'Menu');
 define('MENU_MANAGE', 'Menu Management');
 define('CMS', 'Cms');
 define('CMS_MANAGE', 'Cms Management');
 define('PAGE', 'Page');
-=======
 
 
->>>>>>> master
 /* CRUD */
 define('CREATE', 'Create');
 define('CREATED', 'Created');
