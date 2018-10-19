@@ -427,8 +427,8 @@ function send_first_month_invoice($student_id)
         return false;
     }
 
-    $result3 = get_invoice_result2($result2->sid);
-
+    $result3 = get_invoice_result3($result2->sid);
+    
     $emailto        = $result2->email;
     $fees           = $result2->monthly_fees;
     $extra_charges  = $result2->ex_charges;
@@ -459,6 +459,7 @@ function send_first_month_invoice($student_id)
             $invoice_amount = (((($counter - $i) * $fees) / 4) + $book_charges + $extra_charges - $credit_value);
             $data           = [
                 'invoice_id'     => $invoice_id,
+                'invoice_no'      => get_invoice_no(),
                 'student_id'     => $student_id,
                 'invoice_date'   => $date,
                 'invoice_amount' => $invoice_amount,
@@ -495,7 +496,7 @@ function send_rest_month_invoice($student_id)
         return false;
     }
 
-    $result3 = get_invoice_result2($result2->sid);
+    $result3 = get_invoice_result3($result2->sid);
 
     $emailto        = $result2->email;
     $fees           = $result2->monthly_fees;
@@ -526,6 +527,7 @@ function send_rest_month_invoice($student_id)
             $invoice_amount = ($fees + $book_charges + $extra_charges - $credit_value);
             $data           = [
                 'invoice_id'     => $invoice_id,
+                'invoice_no'      => get_invoice_no(),
                 'student_id'     => $student_id,
                 'invoice_date'   => $date,
                 'invoice_amount' => $invoice_amount,
@@ -604,6 +606,7 @@ function send_archived_invoice($student_id)
 
     $data = [
         'invoice_id'      => $invoice_id,
+        'invoice_no'      => get_invoice_no(),
         'student_id'      => $student_id,
         'invoice_date'    => $date,
         'invoice_amount'  => $invoice_amount,
@@ -681,6 +684,7 @@ function send_final_settlement_invoice($student_id)
 
     $data = [
         'invoice_id'      => $invoice_id,
+        'invoice_no'      => get_invoice_no(),
         'student_id'      => $student_id,
         'invoice_date'    => $date,
         'invoice_amount'  => $invoice_amount,
@@ -851,11 +855,11 @@ function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $ty
 
     $ci->email->send();
     echo $ci->email->print_debugger();*/
-    $to = "arvind.verz@gmail.com";
+    /*$to = "arvind.verz@gmail.com";
     $subject = "My subject";
     $txt = "Hello world!";
     $headers = "From: purohitarvind77@gmail.com";
 
-    mail($to,$subject,$txt,$headers);
+    mail($to,$subject,$txt,$headers);*/
     return true;
 }

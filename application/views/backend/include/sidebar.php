@@ -56,7 +56,7 @@
 						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
 					</a>
 				</li>
-				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
+				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history') || current_url() == site_url('admin/sms_template/sms_template_create')) { echo 'active'; } ?>">
 					<a href="#">
 						<i class="fa fa-envelope"></i> <span>SMS</span>
 						<span class="pull-right-container">
@@ -64,7 +64,7 @@
 						</span>
 					</a>
 					<ul class="treeview-menu">
-						<li class="<?php if(current_url() == site_url('admin/sms_template')) { echo 'active'; } ?>">
+						<li class="<?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_template/sms_template_create')) { echo 'active'; } ?>">
 							<a href="<?php echo site_url('admin/sms_template'); ?>">
 								<span><?php echo SMS_TEMPLATE ?></span>
 							</a>
