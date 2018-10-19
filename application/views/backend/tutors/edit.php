@@ -4,7 +4,10 @@
         <h1><?php print_r($page_title); ?></h1>
         <?php print_r($breadcrumbs); ?>
     </section> 
-	<?php $this->load->view('backend/include/messages') ?>
+	<?php 
+	$this->load->view('backend/include/messages');
+	$subjects=$this->tutors->get_subjects();
+	?>
    
     <!-- Main content -->
     <section class="content">
@@ -12,64 +15,63 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/students/update/' . $student->student_id); ?>
+                    <?php echo form_open('admin/tutors/update/' . $tutor->tutor_id); ?>
                     <div class="box-body">
                         <div class="form-group">
                           <label for="">Name</label>
-                          <input type="text" name="name" class="form-control" value="<?php echo isset($student->name) ? $student->name : '' ?>">
+                          <input type="text" name="tutor_name" class="form-control" value="<?php echo isset($tutor->tutor_name) ? $tutor->tutor_name : '' ?>">
                         </div>
-                        <div class="form-group">
-                         <label for="">NRIC</label>
-                         <input type="text" name="nric" class="form-control" value="<?php echo isset($student->nric) ? $student->nric : '' ?>">
-                        </div>
+                        
                         
                         <div class="form-group">
                             <label for="">Email</label>
-                            <input type="email" name="email" class="form-control" value="<?php echo isset($student->email) ? $student->email : '' ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Username</label>
-                            <input type="text" name="username" class="form-control" value="<?php echo isset($student->username) ? $student->username : '' ?>">
+                            <input type="email" name="email" class="form-control" value="<?php echo isset($tutor->email) ? $tutor->email : '' ?>">
                         </div>
                         <div class="form-group">
                             <label for="">Phone</label>
-                            <input type="tel" name="phone" class="form-control" value="<?php echo isset($student->phone) ? $student->phone : '' ?>">
+                            <input type="tel" name="phone" class="form-control" value="<?php echo isset($tutor->phone) ? $tutor->phone : '' ?>">
                         </div>
+                       
+                            <div class="form-group">
+                            <label for="">Address</label>
+                            <textarea name="address" class="form-control"><?php echo isset($tutor->address) ? $tutor->address : '' ?></textarea>
+                        </div> 
+                        
                         <div class="form-group">
-                            <label for="">Age</label>
-                            <input type="number" name="age" class="form-control" value="<?php echo isset($student->age) ? $student->age : '' ?>">
+                            <label for="">Salary Scheme</label>
+                            <select name="salary_scheme" id="salary_scheme" class="form-control select2">
+                                <option value="">-- Select One --</option>
+                                <option <?php if($tutor->salary_scheme==0) echo 'selected="selected"';?>  value="0">Fixed</option>
+                                <option <?php if($tutor->salary_scheme==1) echo 'selected="selected"';?> value="1">Variable</option>
+                               
+                            </select>
                         </div>
                         
                         <div class="form-group">
-                        <div class="row">
-                            <div class="col-sm-1"><label for="">Gender</label></div>
-                            <div class="col-sm-2">
-                            <label class="radio-inline">
-                                 <input name="gender"  value="0" <?php echo $student->gender==0 ? 'checked="checked"' : '' ?> type="radio" />Male
-                             </label>
-                            </div>
-                            <div class="col-sm-2">
-                             <label class="radio-inline">
-                                  <input name="gender" <?php echo $student->gender==1 ? 'checked="checked"' : '' ?> value="1" type="radio" />Female
-                             </label>
-                            </div>
-                         </div>
+                            <label for="">Remarks</label>
+                            <textarea name="remarks" class="form-control"><?php echo isset($tutor->remark) ? $tutor->remark : '' ?></textarea>
+                        </div> 
+                       <div class="form-group">
+                            <label for="">Subject </label>
+                            <select name="subject" id="subject" class="form-control select2">
+                                <option value="">-- Select One --</option>
+                                <?php if(count($subjects)>0){
+								      foreach($subjects as $subject):?>
+									  <option <?php if($subject->subject_code==$tutor->subject) echo 'selected="selected"';?> value="<?php echo $subject->subject_code;?>"><?php echo $subject->subject_name;?></option>
+								<?php endforeach;}?>
+                               
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="">Parent Name</label>
-                            <input type="text" name="parent_name" class="form-control" value="<?php echo isset($student->parent_name) ? $student->parent_name : '' ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Parent Email</label>
-                            <input type="email" name="parent_email" class="form-control" value="<?php echo isset($student->parent_email) ? $student->parent_email : '' ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Siblings</label>
-                            <input type="text" name="siblings" class="form-control" value="<?php echo isset($student->siblings) ? $student->siblings : '' ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Parents Phone</label>
-                            <input type="text" name="parents_phone" class="form-control" value="<?php echo isset($student->parents_phone) ? $student->parents_phone : '' ?>">
+                            <label for="">Tutor Permission</label>
+                            <select name="tutor_permission" id="tutor_permission" class="form-control select2">
+                                <option value="">-- Select One --</option>
+                                <option <?php if(0==$tutor->tutor_permission) echo 'selected="selected"';?> value="0">Permission 1</option>
+                                <option <?php if(1==$tutor->tutor_permission) echo 'selected="selected"';?> value="1">Permission 2</option>
+                                <option <?php if(2==$tutor->tutor_permission) echo 'selected="selected"';?> value="2">Permission 3</option>
+                                <option <?php if(3==$tutor->tutor_permission) echo 'selected="selected"';?> value="3">Permission 4</option>
+                               
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="">Password</label>

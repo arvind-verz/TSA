@@ -31,7 +31,12 @@ class TutorController extends CI_Controller
 
     public function archive($id)
     {
-     $this->tutors->update_archive($id);  
+     $cur_date = date('Y-m-d H:i:s');	
+	$data = array(
+            'is_archive'   => 1,
+			'updated_at'   => $cur_date
+        );
+	 $this->tutors->update_archive($id,$data);  
     }
 
     public function create()
@@ -57,7 +62,7 @@ class TutorController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = TUTOR . " <small> " . ARCHIVED . " </small>";
-        $data['tutors']     = $this->tutors->get_archived_classes();
+        $data['tutors']     = $this->tutors->get_archived_tutors();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -114,7 +119,7 @@ class TutorController extends CI_Controller
         $data['title']       = $this->title;
         $data['page_title']  = TUTOR . " <small> " . EDIT . ' #' . $id . " </small>";
         $data['crud_id']     = $id;
-        $data['student']     = $this->tutors->get_student($id);
+        $data['tutor']     = $this->tutors->get_tutor($id);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -127,15 +132,19 @@ class TutorController extends CI_Controller
     {
         $this->load->library('form_validation');
 
-                $this->form_validation->set_rules('name', 'Name', 'required');
-				$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-				$this->form_validation->set_rules('username', 'Username', 'required');
+            $this->form_validation->set_rules('tutor_name', 'Name', 'required');
+			$this->form_validation->set_rules('email', 'Email', 'required');
+			$this->form_validation->set_rules('phone', 'phone', 'required');
+			$this->form_validation->set_rules('salary_scheme', 'salary_scheme', 'required');
+			$this->form_validation->set_rules('subject', 'subject', 'required');
+			$this->form_validation->set_rules('tutor_permission', 'tutor_permission', 'required');
+
                
-			    if(isset($_POST['password']) && $_POST['password']!="")
-				{
-				$this->form_validation->set_rules('password', 'Password','trim|required|min_length[8]|matches[passconf]');
-                $this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required');
-				}
+		if(isset($_POST['password']) && $_POST['password']!="")
+		{
+		$this->form_validation->set_rules('password', 'Password','trim|required|min_length[8]|matches[passconf]');
+		$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required');
+		}
                 
 
                 if ($this->form_validation->run() == FALSE)
@@ -151,6 +160,17 @@ class TutorController extends CI_Controller
 		
 		
     }
+	public function moveto_active_list($id)
+	{
+		
+	$cur_date = date('Y-m-d H:i:s');	
+	$data = array(
+            'is_archive'   => 0,
+			'updated_at'   => $cur_date
+        );
+	$this->tutors->update_archive2($id,$data);	
+	
+	}
 
     public function delete($id)
     {
