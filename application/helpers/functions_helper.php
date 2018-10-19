@@ -139,6 +139,7 @@ foreach ($query as $result) {
         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="E">
         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="X">
         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="G">
+        <input type="hidden" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="G">
     </td>
     <td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
 </tr>
@@ -574,6 +575,9 @@ function send_archived_invoice($student_id)
         if ($status[4] == 1) {
             $G[] = $status[4];
         }
+        if ($status[5] == 1) {
+            $H[] = $status[5];
+        }
     }
     if (!$result2) {
         return false;
@@ -596,7 +600,7 @@ function send_archived_invoice($student_id)
         'message' => $message,
     ];
 
-    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
 
     $data = [
         'invoice_id'      => $invoice_id,
@@ -647,6 +651,9 @@ function send_final_settlement_invoice($student_id)
         if ($status[4] == 1) {
             $G[] = $status[4];
         }
+        if ($status[5] == 1) {
+            $H[] = $status[5];
+        }
     }
 
     if (!$result2) {
@@ -670,7 +677,7 @@ function send_final_settlement_invoice($student_id)
         'message' => $message,
     ];
 
-    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
 
     $data = [
         'invoice_id'      => $invoice_id,
@@ -721,6 +728,9 @@ function send_class_transfer_invoice($student_id)
         if ($status[4] == 1) {
             $G[] = $status[4];
         }
+        if ($status[5] == 1) {
+            $H[] = $status[5];
+        }
     }
 
     if (!$result2) {
@@ -744,7 +754,7 @@ function send_class_transfer_invoice($student_id)
         'message' => $message,
     ];
 
-    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+    $invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
 
     $data = [
         'invoice_id'      => $invoice_id,
@@ -841,11 +851,11 @@ function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $ty
 
     $ci->email->send();
     echo $ci->email->print_debugger();*/
-    /*$to = "arvind.verz@gmail.com";
+    $to = "arvind.verz@gmail.com";
     $subject = "My subject";
     $txt = "Hello world!";
     $headers = "From: purohitarvind77@gmail.com";
 
-    mail($to,$subject,$txt,$headers);*/
+    mail($to,$subject,$txt,$headers);
     return true;
 }
