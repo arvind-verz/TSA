@@ -16,10 +16,11 @@ $lang['aauth_email_reset_success_subject'] = 'Successful Pasword Reset';
 $lang['aauth_email_reset_success_new_password'] = 'Your password has successfully been reset. Your new password is : ';
 
 
+
 /* Error Messages */
 
 // Account creation errors
-$lang['aauth_error_email_exists'] = 'Email address already exists on the system. If you forgot your password, you can click the link below.';
+$lang['aauth_error_email_exists'] = 'Email address already exists on the system.';
 $lang['aauth_error_username_exists'] = "Account already exists on the system with that username.  Please enter a different username, or if you forgot your password, please click the link below.";
 $lang['aauth_error_email_invalid'] = 'Invalid e-mail address';
 $lang['aauth_error_password_invalid'] = 'Invalid password';

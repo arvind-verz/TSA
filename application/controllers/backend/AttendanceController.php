@@ -7,8 +7,9 @@ class AttendanceController extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        //is_logged_in();
         $this->load->model('backend/attendance', 'attendance');
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
         $this->title = ADMINPANEL . ' | ' . ATTENDANCE;
     }
 

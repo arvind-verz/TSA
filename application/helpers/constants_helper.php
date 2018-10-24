@@ -22,6 +22,7 @@ define('TBL_MENU' , 'menu');
 define('TBL_CMS' ,'pages'); 
 
 /* MODULES */
+define('LOGIN', 'Login');
 define('DASHBOARD', 'Dashboard');
 define('SUBJECT', 'Subject');
 define('TUTOR', 'Tutor');
@@ -41,6 +42,8 @@ define('MENU_MANAGE', 'Menu Management');
 define('CMS', 'Cms');
 define('CMS_MANAGE', 'Cms Management');
 define('PAGE', 'Page');
+define('ROLESANDPERMISSION', 'Roles and Permission');
+define('USERS', 'Users');
 
 
 /* CRUD */

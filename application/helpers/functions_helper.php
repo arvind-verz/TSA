@@ -1,16 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-function is_logged_in()
-{
-    $ci = &get_instance();
-    $ci->load->library('session');
-    if ($ci->session->has_userdata('logged_in')) {
-        return redirect('admin/dashboard');
-    } else {
-        $ci->session->unset_userdata('logged_in');
-        return redirect('admin/login');
-    }
-}
+
 function get_invoice_no()
 {
     $ci = &get_instance();
@@ -23,6 +13,62 @@ function get_invoice_no()
     } else {
         return 'INV001';
     }
+}
+function get_module_access_data($type, $module, $value, $perm_id)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $query  = $ci->db->get_where('aauth_permission_access', ['perm_id' => $perm_id, $type => $value, 'module' => $module]);
+    $result = $query->row();
+    if($result) {
+        return "checked";
+    }
+}
+function get_permission_data($id = null)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+
+    if ($id) {
+        $query  = $ci->db->get_where('aauth_perms', ['id' => $id]);
+        $result = $query->row();
+    } else {
+        $query  = $ci->db->get('aauth_perms');
+        $result = $query->result();
+    }
+    return $result;
+}
+function get_permission_access_module($perm_id)
+{
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $modules = [];
+    $query   = $ci->db->get_where('aauth_permission_access', ['perm_id' => $perm_id]);
+    $result  = $query->result();
+    foreach ($result as $row) {
+        $modules[] = $row->module;
+    }
+    return implode(', ', $modules);
+}
+function get_users_data($id = null) {
+    $ci = &get_instance();
+    $ci->load->database();
+
+    $ci->db->select('*, aauth_users.id as aauth_users_id');
+    $ci->db->from('aauth_users');
+    $ci->db->join('aauth_perm_to_user', 'aauth_users.id = aauth_perm_to_user.user_id');
+    $ci->db->join('aauth_perms', 'aauth_perms.id = aauth_perm_to_user.perm_id');
+    if ($id) {
+        $ci->db->where(['aauth_users.id' => $id]);
+        $query = $ci->db->get();
+        $result = $query->row();
+    } else {
+        $query = $ci->db->get();
+        $result = $query->result();
+    }
+    return $result;
 }
 function get_sms_condition($id = null)
 {
@@ -99,24 +145,29 @@ function get_classes($id = null)
         return $query->result();
     }
 }
- function check_image_valid($image) {
-        $mime = array(
-            'image/gif',
-            'image/jpeg',
-            'image/png'
-        );
-        $file_info = getimagesize($image);
+function check_image_valid($image)
+{
+    $mime = array(
+        'image/gif',
+        'image/jpeg',
+        'image/png',
+    );
+    $file_info = getimagesize($image);
 
-        if (empty($file_info)) { // No Image?
+    if (empty($file_info)) {
+        // No Image?
+        return false;
+    } else {
+        // An Image?
+        $file_mime = $file_info['mime'];
+        if (in_array($file_mime, $mime)) {
+            return true;
+        } else {
             return false;
-        } else { // An Image?
-            $file_mime = $file_info['mime'];
-            if (in_array($file_mime, $mime))
-                return true;
-            else
-                return false;
         }
+
     }
+}
 function get_attendance_sheet($class_code = null)
 {
     $i  = 1;
@@ -445,7 +496,7 @@ function send_first_month_invoice($student_id)
     }
 
     $result3 = get_invoice_result3($result2->sid);
-    
+
     $emailto        = $result2->email;
     $fees           = $result2->monthly_fees;
     $extra_charges  = $result2->ex_charges;
@@ -476,7 +527,7 @@ function send_first_month_invoice($student_id)
             $invoice_amount = (((($counter - $i) * $fees) / 4) + $book_charges + $extra_charges - $credit_value);
             $data           = [
                 'invoice_id'     => $invoice_id,
-                'invoice_no'      => get_invoice_no(),
+                'invoice_no'     => get_invoice_no(),
                 'student_id'     => $student_id,
                 'invoice_date'   => $date,
                 'invoice_amount' => $invoice_amount,
@@ -544,7 +595,7 @@ function send_rest_month_invoice($student_id)
             $invoice_amount = ($fees + $book_charges + $extra_charges - $credit_value);
             $data           = [
                 'invoice_id'     => $invoice_id,
-                'invoice_no'      => get_invoice_no(),
+                'invoice_no'     => get_invoice_no(),
                 'student_id'     => $student_id,
                 'invoice_date'   => $date,
                 'invoice_amount' => $invoice_amount,

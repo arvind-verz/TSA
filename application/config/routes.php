@@ -2,10 +2,30 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'backend/AccountsController/index';
+
+
+
 
 
 /* BACKEND */
+$route['admin/login'] = 'backend/AccountsController/index';
+$route['admin/login/process'] = 'backend/AccountsController/process';
+$route['admin/logout'] = 'backend/AccountsController/logout';
+
+/* ROLES AND PERMISSION */
+$route['admin/users'] = 'backend/AccountsController/users';
+$route['admin/users/roles-and-permission/create'] = 'backend/AccountsController/permission_create';
+$route['admin/users/roles-and-permission/store'] = 'backend/AccountsController/permission_store';
+$route['admin/users/roles-and-permission/edit/(:any)'] = 'backend/AccountsController/permission_edit/$1';
+$route['admin/users/roles-and-permission/update/(:any)'] = 'backend/AccountsController/permission_update/$1';
+
+$route['admin/users/create'] = 'backend/AccountsController/users_create';
+$route['admin/users/store'] = 'backend/AccountsController/users_store';
+$route['admin/users/edit/(:any)'] = 'backend/AccountsController/users_edit/$1';
+$route['admin/users/update/(:any)'] = 'backend/AccountsController/users_update/$1';
+
+
 $route['admin/dashboard'] = 'backend/DashboardController/index';
 
 /* SUBJECT */

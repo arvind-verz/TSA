@@ -67,9 +67,9 @@
 						<i class="fa fa-dashboard"></i> <span><?php echo CMS ?></span>
 					</a>
 				</li>
-				<li class="<?php if(current_url() == site_url('admin/students')) { echo 'active'; } ?>">
-					<a href="<?php echo site_url('admin/students'); ?>">
-						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
+				<li class="">
+					<a href="<?php echo site_url('admin/users'); ?>">
+						<i class="fa fa-users"></i> <span><?php echo USERS ?></span>
 					</a>
 				</li>
 				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history') || current_url() == site_url('admin/sms_template/sms_template_create')) { echo 'active'; } ?>">

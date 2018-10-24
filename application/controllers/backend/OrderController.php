@@ -9,6 +9,8 @@ class OrderController extends CI_Controller
         parent::__construct();
         //is_logged_in();
         $this->load->model('backend/order', 'order');
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
         $this->title = ADMINPANEL . ' | ' . ORDER;
     }
 

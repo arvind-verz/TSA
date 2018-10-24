@@ -105,7 +105,7 @@
                                             </a>
                                         </div>
                                         <div class="pull-right">
-                                            <a class="btn btn-default btn-flat" href="#">
+                                            <a class="btn btn-default btn-flat" href="<?php echo site_url('admin/logout'); ?>">
                                                 Sign out
                                             </a>
                                         </div>

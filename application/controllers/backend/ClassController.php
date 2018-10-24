@@ -9,6 +9,8 @@ class ClassController extends CI_Controller
         parent::__construct();
         //is_logged_in();
         $this->load->model('backend/classes', 'classes');
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
         $this->title = ADMINPANEL . ' | ' . CLASSES;
     }
 
