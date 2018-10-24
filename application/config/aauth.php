@@ -96,6 +96,7 @@ $config_aauth["default"] = array(
  'group_to_group'                 => 'aauth_group_to_group',
  'user_to_group'                  => 'aauth_user_to_group',
  'perms'                          => 'aauth_perms',
+ 'perms_access'                   => 'aauth_permission_access',
  'perm_to_group'                  => 'aauth_perm_to_group',
  'perm_to_user'                   => 'aauth_perm_to_user',
  'pms'                            => 'aauth_pms',
@@ -105,7 +106,7 @@ $config_aauth["default"] = array(
  'remember'                       => ' +3 days',
 
  'max'                            => 13,
- 'min'                            => 5,
+ 'min'                            => 2,
 
  'additional_valid_chars'         => array(),
 
@@ -128,17 +129,17 @@ $config_aauth["default"] = array(
 
  'login_with_name'                => false,
 
- 'email'                          => 'admin@admin.com',
+ 'email'                          => 'arvind.verz@gmail.com',
  'name'                           => 'Emre Akay',
  'email_config'                   => false,
 
  'verification'                   => false,
- 'verification_link'              => '/account/verification/',
+ 'verification_link'              => '/admin/login/process/',
  'reset_password_link'            => '/account/reset_password/',
 
  'hash'                           => 'sha256',
- 'use_password_hash'              => false,
- 'password_hash_algo'             => PASSWORD_DEFAULT,
+ 'use_password_hash'              => true,
+ 'password_hash_algo'             => PASSWORD_BCRYPT,
  'password_hash_options'          => array(),
 
  'pm_encryption'                  => false,

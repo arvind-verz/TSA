@@ -9,6 +9,8 @@ class TutorController extends CI_Controller
         parent::__construct();
         //is_logged_in();
         $this->load->model('backend/tutors', 'tutors');
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
         $this->title = ADMINPANEL . ' | ' . TUTOR;
     }
 

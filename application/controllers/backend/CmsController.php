@@ -5,6 +5,8 @@ class CmsController extends CI_Controller {
     function __construct() {		
         parent::__construct();
         $this->load->model('backend/Cms_model', 'Cms_model', TRUE);
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
 		$this->title = ADMINPANEL . ' | ' . TUTOR;
     }
 	

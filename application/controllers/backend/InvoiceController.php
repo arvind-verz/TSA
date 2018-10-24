@@ -8,6 +8,8 @@ class InvoiceController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('backend/invoice', 'invoice');
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
         $this->title = ADMINPANEL . ' | ' . INVOICE;
     }
 
