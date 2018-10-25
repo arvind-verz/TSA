@@ -25,6 +25,7 @@ $route['admin/users/store'] = 'backend/AccountsController/users_store';
 $route['admin/users/edit/(:any)'] = 'backend/AccountsController/users_edit/$1';
 $route['admin/users/update/(:any)'] = 'backend/AccountsController/users_update/$1';
 
+$route['admin/denied-access-control'] = 'backend/AccountsController/denied_access';
 
 $route['admin/dashboard'] = 'backend/DashboardController/index';
 

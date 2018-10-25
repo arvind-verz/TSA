@@ -20,12 +20,12 @@ class Accounts extends CI_Model
             redirect('admin/login');
         }
         if(empty($remember_me)) {
-            if($this->aauth->login('arvind.verz@gmail.com', '123')) {
+            if($this->aauth->login($email, $password)) {
                 redirect('admin/dashboard');
             }
         }
         else {
-            if($this->aauth->login('arvind.verz@gmail.com', '123', true)) {
+            if($this->aauth->login($email, $password, true)) {
                 redirect('admin/dashboard');
             }
         }
@@ -81,5 +81,43 @@ class Accounts extends CI_Model
             }
         }
         return false;
+    }
+
+    public function users_update($id) {
+        $email = isset($_POST['email']) ? $_POST['email'] : '';
+        $username = isset($_POST['username']) ? $_POST['username'] : '';
+        $perm_id = isset($_POST['perm_id']) ? $_POST['perm_id'] : '';
+
+        $result = $this->aauth->update_user($id, $email, false, $username);
+        if($result) {
+            $this->aauth->update_allow_user($id, $perm_id);
+            $this->session->set_flashdata('success', USERS . ' ' . MSG_UPDATED);
+            return redirect('admin/users');
+        }
+        return false;
+    }
+
+    public function is_permission_allowed($user_id, $perm_id, $module, $type) {
+        $this->db->select('*');
+        $this->db->from('aauth_permission_access');
+        $this->db->join('aauth_perm_to_user', 'aauth_permission_access.perm_id = aauth_perm_to_user.perm_id');
+        $this->db->where(['aauth_perm_to_user.user_id' =>  $user_id, 'aauth_permission_access.perm_id' => $perm_id, 'aauth_permission_access.module' => $module, 'aauth_permission_access.' . $type => 1]);
+        $query = $this->db->get();
+        if($query->num_rows()<1) {
+            return redirect('admin/denied-access-control');
+        }
+    }
+
+    public function get_login_user_id() {
+        print_r($this->session->userdata('user_credentials'));
+        $result = $_SESSION;
+        $query = $this->db->get_where('aauth_perm_to_user', ['user_id' => $result['id']]);
+        $result1 = $query->row();
+        if($result1) {
+            return [
+                'user_id'   =>  $result['id'],
+                'perm_id'   =>  $result1->perm_id,
+            ];
+        }
     }
 }

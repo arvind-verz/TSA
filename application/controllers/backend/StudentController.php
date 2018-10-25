@@ -11,11 +11,13 @@ class StudentController extends CI_Controller
         $this->load->model('backend/students', 'students');
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . STUDENT;
     }
 
     public function index()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(STUDENT, 'admin/students');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -41,6 +43,7 @@ class StudentController extends CI_Controller
 
     public function create()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(STUDENT, 'admin/students');
         $this->breadcrumbs->push(CREATE, 'admin/students/create');
@@ -73,6 +76,7 @@ class StudentController extends CI_Controller
 	
     public function store()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'creates');
                 $this->load->library('form_validation');
 
                 $this->form_validation->set_rules('name', 'Name', 'required');
@@ -109,6 +113,7 @@ class StudentController extends CI_Controller
 
     public function edit($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'edits');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(STUDENT, 'admin/students');
         $this->breadcrumbs->push(EDIT, 'admin/students/edit');
@@ -127,6 +132,7 @@ class StudentController extends CI_Controller
 
     public function update($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'edits');
         $this->load->library('form_validation');
 
                 $this->form_validation->set_rules('name', 'Name', 'required');
@@ -156,6 +162,7 @@ class StudentController extends CI_Controller
 
     public function delete($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'deletes');
         $this->classes->delete($id, $_POST);
     }
 }

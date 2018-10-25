@@ -10,11 +10,13 @@ class MaterialController extends CI_Controller
         $this->load->model('backend/material', 'material');
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . MATERIAL;
     }
 
     public function index()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(MATERIAL, 'admin/material');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -48,6 +50,7 @@ class MaterialController extends CI_Controller
 
     public function create()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(MATERIAL, 'admin/material');
         $this->breadcrumbs->push(CREATE, 'admin/material/create');
@@ -66,11 +69,13 @@ class MaterialController extends CI_Controller
     public function store()
     {
         //die(print_r($_POST));
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'creates');
         $this->material->store($_POST);
     }
 
     public function edit($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'edits');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(MATERIAL, 'admin/material');
         $this->breadcrumbs->push(EDIT, 'admin/material/edit');
@@ -90,11 +95,13 @@ class MaterialController extends CI_Controller
 
     public function update($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'edits');
         $this->material->update($id, $_POST);
     }
 
     public function delete($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'deletes');
         $this->material->delete($id, $_POST);
     }
 

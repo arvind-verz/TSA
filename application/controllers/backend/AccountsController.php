@@ -6,7 +6,8 @@ class AccountsController extends CI_Controller
 	public function __construct()
     {
         parent::__construct();
-        $this->load->model('backend/accounts', 'accounts');        
+        $this->load->model('backend/accounts', 'accounts');
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . LOGIN;
         $this->title_perm = ADMINPANEL . ' | ' . USERS . ' ' . ROLESANDPERMISSION;
     }
@@ -62,6 +63,7 @@ class AccountsController extends CI_Controller
     }
 
     public function users() {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'views');
         $this->accounts->is_logged_in();
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(USERS, 'admin/users');
@@ -79,6 +81,7 @@ class AccountsController extends CI_Controller
     }
 
     public function permission_create() {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'creates');
         $this->accounts->is_logged_in();
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(USERS, 'admin/users');
@@ -96,6 +99,7 @@ class AccountsController extends CI_Controller
     }
 
     public function permission_store() {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'creates');
         $this->accounts->is_logged_in();
         $config = [
             [
@@ -117,6 +121,7 @@ class AccountsController extends CI_Controller
     }
 
     public function permission_edit($id) {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'edits');
         $this->accounts->is_logged_in();
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(USERS, 'admin/users');
@@ -137,6 +142,7 @@ class AccountsController extends CI_Controller
     }
 
     public function permission_update($id) {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'edits');
         $this->accounts->is_logged_in();
         $config = [
             [
@@ -158,6 +164,7 @@ class AccountsController extends CI_Controller
     }
 
     public function users_create() {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'creates');
         $this->accounts->is_logged_in();
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(USERS, 'admin/users');
@@ -175,6 +182,7 @@ class AccountsController extends CI_Controller
     }
 
     public function users_store() {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'creates');
         $this->accounts->is_logged_in();
         $config = [
             [
@@ -214,6 +222,7 @@ class AccountsController extends CI_Controller
     }
 
     public function users_edit($id) {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'edits');
         $this->accounts->is_logged_in();
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(USERS, 'admin/users');
@@ -229,6 +238,53 @@ class AccountsController extends CI_Controller
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
         $this->load->view('backend/accounts/users-edit');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
+    }
+
+    public function users_update($id) {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'USERS', 'edits');
+        $this->accounts->is_logged_in();
+        $config = [
+            [
+                'field' =>  'username',
+                'label' =>  'Name',
+                'rules' =>  'required',
+            ],
+            [
+                'field' =>  'email',
+                'label' =>  'Email',
+                'rules' =>  'trim|required|valid_email',
+            ],
+            [
+                'field' =>  'perm_id',
+                'label' =>  'Access Control',
+                'rules' =>  'required',
+            ]
+        ];
+
+        $this->form_validation->set_rules($config);
+
+        
+        if ($this->form_validation->run() == FALSE) {
+            $this->users_edit($id);
+        }
+        else {
+            $result = $this->accounts->users_update($id, $_POST);
+            if($result==false) {
+                $this->users_edit($id);
+            }
+        }
+    }
+
+    public function denied_access() {
+        $this->accounts->is_logged_in();
+        $data['title']       = $this->title_perm;
+        $data['page_title']  = 'Denied Access Control';
+
+        $this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/accounts/denied-access');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }

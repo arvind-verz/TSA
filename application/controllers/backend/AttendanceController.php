@@ -10,12 +10,14 @@ class AttendanceController extends CI_Controller
         $this->load->model('backend/attendance', 'attendance');
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . ATTENDANCE;
     }
 
     public function index()
     {
         //print_r(get_weekdays_of_month('September', 'Monday'));
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -37,6 +39,7 @@ class AttendanceController extends CI_Controller
 
     public function create()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
         $this->breadcrumbs->push(CREATE, 'admin/attendance/create');
@@ -73,6 +76,7 @@ class AttendanceController extends CI_Controller
 
     public function store()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'creates');
         $result = $this->attendance->store($_POST);
         print_r($result);
     }

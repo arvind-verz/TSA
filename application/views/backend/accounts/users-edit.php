@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/users/update' . $users_id); ?>
+                    <?php echo form_open('admin/users/update/' . $users_id); ?>
                     <div class="box-body">
                         <div class="col-lg-12">
                             <div class="form-group">
@@ -41,7 +41,7 @@
                                     if(count($permission_data)) {
                                     foreach($permission_data as $value) {
                                     ?>
-                                    <option value="<?php echo isset($value->id) ? $value->id : '' ?>" <?php if($users_data->aauth_users_id==$value->id) {echo "selected";} ?>><?php echo isset($value->name) ? $value->name : ''; ?></option>
+                                    <option value="<?php echo isset($value->id) ? $value->id : '' ?>" <?php if($users_data->perm_id==$value->id) {echo "selected";} ?>><?php echo isset($value->name) ? $value->name : ''; ?></option>
                                     <?php
                                     }}
                                     ?>

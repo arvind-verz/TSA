@@ -130,7 +130,7 @@ $config_aauth["default"] = array(
  'login_with_name'                => false,
 
  'email'                          => 'arvind.verz@gmail.com',
- 'name'                           => 'Emre Akay',
+ 'name'                           => 'Arvind Verz',
  'email_config'                   => false,
 
  'verification'                   => false,

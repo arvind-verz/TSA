@@ -10,11 +10,13 @@ class SmsController extends CI_Controller
         $this->load->model('backend/sms', 'sms');
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . SMS;
     }
 
     public function index()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SMS_TEMPLATE, 'admin/sms_template');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -31,6 +33,7 @@ class SmsController extends CI_Controller
 
     public function sms_history()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS_HISTORY', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SMS_HISTORY, 'admin/sms_template');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -46,6 +49,7 @@ class SmsController extends CI_Controller
 
     public function sms_template_create()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SMS_TEMPLATE, 'admin/sms_template');
         $this->breadcrumbs->push(CREATE, 'admin/sms_template/sms_template_create');
@@ -63,11 +67,13 @@ class SmsController extends CI_Controller
 
     public function sms_template_store()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS', 'creates');
         $this->sms->sms_template_store($_POST);
     }
 
     public function sms_template_edit($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS', 'edits');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SMS_TEMPLATE, 'admin/sms_template');
         $this->breadcrumbs->push(EDIT, 'admin/sms_template/sms_template_create');
@@ -86,6 +92,7 @@ class SmsController extends CI_Controller
 
     public function sms_template_update($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS', 'edits');
         $this->sms->sms_template_update($id, $_POST);
     }
 }

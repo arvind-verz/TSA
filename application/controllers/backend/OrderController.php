@@ -11,11 +11,13 @@ class OrderController extends CI_Controller
         $this->load->model('backend/order', 'order');
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . ORDER;
     }
 
     public function index()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ORDER', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(ORDER, 'admin/order');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -32,6 +34,7 @@ class OrderController extends CI_Controller
 
     public function create()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ORDER', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(ORDER, 'admin/order');
         $this->breadcrumbs->push(CREATE, 'admin/order/create');
@@ -52,11 +55,13 @@ class OrderController extends CI_Controller
 
     public function store()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ORDER', 'creates');
         $this->order->store($_POST);
     }
 
     public function update_order_status()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ORDER', 'edits');
         $this->order->update_order_status($_GET);
     }
 }
