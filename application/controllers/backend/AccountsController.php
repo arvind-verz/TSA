@@ -7,7 +7,6 @@ class AccountsController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('backend/accounts', 'accounts');
-        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . LOGIN;
         $this->title_perm = ADMINPANEL . ' | ' . USERS . ' ' . ROLESANDPERMISSION;
     }

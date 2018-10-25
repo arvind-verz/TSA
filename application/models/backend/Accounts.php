@@ -97,20 +97,25 @@ class Accounts extends CI_Model
         return false;
     }
 
-    public function is_permission_allowed($user_id, $perm_id, $module, $type) {
+    public function is_permission_allowed($user_id, $perm_id = null, $module, $type) {
         $this->db->select('*');
         $this->db->from('aauth_permission_access');
         $this->db->join('aauth_perm_to_user', 'aauth_permission_access.perm_id = aauth_perm_to_user.perm_id');
         $this->db->where(['aauth_perm_to_user.user_id' =>  $user_id, 'aauth_permission_access.perm_id' => $perm_id, 'aauth_permission_access.module' => $module, 'aauth_permission_access.' . $type => 1]);
         $query = $this->db->get();
-        if($query->num_rows()<1) {
+        if($query->num_rows()<1 && $user_id!=1) {
             return redirect('admin/denied-access-control');
         }
     }
 
     public function get_login_user_id() {
-        print_r($this->session->userdata('user_credentials'));
-        $result = $_SESSION;
+        $result = $this->session->userdata('user_credentials');
+        if($result['id']==1) {
+            return [
+                'user_id'   =>  $result['id'],
+                'perm_id'   =>  '',
+            ];
+        }
         $query = $this->db->get_where('aauth_perm_to_user', ['user_id' => $result['id']]);
         $result1 = $query->row();
         if($result1) {
