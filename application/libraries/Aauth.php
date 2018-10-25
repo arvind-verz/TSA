@@ -319,7 +319,7 @@ class Aauth
                 'loggedin' => true,
             );
 
-            $this->CI->session->set_userdata($data, 'user_credentials');
+            $this->CI->session->set_userdata('user_credentials', $data);
             if ($remember) {
                 $this->CI->load->helper('string');
                 $expire        = $this->config_vars['remember'];
@@ -363,7 +363,7 @@ class Aauth
     public function is_loggedin()
     {
 
-        if ($this->CI->session->userdata('loggedin')) {
+        if ($this->CI->session->userdata('user_credentials')) {
             return true;
         } else {
             if (!$this->CI->input->cookie('user', true)) {
@@ -489,7 +489,7 @@ class Aauth
                 'loggedin' => true,
             );
 
-            $this->CI->session->set_userdata($data, 'user_credentials');
+            $this->CI->session->set_userdata('user_credentials', $data);
             return true;
         }
         return false;
