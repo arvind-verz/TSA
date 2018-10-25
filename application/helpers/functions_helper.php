@@ -21,7 +21,7 @@ function get_module_access_data($type, $module, $value, $perm_id)
 
     $query  = $ci->db->get_where('aauth_permission_access', ['perm_id' => $perm_id, $type => $value, 'module' => $module]);
     $result = $query->row();
-    if($result) {
+    if ($result) {
         return "checked";
     }
 }
@@ -52,7 +52,8 @@ function get_permission_access_module($perm_id)
     }
     return implode(', ', $modules);
 }
-function get_users_data($id = null) {
+function get_users_data($id = null)
+{
     $ci = &get_instance();
     $ci->load->database();
 
@@ -62,10 +63,10 @@ function get_users_data($id = null) {
     $ci->db->join('aauth_perms', 'aauth_perms.id = aauth_perm_to_user.perm_id');
     if ($id) {
         $ci->db->where(['aauth_users.id' => $id]);
-        $query = $ci->db->get();
+        $query  = $ci->db->get();
         $result = $query->row();
     } else {
-        $query = $ci->db->get();
+        $query  = $ci->db->get();
         $result = $query->result();
     }
     return $result;

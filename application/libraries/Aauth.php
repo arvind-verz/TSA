@@ -319,8 +319,7 @@ class Aauth
                 'loggedin' => true,
             );
 
-            $this->CI->session->set_userdata($data);
-
+            $this->CI->session->set_userdata($data, 'user_credentials');
             if ($remember) {
                 $this->CI->load->helper('string');
                 $expire        = $this->config_vars['remember'];
@@ -490,7 +489,7 @@ class Aauth
                 'loggedin' => true,
             );
 
-            $this->CI->session->set_userdata($data);
+            $this->CI->session->set_userdata($data, 'user_credentials');
             return true;
         }
         return false;
@@ -862,6 +861,15 @@ class Aauth
 
         $this->aauth_db->where('id', $user_id);
         return $this->aauth_db->update($this->config_vars['users'], $data);
+    }
+
+    public function update_allow_user($user_id, $perm_id)
+    {
+        $data = [
+            'perm_id' => $perm_id,
+        ];
+        $this->aauth_db->where('user_id', $user_id);
+        return $this->aauth_db->update($this->config_vars['perm_to_user'], $data);
     }
 
     //tested
@@ -2456,7 +2464,7 @@ class Aauth
             }
             $i++;
         }
-        if($msg) {
+        if ($msg) {
             echo '<div class="col-lg-12">';
             echo '<div class="alert alert-danger alert-dismissible">';
             echo '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>';

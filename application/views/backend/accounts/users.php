@@ -6,7 +6,7 @@
         </h1>
         <?php print_r($breadcrumbs);?>
     </section>
-    <?php $this->load->view('backend/include/messages')?>
+    <?php $this->load->view('backend/include/messages');?>
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
@@ -84,7 +84,7 @@
                                         <td><?php echo $value->email; ?></td>
                                         <td><?php echo $value->name; ?></td>
                                         <td>
-                                            <a href="<?php echo site_url('admin/users/edit/' . $value->id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                                            <a href="<?php echo site_url('admin/users/edit/' . $value->aauth_users_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                     <?php

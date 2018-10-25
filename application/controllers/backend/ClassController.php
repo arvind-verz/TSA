@@ -11,11 +11,13 @@ class ClassController extends CI_Controller
         $this->load->model('backend/classes', 'classes');
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . CLASSES;
     }
 
     public function index()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'views'); 
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(CLASSES, 'admin/classes');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -50,6 +52,7 @@ class ClassController extends CI_Controller
 
     public function create()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(CLASSES, 'admin/classes');
         $this->breadcrumbs->push(CREATE, 'admin/classes/create');
@@ -67,11 +70,13 @@ class ClassController extends CI_Controller
 
     public function store()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'creates');
         $this->classes->store($_POST);
     }
 
     public function edit($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'edits');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(CLASSES, 'admin/classes');
         $this->breadcrumbs->push(EDIT, 'admin/classes/edit');
@@ -91,11 +96,13 @@ class ClassController extends CI_Controller
 
     public function update($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'creates');
         $this->classes->update($id, $_POST);
     }
 
     public function delete($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'deletes');
         $this->classes->delete($id, $_POST);
     }
 

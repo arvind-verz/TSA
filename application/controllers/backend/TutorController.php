@@ -11,11 +11,13 @@ class TutorController extends CI_Controller
         $this->load->model('backend/tutors', 'tutors');
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . TUTOR;
     }
 
     public function index()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(TUTOR, 'admin/tutors');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -43,6 +45,7 @@ class TutorController extends CI_Controller
 
     public function create()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(TUTOR, 'admin/tutors');
         $this->breadcrumbs->push(CREATE, 'admin/tutors/create');
@@ -75,6 +78,7 @@ class TutorController extends CI_Controller
 	
     public function store()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'creates');
                 $this->load->library('form_validation');
 
 			$this->form_validation->set_rules('tutor_name', 'Name', 'required');
@@ -114,6 +118,7 @@ class TutorController extends CI_Controller
 
     public function edit($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'edits');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(TUTOR, 'admin/tutors');
         $this->breadcrumbs->push(EDIT, 'admin/tutors/edit');
@@ -132,6 +137,7 @@ class TutorController extends CI_Controller
 
     public function update($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'edits');
         $this->load->library('form_validation');
 
             $this->form_validation->set_rules('tutor_name', 'Name', 'required');
@@ -176,6 +182,7 @@ class TutorController extends CI_Controller
 
     public function delete($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'deletes');
         $this->classes->delete($id, $_POST);
     }
 }
