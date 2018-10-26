@@ -16,7 +16,7 @@ class Accounts extends CI_Model
     	$email = isset($_POST['email']) ? $_POST['email'] : '';
     	$password = isset($_POST['password']) ? $_POST['password'] : '';
     	$remember_me = isset($_POST['remember_me']) ? $_POST['remember_me'] : 0;
-    	if($this->aauth->login('arvind.verz@gmail.com', '123')==false) {
+    	if($this->aauth->login($email, $password)==false) {
             redirect('admin/login');
         }
         if(empty($remember_me)) {
@@ -88,11 +88,13 @@ class Accounts extends CI_Model
         $username = isset($_POST['username']) ? $_POST['username'] : '';
         $perm_id = isset($_POST['perm_id']) ? $_POST['perm_id'] : '';
 
-        $result = $this->aauth->update_user($id, $email, false, $username);
-        if($result) {
-            $this->aauth->update_allow_user($id, $perm_id);
-            $this->session->set_flashdata('success', USERS . ' ' . MSG_UPDATED);
-            return redirect('admin/users');
+        if($email && $username && $perm_id) {
+            $result = $this->aauth->update_user($id, $email, false, $username);
+            if($result) {
+                $this->aauth->update_allow_user($id, $perm_id);
+                $this->session->set_flashdata('success', USERS . ' ' . MSG_UPDATED);
+                return redirect('admin/users');
+            }
         }
         return false;
     }
@@ -124,5 +126,28 @@ class Accounts extends CI_Model
                 'perm_id'   =>  $result1->perm_id,
             ];
         }
+    }
+
+    public function profileUpdate() {
+        $old_password = isset($_POST['old_password']) ? $_POST['old_password'] : '';
+        $new_password = isset($_POST['new_password']) ? $_POST['new_password'] : '';
+
+        if($old_password && $new_password) {
+            $user_credentials = $this->session->userdata('user_credentials');
+            $query = $this->db->get_where('aauth_users', ['id'    =>  $user_credentials['id']]);
+            $result = $query->row();
+            if($query->num_rows()<1) {
+                $this->session->set_flashdata('error', PROFILE . ' ' . MSG_UPD_FAILED);
+                return false;
+            }
+            if(!(password_verify($old_password, $result->pass))) {
+                $this->session->set_flashdata('error', 'Old Password does not match.');
+                return false;
+            }
+            $this->aauth->update_user($user_credentials['id'], false, $new_password, false);
+            $this->session->set_flashdata('success', PROFILE . ' ' . MSG_UPDATED);
+            return redirect('admin/users/profile');
+        }
+        return false;
     }
 }

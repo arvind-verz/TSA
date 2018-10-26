@@ -44,6 +44,8 @@ define('CMS_MANAGE', 'Cms Management');
 define('PAGE', 'Page');
 define('ROLESANDPERMISSION', 'Roles and Permission');
 define('USERS', 'Users');
+define('REPORTING', 'Reporting');
+define('PROFILE', 'Profile');
 
 
 /* CRUD */
@@ -71,6 +73,7 @@ define('MSG_ERROR', ' Error occured while manipulating data.');
 define('MSG_MOVED', ' has been moved to active list successfully.');
 define('MSG_EXIST', ' already exist within our system.');
 define('MSG_TRANSFERRED', ' has been transferred successfully.');
+define('MSG_UPD_FAILED', ' update has been failed.');
 
 
 
