@@ -67,9 +67,14 @@
 						<i class="fa fa-dashboard"></i> <span><?php echo CMS ?></span>
 					</a>
 				</li>
-				<li class="">
+				<li class="<?php if(current_url() == site_url('admin/users')) { echo 'active'; } ?>">
 					<a href="<?php echo site_url('admin/users'); ?>">
 						<i class="fa fa-users"></i> <span><?php echo USERS ?></span>
+					</a>
+				</li>
+				<li class="<?php if(current_url() == site_url('admin/reporting')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/reporting'); ?>">
+						<i class="fa fa-users"></i> <span><?php echo REPORTING ?></span>
 					</a>
 				</li>
 				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history') || current_url() == site_url('admin/sms_template/sms_template_create')) { echo 'active'; } ?>">

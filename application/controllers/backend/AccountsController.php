@@ -7,6 +7,7 @@ class AccountsController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('backend/accounts', 'accounts');
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . LOGIN;
         $this->title_perm = ADMINPANEL . ' | ' . USERS . ' ' . ROLESANDPERMISSION;
     }
@@ -88,7 +89,7 @@ class AccountsController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title_perm;
         $data['page_title']  = ROLESANDPERMISSION . " <small> " . CREATE . " </small>";
-        $data['modules_arr'] = ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'SMS_TEMPLATE', 'SMS_HISTORY'];
+        $data['modules_arr'] = get_all_modules();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -128,7 +129,7 @@ class AccountsController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title_perm;
         $data['page_title']  = ROLESANDPERMISSION . " <small> " . EDIT . " </small>";
-        $data['modules_arr'] = ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'SMS_TEMPLATE', 'SMS_HISTORY'];
+        $data['modules_arr'] = get_all_modules();
         $data['permission_data'] = get_permission_data($id);
         $data['perm_id']    =   $id;
 
@@ -286,5 +287,53 @@ class AccountsController extends CI_Controller
         $this->load->view('backend/accounts/denied-access');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
+    }
+
+    public function profile() {
+        $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(PROFILE, 'admin/users/profile');
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title']       = $this->title_perm;
+        $data['page_title']  = PROFILE;
+
+        $this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/accounts/profile');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
+    }
+
+    public function profileUpdate() {
+        $this->accounts->is_logged_in();
+        $config = [
+            [
+                'field' =>  'old_password',
+                'label' =>  'Old Password',
+                'rules' =>  'trim|required',
+            ],
+            [
+                'field' =>  'new_password',
+                'label' =>  'New Password',
+                'rules' =>  'trim|required|min_length[6]',
+            ],
+            [
+                'field' =>  'confirm_new_password',
+                'label' =>  'Confirm New Password',
+                'rules' =>  'trim|required|matches[new_password]',
+            ]
+        ];
+
+        $this->form_validation->set_rules($config);
+
+        
+        if ($this->form_validation->run() == FALSE) {
+            $this->profile();
+        }
+        else {
+            $result = $this->accounts->profileUpdate($_POST);
+            if($result==false) {
+                $this->profile();
+            }
+        }
     }
 }
