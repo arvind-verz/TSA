@@ -809,7 +809,7 @@ function send_final_settlement_invoice($student_id)
 
     $invoice_id = uniqid();
     $date       = date('Y-m-d H:i:s');
-    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d');
+    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
     //die(print_r($result2));

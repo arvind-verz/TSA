@@ -15,7 +15,6 @@ class M_pdf
     public function my_mPDF($filename)
     {
     	$ci = &get_instance();
-    	$filename = $filename . ".pdf";
         $html = $ci->load->view('backend/extra/pdf_invoice_layout', '', true);
     	$ci->load->library('M_pdf');
         
