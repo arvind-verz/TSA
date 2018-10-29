@@ -21,7 +21,17 @@
                         </div>
                         <div class="form-group">
                             <label for=""><?php echo TUTOR ?> ID</label>
-                            <input type="text" name="tutor_id" class="form-control" value="<?php echo isset($classes->tutor_id) ? $classes->tutor_id : '' ?>">
+                            <select name="tutor_id" class="form-control select2">
+                                <option value="">-- Select One --</option>
+                                <?php
+                                if(count($tutors)) {
+                                foreach($tutors as $tutor) {
+                                ?>
+                                <option value="<?php echo $tutor->tutor_id; ?>" <?php if($classes->tutor_id==$tutor->tutor_id) {echo "selected";} ?>><?php echo $tutor->tutor_id; ?></option>
+                                <?php
+                                }}
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="">Level</label>
@@ -42,7 +52,7 @@
                                 <?php
                                 if(count($subjects)) {
                                 foreach($subjects as $subject) {
-                                    $subject_id = json_decode($classes->subject);
+                                $subject_id = json_decode($classes->subject);
                                 ?>
                                 <option value="<?php echo $subject->id; ?>" <?php if(in_array($subject->id, $subject_id)) {echo 'selected';} ?>><?php echo $subject->subject_name; ?></option>
                                 <?php

@@ -8,7 +8,7 @@ define('ADMINPANEL', 'Admin Panel');
 /* DB TABLES */
 define('DB_DASHBOARD', 'dashboard');
 define('DB_SUBJECT', 'subject');
-define('DB_TUTOR', 'Tutor');
+define('DB_TUTOR', 'tutor');
 define('DB_CLASSES', 'class');
 define('DB_ATTENDANCE', 'attendance');
 define('DB_STUDENT', 'student');

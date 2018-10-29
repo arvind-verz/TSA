@@ -12,19 +12,19 @@ class ClassController extends CI_Controller
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
         $this->result = $this->accounts->get_login_user_id();
-        $this->title = ADMINPANEL . ' | ' . CLASSES;
+        $this->title  = ADMINPANEL . ' | ' . CLASSES;
     }
 
     public function index()
     {
-        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'views'); 
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(CLASSES, 'admin/classes');
-        $data['breadcrumbs'] = $this->breadcrumbs->show();
-        $data['title']       = $this->title;
-        $data['page_title']  = CLASSES;
-        $data['classes']     = get_classes();
-        $data['subject_classes']     = get_subject_classes();
+        $data['breadcrumbs']     = $this->breadcrumbs->show();
+        $data['title']           = $this->title;
+        $data['page_title']      = CLASSES;
+        $data['classes']         = get_classes();
+        $data['subject_classes'] = get_subject_classes();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -59,7 +59,8 @@ class ClassController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = CLASSES . " <small> " . CREATE . " </small>";
-        $data['subjects']     = get_subject();
+        $data['subjects']    = get_subject();
+        $data['tutors']      = get_tutors();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -85,7 +86,8 @@ class ClassController extends CI_Controller
         $data['page_title']  = CLASSES . " <small> " . EDIT . ' #' . $id . " </small>";
         $data['crud_id']     = $id;
         $data['classes']     = get_classes($id);
-        $data['subjects']     = get_subject();
+        $data['subjects']    = get_subject();
+        $data['tutors']      = get_tutors();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
