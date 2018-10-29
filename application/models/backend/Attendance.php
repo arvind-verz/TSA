@@ -61,6 +61,7 @@ class Attendance extends CI_Model
             $this->db->group_by('student_id');
             $query1 = $this->db->get();
             $result1 = $query1->result();
+
             $date_collection = get_weekdays_of_month($class_month, $result->class_day);
             ?>
             <thead>
@@ -79,16 +80,25 @@ class Attendance extends CI_Model
                 <?php
                 $i = 1;
                 if(count($result1)) {
-                foreach($result1 as $result) {
+                foreach($result1 as $result) {                    
                 ?>
                 <tr>
                     <td><?php echo $result->student_id; ?></td>
                     <td><?php echo get_student_by_student_id($result->student_id); ?></td>
                     <?php
                     if(count($date_collection)) {
-                    foreach($date_collection as $dates) {
+                    for($i=0;$i<count($date_collection);$i++) {
+                        $this->db->select('*');
+                        $this->db->from('attendance');
+                        $this->db->where(['class_code' => $class_code]);
+                        $this->db->where(['student_id' => $result->student_id]);
+                        $this->db->where(['date(attendance_date)' => $date_collection[$i]]);
+                        $this->db->order_by('id', 'ASC');
+                        $query2 = $this->db->get();
+                        $result2 = $query2->result();
+                        $result2 = $result2[0];
                     ?>
-                    <td><?php if($dates==date('Y-m-d', strtotime($result->attendance_date))) {echo get_attendance_status($result->status);} else {echo '-';} ?></td>
+                    <td><?php if($result2) {if($date_collection[$i]==date('Y-m-d', strtotime($result2->attendance_date))) {echo get_attendance_status($result2->status);} else {echo '-';}} else {echo '-';} ?></td>
                     <?php
                     }}
                     ?>

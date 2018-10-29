@@ -191,6 +191,15 @@ function get_archived($module = null)
     }
 }
 
+function get_tutors() {
+    $ci = &get_instance();
+
+    $query = $ci->db->get(DB_TUTOR);
+    if($query) {
+        return $query->result();
+    }
+}
+
 function get_classes($id = null)
 {
     $ci = &get_instance();
@@ -800,6 +809,7 @@ function send_final_settlement_invoice($student_id)
 
     $invoice_id = uniqid();
     $date       = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d');
 
     $result2 = get_invoice_result2($student_id);
     //die(print_r($result2));
@@ -869,12 +879,16 @@ function send_final_settlement_invoice($student_id)
         'amount_excluding_material' => $amount_excluding_material,
         'material_amount'           => $book_charges,
         'invoice_data'              => json_encode($invoice_data),
+        'invoice_file'              =>  $invoice_file,
         'invoice_content'           => json_encode($invoice_content),
         'created_at'                => $date,
         'updated_at'                => $date,
     ];
     $query = $ci->db->insert(DB_INVOICE, $data);
+    
     if ($query) {
+        $ci->load->library('M_pdf');
+        $ci->m_pdf->my_mPDF($invoice_file);
         $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
         if ($mail == true) {
             //die(print_r($query));
@@ -1051,4 +1065,8 @@ function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $ty
 
     mail($to,$subject,$txt,$headers);*/
     return true;
+}
+
+function send_sms($recipient, $message) {
+    
 }
