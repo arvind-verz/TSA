@@ -177,12 +177,12 @@ $(document).ready(function(){
 								$clss=$this->students->get_classes($student->student_id);
                                 ?>
                                 <tr <?php if(isset($enr->collected) && $enr->collected==0 && $student->status==0) echo 'bgcolor="#F00"';?>>
-                                <td><?php if(empty($student->status)){?><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/><?php }?></td>
+                                <td><?php if(is_null($student->status) || $student->status!=0){?><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/><?php }?></td>
                                 <td><?php echo $student->name;?></td>
                                 <td><?php echo $student->email;?></td>
                                 <td><?php echo $student->username;?></td>
                                 <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
-                                <td><?php foreach($clss as $class): echo $class['class_id'].'<br>'; endforeach;?></td>
+                                <td><?php echo $student->class_id;/*foreach($clss as $class): echo $class['class_id'].'<br>'; endforeach;*/?></td>
                                 <td><?php echo ($student->gender==0) ? 'Male' : 'Female' ?></td>
                                 <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
                                 <!--<td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>-->
@@ -396,7 +396,7 @@ $(document).ready(function(){
 var option="";
 option+='<div class="form-group">';
 option+='<label for="">Select Class Code</label>';
-option+='<select name="class_code[]" multiple="multiple" class="form-control select2">';
+option+='<select name="class_code" class="form-control select2">';
 option+='<option value="">-- Select One --</option>';
 option+='<?php if (count($classes)) {
 foreach ($classes as $class) {

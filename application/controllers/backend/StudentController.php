@@ -175,6 +175,7 @@ class StudentController extends CI_Controller
 
     public function delete($id)
     {
+
         $this->students->delete($id, $_POST);
     }
 	public function moveto_active_list($id)
@@ -183,5 +184,6 @@ class StudentController extends CI_Controller
 
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'deletes');
         $this->classes->delete($id, $_POST);
+
     }
 }

@@ -1,18 +1,25 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+
 /* FRONTEND */
 
-$route['default_controller'] = 'welcome';
 $route['testimonial']        = "frontend/cms/testimonial";
 $route['home']               = "frontend/cms/index";
 $route['contact-us']         = "frontend/cms/contact_us";
 $route['(:any)']             = "frontend/cms/inner_pages/$1";
 /* FRONTEND */
 
+
+$route['default_controller'] = 'backend/AccountsController/index';
+
+/* BACKEND */
+
+
 //$route['default_controller'] = 'backend/AccountsController/index';
 
 /* BACKEND */
+
 
 /* PDF */
 //$route['admin/pdf/invoice/(:any)']         = 'backend/PdfController/my_mPDF/$1';
@@ -59,6 +66,21 @@ $route['admin/classes/delete/(:any)']             = 'backend/ClassController/del
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/ClassController/moveto_active_list/$1';
 
 /* Student Admin */
+
+$route['admin/students']                = 'backend/StudentController/index';
+$route['admin/students/archive/(:any)'] = 'backend/StudentController/archive/$1';
+
+$route['admin/students/archived'] = 'backend/StudentController/archived';
+$route['admin/students/create'] = 'backend/StudentController/create';
+$route['admin/students/store'] = 'backend/StudentController/store';
+$route['admin/students/search'] = 'backend/StudentController/search';
+$route['admin/students/enroll'] = 'backend/StudentController/enroll';
+$route['admin/students/edit/(:any)'] = 'backend/StudentController/edit/$1';
+$route['admin/students/update/(:any)'] = 'backend/StudentController/update/$1';
+$route['admin/students/delete/(:any)'] = 'backend/StudentController/delete/$1';
+$route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
+
+
 $route['admin/students']                           = 'backend/StudentController/index';
 $route['admin/students/archive/(:any)']            = 'backend/StudentController/archive/$1';
 $route['admin/students/archived']                  = 'backend/StudentController/archived';
@@ -70,6 +92,7 @@ $route['admin/students/edit/(:any)']               = 'backend/StudentController/
 $route['admin/students/update/(:any)']             = 'backend/StudentController/update/$1';
 $route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
 $route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
+
 
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
 
@@ -153,6 +176,7 @@ $route['admin/tutors/edit/(:any)']               = 'backend/TutorController/edit
 $route['admin/tutors/update/(:any)']             = 'backend/TutorController/update/$1';
 $route['admin/tutors/moveto_active_list/(:any)'] = 'backend/TutorController/moveto_active_list/$1';
 
+
 /* End Tutor Admin */
 
 /* Permission Admin */
@@ -191,6 +215,7 @@ $route['admin/edit-testimonial/(:any)'] = "backend/TestimonialController/edit_te
 $route['admin/del-testimonial/(:any)']  = "backend/TestimonialController/del_testimonial/$1";
 /* CMS Admin */
 
+
 /* Tutor Admin */
 $route['404_override']         = '';
 $route['translate_uri_dashes'] = false;
@@ -206,3 +231,4 @@ $route['admin/add-cms']                      = "backend/CmsController/add_cms";
 $route['admin/edit-cms/(:any)']              = "backend/CmsController/edit_cms/$1";
 $route['admin/del-cms/(:any)']               = "backend/CmsController/del_cms/$1";
 /* CMS Admin */
+
