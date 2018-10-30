@@ -85,7 +85,8 @@ function get_users_data($id = null)
     return $result;
 }
 
-function get_student_by_class_code($class_code = null) {
+function get_student_by_class_code($class_code = null)
+{
     $ci = &get_instance();
 
     $ci->db->select('*, student.id as student_id');
@@ -93,14 +94,14 @@ function get_student_by_class_code($class_code = null) {
     $ci->db->join(DB_STUDENT, DB_CLASSES . '.id = ' . DB_STUDENT . '.class_id');
     $ci->db->where(DB_CLASSES . '.class_code', $class_code);
     $ci->db->where([DB_STUDENT . '.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
-    $query = $ci->db->get();
+    $query  = $ci->db->get();
     $result = $query->result();
-    if($result) {
-        foreach($result as $row) {
-        ?>
+    if ($result) {
+        foreach ($result as $row) {
+            ?>
         <option value="<?php echo $row->student_id ?>"><?php echo $row->name ?></option>
         <?php
-        }
+}
     }
 }
 
@@ -132,48 +133,51 @@ function level($value = null)
     }
 }
 
-function get_class_code($student_id = null) {
+function get_class_code($student_id = null)
+{
     $ci = &get_instance();
 
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
     $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.id');
-    $query = $ci->db->get();
+    $query  = $ci->db->get();
     $result = $query->row();
 
     return [
         'class_code' => $result->class_code,
-        'tutor_id'  =>  $result->tutor_id,
+        'tutor_id'   => $result->tutor_id,
     ];
 }
 
-function get_subject_code($student_id = null) {
+function get_subject_code($student_id = null)
+{
     $ci = &get_instance();
 
     $subject_list = [];
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
     $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.id');
-    $query = $ci->db->get();
-    $result = $query->row();
+    $query   = $ci->db->get();
+    $result  = $query->row();
     $subject = json_decode($result->subject);
 
-    foreach($subject as $value) {
-        $query = $ci->db->get_where(DB_SUBJECT, ['id' => $value]);
-        $result = $query->row();
+    foreach ($subject as $value) {
+        $query          = $ci->db->get_where(DB_SUBJECT, ['id' => $value]);
+        $result         = $query->row();
         $subject_list[] = $result->subject_name;
     }
     return implode(", ", $subject_list);
 }
 
-function get_students_enrolled($class_code = null) {
+function get_students_enrolled($class_code = null)
+{
     $ci = &get_instance();
 
     $ci->db->select('*, count(student.id) as total_students_enrolled');
     $ci->db->from(DB_STUDENT);
     $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.id');
     $ci->db->where([DB_STUDENT . '.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
-    $query = $ci->db->get();
+    $query  = $ci->db->get();
     $result = $query->row();
     return $result->total_students_enrolled;
 }
@@ -212,11 +216,12 @@ function get_archived($module = null)
     }
 }
 
-function get_tutors() {
+function get_tutors()
+{
     $ci = &get_instance();
 
     $query = $ci->db->get(DB_TUTOR);
-    if($query) {
+    if ($query) {
         return $query->result();
     }
 }
@@ -583,9 +588,9 @@ function send_first_month_invoice($student_id)
 {
     $ci = &get_instance();
 
-    $invoice_id = uniqid();
-    $date       = date('Y-m-d H:i:s');
-    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
+    $invoice_id   = uniqid();
+    $date         = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
     /*echo $ci->db->last_query();
@@ -642,7 +647,7 @@ function send_first_month_invoice($student_id)
                 'amount_excluding_material' => $amount_excluding_material,
                 'material_amount'           => $book_charges,
                 'invoice_data'              => json_encode($invoice_data),
-                'invoice_file'              =>  $invoice_file,
+                'invoice_file'              => $invoice_file,
                 'created_at'                => $date,
                 'updated_at'                => $date,
             ];
@@ -666,9 +671,9 @@ function send_rest_month_invoice($student_id)
 
     $ci = &get_instance();
 
-    $invoice_id = uniqid();
-    $date       = date('Y-m-d H:i:s');
-    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
+    $invoice_id   = uniqid();
+    $date         = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
     /*echo $ci->db->last_query();
@@ -724,7 +729,7 @@ function send_rest_month_invoice($student_id)
                 'amount_excluding_material' => $amount_excluding_material,
                 'material_amount'           => $book_charges,
                 'invoice_data'              => json_encode($invoice_data),
-                'invoice_file'              =>  $invoice_file,
+                'invoice_file'              => $invoice_file,
                 'created_at'                => $date,
                 'updated_at'                => $date,
             ];
@@ -747,9 +752,9 @@ function send_archived_invoice($student_id)
 {
     $ci = &get_instance();
 
-    $invoice_id = uniqid();
-    $date       = date('Y-m-d H:i:s');
-    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
+    $invoice_id   = uniqid();
+    $date         = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
 
@@ -818,7 +823,7 @@ function send_archived_invoice($student_id)
         'amount_excluding_material' => $amount_excluding_material,
         'material_amount'           => $book_charges,
         'invoice_data'              => json_encode($invoice_data),
-        'invoice_file'              =>  $invoice_file,
+        'invoice_file'              => $invoice_file,
         'invoice_content'           => json_encode($invoice_content),
         'created_at'                => $date,
         'updated_at'                => $date,
@@ -837,10 +842,10 @@ function send_archived_invoice($student_id)
 
 function send_final_settlement_invoice($student_id)
 {
-    $ci = &get_instance();
-    $invoice_id = uniqid();
-    $date       = date('Y-m-d H:i:s');
-    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
+    $ci           = &get_instance();
+    $invoice_id   = uniqid();
+    $date         = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
     //die(print_r($result2));
@@ -910,13 +915,13 @@ function send_final_settlement_invoice($student_id)
         'amount_excluding_material' => $amount_excluding_material,
         'material_amount'           => $book_charges,
         'invoice_data'              => json_encode($invoice_data),
-        'invoice_file'              =>  $invoice_file,
+        'invoice_file'              => $invoice_file,
         'invoice_content'           => json_encode($invoice_content),
         'created_at'                => $date,
         'updated_at'                => $date,
     ];
     $query = $ci->db->insert(DB_INVOICE, $data);
-    
+
     if ($query) {
         $ci->load->library('M_pdf');
         $ci->m_pdf->download_my_mPDF($invoice_file);
@@ -932,9 +937,9 @@ function send_class_transfer_invoice($student_id)
 {
     $ci = &get_instance();
 
-    $invoice_id = uniqid();
-    $date       = date('Y-m-d H:i:s');
-    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
+    $invoice_id   = uniqid();
+    $date         = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
     //die(print_r($result2));
@@ -1004,7 +1009,7 @@ function send_class_transfer_invoice($student_id)
         'amount_excluding_material' => $amount_excluding_material,
         'material_amount'           => $book_charges,
         'invoice_data'              => json_encode($invoice_data),
-        'invoice_file'              =>  $invoice_file,
+        'invoice_file'              => $invoice_file,
         'invoice_content'           => json_encode($invoice_content),
         'created_at'                => $date,
         'updated_at'                => $date,
@@ -1102,6 +1107,7 @@ function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $ty
     return true;
 }
 
-function send_sms($recipient, $message) {
-    
+function send_sms($recipient, $message)
+{
+
 }
