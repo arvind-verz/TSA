@@ -104,13 +104,12 @@
         $("tbody tr td input[name='payment_status']").each(function() {
             if($("input[name='payment_status_all']").is(":checked")) {
                 $(this).prop("checked", true);
-                storage.push($(this).val());
             }
             else {
                 $(this).prop("checked", false);
                 storage.pop($(this).val());
             }
-        })
+        });
     });
 
     $("body").on("click", "button.payment_status", function() {

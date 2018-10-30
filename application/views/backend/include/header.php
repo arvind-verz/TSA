@@ -118,7 +118,7 @@ jQuery(document).ready(function(){
         <div class="wrapper">
             <header class="main-header">
                 <!-- Logo -->
-                <a class="logo" href="index2.html">
+                <a class="logo" href="<?php echo site_url('admin/dashboard'); ?>">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini">
                         <b>
@@ -131,7 +131,7 @@ jQuery(document).ready(function(){
                         <b>
                         Admin
                         </b>
-                        LTE
+                        Panel
                     </span>
                 </a>
                 <!-- Header Navbar: style can be found in header.less -->
@@ -147,33 +147,36 @@ jQuery(document).ready(function(){
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <img alt="User Image" class="user-image" src="dist/img/user2-160x160.jpg">
+                                    <img alt="User Image" class="user-image" src="<?php echo base_url('assets/images/user.png'); ?>">
                                     <span class="hidden-xs">
-                                        Alexander Pierce
+                                        <?php
+                                        $result = $this->session->userdata('user_credentials');
+                                        echo $result['username'];
+                                        ?>
                                     </span>
                                     </img>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header">
-                                        <img alt="User Image" class="img-circle" src="dist/img/user2-160x160.jpg">
+                                        <img alt="User Image" class="img-circle" src="<?php echo base_url('assets/images/user.png'); ?>">
                                         <p>
-                                            Alexander Pierce - Web Developer
-                                            <small>
-                                            Member since Nov. 2012
-                                            </small>
+                                            <?php
+                                            $result = $this->session->userdata('user_credentials');
+                                            echo $result['username'];
+                                            ?>
                                         </p>
                                         </img>
                                     </li>
                                     <!-- Menu Footer-->
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a class="btn btn-default btn-flat" href="#">
+                                            <a class="btn btn-default btn-flat" href="<?php echo site_url('admin/users/profile'); ?>">
                                                 Profile
                                             </a>
                                         </div>
                                         <div class="pull-right">
-                                            <a class="btn btn-default btn-flat" href="#">
+                                            <a class="btn btn-default btn-flat" href="<?php echo site_url('admin/logout'); ?>">
                                                 Sign out
                                             </a>
                                         </div>

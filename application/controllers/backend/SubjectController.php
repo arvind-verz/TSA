@@ -8,11 +8,15 @@ class SubjectController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('backend/subject', 'subject');
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . SUBJECT;
     }
 
     public function index()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'views');       
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SUBJECT, 'admin/subject');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -29,6 +33,7 @@ class SubjectController extends CI_Controller
 
     public function archived()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'views');   
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SUBJECT, 'admin/subject');
         $this->breadcrumbs->push(ARCHIVED, 'admin/archived');
@@ -46,6 +51,7 @@ class SubjectController extends CI_Controller
 
     public function create()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SUBJECT, 'admin/subject');
         $this->breadcrumbs->push(CREATE, 'admin/subject/create');
@@ -62,12 +68,13 @@ class SubjectController extends CI_Controller
 
     public function store()
     {
-        //die(print_r($_POST));
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'creates');
         $this->subject->store($_POST);
     }
 
     public function edit($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'edits');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SUBJECT, 'admin/subject');
         $this->breadcrumbs->push(EDIT, 'admin/subject/edit');
@@ -86,11 +93,14 @@ class SubjectController extends CI_Controller
 
     public function update($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'edits');
         $this->subject->update($id, $_POST);
     }
 
     public function delete($id)
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'deletes');
+        die();
         $this->subject->delete($id, $_POST);
     }
 

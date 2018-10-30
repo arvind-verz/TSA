@@ -8,13 +8,16 @@ class InvoiceController extends CI_Controller
     {
         parent::__construct();
         $this->load->model('backend/invoice', 'invoice');
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . INVOICE;
     }
 
     public function index()
     {
-        //send_class_transfer_invoice('123');
-        die(print_r(send_class_transfer_invoice('123')));
+        send_final_settlement_invoice('123');        
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'INVOICE', 'views'); 
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(INVOICE, 'admin/invoice');
         $data['breadcrumbs'] = $this->breadcrumbs->show();

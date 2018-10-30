@@ -5,10 +5,14 @@ class CmsController extends CI_Controller {
     function __construct() {		
         parent::__construct();
         $this->load->model('backend/Cms_model', 'Cms_model', TRUE);
+        $this->load->model('backend/accounts', 'accounts');
+        $this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
 		$this->title = ADMINPANEL . ' | ' . TUTOR;
     }
 	
 	public function manage_menu() {
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MENU', 'views'); 
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(TUTOR, 'admin/manage-menu                              ');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -26,7 +30,7 @@ class CmsController extends CI_Controller {
     }
 	
 	public function manage_menu_list($position) {
-				
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MENU', 'views'); 		
         $data = array();
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(MENU, 'admin/manage-menu');
@@ -45,7 +49,7 @@ class CmsController extends CI_Controller {
     }
 	
 	public function add_menu_item($position) {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MENU', 'creates'); 
         $data_msg = array();
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(TUTOR, 'admin/tutors');
@@ -131,7 +135,7 @@ class CmsController extends CI_Controller {
     }
 	
 	public function del_menu_item($position,$id) {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MENU', 'deletes'); 
         $data_msg = array();		
 		$this->Cms_model->del_menu_item($id);						
 		$this->session->set_flashdata('success_msg', 'Successfully Removed');
@@ -139,7 +143,7 @@ class CmsController extends CI_Controller {
     }
 	
 	public function edit_menu_item($position,$id) {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MENU', 'edits'); 
         $data_msg = array();
 		
 		$error = FALSE;
@@ -234,7 +238,7 @@ class CmsController extends CI_Controller {
     }
 	
 	public function add_cms() {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CMS', 'creates');
         $data_msg = array();
 
         $data_msg['meta_title'] = "Add Pages";
@@ -341,7 +345,7 @@ class CmsController extends CI_Controller {
     }
 	
 	public function del_cms($id) {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CMS', 'deletes');
         $data_msg = array();
 		$details = $this->Cms_model->get_cms_details($id)->result_array();
 		$file = MAIN_SITE_AB_UPLOAD_PATH.'pagebanner/original/'.$details[0]['image_name'];
@@ -363,7 +367,7 @@ class CmsController extends CI_Controller {
     }
 	
 	public function edit_cms($id) {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CMS', 'edits');
         $data_msg = array();
 
         $data_msg['meta_title'] = EDIT.' '.CMS;
@@ -535,7 +539,7 @@ function resize_image($config = array(), $index = NULL) {
     }
 
     public function manage_cms() {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CMS', 'views');
 		$data_msg = array();		
         		
         $data_msg['page_title'] = "CMS Manager";

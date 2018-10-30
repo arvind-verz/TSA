@@ -105,7 +105,7 @@
                                         <?php echo isset($class->level) ? level($class->level) : '-'; ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($class->class_size) ? '-/' . $class->class_size : '-' ?>
+                                        <?php echo isset($class->class_size) ? get_students_enrolled($class->class_code) . '/' . $class->class_size : '-' ?>
                                     </td>
                                     <?php
                                     if (current_url() == site_url('admin/classes/archived')) {

@@ -6,7 +6,6 @@
         </h1>
         <?php print_r($breadcrumbs);?>
     </section>
-
     <?php $this->load->view('backend/include/messages') ?>
     
     <!-- Main content -->
@@ -23,7 +22,17 @@
                         </div>
                         <div class="form-group">
                             <label for=""><?php echo TUTOR ?> ID</label>
-                            <input type="text" name="tutor_id" class="form-control" value="">
+                            <select name="tutor_id" class="form-control select2">
+                                <option value="">-- Select One --</option>
+                                <?php
+                                if(count($tutors)) {
+                                foreach($tutors as $tutor) {
+                                ?>
+                                <option value="<?php echo $tutor->tutor_id; ?>"><?php echo $tutor->tutor_id; ?></option>
+                                <?php
+                                }}
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="">Level</label>
@@ -40,7 +49,6 @@
                         <div class="form-group">
                             <label for="">Subject</label>
                             <select name="subject[]" class="form-control select2" multiple="multiple">
-                                <option value="">-- Select One --</option>
                                 <?php
                                 if(count($subjects)) {
                                 foreach($subjects as $subject) {
