@@ -314,7 +314,6 @@ class CmsController extends CI_Controller {
 						'url_name' => preg_replace("/^'|[^A-Za-z0-9\'-]|'$/", '',$post_data['url_name']),					
 						'template' => $post_data['template'],
 						'image_name' => $image_name_name,	
-						//'left_image' => $left_image,
 						'banner_heading' => isset($post_data['banner_heading']) ? $post_data['banner_heading'] : '',					
 						'page_heading' => $post_data['page_heading'],
 						'page_content' => $post_data['page_content'],
@@ -353,10 +352,7 @@ class CmsController extends CI_Controller {
 		$file = MAIN_SITE_AB_UPLOAD_PATH.'pagebanner/thumb/'.$details[0]['image_name'];
 		if(is_file($file)){unlink($file);}
 		
-		/*$file = MAIN_SITE_AB_UPLOAD_PATH.'pagebanner/left_image/original/'.$details[0]['left_image'];
-		if(is_file($file)){unlink($file);}
-		$file = MAIN_SITE_AB_UPLOAD_PATH.'pagebanner/left_image/thumb/'.$details[0]['left_image'];
-		if(is_file($file)){unlink($file);}*/
+
 		
 		
 		$this->Cms_model->del_cms($id);			
@@ -409,9 +405,7 @@ class CmsController extends CI_Controller {
         }
 		$data_msg['details'] = $details;
 		
-		/*$get_result_menu = $this->Cms_model->get_cms_menu();
-		$details_menu = $get_result_menu->result_array();		
-		$data_msg['menu'] = $details_menu;*/
+		
 		if($_POST){	
 			if ($this->form_validation->run() == FALSE)
 			{	
@@ -451,7 +445,6 @@ class CmsController extends CI_Controller {
              $data = array(
 					'url_name' => preg_replace("/^'|[^A-Za-z0-9\'-]|'$/", '',$post_data['url_name']),
 					'image_name' => $image_name_name,
-					//'left_image' => $left_image,
 					'template' => $post_data['template'],	
 					'banner_heading' => isset($post_data['banner_heading'])?$post_data['banner_heading']:'',								
 					'page_heading' => $post_data['page_heading'],
