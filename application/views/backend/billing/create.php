@@ -39,7 +39,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[]" value="1"> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[0]" value="1"> Rest Week
                                         </label>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[]" value="1"> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[1]" value="1"> Rest Week
                                         </label>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[]" value="1"> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[2]" value="1"> Rest Week
                                         </label>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[]" value="1"> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[3]" value="1"> Rest Week
                                         </label>
                                     </div>
                                 </div>
