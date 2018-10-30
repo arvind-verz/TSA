@@ -11,7 +11,7 @@ class Billing extends CI_Model
     }
 
     public function store()
-    {
+    {        
         $billing = [];
         for ($i = 0; $i < count($_POST['billing_name']); $i++) {
             $billing[] = [

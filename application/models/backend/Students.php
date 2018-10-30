@@ -203,7 +203,9 @@ class Students extends CI_Model
 			{
 				$data2 = array(
 				'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
+
 				'class_id'    => !empty($_POST['class_code']) ? $_POST['class_code'] : '',
+
 				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
 				);
 					/*foreach($_POST['class_code'] as $class):
