@@ -42,7 +42,6 @@ class OrderController extends CI_Controller
         $data['title']       = $this->title;
         $data['page_title']  = ORDER . " <small> " . CREATE . " </small>";
         $data['subjects']    = get_subject();
-        $data['students']    = get_student();
         $data['classes']     = get_classes();
         $data['books']       = get_book();
 

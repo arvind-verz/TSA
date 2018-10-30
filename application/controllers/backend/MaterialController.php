@@ -33,6 +33,7 @@ class MaterialController extends CI_Controller
 
     public function archived()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(MATERIAL, 'admin/material');
         $this->breadcrumbs->push(ARCHIVED, 'admin/archived');
@@ -108,5 +109,10 @@ class MaterialController extends CI_Controller
     public function moveto_active_list($id)
     {
         $this->material->moveto_active_list($id, $_POST);
+    }
+
+    public function get_student_by_class_code() {
+        $class_code = isset($_GET['class_code']) ? $_GET['class_code'] : '';
+        print_r(get_student_by_class_code($class_code));
     }
 }

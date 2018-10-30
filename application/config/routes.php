@@ -13,8 +13,8 @@ $route['admin/login/process'] = 'backend/AccountsController/process';
 $route['admin/logout']        = 'backend/AccountsController/logout';
 
 /* ROLES AND PERMISSION */
-$route['admin/users/profile']        = 'backend/AccountsController/profile';
-$route['admin/users/profile/update']        = 'backend/AccountsController/profileUpdate';
+$route['admin/users/profile']                            = 'backend/AccountsController/profile';
+$route['admin/users/profile/update']                     = 'backend/AccountsController/profileUpdate';
 $route['admin/users']                                    = 'backend/AccountsController/users';
 $route['admin/users/roles-and-permission/create']        = 'backend/AccountsController/permission_create';
 $route['admin/users/roles-and-permission/store']         = 'backend/AccountsController/permission_store';
@@ -79,6 +79,8 @@ $route['admin/material/edit/(:any)']               = 'backend/MaterialController
 $route['admin/material/update/(:any)']             = 'backend/MaterialController/update/$1';
 $route['admin/material/delete/(:any)']             = 'backend/MaterialController/delete/$1';
 $route['admin/material/moveto_active_list/(:any)'] = 'backend/MaterialController/moveto_active_list/$1';
+
+$route['admin/material/get_student_by_class_code'] = 'backend/MaterialController/get_student_by_class_code';
 
 /* INVOICE */
 $route['admin/invoice']                       = 'backend/InvoiceController/index';
