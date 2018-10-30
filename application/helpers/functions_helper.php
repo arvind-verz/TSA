@@ -261,7 +261,11 @@ function check_image_valid($image)
         }
 
     }
+<<<<<<< HEAD
+
+=======
 }
+>>>>>>> master
 function get_attendance_sheet($class_code = null)
 {
     $i  = 1;

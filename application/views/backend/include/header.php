@@ -45,6 +45,74 @@
         <!-- jQuery UI 1.11.4 -->
         <script src="<?php echo base_url('assets/plugins/jquery-ui/jquery-ui.min.js'); ?>"></script>
         <script src="<?php echo base_url('assets/plugins/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url();?>editor/tinymce/tinymce.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>editor/fancybox/jquery.fancybox.css" media="screen" />
+<script type="text/javascript" src="<?php echo base_url();?>editor/fancybox/jquery.fancybox.js"></script>
+<script>
+tinymce.init({
+    selector: "textarea#bodyContent",
+    theme: "modern",
+    width: "auto",
+    height: 500,
+    plugins: [
+         "advlist autolink link image lists charmap print preview hr anchor pagebreak",
+         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+         "save table contextmenu directionality emoticons template paste textcolor responsivefilemanager,emoticons"
+   ],
+   content_css: "css/content.css",  
+   extended_valid_elements: 'span[style|id|nam|class|lang]', 
+   relative_urls: false,
+   remove_script_host: false,
+   document_base_url: '<?php echo base_url();?>',
+   toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
+   toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code | edit  tools, emoticons",
+   browser_spellcheck: true,
+   contextmenu: false,
+   image_advtab: true ,   
+   external_filemanager_path:"<?php echo base_url();?>editor/filemanager/",
+   filemanager_title:"Filemanager" ,
+   filemanager_access_key:'',
+   external_plugins: { "filemanager" : "<?php echo  base_url();?>editor/filemanager/plugin.min.js"}
+ }); 
+
+</script>
+<script>
+jQuery(document).ready(function(){
+    //*******************************************************************//
+	$('input:radio[name=link_type]').click(function(){
+		radio_val = $(this).val();
+		
+		link_target_str = '';
+		
+		link_target_str += '<label for="link_target">Page Target: </label>';
+		link_target_str += '<select name="link_target" class="form-control">';
+		link_target_str += '<option value="self">Same Tab</option>';
+		link_target_str += '<option value="new_tab">New Tab</option>';
+		link_target_str += '</select>';
+		
+		if(radio_val=='external'){
+			$('#select_page_box').html('<label for="external_box">External URL</label> <input type="text" placeholder="http://" name="external_url"  id="external_url" required class="sf" />').show('slow');
+			$('#link_target').html(link_target_str).show('slow');
+		}
+		else if(radio_val=='internal'){
+			$.ajax({
+				type: "GET",
+				dataType: "text",
+				url: "<?php echo site_url('admin/generate-page-list');?>",
+				success: function(data) { 
+					$('#select_page_box').html(data).show('slow');
+					$('#link_target').html(link_target_str).show('slow');
+				}
+			});
+		}
+		else{
+			$('#select_page_box').hide('slow');
+			$('#link_target').hide('slow');
+		}
+	});	
+	//*******************************************************************//
+});
+</script>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
         <div class="wrapper">

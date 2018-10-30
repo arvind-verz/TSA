@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-          <?php echo form_open('admin/edit-cms/'.$cms_id); ?>
+          <?php echo form_open_multipart('admin/edit-cms/'.$cms_id); ?>
             <div class="box-body">
               <div class="form-group">
                 <label for="page_heading" >Page Title  : <span>*</span></label>
@@ -41,20 +41,19 @@
               </div>
               <?php }?>
 
-              <!--<div class="form-group">
+              <div class="form-group">
              	 <label for="parent_id">Template : </label>
                  <select name="template" id="template"   class="form-control">
                  <option value="Full Width" <?php if($details[0]['template']=='Full Width'){echo 'selected';} ?>>Full Width</option>
                  <option value="About Us" <?php if($details[0]['template']=='About Us'){echo 'selected';} ?>>About Us</option>
-                 <option value="Why Join Us" <?php if($details[0]['template']=='Why Join Us'){echo 'selected';} ?>>Why Join Us</option>
                  </select>
-              </div>-->
+              </div>
               <div class="form-group">
                 <label for="sort_order" >Sort Order: </label>
                 <input type="text" name="sort_order"  id="sort_order" value="<?php echo $details[0]['sort_order'];?>"  class="form-control" />
               </div>
             <?php if($details[0]['image_name']!=''){?>
-              <p><img src="<?php echo get_site_image('upload/pagebanner/thumb').$details[0]['image_name']; ?>" /></p>
+              <p><img src="<?php echo base_url().'assets/upload/pagebanner/thumb/'.$details[0]['image_name']; ?>" /></p>
               <?php }?>
               <?php //if($details[0]['id']!=1){?>
               <div class="form-group">
@@ -62,10 +61,10 @@
                 <input type="file" name="image_name" id="image_name" value="<?php echo $details[0]['image_name'];?>">
               </div>
               <?php //}?>  
-              <!--<p>
-                <label for="banner_heading" >Baner Heading</label>
-                <textarea name="banner_heading" id="banner_heading"><?php //echo $details[0]['banner_heading'];?></textarea>
-              </p> -->  
+              <div class="form-group">
+                <label for="banner_heading" >Other Content</label>
+                <textarea name="banner_heading" id="banner_heading" class="form-control"><?php echo $details[0]['banner_heading'];?></textarea>
+              </div>   
               <?php //if($details[0]['id']!=4 && $details[0]['id']!=8 && $details[0]['id']!=19){?>        
               <label for="from_email" >Body Content </label>
               <div class="body">

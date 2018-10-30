@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/add-menu-item'); ?>
+                    <?php echo form_open('admin/students/store'); ?>
                     <div class="box-body">
                         <div class="form-group">
                           <label for="">Name</label>
@@ -48,7 +48,7 @@
                             <div class="col-sm-1"><label for="">Gender</label></div>
                             <div class="col-sm-2">
                             <label class="radio-inline">
-                                 <input name="gender"  value="0" type="radio" />Male
+                                 <input name="gender" checked="checked"  value="0" type="radio" />Male
                              </label>
                             </div>
                             <div class="col-sm-2">

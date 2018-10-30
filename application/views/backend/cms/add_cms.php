@@ -49,10 +49,10 @@
                 <label for="location">Banner (1400 X 350) </label>
                 <input type="file" name="image_name" id="image_name" value="">
               </div>
-              <!--<p>
-                <label for="banner_heading" >Baner Heading</label>
-                <textarea name="banner_heading" id="banner_heading"><?php //echo set_value('banner_heading'); ?></textarea>
-              </p>-->
+              <div class="form-group">
+                <label for="banner_heading" >Other Content</label>
+                <textarea name="banner_heading" id="banner_heading"><?php echo set_value('banner_heading'); ?></textarea>
+              </div>
               <label for="from_email" >Body Content</label>
               <div class="body">
                 <textarea class="form-control" name="page_content" id="bodyContent"><?php echo set_value('page_content'); ?></textarea>

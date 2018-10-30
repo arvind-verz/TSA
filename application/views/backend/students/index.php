@@ -120,9 +120,9 @@ $(document).ready(function(){
                                     <th>
                                         NRIC
                                     </th>
-                                    <!--<th>
+                                    <th>
                                         Enrolled <br />classes
-                                    </th>-->
+                                    </th>
                                     <th>
                                         Gender
                                     </th>
@@ -174,23 +174,23 @@ $(document).ready(function(){
 								{
 								$enr=$this->students->get_enrollment($student->student_id);
 								}
-								
+								$clss=$this->students->get_classes($student->student_id);
                                 ?>
                                 <tr <?php if(isset($enr->collected) && $enr->collected==0 && $student->status==0) echo 'bgcolor="#F00"';?>>
-                                <td><?php if($student->status==0){?><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/><?php }?></td>
+                                <td><?php if(empty($student->status)){?><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/><?php }?></td>
                                 <td><?php echo $student->name;?></td>
                                 <td><?php echo $student->email;?></td>
                                 <td><?php echo $student->username;?></td>
                                 <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
-                                <!--<td></td>-->
-                                <td><?php echo isset($student->gender) ? $student->gender : '-' ?></td>
+                                <td><?php foreach($clss as $class): echo $class['class_id'].'<br>'; endforeach;?></td>
+                                <td><?php echo ($student->gender==0) ? 'Male' : 'Female' ?></td>
                                 <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
                                 <!--<td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>-->
                                 <!--<td><?php echo isset($student->parent_name ) ? $student->parent_name  : '-' ?></td>-->
                                 <!--<td><?php echo isset($student->parent_email ) ? $student->parent_email  : '-' ?></td>-->
                                 <!--<td><?php echo isset($student->parents_phone ) ? $student->parents_phone  : '-' ?></td>-->
                                 <td><?php echo isset($student->siblings ) ? $student->siblings  : '-' ?></td>
-                                <td><?php echo isset($student->status ) ? $student->status  : '-' ?></td>
+                                <td><?php echo (is_null($student->status)) ? '-'  : '<span class="glyphicon glyphicon-ok"></span>' ?></td>
                                 <td> <div class="form-group">
                            
                             <select name="action" id="action" class="form-control select2 action">
@@ -239,7 +239,7 @@ $(document).ready(function(){
           <div class="form-group">
                             <label for="">Select Status</label>
                             <select name="student_status" id="student_status" class="form-control select2">
-                                <option value="">-- Select One --</option>
+                                <option value="-1">-- Select One --</option>
                                 <option value="0">Enrolled</option>
                                 <option value="1">Reserved</option>
                                 <option value="2">Waitlist</option>
@@ -389,13 +389,14 @@ $(document).ready(function(){
       
     </div>
   </div>
-<?php } ?>  
+<?php } ?> 
+ 
 <!-- Modal -->
 <script type="text/javascript">
-var option;
+var option="";
 option+='<div class="form-group">';
 option+='<label for="">Select Class Code</label>';
-option+='<select name="class_code" class="form-control select2">';
+option+='<select name="class_code[]" multiple="multiple" class="form-control select2">';
 option+='<option value="">-- Select One --</option>';
 option+='<?php if (count($classes)) {
 foreach ($classes as $class) {
@@ -408,8 +409,9 @@ $(document).ready(function() {
 		var reservation ="";var enrollment ="";
 		
 		reservation =option+'<div class="form-group"><label for="">Select Reservation Date</label><input type="text" name="reservation_date" class="form-control datepicker" value=""></div>';
-		enrollment = '<div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value=""></div><div class="form-group"><label for="">Deposit</label>200</div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected" value="0" type="radio" />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Select Reservation Date</label><input type="text" name="reservation_date" class="form-control datepicker" value=""></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value=""></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="ex_charges" class="form-control" value=""></div><div class="form-group"><label for="">Remarks</label><input type="text" name="remarks" class="form-control" value=""></div>';
+		enrollment = '<div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="" required="required"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="" required="required"></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected" value="0" type="radio" />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input required="required" type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Select Reservation Date</label><input required="required" type="text" name="reservation_date" class="form-control datepicker" value=""></div><div class="form-group"><label for="">Credit Value</label><input required="required" type="text" name="credit_value" class="form-control" value=""></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="ex_charges" required="required" class="form-control" value=""></div><div class="form-group"><label for="">Remarks</label><input  required="required" type="text" name="remarks" class="form-control" value=""></div>';
 				
+		
 		if($(this).val()==0)
 		{
 			$("#dis_content").html(enrollment);
