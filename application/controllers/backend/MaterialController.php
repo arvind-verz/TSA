@@ -33,6 +33,7 @@ class MaterialController extends CI_Controller
 
     public function archived()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(MATERIAL, 'admin/material');
         $this->breadcrumbs->push(ARCHIVED, 'admin/archived');

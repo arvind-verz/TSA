@@ -32,7 +32,8 @@ class SubjectController extends CI_Controller
     }
 
     public function archived()
-    {        
+    {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'views');   
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SUBJECT, 'admin/subject');
         $this->breadcrumbs->push(ARCHIVED, 'admin/archived');

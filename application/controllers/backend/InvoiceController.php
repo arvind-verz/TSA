@@ -16,7 +16,7 @@ class InvoiceController extends CI_Controller
 
     public function index()
     {
-        send_final_settlement_invoice('123');
+        //send_final_settlement_invoice('123');
         
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'INVOICE', 'views'); 
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');

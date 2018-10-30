@@ -302,7 +302,7 @@ function get_invoice_sheet($class_code = null)
         <td><?php echo isset($row->student_id) ? $row->student_id : '-'; ?></td>
         <td><?php echo isset($row->invoice_no) ? $row->invoice_no : '-'; ?></td>
         <td><?php echo isset($row->invoice_date) ? date("d/m/Y", strtotime($row->invoice_date)) : '-'; ?></td>
-        <td><a href="#">View</a><br/><a href="#">Download Invoice</a></td>
+        <td><a href="<?php echo base_url('assets/files/pdf/invoice/' . $row->invoice_file) ?>" target="_blank">View</a><br/><a href="<?php echo base_url('assets/files/pdf/invoice/' . $row->invoice_file) ?>" target="_blank" download>Download Invoice</a></td>
         <td><?php echo isset($row->status) ? get_invoice_status($row->invoice_id, 'status') : '-'; ?></td>
         <td><?php echo isset($row->payment_method) ? get_invoice_status($row->invoice_id, 'payment_method') : '-'; ?></td>
     </tr>
@@ -560,11 +560,11 @@ function get_billing($id = null)
 
 function send_first_month_invoice($student_id)
 {
-
     $ci = &get_instance();
 
     $invoice_id = uniqid();
     $date       = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
     /*echo $ci->db->last_query();
@@ -621,11 +621,14 @@ function send_first_month_invoice($student_id)
                 'amount_excluding_material' => $amount_excluding_material,
                 'material_amount'           => $book_charges,
                 'invoice_data'              => json_encode($invoice_data),
+                'invoice_file'              =>  $invoice_file,
                 'created_at'                => $date,
                 'updated_at'                => $date,
             ];
             $query = $ci->db->insert(DB_INVOICE, $data);
             if ($query) {
+                $ci->load->library('M_pdf');
+                $ci->m_pdf->download_my_mPDF($invoice_file);
                 $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
                 if ($mail == true) {
                     //die(print_r($query));
@@ -644,6 +647,7 @@ function send_rest_month_invoice($student_id)
 
     $invoice_id = uniqid();
     $date       = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
     /*echo $ci->db->last_query();
@@ -699,11 +703,14 @@ function send_rest_month_invoice($student_id)
                 'amount_excluding_material' => $amount_excluding_material,
                 'material_amount'           => $book_charges,
                 'invoice_data'              => json_encode($invoice_data),
+                'invoice_file'              =>  $invoice_file,
                 'created_at'                => $date,
                 'updated_at'                => $date,
             ];
             $query = $ci->db->insert(DB_INVOICE, $data);
             if ($query) {
+                $ci->load->library('M_pdf');
+                $ci->m_pdf->download_my_mPDF($invoice_file);
                 $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
                 if ($mail == true) {
                     //die(print_r($query));
@@ -721,6 +728,7 @@ function send_archived_invoice($student_id)
 
     $invoice_id = uniqid();
     $date       = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
 
@@ -789,12 +797,15 @@ function send_archived_invoice($student_id)
         'amount_excluding_material' => $amount_excluding_material,
         'material_amount'           => $book_charges,
         'invoice_data'              => json_encode($invoice_data),
+        'invoice_file'              =>  $invoice_file,
         'invoice_content'           => json_encode($invoice_content),
         'created_at'                => $date,
         'updated_at'                => $date,
     ];
     $query = $ci->db->insert(DB_INVOICE, $data);
     if ($query) {
+        $ci->load->library('M_pdf');
+        $ci->m_pdf->download_my_mPDF($invoice_file);
         $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
         if ($mail == true) {
             //die(print_r($query));
@@ -806,7 +817,6 @@ function send_archived_invoice($student_id)
 function send_final_settlement_invoice($student_id)
 {
     $ci = &get_instance();
-
     $invoice_id = uniqid();
     $date       = date('Y-m-d H:i:s');
     $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
@@ -888,7 +898,7 @@ function send_final_settlement_invoice($student_id)
     
     if ($query) {
         $ci->load->library('M_pdf');
-        $ci->m_pdf->my_mPDF($invoice_file);
+        $ci->m_pdf->download_my_mPDF($invoice_file);
         $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
         if ($mail == true) {
             //die(print_r($query));
@@ -903,6 +913,7 @@ function send_class_transfer_invoice($student_id)
 
     $invoice_id = uniqid();
     $date       = date('Y-m-d H:i:s');
+    $invoice_file = uniqid() . '__invoice_pdf-' .date('Y-m-d') . '.pdf';
 
     $result2 = get_invoice_result2($student_id);
     //die(print_r($result2));
@@ -972,12 +983,15 @@ function send_class_transfer_invoice($student_id)
         'amount_excluding_material' => $amount_excluding_material,
         'material_amount'           => $book_charges,
         'invoice_data'              => json_encode($invoice_data),
+        'invoice_file'              =>  $invoice_file,
         'invoice_content'           => json_encode($invoice_content),
         'created_at'                => $date,
         'updated_at'                => $date,
     ];
     $query = $ci->db->insert(DB_INVOICE, $data);
     if ($query) {
+        $ci->load->library('M_pdf');
+        $ci->m_pdf->download_my_mPDF($invoice_file);
         $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
         if ($mail == true) {
             //die(print_r($query));

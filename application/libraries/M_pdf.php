@@ -12,7 +12,7 @@ class M_pdf
         $this->mpdf = new Mpdf\Mpdf();
     }
 
-    public function my_mPDF($filename)
+    public function download_my_mPDF($filename)
     {
     	$ci = &get_instance();
         $html = $ci->load->view('backend/extra/pdf_invoice_layout', '', true);

@@ -35,6 +35,7 @@ class ClassController extends CI_Controller
 
     public function archived()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CLASSES', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(CLASSES, 'admin/classes');
         $this->breadcrumbs->push(ARCHIVED, 'admin/archived');
