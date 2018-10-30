@@ -53,7 +53,8 @@ function get_permission_data($id = null)
     }
     return $result;
 }
-function get_permission_access_module($perm_id)
+
+function get_permission_access_module($perm_id = null)
 {
     $ci = &get_instance();
 
@@ -101,7 +102,7 @@ function get_student_by_class_code($class_code = null)
             ?>
         <option value="<?php echo $row->student_id ?>"><?php echo $row->name ?></option>
         <?php
-}
+        }
     }
 }
 

@@ -34,7 +34,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right date_range" name="date_range[]" value="<?php echo $billing_group[0]->date_range; ?>">
+                                            <input type="text" class="form-control pull-right date_range" name="date_range[]" value="<?php echo $billing_group[0]->date_range; ?>"  autocomplete="off">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -42,7 +42,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[]" value="1" <?php if($billing_group[0]->rest_week==1) {echo 'checked';} ?>> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[0]" value="1" <?php if($billing_group[0]->rest_week==1) {echo 'checked';} ?>> Rest Week
                                         </label>
                                     </div>
                                 </div>
@@ -61,7 +61,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right date_range" name="date_range[]" value="<?php echo $billing_group[1]->date_range; ?>">
+                                            <input type="text" class="form-control pull-right date_range" name="date_range[]" value="<?php echo $billing_group[1]->date_range; ?>" autocomplete="off">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -69,7 +69,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[]" value="1" <?php if($billing_group[1]->rest_week==1) {echo 'checked';} ?>> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[1]" value="1" <?php if($billing_group[1]->rest_week==1) {echo 'checked';} ?>> Rest Week
                                         </label>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right date_range" name="date_range[]" value="<?php echo $billing_group[2]->date_range; ?>">
+                                            <input type="text" class="form-control pull-right date_range" name="date_range[]" value="<?php echo $billing_group[2]->date_range; ?>" autocomplete="off">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -96,7 +96,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[]" value="1" <?php if($billing_group[2]->rest_week==1) {echo 'checked';} ?>> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[2]" value="1" <?php if($billing_group[2]->rest_week==1) {echo 'checked';} ?>> Rest Week
                                         </label>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right date_range" name="date_range[]" <?php echo $billing_group[3]->date_range; ?>>
+                                            <input type="text" class="form-control pull-right date_range" name="date_range[]" value="<?php echo $billing_group[3]->date_range; ?>" autocomplete="off">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -123,7 +123,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[]" value="1" <?php if($billing_group[3]->rest_week==1) {echo 'checked';} ?>> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[3]" value="1" <?php if($billing_group[3]->rest_week==1) {echo 'checked';} ?>> Rest Week
                                         </label>
                                     </div>
                                 </div>
