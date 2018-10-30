@@ -123,21 +123,21 @@ class Students extends CI_Model
 	
     public function store()
     {
-        //die(print_r($_POST));
+       // die(print_r($_POST));
         $data = array(
             'student_id'     => $this->uniq_id,
-            'name'   => !empty($_POST['name']) ? $_POST['name'] : null,
-            'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
-            'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : null,
-            'username'      => !empty($_POST['username']) ? $_POST['username'] : null,
-            'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
-            'age'    => !empty($_POST['age']) ? $_POST['age'] : null,
-            'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : null,
-            'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : null,
-            'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : null,
-            'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : null,
-            'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : null,
-            'password'   => !empty($_POST['password']) ? md5($_POST['password']) : null,
+            'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
+            'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
+            'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
+            'username'      => !empty($_POST['username']) ? $_POST['username'] : '',
+            'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
+            'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
+            'gender'   => $_POST['gender'],
+            'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
+            'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
+            'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : '',
+            'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
+            'password'   => !empty($_POST['password']) ? md5($_POST['password']) : '',
             'created_at'   => $this->date,
             'updated_at'   => $this->date,
         );
@@ -167,14 +167,14 @@ class Students extends CI_Model
 			
 				$data = array(
 					'student_id'     => $student,
-					'enrollment_date'     => !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : null,
-					'collected'      => !empty($_POST['depo_collected']) ? $_POST['depo_collected'] : null,
-					'deposit'   => !empty($_POST['deposit']) ? $_POST['deposit'] : null,
-					'remarks_deposit'   => !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : null,
-					'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : null,
-					'ex_charges'   => !empty($_POST['ex_charges']) ? $_POST['ex_charges'] : null,
-					'credit_value'   => !empty($_POST['credit_value']) ? $_POST['credit_value'] : null,
-					'remarks'    => !empty($_POST['remarks']) ? $_POST['remarks'] : null,
+					'enrollment_date'     => !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '',
+					'collected'      => !empty($_POST['depo_collected']) ? $_POST['depo_collected'] : '',
+					'deposit'   => !empty($_POST['deposit']) ? $_POST['deposit'] : '',
+					'remarks_deposit'   => !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '',
+					'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
+					'ex_charges'   => !empty($_POST['ex_charges']) ? $_POST['ex_charges'] : '',
+					'credit_value'   => !empty($_POST['credit_value']) ? $_POST['credit_value'] : '',
+					'remarks'    => !empty($_POST['remarks']) ? $_POST['remarks'] : '',
 					'created_at'   => $this->date,
 					'updated_at'   => $this->date
 				);
@@ -185,8 +185,8 @@ class Students extends CI_Model
 			
 			
 			$data2 = array(
-			'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : null,
-			'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : null
+			'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
+			'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
 			);
 			
 			$this->db->trans_start();
@@ -202,10 +202,11 @@ class Students extends CI_Model
 			foreach($student_code as $student)
 			{
 				$data2 = array(
-				'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : null,
-				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : null
+				'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
+				'class_id'    => !empty($_POST['class_code']) ? $_POST['class_code'] : '',
+				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
 				);
-					foreach($_POST['class_code'] as $class):
+					/*foreach($_POST['class_code'] as $class):
 					if($student!="all")
 					{
 						$data3 = array(
@@ -217,7 +218,7 @@ class Students extends CI_Model
 						$this->db->insert('student_to_class', $data3);
 						$this->db->trans_complete();
 					}
-					endforeach;
+					endforeach;*/
 				$this->db->trans_start();
 				$this->db->where('student_id', $student);
 				$this->db->update('student', $data2);
@@ -230,7 +231,7 @@ class Students extends CI_Model
 			foreach($student_code as $student)
 			{
 				$data2 = array(
-				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : null
+				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
 				);
 				
 				$this->db->trans_start();
@@ -255,18 +256,18 @@ class Students extends CI_Model
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
 			$data = array(
-				'name'   => !empty($_POST['name']) ? $_POST['name'] : null,
-				'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
-				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : null,
-				'username'      => !empty($_POST['username']) ? $_POST['username'] : null,
-				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
-				'age'    => !empty($_POST['age']) ? $_POST['age'] : null,
-				'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : null,
-				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : null,
-				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : null,
-				'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : null,
-				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : null,
-				'password'   => !empty($_POST['password']) ? md5($_POST['password']) : null,
+				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
+				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
+				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
+				'username'      => !empty($_POST['username']) ? $_POST['username'] : '',
+				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
+				'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
+				'gender'   => $_POST['gender'],
+				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
+				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
+				'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : '',
+				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
+				'password'   => !empty($_POST['password']) ? md5($_POST['password']) : '',
 				'created_at'   => $this->date,
 				'updated_at'   => $this->date
 			);
@@ -274,17 +275,17 @@ class Students extends CI_Model
 		else
 		{
 		$data = array(
-				'name'   => !empty($_POST['name']) ? $_POST['name'] : null,
-				'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
-				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : null,
-				'username'      => !empty($_POST['username']) ? $_POST['username'] : null,
-				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
-				'age'    => !empty($_POST['age']) ? $_POST['age'] : null,
-				'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : null,
-				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : null,
-				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : null,
-				'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : null,
-				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : null,
+				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
+				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
+				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
+				'username'      => !empty($_POST['username']) ? $_POST['username'] : '',
+				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
+				'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
+				'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : '',
+				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
+				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
+				'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : '',
+				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
 				'created_at'   => $this->date,
 				'updated_at'   => $this->date
 			);	

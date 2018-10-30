@@ -19,11 +19,11 @@
 <!-- Footer END --> 
 <!-- Get In Touch -->
 <div class="get-in-touch">
-	<div class="get-btn"><img src="images/btn.png" alt="" class="responsive"></div>
+	<div class="get-btn"><img src="<?php echo base_url('assets/images/btn.png'); ?>" alt="" class="responsive"></div>
 	<div class="get-holder">
 		<h3 class="title4 text-center txt-dark mb0">Quick Enquiry</h3>
 		<p class="text-center">Feel free to send us a message!</p>
-		<form name="contact" id="contact" method="post" action="contact.php">
+		<form name="contact" id="contact" method="post" action="<?php echo site_url('quick_enquiry'); ?>">
 		<div class="get-form">
 			<div class="form-group">
 				<input type="text" name="fullname" required id="fullname" placeholder="Name" class="gt-input">

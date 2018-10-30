@@ -54,19 +54,15 @@ class Cms extends CI_Controller {
 		
 		if($page[0]['template']=='About Us')
 		{
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push('About Us', 'about-us');
+        $this->breadcrumbs->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/about');
         $this->load->view('frontend/include/footer');
 		}
-		else if($page[0]['template']=='Why Join Us')
-		{
-		 if($page[0]['id']==46)
-		 {
-			$data_msg['join_us']='<a href="'.base_url('membership-types').'" class="link-red">JOIN US NOW</a>';
-		 }
-		$this->view('why_join_us_page',$data_msg);
 		
-		}
 		else
 		{
 		$this->load->view('frontend/include/header', $data_msg);
