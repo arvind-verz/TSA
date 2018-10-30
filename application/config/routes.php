@@ -1,8 +1,16 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/* FRONTEND */
+
+
 
 $route['default_controller'] = 'welcome';
+$route['testimonial'] = "frontend/cms/testimonial";
+$route['home'] = "frontend/cms/index";
+$route['contact-us'] = "frontend/cms/contact_us";
+$route['(:any)'] = "frontend/cms/inner_pages/$1";
+/* FRONTEND */
 
 
 /* BACKEND */
@@ -38,7 +46,7 @@ $route['admin/students/enroll'] = 'backend/StudentController/enroll';
 $route['admin/students/edit/(:any)'] = 'backend/StudentController/edit/$1';
 $route['admin/students/update/(:any)'] = 'backend/StudentController/update/$1';
 $route['admin/students/delete/(:any)'] = 'backend/StudentController/delete/$1';
-
+$route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
 
 /* ATTENDANCE */
@@ -136,7 +144,24 @@ $route['admin/tutors/edit/(:any)'] = 'backend/TutorController/edit/$1';
 $route['admin/tutors/update/(:any)'] = 'backend/TutorController/update/$1';
 $route['admin/tutors/moveto_active_list/(:any)'] = 'backend/TutorController/moveto_active_list/$1';
 
-/* Tutor Admin */
+/* End Tutor Admin */
+
+/* Permission Admin */
+$route['admin/permission'] = 'backend/PermissionController/index';
+$route['admin/permission/create'] = 'backend/PermissionController/create';
+$route['admin/permission/store'] = 'backend/PermissionController/store';
+$route['admin/permission/edit/(:any)'] = 'backend/PermissionController/edit/$1';
+$route['admin/permission/update/(:any)'] = 'backend/PermissionController/update/$1';
+$route['admin/permission/delete/(:any)'] = 'backend/PermissionController/delete/$1';
+
+
+$route['admin/role/create'] = 'backend/PermissionController/create_user';
+$route['admin/role/store'] = 'backend/PermissionController/store_user';
+$route['admin/role/edit/(:any)'] = 'backend/PermissionController/edit_user/$1';
+$route['admin/role/update/(:any)'] = 'backend/PermissionController/update_user/$1';
+$route['admin/role/delete/(:any)'] = 'backend/PermissionController/delete_user/$1';
+/* End Permission Admin */
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 /* CMS Admin */
@@ -150,4 +175,12 @@ $route['translate_uri_dashes'] = FALSE;
   $route['admin/add-cms'] = "backend/CmsController/add_cms";
   $route['admin/edit-cms/(:any)'] = "backend/CmsController/edit_cms/$1";
   $route['admin/del-cms/(:any)'] = "backend/CmsController/del_cms/$1";
+  $route['admin/generate-page-list'] = "backend/CmsController/generate_page_list";
+  
+  $route['admin/manage-testimonial'] = "backend/TestimonialController/manage_testimonial";
+  $route['admin/add-testimonial'] = "backend/TestimonialController/add_testimonial";
+  $route['admin/edit-testimonial/(:any)'] = "backend/TestimonialController/edit_testimonial/$1";
+  $route['admin/del-testimonial/(:any)'] = "backend/TestimonialController/del_testimonial/$1";
 /* CMS Admin */
+
+

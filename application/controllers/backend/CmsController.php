@@ -87,8 +87,12 @@ class CmsController extends CI_Controller {
 		if($_POST){	
 			if ($this->form_validation->run() == FALSE)
 			{
-				$data_msg['error_msg'] = $error_msg = strip_tags(validation_errors());
-				$this->view('cms/add_menu', $data_msg);
+				$data_msg['error'] = $error = strip_tags(validation_errors());
+				$this->load->view('backend/include/header', $data_msg);
+		$this->load->view('backend/include/sidebar');
+		$this->load->view('backend/cms/add_menu');
+		$this->load->view('backend/include/control-sidebar');
+		$this->load->view('backend/include/footer');
 			}else{
             	$post_data = $_POST;
 				
@@ -114,7 +118,7 @@ class CmsController extends CI_Controller {
 				); 
 				$this->Cms_model->add_menu_item($data);
                 $this->session->set_flashdata('success_msg', 'Successfully added');
-				redirect(site_url("manage-menu-list/".$position));
+				redirect(site_url("admin/manage-menu-list/".$position));
             }
 		}else{
 
@@ -184,7 +188,7 @@ class CmsController extends CI_Controller {
 			foreach($_POST as $Key => $Value){$this->session->set_flashdata($Key, $Value);}
 			if ($this->form_validation->run() == FALSE)
 			{
-				$data_msg['error_msg'] = $error_msg = strip_tags(validation_errors());
+				$data_msg['error'] = $error = strip_tags(validation_errors());
 				$this->view('cms/edit_menu', $data_msg);
 			}else{
            
@@ -247,6 +251,7 @@ class CmsController extends CI_Controller {
                      'label'   => 'Page Title',
                      'rules'   => 'required'
                   ), 
+				  
 				array(
                      'field'   => 'url_name',
                      'label'   => 'Url',
@@ -270,7 +275,7 @@ class CmsController extends CI_Controller {
 		if($_POST){	
 			if ($this->form_validation->run() == FALSE)
 			{
-				$data_msg['error_msg'] = $error_msg = strip_tags(validation_errors());
+				$data_msg['error'] = $error = strip_tags(validation_errors());
 				$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
 				$this->breadcrumbs->push(CMS_MANAGE, 'admin/classes');
 				$data_msg['breadcrumbs'] = $this->breadcrumbs->show();
@@ -283,17 +288,17 @@ class CmsController extends CI_Controller {
 				$this->load->view('backend/include/footer');
 			}
 			else {
-              $post_data = $_POST; $error_msg = '';
+              $post_data = $_POST; $error = '';
 			  if($_FILES['image_name']['tmp_name']!=''){				  
 				  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){
-					  $error_msg = "Invalid Banner Image.";  
+					  $error = "Invalid Banner Image.";  
 				  }else{
 					   $config = array(
 						'source' => 'image_name', 
 						'temp' => 'temp',
-						'resize' => array(array('height' => 350, 'width' => 1400, 'save' => 'assets/upload/cms'))
+						'resize' => array(array('height' => '', 'width' => '', 'save' => 'assets/upload/cms'))
 						);						
-						$image_name_name = $this->all_function->resize_image($config);
+						$image_name_name = $this->resize_image($config);
 					}				  
 				  }else{
 					  $image_name_name = '';
@@ -306,7 +311,7 @@ class CmsController extends CI_Controller {
 						'template' => $post_data['template'],
 						'image_name' => $image_name_name,	
 						//'left_image' => $left_image,
-						//'banner_heading' => $post_data['banner_heading'],					
+						'banner_heading' => isset($post_data['banner_heading']) ? $post_data['banner_heading'] : '',					
 						'page_heading' => $post_data['page_heading'],
 						'page_content' => $post_data['page_content'],
 						'seo_title' => $post_data['seo_title'],
@@ -361,7 +366,9 @@ class CmsController extends CI_Controller {
 		
         $data_msg = array();
 
-        $data_msg['meta_title'] = "Edit Page";
+        $data_msg['meta_title'] = EDIT.' '.CMS;
+		$data_msg['page_title']  = EDIT.' '.CMS;
+		$data_msg['cms_id']  =$id;
 		$this->load->library('form_validation');
 		
 		$config = array(
@@ -370,6 +377,7 @@ class CmsController extends CI_Controller {
                      'label'   => 'Page Title',
                      'rules'   => 'required'
                   ), 
+				 
 				array(
                      'field'   => 'url_name',
                      'label'   => 'Url',
@@ -393,7 +401,7 @@ class CmsController extends CI_Controller {
 		$get_result = $this->Cms_model->get_cms_details($id);
 		$details = $get_result->result_array();
         if (count($details) == 0) {			
-				redirect(site_url("manage-cms"));
+				redirect(site_url("admin/manage-cms"));
         }
 		$data_msg['details'] = $details;
 		
@@ -403,27 +411,32 @@ class CmsController extends CI_Controller {
 		if($_POST){	
 			if ($this->form_validation->run() == FALSE)
 			{	
-				$data_msg['error_msg'] = $error_msg = strip_tags(validation_errors());
-				$this->view('cms/edit_cms', $data_msg);
+		$data_msg['error'] = $error = strip_tags(validation_errors());
+		$this->load->view('backend/include/header', $data_msg);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/cms/edit_cms');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
 			}else {           
              $post_data = $_POST;  
 			 if(isset($_FILES['image_name']['tmp_name']) && $_FILES['image_name']['tmp_name']!=''){
-				  if ($this->all_function->check_image_valid($_FILES['image_name']['tmp_name'])!=1){
-					   $error_msg = 'Invalid Banner Image.';
+				  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){
+					   $error = 'Invalid Banner Image.';
 				  }else{
 					  	$file = MAIN_SITE_AB_UPLOAD_PATH.'pagebanner/original/'.$details[0]['image_name'];
 						if(is_file($file)){unlink($file);}
 						$file = MAIN_SITE_AB_UPLOAD_PATH.'pagebanner/thumb/'.$details[0]['image_name'];
 						if(is_file($file)){unlink($file);}
+						list($width, $height) = getimagesize($_FILES['image_name']['tmp_name']);
 					    $config = array(
 						'source' => 'image_name', 
 						'temp' => 'temp',
 						'resize' => array(
-						array('height' => 350, 'width' => 1400, 'save' => 'pagebanner/original/'),
+						array('height' => $height, 'width' => $width, 'save' => 'pagebanner/original/'),
 						array('height' => 45, 'width' => 200, 'save' => 'pagebanner/thumb/')
 						)
 						);						
-						$image_name_name = $this->all_function->resize_image($config);
+						$image_name_name = $this->resize_image($config);
 					}				  
 				  }else{
 					  $image_name_name = $details[0]['image_name'];
@@ -436,7 +449,7 @@ class CmsController extends CI_Controller {
 					'image_name' => $image_name_name,
 					//'left_image' => $left_image,
 					'template' => $post_data['template'],	
-					//'banner_heading' => isset($post_data['banner_heading'])?$post_data['banner_heading']:'',								
+					'banner_heading' => isset($post_data['banner_heading'])?$post_data['banner_heading']:'',								
 					'page_heading' => $post_data['page_heading'],
 					'page_content' => isset($post_data['page_content'])?$post_data['page_content']:'',
 					'seo_title' => $post_data['seo_title'],
@@ -455,6 +468,7 @@ class CmsController extends CI_Controller {
 			
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(CMS, 'admin/cms');
+		
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
 		$data_msg['cms_id']       = $id;
@@ -465,6 +479,59 @@ class CmsController extends CI_Controller {
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
 		}
+    }
+	
+			  function rand_string($digits) {
+        $alphanum = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        // generate the random string
+        $rand = substr(str_shuffle($alphanum), 0, $digits);
+        $time = time();
+        $val = $time . $rand;
+
+        return $val;
+    }	
+function resize_image($config = array(), $index = NULL) {
+        $product_image_name = $this->rand_string(6); // generate new name for the profile
+
+        $temp_image_with_path = MAIN_SITE_PATH . 'assets/upload/' . $config['temp'] . $product_image_name; 
+		
+        if (isset($config['source'])) {
+            if (!is_null($index)) {
+                $temporary_image = $_FILES[$config['source']]['tmp_name'][$index]; // temporary image file
+            } else {
+                $temporary_image = $_FILES[$config['source']]['tmp_name']; // temporary image file
+            }
+            move_uploaded_file($temporary_image, $temp_image_with_path);
+        } elseif ($config['source2']) {
+            $temp_image_with_path = $config['source2'];
+            copy($temp_image_with_path, $temp_image_with_path);
+        }
+        $this->load->library('resize_image');
+
+        $image_resize = $this->resize_image;
+        $image_resize->image_to_resize = $temp_image_with_path;
+        $image_resize->image_size(); // set orginal image size
+        foreach ($config['resize'] as $val) {
+            $width = isset($val['width']) ? $val['width'] : $image_resize->orginal_width;
+            $height = isset($val['height']) ? $val['height'] : $image_resize->orginal_height;
+            $save = $val['save'];
+            //------------------------- start procession ----------------------------//
+            $image_resize->new_width = $width;
+            $image_resize->new_height = $height;
+            $image_resize->ratio = (bool) isset($val['ratio']) ? $val['ratio'] : TRUE; // Keep Aspect Ratio?
+            $image_resize->dynamic_ratio = (bool) isset($val['dynamic_ratio']) ? $val['dynamic_ratio'] : FALSE; // Keep Aspect Ratio?
+            // Name of the new image (optional) - If it's not set a new will be added automatically
+            $image_resize->new_image_name = $product_image_name;
+
+            // Path where the new image should be saved. If it's not set the script will output the image without saving it
+            $image_resize->save_folder = MAIN_SITE_PATH . 'assets/upload/' . $save;
+            $process = $image_resize->resize();
+        }
+        if (is_file($temp_image_with_path)) {
+            @unlink($temp_image_with_path);
+        }
+        return $process['file_new_name'];
     }
 
     public function manage_cms() {
@@ -499,7 +566,7 @@ class CmsController extends CI_Controller {
 		
 		if( !empty($pages) ){
 			$page_sel_box_str	.= '<label for="page_id">Select Page: </label>';
-			$page_sel_box_str	.= '<select name="page_id" class="sf">';
+			$page_sel_box_str	.= '<select name="page_id" class="form-control">';
 			
 			foreach ($pages as $key => $val):
 				$selected = ($this->session->flashdata('page_id')==$val['id'])?' selected':'';

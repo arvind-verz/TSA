@@ -110,6 +110,17 @@ class Students extends CI_Model
 				$query = $this->db->get()->result_object();				
 				return $query;	
 	}
+	
+	public function get_classes($id)
+	{
+	
+			$this->db->select('*')
+					 ->from(DB_STUDENT_CLASS)
+					 ->where('student_id',$id);				 
+				$query = $this->db->get()->result_array();				
+				return $query;	
+	}
+	
     public function store()
     {
         //die(print_r($_POST));
@@ -148,6 +159,7 @@ class Students extends CI_Model
     {
         //die(print_r($_POST));
 		$student_code=explode(',',$_POST['student_code']);
+		$msg='';
 		if($_POST['student_status']==0)
 		{
 		foreach($student_code as $student)
@@ -157,9 +169,11 @@ class Students extends CI_Model
 					'student_id'     => $student,
 					'enrollment_date'     => !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : null,
 					'collected'      => !empty($_POST['depo_collected']) ? $_POST['depo_collected'] : null,
+					'deposit'   => !empty($_POST['deposit']) ? $_POST['deposit'] : null,
 					'remarks_deposit'   => !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : null,
 					'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : null,
 					'ex_charges'   => !empty($_POST['ex_charges']) ? $_POST['ex_charges'] : null,
+					'credit_value'   => !empty($_POST['credit_value']) ? $_POST['credit_value'] : null,
 					'remarks'    => !empty($_POST['remarks']) ? $_POST['remarks'] : null,
 					'created_at'   => $this->date,
 					'updated_at'   => $this->date
@@ -179,6 +193,7 @@ class Students extends CI_Model
 			$this->db->where('student_id', $student);
 			$this->db->update('student', $data2);
 			$this->db->trans_complete();
+			$msg='Enrolled successfully';
 			//echo $this->db->last_query();die;
 		}
 		}
@@ -188,15 +203,27 @@ class Students extends CI_Model
 			{
 				$data2 = array(
 				'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : null,
-				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : null,
-				'class_id'   => $_POST['class_code']!="" ? $_POST['class_code'] : null
+				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : null
 				);
-				
+					foreach($_POST['class_code'] as $class):
+					if($student!="all")
+					{
+						$data3 = array(
+						'student_id'    => $student,
+						'class_id'   => $class
+						);
+						
+						$this->db->trans_start();
+						$this->db->insert('student_to_class', $data3);
+						$this->db->trans_complete();
+					}
+					endforeach;
 				$this->db->trans_start();
 				$this->db->where('student_id', $student);
 				$this->db->update('student', $data2);
 				$this->db->trans_complete();
 			}
+		$msg='Reserved successfully';
 		}
 		else
 		{
@@ -211,12 +238,13 @@ class Students extends CI_Model
 				$this->db->update('student', $data2);
 				$this->db->trans_complete();
 			}
+		$msg='Updated successfully';
 		}
 		if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
             return redirect('admin/students');
         } else {
-            $this->session->set_flashdata('success', STUDENT . ' ' . MSG_CREATED);
+            $this->session->set_flashdata('success', STUDENT . ' ' . $msg);
             return redirect('admin/students');
         }
     }
@@ -313,6 +341,22 @@ class Students extends CI_Model
         } else {
             $this->session->set_flashdata('success', CLASSES . ' ' . MSG_ARCHIVED);
             return redirect('admin/classes');
+        }
+    }
+	
+	public function moveto_active_list($id)
+    {
+        $this->db->trans_start();
+        $this->db->where('student_id', $id);
+        $this->db->update(DB_STUDENT, array('is_archive' => 0, 'updated_at' => $this->date));
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === false) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return redirect('admin/students/archived');
+        } else {
+            $this->session->set_flashdata('success', STUDENT . ' ' . MSG_MOVED);
+            return redirect('admin/students');
         }
     }
 

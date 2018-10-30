@@ -177,24 +177,17 @@ $(document).ready(function(){
                                 <td><?php echo $student->username;?></td>
                                 <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
                                 <!--<td></td>-->
-                                <td><?php echo isset($student->gender) ? $student->gender : '-' ?></td>
+                                <td><?php echo ($student->gender==0) ? 'Male' : 'Female' ?></td>
                                 <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
                                 <!--<td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>-->
                                 <!--<td><?php echo isset($student->parent_name ) ? $student->parent_name  : '-' ?></td>-->
                                 <!--<td><?php echo isset($student->parent_email ) ? $student->parent_email  : '-' ?></td>-->
                                 <!--<td><?php echo isset($student->parents_phone ) ? $student->parents_phone  : '-' ?></td>-->
                                 <td><?php echo isset($student->siblings ) ? $student->siblings  : '-' ?></td>
-                                <td><?php echo isset($student->status ) ? $student->status  : '-' ?></td>
+                                <td><?php echo (is_null($student->status)) ? '-'  : '<span class="glyphicon glyphicon-ok"></span>' ?></td>
                                 <td> <div class="form-group">
-                           
-                            <select name="action" id="action" class="form-control select2 action">
-                                <option value="">-- Select One --</option>
-                                <option value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
-                                <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
-                                <option value="Final Settlement">Final Settlement</option>
-                                <option value="View all details">View all details</option>
-                                <option value="<?php echo base_url();?>index.php/admin/classes/edit/<?php echo $student->class_id;?>">Edit Class </option>
-                            </select>
+                           <a onClick="return confirm('Are you sure want to move to active list?');" href="<?php echo base_url();?>index.php/admin/students/moveto_active_list/<?php echo $student->student_id;?>">Move to Active List</a>
+                            
                         </div></td>
                                 <!--<td></td>
                                 <td></td>-->
@@ -219,7 +212,7 @@ $(document).ready(function(){
 
 
 <script type="text/javascript">
-var option;
+var option="";
 option+='<div class="form-group">';
 option+='<label for="">Select Class Code</label>';
 option+='<select name="class_code" class="form-control select2">';

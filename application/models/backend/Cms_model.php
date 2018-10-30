@@ -23,6 +23,9 @@
 					  }
                   return $val;
           }
+		  
+	
+	
 		  function get_custom_menu_page_filter($position, $total_row_display , $limit_from, $FlterData) {
                   $this->db->select('*')
                           ->from(TBL_MENU)

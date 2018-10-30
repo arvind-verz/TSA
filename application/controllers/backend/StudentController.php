@@ -78,6 +78,13 @@ class StudentController extends CI_Controller
 				$this->form_validation->set_rules('username', 'Username', 'required');
                 $this->form_validation->set_rules('password', 'Password','trim|required|min_length[8]|matches[passconf]');
                 $this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required');
+				$this->form_validation->set_rules('phone', 'Phone', 'required');
+				$this->form_validation->set_rules('age', 'Age', 'required');
+				$this->form_validation->set_rules('parent_name', 'Parent Name', 'required');
+				$this->form_validation->set_rules('parent_email', 'Parent Email', 'required');
+				$this->form_validation->set_rules('siblings', 'Siblings', 'required');
+				$this->form_validation->set_rules('parents_phone', 'Parents Phone', 'required');
+				
                 
 
                 if ($this->form_validation->run() == FALSE)
@@ -127,9 +134,15 @@ class StudentController extends CI_Controller
     {
         $this->load->library('form_validation');
 
-                $this->form_validation->set_rules('name', 'Name', 'required');
-				$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+                 $this->form_validation->set_rules('name', 'Name', 'required');
+				$this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[student.email]');
 				$this->form_validation->set_rules('username', 'Username', 'required');
+				$this->form_validation->set_rules('phone', 'Phone', 'required');
+				$this->form_validation->set_rules('age', 'Age', 'required');
+				$this->form_validation->set_rules('parent_name', 'Parent Name', 'required');
+				$this->form_validation->set_rules('parent_email', 'Parent Email', 'required');
+				$this->form_validation->set_rules('siblings', 'Siblings', 'required');
+				$this->form_validation->set_rules('parents_phone', 'Parents Phone', 'required');
                
 			    if(isset($_POST['password']) && $_POST['password']!="")
 				{
@@ -154,6 +167,10 @@ class StudentController extends CI_Controller
 
     public function delete($id)
     {
-        $this->classes->delete($id, $_POST);
+        $this->students->delete($id, $_POST);
+    }
+	public function moveto_active_list($id)
+    {
+        $this->students->moveto_active_list($id);
     }
 }

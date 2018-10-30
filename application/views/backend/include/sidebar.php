@@ -1,10 +1,4 @@
 <aside class="main-sidebar">
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> master
 	<!-- sidebar: style can be found in sidebar.less -->
 	<section class="sidebar">
 		<!-- Sidebar user panel -->
@@ -57,29 +51,40 @@
 						<i class="fa fa-file"></i> <span><?php echo INVOICE ?></span>
 					</a>
 				</li>
-<<<<<<< HEAD
+
             <li class="">
             
             <a href="<?php echo site_url('admin/students'); ?>">
             <i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
             </a>
             </li>
-             <li class="">
+            <li class="">
+            
+            <a href="<?php echo site_url('admin/manage-menu'); ?>">
+            <i class="fa fa-dashboard"></i> <span><?php echo MENU ?></span>
+            </a>
+            </li>
+            <li class="">
+            
+            <a href="<?php echo site_url('admin/manage-cms'); ?>">
+            <i class="fa fa-dashboard"></i> <span><?php echo CMS ?></span>
+            </a>
+            </li>
+            <li class="">
+            
+            <a href="<?php echo site_url('admin/manage-testimonial'); ?>">
+            <i class="fa fa-dashboard"></i> <span><?php echo TESTIMONIAL ?></span>
+            </a>
+            </li>
 
-<a href="<?php echo site_url('admin/manage-menu'); ?>">
-<i class="fa fa-dashboard"></i> <span><?php echo MENU ?></span>
-</a>
-</li>
-<li class="">
-
-<a href="<?php echo site_url('admin/manage-cms'); ?>">
-<i class="fa fa-dashboard"></i> <span><?php echo CMS ?></span>
-</a>
-</li>
-=======
 				<li class="<?php if(current_url() == site_url('admin/students')) { echo 'active'; } ?>">
 					<a href="<?php echo site_url('admin/students'); ?>">
 						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
+					</a>
+				</li>
+                <li class="<?php if(current_url() == site_url('admin/permission')) { echo 'active'; } ?>">
+					<a href="<?php echo site_url('admin/permission'); ?>">
+						<i class="fa fa-dashboard"></i> <span><?php echo PERMISSION ?></span>
 					</a>
 				</li>
 				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
@@ -103,7 +108,6 @@
 					</ul>
 				</li>
 				
->>>>>>> master
 			</ul>
 		</div>
 	</section>

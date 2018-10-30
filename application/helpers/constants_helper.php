@@ -4,29 +4,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /* NAMES */
 define('ADMINPANEL', 'Admin Panel');
 
-<<<<<<< HEAD
 
-=======
 /* DB TABLES */
->>>>>>> master
+
 define('DB_DASHBOARD', 'dashboard');
 define('DB_SUBJECT', 'subject');
 define('DB_TUTOR', 'Tutor');
 define('DB_CLASSES', 'class');
 define('DB_ATTENDANCE', 'attendance');
 define('DB_STUDENT', 'student');
+define('DB_STUDENT_CLASS', 'student_to_class');
 define('DB_ORDER', 'order');
 define('DB_BOOK', 'Book');
 define('DB_MATERIAL', 'material');
 define('DB_INVOICE', 'invoice');
 define('DB_BILLING', 'billing');
-<<<<<<< HEAD
+
 define('TBL_MENU_POSITION' , 'menu_position');
 define('TBL_MENU' , 'menu'); 
 define('TBL_CMS' ,'pages'); 
-=======
-
->>>>>>> master
+define('DB_MODULES' ,'modules'); 
+define('DB_ADMIN_USER' ,'admin'); 
+define('DB_TESTIMONIAL' ,'testimonial');
 /* MODULES */
 define('DASHBOARD', 'Dashboard');
 define('SUBJECT', 'Subject');
@@ -42,16 +41,17 @@ define('SMS', 'SMS');
 define('SMS_TEMPLATE', 'SMS Template');
 define('SMS_HISTORY', 'SMS History');
 define('BILLING', 'Billing');
-<<<<<<< HEAD
+define('PERMISSION', 'Permission');
+define('TESTIMONIAL', 'Testimonial');
+
 define('MENU', 'Menu');
 define('MENU_MANAGE', 'Menu Management');
 define('CMS', 'Cms');
 define('CMS_MANAGE', 'Cms Management');
 define('PAGE', 'Page');
-=======
+define('ROLE', 'Role');
 
 
->>>>>>> master
 /* CRUD */
 define('CREATE', 'Create');
 define('CREATED', 'Created');
@@ -77,6 +77,12 @@ define('MSG_ERROR', ' Error occured while manipulating data.');
 define('MSG_MOVED', ' has been moved to active list successfully.');
 define('MSG_EXIST', ' already exist within our system.');
 define('MSG_TRANSFERRED', ' has been transferred successfully.');
+
+
+define('MAIN_SITE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/TSA/');	 
+define('MAIN_SITE_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload');
+define('MAIN_SITE_AB_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload/');;
+
 
 
 
