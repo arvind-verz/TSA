@@ -110,4 +110,9 @@ class MaterialController extends CI_Controller
     {
         $this->material->moveto_active_list($id, $_POST);
     }
+
+    public function get_student_by_class_code() {
+        $class_code = isset($_GET['class_code']) ? $_GET['class_code'] : '';
+        print_r(get_student_by_class_code($class_code));
+    }
 }

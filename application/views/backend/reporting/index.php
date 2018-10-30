@@ -36,7 +36,7 @@
                                         <td><?php echo $class_code['class_code']; ?></td>
                                         <td><?php echo get_subject_code($value->student_id); ?></td>
                                         <td><?php echo $class_code['tutor_id']; ?></td>
-                                        <td><?php echo get_students_enrolled($value->student_id); ?></td>
+                                        <td><?php echo get_students_enrolled($class_code['class_code']); ?></td>
                                         <td><?php get_currency('INR'); echo isset($value->total_amount_excluding_material) ? $value->total_amount_excluding_material : '-'; ?></td>
                                         <td><?php get_currency('INR'); echo isset($value->total_material_amount) ? $value->total_material_amount : '-'; ?></td>
                                     </tr>
