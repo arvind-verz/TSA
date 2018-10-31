@@ -1,4 +1,3 @@
-<?php $book = $book[0] ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">

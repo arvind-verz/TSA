@@ -70,14 +70,8 @@
 					</a>
 				</li>
 				<li class="">
-					
 					<a href="<?php echo site_url('admin/manage-testimonial'); ?>">
 						<i class="fa fa-dashboard"></i> <span><?php echo TESTIMONIAL ?></span>
-					</a>
-				</li>
-				<li class="<?php if(current_url() == site_url('admin/students')) { echo 'active'; } ?>">
-					<a href="<?php echo site_url('admin/students'); ?>">
-						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
 					</a>
 				</li>
 				<li class="<?php if(current_url() == site_url('admin/users')) { echo 'active'; } ?>">
