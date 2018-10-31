@@ -45,7 +45,7 @@
  
     <?php if($url!='home'){?>
 	<!-- Banner -->
-	<div class="banner-holder inner-banner background parallax" style="background-image:url(<?php echo base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']); ?>);" data-img-width="1400" data-img-height="502" data-diff="100">
+	<div class="banner-holder inner-banner background parallax" style="background-image:url(<?php !empty($page[0]['image_name']) ?  base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']) : ''; ?>);" data-img-width="1400" data-img-height="502" data-diff="100">
 		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>
 		<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.png'); ?>" alt="" class="responsive"></div>
 		<div class="bn-caption">
@@ -53,13 +53,9 @@
 				<div class="bn-content">
 					<div>
 						<h2><?php echo $page[0]['page_heading'];?></h2>
-						<div class="breadcrumbs">
-							<ul>
-								<li><a href="home">Home</a></li>
-								<li><a href="#">About Us</a></li>
-								<li><strong>The Science Academy</strong></li>
-							</ul>
-						</div>
+						
+                        <?php echo $breadcrumbs;?>
+							
 					</div>
 				</div>
 			</div>
@@ -69,7 +65,7 @@
 	<!-- Banner END --> 
     <?php }else{?>
 	<!-- Banner -->
-	<div class="banner-holder main-banner background parallax" style="background-image:url(<?php echo base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']); ?>);" data-img-width="1400" data-img-height="768" data-diff="100">
+	<div class="banner-holder main-banner background parallax" style="background-image:url(<?php !empty($page[0]['image_name']) ?  base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']) : ''; ?>);" data-img-width="1400" data-img-height="768" data-diff="100">
 		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>
 		<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.png'); ?>" alt="" class="responsive"></div>
 		<div class="bann-scroll"><a href="#HomeAbout">Scroll down</a></div>

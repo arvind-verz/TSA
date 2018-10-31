@@ -203,9 +203,12 @@ class Students extends CI_Model
 			{
 				$data2 = array(
 				'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
+
+				'class_id'    => !empty($_POST['class_code']) ? $_POST['class_code'] : '',
+
 				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
 				);
-					foreach($_POST['class_code'] as $class):
+					/*foreach($_POST['class_code'] as $class):
 					if($student!="all")
 					{
 						$data3 = array(
@@ -217,7 +220,7 @@ class Students extends CI_Model
 						$this->db->insert('student_to_class', $data3);
 						$this->db->trans_complete();
 					}
-					endforeach;
+					endforeach;*/
 				$this->db->trans_start();
 				$this->db->where('student_id', $student);
 				$this->db->update('student', $data2);
