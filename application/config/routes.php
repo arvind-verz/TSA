@@ -23,6 +23,7 @@ $route['default_controller'] = 'backend/AccountsController/index';
 
 /* PDF */
 //$route['admin/pdf/invoice/(:any)']         = 'backend/PdfController/my_mPDF/$1';
+$route['admin/studentcron']         = 'backend/DemoController/index';
 $route['admin/login']         = 'backend/AccountsController/index';
 $route['admin/login/process'] = 'backend/AccountsController/process';
 $route['admin/logout']        = 'backend/AccountsController/logout';

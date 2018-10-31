@@ -92,7 +92,7 @@ function get_student_by_class_code($class_code = null)
 
     $ci->db->select('*, student.id as student_id');
     $ci->db->from(DB_CLASSES);
-    $ci->db->join(DB_STUDENT, DB_CLASSES . '.id = ' . DB_STUDENT . '.class_id');
+    $ci->db->join(DB_STUDENT, DB_CLASSES . '.class_id = ' . DB_STUDENT . '.class_id');
     $ci->db->where(DB_CLASSES . '.class_code', $class_code);
     $ci->db->where([DB_STUDENT . '.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
     $query  = $ci->db->get();
@@ -271,7 +271,7 @@ function get_attendance_sheet($class_code = null)
 
     $ci->db->select('*');
     $ci->db->from('student');
-    $ci->db->join('class', 'student.class_id = class.id');
+    $ci->db->join('class', 'student.class_id = class.class_id');
     $ci->db->where(['class.class_code' => $class_code, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 3]);
     $query = $ci->db->get();
     $query = $query->result();
@@ -319,10 +319,11 @@ function get_invoice_sheet($class_code = null)
     $ci->db->select('*');
     $ci->db->from(INVOICE);
     $ci->db->join(STUDENT, 'invoice.student_id = student.student_id');
-    $ci->db->join(CLASSES, 'student.class_id = class.id');
+    $ci->db->join(CLASSES, 'student.class_id = class.class_id');
     $ci->db->where('class.class_code', $class_code);
     $query  = $ci->db->get();
     $result = $query->result();
+    
     foreach ($result as $row) {
         ?>
     <tr>
@@ -510,12 +511,14 @@ function get_book($id = null)
     $ci = &get_instance();
 
     if ($id) {
-        $query = $ci->db->get_where(DB_MATERIAL, ['is_archive' => 0, 'id' => $id]);
+        $query = $ci->db->get_where(DB_MATERIAL, ['is_archive' => 0, 'material_id' => $id]);
+        $result = $query->row();
     } else {
         $query = $ci->db->get_where(DB_MATERIAL, ['is_archive' => 0]);
+        $result = $query->result();
     }
     if ($query) {
-        return $query->result();
+        return $result;
     }
 }
 
@@ -587,7 +590,7 @@ function get_billing($id = null)
 }
 
 function send_first_month_invoice($student_id)
-{
+{  
     $ci = &get_instance();
 
     $invoice_id   = uniqid();

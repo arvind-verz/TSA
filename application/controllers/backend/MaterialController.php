@@ -11,7 +11,7 @@ class MaterialController extends CI_Controller
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
         $this->result = $this->accounts->get_login_user_id();
-        $this->title = ADMINPANEL . ' | ' . MATERIAL;
+        $this->title  = ADMINPANEL . ' | ' . MATERIAL;
     }
 
     public function index()
@@ -20,9 +20,9 @@ class MaterialController extends CI_Controller
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(MATERIAL, 'admin/material');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
-        $data['title'] = $this->title;
-        $data['page_title'] = MATERIAL;
-        $data['books'] = get_book();
+        $data['title']       = $this->title;
+        $data['page_title']  = MATERIAL;
+        $data['books']       = get_book();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -40,7 +40,7 @@ class MaterialController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = MATERIAL . " <small> " . ARCHIVED . " </small>";
-        $data['books']     = get_archived(DB_MATERIAL);
+        $data['books']       = get_archived(DB_MATERIAL);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -58,7 +58,7 @@ class MaterialController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = MATERIAL . " <small> " . CREATE . " </small>";
-        $data['subjects']     = get_subject();
+        $data['subjects']    = get_subject();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -84,8 +84,8 @@ class MaterialController extends CI_Controller
         $data['title']       = $this->title;
         $data['page_title']  = MATERIAL . " <small> " . EDIT . ' #' . $id . " </small>";
         $data['crud_id']     = $id;
-        $data['book']     = get_book($id);
-        $data['subjects']     = get_subject();
+        $data['book']        = get_book($id);
+        $data['subjects']    = get_subject();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -111,7 +111,8 @@ class MaterialController extends CI_Controller
         $this->material->moveto_active_list($id, $_POST);
     }
 
-    public function get_student_by_class_code() {
+    public function get_student_by_class_code()
+    {
         $class_code = isset($_GET['class_code']) ? $_GET['class_code'] : '';
         print_r(get_student_by_class_code($class_code));
     }
