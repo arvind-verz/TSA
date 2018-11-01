@@ -91,6 +91,10 @@
     text-align: left;
 }
 </style>
+<?php
+$result = get_student_details($invoice_data->student_id);
+$item_details = json_decode($invoice_data->invoice_data);
+?>
 <div class="invoice-box">
     <table cellpadding="0" cellspacing="0">
         <tr class="top">
@@ -98,13 +102,12 @@
                 <table>
                     <tr>
                         <td class="title">
-                            <img src="https://www.sparksuite.com/images/logo.png" style="width:100%; max-width:300px;">
+                            <img src="<?php echo base_url('assets/images/img3.png'); ?>" style="width:100%; max-width:300px;">
                         </td>
                         
                         <td>
-                            Invoice #: 123<br>
-                            Created: January 1, 2015<br>
-                            Due: February 1, 2015
+                            Invoice #: <?php echo $invoice_data->invoice_no; ?><br>
+                            Created: <?php echo date('M d, Y', strtotime($invoice_data->created_at)); ?>
                         </td>
                     </tr>
                 </table>
@@ -116,28 +119,28 @@
                 <table>
                     <tr>
                         <td>
-                            Sparksuite, Inc.<br>
+                            The Science Academy Pte Ltd<br>
                             12345 Sunny Road<br>
-                            Sunnyville, CA 12345
+                            Sunnyville, SG 12345
                         </td>
                         
                         <td>
-                            Acme Corp.<br>
-                            John Doe<br>
-                            john@example.com
+                            <?php echo $result['name']; ?><br>
+                            <?php echo $result['email']; ?><br>
+                            <?php echo $result['phone']; ?>
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
         
-        <tr class="heading">
+        <!-- <tr class="heading">
             <td>
                 Payment Method
             </td>
             
             <td>
-                Check #
+                
             </td>
         </tr>
         
@@ -149,8 +152,8 @@
             <td>
                 1000
             </td>
-        </tr>
-        
+        </tr> -->
+
         <tr class="heading">
             <td>
                 Item
@@ -160,42 +163,28 @@
                 Price
             </td>
         </tr>
-        
-        <tr class="item">
-            <td>
-                Website design
-            </td>
-            
-            <td>
-                $300.00
-            </td>
-        </tr>
-        
-        <tr class="item">
-            <td>
-                Hosting (3 months)
-            </td>
-            
-            <td>
-                $75.00
-            </td>
-        </tr>
-        
+        <?php
+        foreach($item_details as $key => $value) {
+        if($value) {
+        ?>
         <tr class="item last">
             <td>
-                Domain name (1 year)
+                <?php echo ucwords(str_replace("_", " ", $key)); ?>
             </td>
             
             <td>
-                $10.00
+                $<?php echo $value; ?>
             </td>
         </tr>
+        <?php
+        }}
+        ?>
         
         <tr class="total">
             <td></td>
             
             <td>
-               Total: $385.00
+               Total Paid: $<?php echo $invoice_data->invoice_amount; ?>
             </td>
         </tr>
     </table>
