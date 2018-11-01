@@ -1,32 +1,28 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-
 /* FRONTEND */
 
-$route['testimonial']        = "frontend/cms/testimonial";
-$route['home']               = "frontend/cms/index";
-$route['contact-us']         = "frontend/cms/contact_us";
-$route['(:any)']             = "frontend/cms/inner_pages/$1";
+$route['testimonial'] = "frontend/cms/testimonial";
+$route['home']        = "frontend/cms/index";
+$route['contact-us']  = "frontend/cms/contact_us";
+$route['(:any)']      = "frontend/cms/inner_pages/$1";
 /* FRONTEND */
-
 
 $route['default_controller'] = 'backend/AccountsController/index';
 
 /* BACKEND */
 
-
 //$route['default_controller'] = 'backend/AccountsController/index';
 
 /* BACKEND */
 
-
 /* PDF */
 //$route['admin/pdf/invoice/(:any)']         = 'backend/PdfController/my_mPDF/$1';
-$route['admin/studentcron']         = 'backend/DemoController/index';
-$route['admin/login']         = 'backend/AccountsController/index';
-$route['admin/login/process'] = 'backend/AccountsController/process';
-$route['admin/logout']        = 'backend/AccountsController/logout';
+$route['admin/cronjobs_PQWEas22'] = 'backend/CronController/index';
+$route['admin/login']             = 'backend/AccountsController/index';
+$route['admin/login/process']     = 'backend/AccountsController/process';
+$route['admin/logout']            = 'backend/AccountsController/logout';
 
 /* ROLES AND PERMISSION */
 $route['admin/users/profile']                            = 'backend/AccountsController/profile';
@@ -71,16 +67,15 @@ $route['admin/classes/moveto_active_list/(:any)'] = 'backend/ClassController/mov
 $route['admin/students']                = 'backend/StudentController/index';
 $route['admin/students/archive/(:any)'] = 'backend/StudentController/archive/$1';
 
-$route['admin/students/archived'] = 'backend/StudentController/archived';
-$route['admin/students/create'] = 'backend/StudentController/create';
-$route['admin/students/store'] = 'backend/StudentController/store';
-$route['admin/students/search'] = 'backend/StudentController/search';
-$route['admin/students/enroll'] = 'backend/StudentController/enroll';
-$route['admin/students/edit/(:any)'] = 'backend/StudentController/edit/$1';
-$route['admin/students/update/(:any)'] = 'backend/StudentController/update/$1';
-$route['admin/students/delete/(:any)'] = 'backend/StudentController/delete/$1';
+$route['admin/students/archived']                  = 'backend/StudentController/archived';
+$route['admin/students/create']                    = 'backend/StudentController/create';
+$route['admin/students/store']                     = 'backend/StudentController/store';
+$route['admin/students/search']                    = 'backend/StudentController/search';
+$route['admin/students/enroll']                    = 'backend/StudentController/enroll';
+$route['admin/students/edit/(:any)']               = 'backend/StudentController/edit/$1';
+$route['admin/students/update/(:any)']             = 'backend/StudentController/update/$1';
+$route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
 $route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
-
 
 $route['admin/students']                           = 'backend/StudentController/index';
 $route['admin/students/archive/(:any)']            = 'backend/StudentController/archive/$1';
@@ -93,7 +88,6 @@ $route['admin/students/edit/(:any)']               = 'backend/StudentController/
 $route['admin/students/update/(:any)']             = 'backend/StudentController/update/$1';
 $route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
 $route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
-
 
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
 
@@ -164,7 +158,6 @@ $route['admin/material/update/(:any)']             = 'backend/materialcontroller
 $route['admin/material/delete/(:any)']             = 'backend/materialcontroller/delete/$1';
 $route['admin/material/moveto_active_list/(:any)'] = 'backend/materialcontroller/moveto_active_list/$1';
 
-
 /* Tutor Admin */
 $route['admin/tutors']                           = 'backend/TutorController/index';
 $route['admin/tutors/create']                    = 'backend/TutorController/create';
@@ -174,7 +167,6 @@ $route['admin/tutors/archived']                  = 'backend/TutorController/arch
 $route['admin/tutors/edit/(:any)']               = 'backend/TutorController/edit/$1';
 $route['admin/tutors/update/(:any)']             = 'backend/TutorController/update/$1';
 $route['admin/tutors/moveto_active_list/(:any)'] = 'backend/TutorController/moveto_active_list/$1';
-
 
 /* End Tutor Admin */
 
@@ -214,7 +206,6 @@ $route['admin/edit-testimonial/(:any)'] = "backend/TestimonialController/edit_te
 $route['admin/del-testimonial/(:any)']  = "backend/TestimonialController/del_testimonial/$1";
 /* CMS Admin */
 
-
 /* Tutor Admin */
 $route['404_override']         = '';
 $route['translate_uri_dashes'] = false;
@@ -230,4 +221,3 @@ $route['admin/add-cms']                      = "backend/CmsController/add_cms";
 $route['admin/edit-cms/(:any)']              = "backend/CmsController/edit_cms/$1";
 $route['admin/del-cms/(:any)']               = "backend/CmsController/del_cms/$1";
 /* CMS Admin */
-

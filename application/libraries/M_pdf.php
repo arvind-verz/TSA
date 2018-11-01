@@ -14,8 +14,9 @@ class M_pdf
 
     public function download_my_mPDF($filename)
     {
+        $data['invoice_data'] = get_invoice_by_filename($filename);
     	$ci = &get_instance();
-        $html = $ci->load->view('backend/extra/pdf_invoice_layout', '', true);
+        $html = $ci->load->view('backend/extra/pdf_invoice_layout', $data, true);
     	$ci->load->library('M_pdf');
         
 		$ci->m_pdf->mpdf->WriteHTML($html);
