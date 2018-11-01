@@ -164,8 +164,6 @@ $route['admin/material/update/(:any)']             = 'backend/materialcontroller
 $route['admin/material/delete/(:any)']             = 'backend/materialcontroller/delete/$1';
 $route['admin/material/moveto_active_list/(:any)'] = 'backend/materialcontroller/moveto_active_list/$1';
 
-/* INVOICE */
-$route['admin/invoice'] = 'backend/invoicecontroller/index';
 
 /* Tutor Admin */
 $route['admin/tutors']                           = 'backend/TutorController/index';
