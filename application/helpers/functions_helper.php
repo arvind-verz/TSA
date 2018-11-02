@@ -1,12 +1,17 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-function get_currency($value)
+function get_currency($currency_code)
 {
-    if ($value == 'INR') {
-        echo '<i class="fa fa-inr" aria-hidden="true"></i> ';
-    } elseif ($value == 'SGD') {
-        echo 'SGD ';
+    $currency_array = [
+        'INR'   =>  '<i class="fa fa-inr" aria-hidden="true"></i> ',
+        'SGD'   =>  'SGD ',
+    ];
+
+    foreach($currency_array as $key => $value) {
+        if($currency_code==$key) {
+            echo $value;
+        }
     }
 }
 
@@ -166,7 +171,7 @@ function get_class_code($student_id = null)
 
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
-    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.id');
+    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.class_id');
     $query  = $ci->db->get();
     $result = $query->row();
 
@@ -183,7 +188,7 @@ function get_subject_code($student_id = null)
     $subject_list = [];
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
-    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.id');
+    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.class_id');
     $query   = $ci->db->get();
     $result  = $query->row();
     $subject = json_decode($result->subject);
@@ -202,7 +207,7 @@ function get_students_enrolled($class_code = null)
 
     $ci->db->select('*, count(student.id) as total_students_enrolled');
     $ci->db->from(DB_STUDENT);
-    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.id');
+    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.class_id');
     $ci->db->where([DB_STUDENT . '.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
     $query  = $ci->db->get();
     $result = $query->row();
