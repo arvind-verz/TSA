@@ -102,7 +102,7 @@ $item_details = json_decode($invoice_data->invoice_data);
                 <table>
                     <tr>
                         <td class="title">
-                            <img src="<?php echo base_url('assets/images/logo.png'); ?>" style="width:100%; max-width:300px;">
+                            <img src="<?php echo base_url('assets/images/img3.png'); ?>" style="width:100%; max-width:300px;">
                         </td>
                         
                         <td>

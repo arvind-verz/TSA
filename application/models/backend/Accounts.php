@@ -90,11 +90,9 @@ class Accounts extends CI_Model
 
         if($email && $username && $perm_id) {
             $result = $this->aauth->update_user($id, $email, false, $username);
-            if($result) {
-                $this->aauth->update_allow_user($id, $perm_id);
-                $this->session->set_flashdata('success', USERS . ' ' . MSG_UPDATED);
-                return redirect('admin/users');
-            }
+            $this->aauth->update_allow_user($id, $perm_id);
+            $this->session->set_flashdata('success', USERS . ' ' . MSG_UPDATED);
+            return redirect('admin/users');
         }
         return false;
     }

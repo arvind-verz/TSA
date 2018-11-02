@@ -13,7 +13,7 @@
             <div class="col-lg-12">
                 <div class="box">
                     <div class="box-body">
-                        <h2 class="text-danger"><i class="fa fa-frown-o" aria-hidden="true"></i> Sorry! You do not have access control.</h2>
+                        <h2 class="text-danger"><i class="fa fa-frown-o" aria-hidden="true"></i> Sorry! You do not have permission to access.</h2>
                         <a href="<?php echo site_url('admin/dashboard') ?>" class="btn btn-primary">Go to Dashboard</a>
                     </div>
                 </div>
