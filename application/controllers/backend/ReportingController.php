@@ -31,4 +31,10 @@ class ReportingController extends CI_Controller
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
+
+    public function get_reporting_sheet() {
+        $date_from = isset($_GET['date_from']) ? $_GET['date_from'] : '';
+        $date_to = isset($_GET['date_to']) ? $_GET['date_to'] : '';
+        print_r(get_reporting_sheet($date_from, $date_to));
+    }
 }

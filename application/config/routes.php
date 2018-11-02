@@ -147,6 +147,7 @@ $route['admin/order/update_order_status'] = 'backend/OrderController/update_orde
 
 /* REPORTING */
 $route['admin/reporting'] = 'backend/ReportingController/index';
+$route['admin/reporting/get_reporting_sheet'] = 'backend/ReportingController/get_reporting_sheet';
 
 /* MATERIAL */
 $route['admin/material']                           = 'backend/materialcontroller/index';

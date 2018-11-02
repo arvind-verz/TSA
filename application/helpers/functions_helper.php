@@ -172,6 +172,7 @@ function get_class_code($student_id = null)
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
     $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.class_id');
+    $ci->db->where(['student.student_id' => $student_id]);
     $query  = $ci->db->get();
     $result = $query->row();
 
@@ -525,16 +526,39 @@ function get_student_by_student_id($id = null)
     }
 }
 
-function get_reporting_sheet()
+function get_reporting_sheet($date_from = false, $date_to = false)
 {
     $ci = &get_instance();
 
     $ci->db->select('*, sum(invoice_amount) as total_invoice_amount, sum(amount_excluding_material) as total_amount_excluding_material, sum(material_amount) as total_material_amount');
     $ci->db->from(DB_INVOICE);
+    if($date_from || $date_to) {
+        $ci->db->where('DATE(invoice_date) >=', $date_from);
+        $ci->db->where('DATE(invoice_date) <=', $date_to);
+    }
     $ci->db->group_by('student_id');
     $query  = $ci->db->get();
     $result = $query->result();
-    return $result;
+    
+    if($date_from || $date_to) {
+        if(count($result)) {
+        foreach($result as $value) {
+        $class_code = get_class_code($value->student_id);
+        ?>
+        <tr>
+            <td><?php echo $class_code['class_code']; ?></td>
+            <td><?php echo get_subject_code($value->student_id); ?></td>
+            <td><?php echo $class_code['tutor_id']; ?></td>
+            <td><?php echo get_students_enrolled($class_code['class_code']); ?></td>
+            <td><?php get_currency('INR'); echo isset($value->total_amount_excluding_material) ? $value->total_amount_excluding_material : '-'; ?></td>
+            <td><?php get_currency('INR'); echo isset($value->total_material_amount) ? $value->total_material_amount : '-'; ?></td>
+        </tr>
+        <?php
+        }}    
+    }
+    else {
+        return $result;
+    }
 }
 
 function get_book($id = null)
