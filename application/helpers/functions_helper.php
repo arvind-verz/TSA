@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-function get_currency($currency_code)
+function get_currency($currency_code = false)
 {
     $currency_array = [
         'INR'   =>  '<i class="fa fa-inr" aria-hidden="true"></i> ',
@@ -15,7 +15,7 @@ function get_currency($currency_code)
     }
 }
 
-function get_student_details($student_id = null)
+function get_student_details($student_id = false)
 {
     $ci = &get_instance();
 
@@ -30,7 +30,7 @@ function get_student_details($student_id = null)
     }
 }
 
-function get_invoice_by_filename($filename = null)
+function get_invoice_by_filename($filename = false)
 {
     $ci = &get_instance();
 
@@ -71,7 +71,7 @@ function get_module_access_data($type, $module, $value, $perm_id)
         return "checked";
     }
 }
-function get_permission_data($id = null)
+function get_permission_data($id = false)
 {
     $ci = &get_instance();
 
@@ -85,7 +85,7 @@ function get_permission_data($id = null)
     return $result;
 }
 
-function get_permission_access_module($perm_id = null)
+function get_permission_access_module($perm_id = false)
 {
     $ci = &get_instance();
 
@@ -98,7 +98,7 @@ function get_permission_access_module($perm_id = null)
     return implode(', ', $modules);
 }
 
-function get_users_data($id = null)
+function get_users_data($id = false)
 {
     $ci = &get_instance();
 
@@ -117,7 +117,7 @@ function get_users_data($id = null)
     return $result;
 }
 
-function get_student_by_class_code($class_code = null)
+function get_student_by_class_code($class_code = false)
 {
     $ci = &get_instance();
 
@@ -137,7 +137,7 @@ function get_student_by_class_code($class_code = null)
     }
 }
 
-function get_sms_condition($id = null)
+function get_sms_condition($id = false)
 {
     $sms_condition = ['Student absent without leave', 'Fee reminder', 'Late Fee reminder', 'Student filled a miss class request', 'Reminder one day before reservation', 'Centre wide announcements'];
     if ($id) {
@@ -146,7 +146,7 @@ function get_sms_condition($id = null)
     return $sms_condition;
 }
 
-function level($value = null)
+function level($value = false)
 {
     if ($value == 1) {
         return "S1";
@@ -165,7 +165,7 @@ function level($value = null)
     }
 }
 
-function get_class_code($student_id = null)
+function get_class_code($student_id = false)
 {
     $ci = &get_instance();
 
@@ -182,7 +182,7 @@ function get_class_code($student_id = null)
     ];
 }
 
-function get_subject_code($student_id = null)
+function get_subject_code($student_id = false)
 {
     $ci = &get_instance();
 
@@ -202,7 +202,7 @@ function get_subject_code($student_id = null)
     return implode(", ", $subject_list);
 }
 
-function get_students_enrolled($class_code = null)
+function get_students_enrolled($class_code = false)
 {
     $ci = &get_instance();
 
@@ -215,7 +215,7 @@ function get_students_enrolled($class_code = null)
     return $result->total_students_enrolled;
 }
 
-function get_attendance_status($value = null)
+function get_attendance_status($value = false)
 {
     $value        = json_decode($value);
     $array_status = ['L', 'M', 'E', 'X', 'G', 'H'];
@@ -226,7 +226,7 @@ function get_attendance_status($value = null)
     }
 }
 
-function order_status($value = null)
+function order_status($value = false)
 {
     if ($value == 0) {
         return "Print";
@@ -239,7 +239,7 @@ function order_status($value = null)
     }
 }
 
-function get_archived($module = null)
+function get_archived($module = false)
 {
     $ci = &get_instance();
 
@@ -259,7 +259,7 @@ function get_tutors()
     }
 }
 
-function get_classes($id = null)
+function get_classes($id = false)
 {
     $ci = &get_instance();
 
@@ -296,7 +296,7 @@ function check_image_valid($image)
     }
 }
 
-function get_attendance_sheet($class_code = null)
+function get_attendance_sheet($class_code = false)
 {
     $i  = 1;
     $ci = &get_instance();
@@ -343,7 +343,7 @@ foreach ($query as $result) {
 $i++;}
 }
 
-function get_invoice_sheet($class_code = null)
+function get_invoice_sheet($class_code = false)
 {
 
     $ci = &get_instance();
@@ -414,7 +414,7 @@ function get_invoice_payment_method_db($payment_method)
     }
 }
 
-function get_weekdays_of_month($month = null, $day = null)
+function get_weekdays_of_month($month = false, $day = false)
 {
     $counter_list = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
     $storage      = [];
@@ -429,7 +429,7 @@ function get_weekdays_of_month($month = null, $day = null)
     return $storage;
 }
 
-function get_subject($id = null)
+function get_subject($id = false)
 {
     $ci = &get_instance();
 
@@ -443,7 +443,7 @@ function get_subject($id = null)
     }
 }
 
-function get_subject_classes($id = null)
+function get_subject_classes($id = false)
 {
     $ids     = json_decode($id);
     $storage = [];
@@ -462,7 +462,7 @@ function get_subject_classes($id = null)
     }
 }
 
-function get_order_student($id = null)
+function get_order_student($id = false)
 {
     $storage = [];
     $ci      = &get_instance();
@@ -480,7 +480,7 @@ function get_order_student($id = null)
     }
 }
 
-function get_order_student_content($id = null)
+function get_order_student_content($id = false)
 {
     $ci = &get_instance();
 
@@ -499,7 +499,7 @@ function get_order_student_content($id = null)
     }
 }
 
-function get_student($id = null)
+function get_student($id = false)
 {
     $ci = &get_instance();
 
@@ -513,7 +513,7 @@ function get_student($id = null)
     }
 }
 
-function get_student_by_student_id($id = null)
+function get_student_by_student_id($id = false)
 {
     $ci = &get_instance();
 
@@ -561,7 +561,7 @@ function get_reporting_sheet($date_from = false, $date_to = false)
     }
 }
 
-function get_book($id = null)
+function get_book($id = false)
 {
     $ci = &get_instance();
 
@@ -577,7 +577,7 @@ function get_book($id = null)
     }
 }
 
-function get_order($id = null)
+function get_order($id = false)
 {
     $ci = &get_instance();
 
@@ -591,7 +591,7 @@ function get_order($id = null)
     }
 }
 
-function get_class_code_transfer($class_code = null)
+function get_class_code_transfer($class_code = false)
 {
     $ci = &get_instance();
 
@@ -612,7 +612,7 @@ foreach ($result as $row) {
     }
 }
 
-function get_sms_template($id = null)
+function get_sms_template($id = false)
 {
     $ci = &get_instance();
 
@@ -628,7 +628,7 @@ function get_sms_template($id = null)
     }
 }
 
-function get_billing($id = null)
+function get_billing($id = false)
 {
     $ci = &get_instance();
 
