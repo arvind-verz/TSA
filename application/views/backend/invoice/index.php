@@ -52,7 +52,7 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" name="payment_status_all" value=""></th>
+                                        <th class="no-sort"><input type="checkbox" name="payment_status_all" value=""></th>
                                         <th>Student ID</th>
                                         <th>Invoice No</th>
                                         <th>Invoice Date</th>
@@ -78,6 +78,7 @@
     });
 
     function get_payment_status_sheet(class_code) {
+        $('table').DataTable().clear().destroy();
         if (class_code != '') {
             $.ajax({
                 type: 'GET',
@@ -89,7 +90,11 @@
                 success: function(data) {
                     //alert(data);
                     $("tbody.display_data").html(data);
-                    $("table").dataTable();
+                    $("table").dataTable({
+                        columnDefs: [
+                          { targets: 'no-sort', orderable: false }
+                        ]
+                    });
                 }
             })
         } else {
