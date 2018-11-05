@@ -34,7 +34,7 @@
                             </div>
                             <div class="form-group">
                                 <label for=""><?php echo SUBJECT ?></label>
-                                <select name="subject[]" class="form-control select2" multiple="multiple">
+                                <select name="subject[]" class="form-control select2 subject" multiple="multiple">
                                     <?php
                                     if(count($subjects)) {
                                     foreach($subjects as $subject) {

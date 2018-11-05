@@ -1,121 +1,191 @@
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <!-- Main content -->
-    <section class="content">
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="box">
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="invoice-title">
-                                    <h2>Invoice</h2><h3 class="pull-right">Order # 12345</h3>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <address>
-                                            <strong>Billed To:</strong><br>
-                                            John Smith<br>
-                                            1234 Main<br>
-                                            Apt. 4B<br>
-                                            Springfield, ST 54321
-                                        </address>
-                                    </div>
-                                    <div class="col-xs-6 text-right">
-                                        <address>
-                                            <strong>Shipped To:</strong><br>
-                                            Jane Smith<br>
-                                            1234 Main<br>
-                                            Apt. 4B<br>
-                                            Springfield, ST 54321
-                                        </address>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <address>
-                                            <strong>Payment Method:</strong><br>
-                                            Visa ending **** 4242<br>
-                                            jsmith@email.com
-                                        </address>
-                                    </div>
-                                    <div class="col-xs-6 text-right">
-                                        <address>
-                                            <strong>Order Date:</strong><br>
-                                            March 7, 2014<br><br>
-                                        </address>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<style type="text/css">
+.invoice-box {
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+    font-size: 16px;
+    line-height: 24px;
+    font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+    color: #555;
+}
+
+.invoice-box table {
+    width: 100%;
+    line-height: inherit;
+    text-align: left;
+}
+
+.invoice-box table td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+.invoice-box table tr td:nth-child(2) {
+    text-align: right;
+}
+
+.invoice-box table tr.top table td {
+    padding-bottom: 20px;
+}
+
+.invoice-box table tr.top table td.title {
+    font-size: 45px;
+    line-height: 45px;
+    color: #333;
+}
+
+.invoice-box table tr.information table td {
+    padding-bottom: 40px;
+}
+
+.invoice-box table tr.heading td {
+    background: #eee;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.invoice-box table tr.details td {
+    padding-bottom: 20px;
+}
+
+.invoice-box table tr.item td{
+    border-bottom: 1px solid #eee;
+}
+
+.invoice-box table tr.item.last td {
+    border-bottom: none;
+}
+
+.invoice-box table tr.total td:nth-child(2) {
+    border-top: 2px solid #eee;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+    .invoice-box table tr.top table td {
+        width: 100%;
+        display: block;
+        text-align: center;
+    }
+    
+    .invoice-box table tr.information table td {
+        width: 100%;
+        display: block;
+        text-align: center;
+    }
+}
+
+/** RTL **/
+.rtl {
+    direction: rtl;
+    font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+}
+
+.rtl table {
+    text-align: right;
+}
+
+.rtl table tr td:nth-child(2) {
+    text-align: left;
+}
+</style>
+<?php
+$result = get_student_details($invoice_data->student_id);
+$item_details = json_decode($invoice_data->invoice_data);
+?>
+<div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td class="title">
+                            <img src="<?php echo base_url('assets/images/img3.png'); ?>" style="width:100%; max-width:300px;">
+                        </td>
                         
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title"><strong>Order summary</strong></h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-condensed">
-                                                <thead>
-                                                    <tr>
-                                                        <td><strong>Item</strong></td>
-                                                        <td class="text-center"><strong>Price</strong></td>
-                                                        <td class="text-center"><strong>Quantity</strong></td>
-                                                        <td class="text-right"><strong>Totals</strong></td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <!-- foreach ($order->lineItems as $line) or some such thing here -->
-                                                    <tr>
-                                                        <td>BS-200</td>
-                                                        <td class="text-center">$10.99</td>
-                                                        <td class="text-center">1</td>
-                                                        <td class="text-right">$10.99</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>BS-400</td>
-                                                        <td class="text-center">$20.00</td>
-                                                        <td class="text-center">3</td>
-                                                        <td class="text-right">$60.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>BS-1000</td>
-                                                        <td class="text-center">$600.00</td>
-                                                        <td class="text-center">1</td>
-                                                        <td class="text-right">$600.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="thick-line"></td>
-                                                        <td class="thick-line"></td>
-                                                        <td class="thick-line text-center"><strong>Subtotal</strong></td>
-                                                        <td class="thick-line text-right">$670.99</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="no-line"></td>
-                                                        <td class="no-line"></td>
-                                                        <td class="no-line text-center"><strong>Shipping</strong></td>
-                                                        <td class="no-line text-right">$15</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="no-line"></td>
-                                                        <td class="no-line"></td>
-                                                        <td class="no-line text-center"><strong>Total</strong></td>
-                                                        <td class="no-line text-right">$685.99</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                        <td>
+                            Invoice #: <?php echo $invoice_data->invoice_no; ?><br>
+                            Created: <?php echo date('M d, Y', strtotime($invoice_data->created_at)); ?>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <tr class="information">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td>
+                            The Science Academy Pte Ltd<br>
+                            12345 Sunny Road<br>
+                            Sunnyville, SG 12345
+                        </td>
+                        
+                        <td>
+                            <?php echo $result['name']; ?><br>
+                            <?php echo $result['email']; ?><br>
+                            <?php echo $result['phone']; ?>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <!-- <tr class="heading">
+            <td>
+                Payment Method
+            </td>
+            
+            <td>
+                
+            </td>
+        </tr>
+        
+        <tr class="details">
+            <td>
+                Check
+            </td>
+            
+            <td>
+                1000
+            </td>
+        </tr> -->
+
+        <tr class="heading">
+            <td>
+                Item
+            </td>
+            
+            <td>
+                Price
+            </td>
+        </tr>
+        <?php
+        foreach($item_details as $key => $value) {
+        if($value) {
+        ?>
+        <tr class="item last">
+            <td>
+                <?php echo ucwords(str_replace("_", " ", $key)); ?>
+            </td>
+            
+            <td>
+                $<?php echo $value; ?>
+            </td>
+        </tr>
+        <?php
+        }}
+        ?>
+        
+        <tr class="total">
+            <td></td>
+            
+            <td>
+               Total Paid: $<?php echo $invoice_data->invoice_amount; ?>
+            </td>
+        </tr>
+    </table>
 </div>

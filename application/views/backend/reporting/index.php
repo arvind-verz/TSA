@@ -14,6 +14,20 @@
             <div class="col-lg-12">
                 <div class="box">
                     <div class="box-body">
+                        <div class="col-lg-12">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Date From</label>
+                                    <input type="text" name="date_from" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Date To</label>
+                                    <input type="text" name="date_to" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-lg-12 table-responsive">
                             <table class="table table-hover" id="datatable" style="width:100%">
                                 <thead>
@@ -26,7 +40,7 @@
                                         <th>Material Fees</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="display_data">
                                     <?php
                                     if(count($report_data)) {
                                     foreach($report_data as $value) {
@@ -52,3 +66,25 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("input[name='date_from'], input[name='date_to']").on("change", function() {
+            var date_from = $("input[name='date_from']").val();
+            var date_to = $("input[name='date_to']").val();
+
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/reporting/get_reporting_sheet'); ?>',
+                data: 'date_from=' + date_from + '&date_to=' + date_to,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    //alert(data);
+                    $(".display_data").html(data);
+                    $("table#datatable").dataTable();
+                }
+            })
+        });
+    });
+</script>
