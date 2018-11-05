@@ -16,18 +16,18 @@
         <div class="col-lg-12">
             <?php echo form_open('login/process'); ?>
             <div class="form-group has-feedback">
-                <input type="email" name="email" class="form-control" placeholder="Email" value="<?php echo $this->input->cookie('email'); ?>">
+                <input type="email" name="email" class="form-control" placeholder="Email" value="<?php echo get_cookie('_cemail'); ?>">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
-                <input type="password" name="password" class="form-control" placeholder="Password" value="<?php echo $this->input->cookie('password'); ?>">
+                <input type="password" name="password" class="form-control" placeholder="Password" value="<?php echo get_cookie('_cpassword'); ?>">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="row">
                 <div class="col-xs-8">
                     <div class="checkbox icheck">
                         <label>
-                            <input type="checkbox" name="remember_me" value="1"> Remember Me
+                            <input type="checkbox" name="remember_me" value="1" <?php if(get_cookie('_cemail') && get_cookie('_cpassword')) {echo "checked";} ?>> Remember Me
                         </label>
                     </div>
                 </div>
