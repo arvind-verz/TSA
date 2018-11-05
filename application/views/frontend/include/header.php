@@ -66,6 +66,22 @@
 			</div>
 		</div>
 	</div>
+	<?php }else if($url=='student-profile' || $url == 'student-invoices'){?>
+	<!-- Banner -->
+	<div class="banner-holder inner-banner background parallax" style="background-image:url(<?php echo base_url('assets/images/banner-about.jpg'); ?>)" data-img-width="1400" data-img-height="502" data-diff="100">
+		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.jpg'); ?>" alt="" class="responsive"></div>
+		<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.jpg'); ?>" alt="" class="responsive"></div>
+		<div class="bn-caption">
+			<div class="container">
+				<div class="bn-content">
+					<div>
+						<div class="student-dp"><img src="<?php echo base_url('assets/images/student10.jpg'); ?>" class="responsive" alt=""></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
 	<!-- Banner END --> 
     <?php }else if($url!='thank-you'){?>
 	<!-- Banner -->

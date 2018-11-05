@@ -7,8 +7,9 @@ class Cms extends CI_Controller {
 
    public  function __construct() {
         parent::__construct();
-        $this->load->model('frontend/Cms_model', '', TRUE);   
-		//$this->load->model('Banner_model', '', TRUE);  
+        $this->load->model('frontend/Cms_model', '', TRUE);
+        $this->load->model('frontend/accounts', 'accounts');   
+		//$this->load->model('Banner_model', '', TRUE);
     }
 	public function index() {
 		
@@ -22,6 +23,42 @@ class Cms extends CI_Controller {
 			$this->load->view('frontend/include/header', $data_msg);
 			$this->load->view('frontend/home');
 			$this->load->view('frontend/include/footer');
+	}
+
+	public function student_profile() {
+		$this->accounts->is_logged_in();
+		$data = array();	
+		$url="home";	
+		$data['page'] =$page = $this->Cms_model->get_page($url);
+		$data['menu_id'] = $page[0]['menu_id'];
+		$data['url'] = 'student-profile';
+		$data['testimonials'] = $this->Cms_model->get_testimonials();
+
+		$data['student_profile']	= get_student_profile();
+		$data['title'] = STUDENT . ' | Profile';
+		$data['page_title']	= STUDENT . ' | Profile';
+
+		$this->load->view('frontend/include/header', $data);
+		$this->load->view('frontend/student-profile');
+		$this->load->view('frontend/include/footer');
+	}
+
+	public function student_invoices() {
+		$this->accounts->is_logged_in();
+		$data = array();	
+		$url="home";	
+		$data['page'] =$page = $this->Cms_model->get_page($url);
+		$data['menu_id'] = $page[0]['menu_id'];
+		$data['url'] = 'student-invoices';
+		$data['testimonials'] = $this->Cms_model->get_testimonials();
+
+		$data['student_invoices']	= get_student_invoices();
+		$data['title'] = STUDENT . ' | Invoices';
+		$data['page_title']	= STUDENT . ' | Invoices';
+
+		$this->load->view('frontend/include/header', $data);
+		$this->load->view('frontend/student-invoices');
+		$this->load->view('frontend/include/footer');
 	}
 	
 	
