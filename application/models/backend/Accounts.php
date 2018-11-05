@@ -97,7 +97,7 @@ class Accounts extends CI_Model
         return false;
     }
 
-    public function is_permission_allowed($user_id, $perm_id = null, $module, $type) {
+    public function is_permission_allowed($user_id, $perm_id, $module, $type) {
         $this->db->select('*');
         $this->db->from('aauth_permission_access');
         $this->db->join('aauth_perm_to_user', 'aauth_permission_access.perm_id = aauth_perm_to_user.perm_id');
