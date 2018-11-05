@@ -56,7 +56,7 @@
 			'icon'  => '<i class="fa fa-dashboard"></i>',
 			'url'   => 'admin/students',
 			],
-			[
+			/*[
 			'title' => MENU,
 			'icon'  => '<i class="fa fa-dashboard"></i>',
 			'url'   => 'admin/manage-menu',
@@ -70,7 +70,7 @@
 			'title' => TESTIMONIAL,
 			'icon'  => '<i class="fa fa-book"></i>',
 			'url'   => 'admin/manage-testimonial',
-			],
+			],*/
 			[
 			'title' => USERS,
 			'icon'  => '<i class="fa fa-users"></i>',
@@ -96,9 +96,7 @@
 			],
 			];
 			?>
-
-
-
+			<ul class="sidebar-menu" data-widget="tree">
 				<?php
 				if (count($menu_array)) {
 				foreach ($menu_array as $menu) {
@@ -122,7 +120,6 @@
 				}
 				?>
 				<li class="treeview <?php if (in_array(current_url(), $url_array)) {echo 'active';}?>">
-
 					<a href="#">
 						<?php echo $child_menu_icon; ?> <span><?php echo $value; ?></span>
 						<span class="pull-right-container">
