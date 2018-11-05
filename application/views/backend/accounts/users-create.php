@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Access Control</label>
-                                <select name="perm_id" class="form-control">
+                                <select name="perm_id" class="form-control select2">
                                     <option value="">-- Select One --</option>
                                     <?php
                                     if(count($permission_data)) {
