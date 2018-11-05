@@ -191,8 +191,8 @@ $(document).ready(function(){
                                 <!--<td><?php echo isset($student->parents_phone ) ? $student->parents_phone  : '-' ?></td>-->
                                 <td><?php echo isset($student->siblings ) ? $student->siblings  : '-' ?></td>
                                 <td><?php echo (is_null($student->status)) ? '-'  : '<span class="glyphicon glyphicon-ok"></span>' ?></td>
-                                <td> <div class="form-group">
-                           
+                                <td> 
+                                <div class="form-group">
                             <select name="action" id="action" class="form-control select2 action">
                                 <option value="">-- Select One --</option>
                                 <option value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>

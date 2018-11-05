@@ -96,7 +96,9 @@
 			],
 			];
 			?>
-			<ul class="sidebar-menu" data-widget="tree">
+
+
+
 				<?php
 				if (count($menu_array)) {
 				foreach ($menu_array as $menu) {
@@ -120,6 +122,7 @@
 				}
 				?>
 				<li class="treeview <?php if (in_array(current_url(), $url_array)) {echo 'active';}?>">
+
 					<a href="#">
 						<?php echo $child_menu_icon; ?> <span><?php echo $value; ?></span>
 						<span class="pull-right-container">

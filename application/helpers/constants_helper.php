@@ -6,6 +6,7 @@ define('ADMINPANEL', 'Admin Panel');
 
 
 /* DB TABLES */
+
 define('DB_DASHBOARD', 'dashboard');
 define('DB_SUBJECT', 'subject');
 define('DB_TUTOR', 'tutor');
@@ -18,7 +19,9 @@ define('DB_BOOK', 'Book');
 define('DB_MATERIAL', 'material');
 define('DB_INVOICE', 'invoice');
 define('DB_BILLING', 'billing');
-
+define('DB_CONTACT', 'contact');
+define('DB_ENQUIRY', 'quick_enquiry');
+define('DB_GALLERY', 'gallery');
 
 define('TBL_MENU_POSITION' , 'menu_position');
 define('TBL_MENU' , 'menu'); 
@@ -26,6 +29,7 @@ define('TBL_CMS' ,'pages');
 define('DB_MODULES' ,'modules'); 
 define('DB_ADMIN_USER' ,'admin'); 
 define('DB_TESTIMONIAL' ,'testimonial');
+ 
 
 /* MODULES */
 define('LOGIN', 'Login');
@@ -43,9 +47,9 @@ define('SMS', 'SMS');
 define('SMS_TEMPLATE', 'SMS Template');
 define('SMS_HISTORY', 'SMS History');
 define('BILLING', 'Billing');
-
 define('PERMISSION', 'Permission');
 define('TESTIMONIAL', 'Testimonial');
+define('GALLERY', 'Gallery');
 
 
 define('MENU', 'Menu');
@@ -55,7 +59,6 @@ define('CMS_MANAGE', 'Cms Management');
 define('PAGE', 'Page');
 
 define('ROLE', 'Role');
-
 define('ROLESANDPERMISSION', 'Roles and Permission');
 define('USERS', 'Users');
 define('REPORTING', 'Reporting');

@@ -242,8 +242,8 @@ class CmsController extends CI_Controller {
         $data_msg = array();
 
         $data_msg['meta_title'] = "Add Pages";
-		
 		$get_result = $this->Cms_model->get_cms_menu();
+		$data_msg['subjects'] = $this->Cms_model->get_subjects();
 		$details = $get_result->result_array();		
 		$data_msg['menu'] = $details;
 		
@@ -316,6 +316,7 @@ class CmsController extends CI_Controller {
 						'image_name' => $image_name_name,	
 						'banner_heading' => isset($post_data['banner_heading']) ? $post_data['banner_heading'] : '',					
 						'page_heading' => $post_data['page_heading'],
+						'subject_id' => ($post_data['subject_id']!="") ? $post_data['subject_id'] : '',
 						'page_content' => $post_data['page_content'],
 						'seo_title' => $post_data['seo_title'],
 						'seo_keyword' => $post_data['seo_keyword'],
@@ -365,7 +366,7 @@ class CmsController extends CI_Controller {
 	public function edit_cms($id) {
 		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CMS', 'edits');
         $data_msg = array();
-
+$data_msg['subjects'] = $this->Cms_model->get_subjects();
         $data_msg['meta_title'] = EDIT.' '.CMS;
 		$data_msg['page_title']  = EDIT.' '.CMS;
 		$data_msg['cms_id']  =$id;
@@ -449,6 +450,7 @@ class CmsController extends CI_Controller {
 					'banner_heading' => isset($post_data['banner_heading'])?$post_data['banner_heading']:'',								
 					'page_heading' => $post_data['page_heading'],
 					'page_content' => isset($post_data['page_content'])?$post_data['page_content']:'',
+					'subject_id' => isset($post_data['subject_id']) ? $post_data['subject_id'] : '',
 					'seo_title' => $post_data['seo_title'],
 					'seo_keyword' => $post_data['seo_keyword'],
 					'seo_description' => $post_data['seo_description'],

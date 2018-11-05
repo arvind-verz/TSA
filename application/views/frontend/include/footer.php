@@ -23,16 +23,16 @@
 	<div class="get-holder">
 		<h3 class="title4 text-center txt-dark mb0">Quick Enquiry</h3>
 		<p class="text-center">Feel free to send us a message!</p>
-		<form name="contact" id="contact" method="post" action="<?php echo site_url('quick_enquiry'); ?>">
+         <?php echo form_open('quick-enquiry'); ?>
 		<div class="get-form">
 			<div class="form-group">
-				<input type="text" name="fullname" required id="fullname" placeholder="Name" class="gt-input">
+				<input type="text" name="fname" required id="fname" placeholder="Name" class="gt-input">
 			</div>
 			<div class="form-group">
-				<input type="email"name="emailid" required id="emailid" placeholder="Email Address" class="gt-input">
+				<input type="email"name="email_id" required id="email_id" placeholder="Email Address" class="gt-input">
 			</div>
 			<div class="form-group">
-				<input type="text" required name="contact" id="contact" placeholder="Contact No." class="gt-input">
+				<input type="text" required name="phone" id="phone" placeholder="Contact No." class="gt-input">
 			</div>
 			<div class="form-group">
 				<textarea required name="message" id="message" placeholder="Message" class="gt-input"></textarea>
@@ -41,7 +41,7 @@
 				<button type="submit" class="button btn-md btn-block">Submit</button>
 			</div>
 		</div>
-		</form>
+		<?php echo form_close(); ?>
 	</div>
 </div>
 <!-- Get In Touch END--> 

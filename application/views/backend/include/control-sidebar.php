@@ -37,12 +37,34 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('/admin/cms/pages') }}">
+                    <a href="<?php echo site_url('admin/manage-cms'); ?>">
                         <i class="menu-icon fa fa-check">
                         </i>
                         <div class="menu-info">
                             <h4 class="control-sidebar-subheading">
-                                Pages
+                                <?php echo CMS ?>
+                            </h4>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?php echo site_url('admin/manage-menu'); ?>">
+                        <i class="menu-icon fa fa-check">
+                        </i>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">
+                                <?php echo MENU ?>
+                            </h4>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?php echo site_url('admin/manage-testimonial'); ?>">
+                        <i class="menu-icon fa fa-check">
+                        </i>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">
+                                <?php echo TESTIMONIAL ?>
                             </h4>
                         </div>
                     </a>

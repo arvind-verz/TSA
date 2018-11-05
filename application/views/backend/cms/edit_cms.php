@@ -46,12 +46,22 @@
                  <select name="template" id="template"   class="form-control">
                  <option value="Full Width" <?php if($details[0]['template']=='Full Width'){echo 'selected';} ?>>Full Width</option>
                  <option value="About Us" <?php if($details[0]['template']=='About Us'){echo 'selected';} ?>>About Us</option>
+                 <option value="Subject" <?php if($details[0]['template']=='Subject'){echo 'selected';} ?>>Subject</option>
                  </select>
               </div>
               <div class="form-group">
                 <label for="sort_order" >Sort Order: </label>
                 <input type="text" name="sort_order"  id="sort_order" value="<?php echo $details[0]['sort_order'];?>"  class="form-control" />
               </div>
+               <div class="form-group" id="subject" style=" <?php if($details[0]['template']!='Subject') echo 'display:none;"';?>>
+             	 <label for="subject">Subject : </label>
+                 <select name="subject_id" id="subject_id"  class="form-control">
+                 <?php foreach($subjects as $subject){?>
+                     <option value="<?php echo $subject['subject_id'];?>" <?php if($details[0]['subject_id']==$subject['subject_id']){echo 'selected';} ?>><?php echo $subject['subject_name'];?></option>
+                 <?php }?>
+                 </select>
+              </div>
+              
             <?php if($details[0]['image_name']!=''){?>
               <p><img src="<?php echo base_url().'assets/upload/pagebanner/thumb/'.$details[0]['image_name']; ?>" /></p>
               <?php }?>
@@ -108,3 +118,14 @@
         </div>
     </section>
 </div>
+<script>
+$(function() {
+	$('#template').change(function() {
+		var result=$(this).val();
+		if(result=='Subject')
+		{
+		$('#subject').css('display','block');
+		}
+	});
+});
+</script>

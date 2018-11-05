@@ -43,38 +43,14 @@
 					if(count($submenu)>0){ $c=0;
 						foreach ($submenu as $key => $valm){ $c++;?>
                     		<tr>
-                            	<td align="center"><input type="checkbox" name="id[]" value="<?php echo $valm['id'] ?>"></td>
+                            	
                 				<td><?php echo $start_count.'.'.$c; ?></td>
                                 <td><?php echo $val['menu_title'] ?> &gt;&gt; <?php echo $valm['menu_title'] ?></td>
                                 <td align="center"><a href="<?php echo site_url('admin/edit-menu-item/'.$position.'/'.$valm['id']); ?>"><span class="glyphicon glyphicon-edit"></span></a>&nbsp;  &nbsp; 
                                 <a href="<?php echo site_url('admin/del-menu-item/'.$position.'/'.$valm['id']); ?>" onClick="return confirm('Are you sure want to delete?');"><span class="glyphicon glyphicon-trash"></span></a></td>
               				</tr>
                             
-							<?php $subsubmenu = $this->Cms_model->get_sub_menus($position, $valm['id']);
-							if(count($subsubmenu)>0){ $cc = 0;
-							foreach ($subsubmenu as $key => $valsm){ $cc++;?>
-                    		<tr>
-                                <td align="center"><input type="checkbox" name="id[]" value="<?php echo $valsm['id'] ?>"></td>
-                				<td><?php echo $start_count.'.'.$c.'.'.$cc; ?></td>
-                                <td><?php echo $val['menu_title'] ?> &gt;&gt; <?php echo $valm['menu_title'] ?> &gt;&gt; <?php echo $valsm['menu_title'] ?></td>
-                                <td align="center"><a href="<?php echo site_url('admin/edit-menu-item/'.$position.'/'.$valsm['id']); ?>">Edit</a>&nbsp;  &nbsp; 
-                                <a href="<?php echo site_url('admin/del-menu-item/'.$position.'/'.$valsm['id']); ?>" onClick="return confirm('Are you sure want to delete?');">Delete</a></td>
-              				</tr>
-                            
-                            <?php $subsubsubmenu = $this->Cms_model->get_sub_menus($position, $valsm['id']);
-							if(count($subsubsubmenu)>0){$ccc = 0;
-							foreach ($subsubsubmenu as $key => $valsms){ $ccc++;?>
-                    		<tr>
-                                <td align="center"><input type="checkbox" name="id[]" value="<?php echo $valsms['id'] ?>"></td>
-                				<td><?php echo $start_count.'.'.$c.'.'.$cc.'.'.$ccc; ?></td>
-                                <td><?php echo $val['menu_title'] ?> &gt;&gt; <?php echo $valm['menu_title'] ?> &gt;&gt; <?php echo $valsm['menu_title'] ?> &gt;&gt; <?php echo $valsms['menu_title'] ?></td>
-                                <td align="center"><a href="<?php echo site_url('admin/edit-menu-item/'.$position.'/'.$valsms['id']); ?>"><span class="glyphicon glyphicon-edit"></span></a>&nbsp;  &nbsp; 
-                                <a href="<?php echo site_url('admin/del-menu-item/'.$position.'/'.$valsms['id']); ?>" onClick="return confirm('Are you sure want to delete?');"><span class="glyphicon glyphicon-trash"></span></a></td>
-              				</tr>
-                    	<?php } }?>
-                            
-                            
-                    	<?php } }?>
+							
                         
                     	<?php } }?>
               			
