@@ -22,7 +22,14 @@
 <link href="<?php echo base_url('assets/css/responsive.css'); ?>" rel="stylesheet" type="text/css">
 </head>
 <body>
+
+<?php if($url=='thank-you'){?>
+<div id="wrapper" class="bg-img thankyou-page" style="background-image:url(<?php if($page[0]['image_name']!='')  echo base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']); else echo ''; ?>);">
+	<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>
+		<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.png'); ?>" alt="" class="responsive"></div>
+<?php }else{?>
 <div id="wrapper"> 
+<?php }?>
 	<!-- Header -->
 	<header id="header" class="header">
 		<div class="container">
@@ -43,29 +50,9 @@
 	<!-- Header END --> 
     
  
-    <?php if($url!='home'){?>
+    <?php if($url=='home'){?>
 	<!-- Banner -->
-	<div class="banner-holder inner-banner background parallax" style="background-image:url(<?php !empty($page[0]['image_name']) ?  base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']) : ''; ?>);" data-img-width="1400" data-img-height="502" data-diff="100">
-		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>
-		<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.png'); ?>" alt="" class="responsive"></div>
-		<div class="bn-caption">
-			<div class="container">
-				<div class="bn-content">
-					<div>
-						<h2><?php echo $page[0]['page_heading'];?></h2>
-						
-                        <?php echo $breadcrumbs;?>
-							
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="clear"></div>
-	</div>
-	<!-- Banner END --> 
-    <?php }else{?>
-	<!-- Banner -->
-	<div class="banner-holder main-banner background parallax" style="background-image:url(<?php !empty($page[0]['image_name']) ?  base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']) : ''; ?>);" data-img-width="1400" data-img-height="768" data-diff="100">
+	<div class="banner-holder main-banner background parallax" style="background-image:url(<?php if($page[0]['image_name']!='')  echo base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']); else echo ''; ?>);" data-img-width="1400" data-img-height="768" data-diff="100">
 		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>
 		<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.png'); ?>" alt="" class="responsive"></div>
 		<div class="bann-scroll"><a href="#HomeAbout">Scroll down</a></div>
@@ -78,6 +65,24 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<!-- Banner END --> 
+    <?php }else if($url!='thank-you'){?>
+	<!-- Banner -->
+	<div class="banner-holder inner-banner background parallax" style="background-image:url(<?php if($page[0]['image_name']!='')  echo base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']); else echo ''; ?>);" data-img-width="1400" data-img-height="502" data-diff="100">
+		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>
+		<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.png'); ?>" alt="" class="responsive"></div>
+		<div class="bn-caption">
+			<div class="container">
+				<div class="bn-content">
+					<div>
+						<h2><?php echo $page[0]['page_heading'];?></h2>
+                        <?php echo $breadcrumbs;?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
 	</div>
 	<!-- Banner END --> 
     <?php }?>

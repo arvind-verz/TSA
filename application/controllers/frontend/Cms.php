@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 class Cms extends CI_Controller {
 
-    function __construct() {
+   public  function __construct() {
         parent::__construct();
         $this->load->model('frontend/Cms_model', '', TRUE);   
 		//$this->load->model('Banner_model', '', TRUE);  
@@ -52,7 +52,27 @@ class Cms extends CI_Controller {
 			redirect(base_url("page-not-found"));	
 		}
 		
-		if($page[0]['template']=='About Us')
+		if($url=='thank-you')
+		{
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->load->view('frontend/include/header', $data_msg);
+        $this->load->view('frontend/thank-you');
+        $this->load->view('frontend/include/footer');
+		}
+		else if($url=='subjects')
+		{
+		//echo $url;die;
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push('Subjects', 'subjects');
+		$data_msg['subjects'] = $this->Cms_model->get_subjects();
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->load->view('frontend/include/header', $data_msg);
+        $this->load->view('frontend/subjects');
+        $this->load->view('frontend/include/footer');
+		}
+		else if($page[0]['template']=='About Us')
 		{
 		$this->breadcrumbs->push('Home', 'home');
         $this->breadcrumbs->push('About Us', 'about-us');
@@ -74,7 +94,7 @@ class Cms extends CI_Controller {
     }
 	
 	  
-	function testimonial()
+	public function testimonial()
 	{
 		$data_msg = array();		
 		$data_msg['testimonials'] = $this->Cms_model->get_testimonials();
@@ -83,16 +103,19 @@ class Cms extends CI_Controller {
         $this->load->view('frontend/testimonial');
         $this->load->view('frontend/include/footer');	
     }
-	function contact_us()
+	public function contact_us()
 	{
 		$data_msg = array();	
 		$url="contact-us";	
 		//$data_msg['testimonials'] = $this->Cms_model->get_testimonials();
 		$this->load->library('form_validation');
-		$page = $this->Cms_model->get_page($url);
-		$page1 = $this->Cms_model->get_page_others($url); 
+		$data_msg['page'] =$page = $this->Cms_model->get_page($url);
+		
 		$data_msg['menu_id'] = $page[0]['menu_id'];
 		$data_msg['url'] = $url;
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push('Contact Us', 'contact-us');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
 		
 		$configForm = array(
                array(
@@ -187,19 +210,17 @@ class Cms extends CI_Controller {
 						*/
 												
 								$data = array(
-												'name' => $post_data['name'],
-												'email' => $post_data['email'],
-												'company' => $post_data['company'],
-												'phone_no' => $post_data['phone_no'],
-												'enquiry_type' => $post_data['enquiry_type'],
+												'name' => $post_data['fname'],
+												'email' => $post_data['email_id'],
+												'phone_no' => $post_data['phone'],
+												'enquiry_type' => $post_data['programme'],
 												'message' => $post_data['message'],
-												'create_date' => date("Y-m-d H:m:s"),
-												'status' =>'N'
+												'create_date' => date("Y-m-d H:m:s")
 											); 
-								$this->db->insert(TBL_CONTACT , $data);
+								$this->db->insert(DB_CONTACT , $data);
 								
 								//$this->Cms_model->batch_email($_POST['email'], $auto_from, $auto_from_name, '', $auto_subject, $body_auto);
-								redirect(base_url("thank-you/contact"));
+								redirect(base_url("thank-you"));
 						
 					
 						
@@ -213,7 +234,69 @@ class Cms extends CI_Controller {
 			
 		}
 	}
-	function members()
+	public function quick_enquiry()
+	{$data_msg = array();	
+		$url="quick-enquiry";	
+		//$data_msg['testimonials'] = $this->Cms_model->get_testimonials();
+		$this->load->library('form_validation');
+		
+		
+		$configForm = array(
+               array(
+                     'field'   => 'fname',
+                     'label'   => 'Name',
+                     'rules'   => 'required'
+                  ),
+				  array(
+                     'field'   => 'email_id',
+                     'label'   => 'Email',
+                     'rules'   => 'required|valid_email'
+                  ),
+              
+				  array(
+                     'field'   => 'phone',
+                     'label'   => 'Phone',
+                     'rules'   => 'required'
+                  ),  
+			   array(
+                     'field'   => 'message',
+                     'label'   => 'Comment',
+                     'rules'   => 'required'
+                  )
+            );
+
+		$this->form_validation->set_rules($configForm); 
+		if($_POST){
+			if ($this->form_validation->run() == FALSE)
+			{
+				redirect(site_url("contact-us"));
+			}else{
+				$post_data = $_POST;
+
+				
+					
+												
+								$data = array(
+												'name' => $post_data['fname'],
+												'email' => $post_data['email_id'],
+												'phone_no' => $post_data['phone'],
+												'message' => $post_data['message'],
+												'create_date' => date("Y-m-d H:m:s")
+											); 
+								$this->db->insert(DB_ENQUIRY , $data);
+								
+								//$this->Cms_model->batch_email($_POST['email'], $auto_from, $auto_from_name, '', $auto_subject, $body_auto);
+								redirect(site_url("thank-you"));
+						
+					
+						
+			}
+		}
+		
+		
+	}
+	
+	public function members()
 	{
 		$data_msg = array();
 				

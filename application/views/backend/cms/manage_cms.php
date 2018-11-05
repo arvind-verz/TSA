@@ -25,7 +25,6 @@
            <table class="table table-striped table-bordered text-center" id="datatable" style="width:100%">
             <thead>
               <tr>
-                <th align="center"><input class="checkall" type="checkbox" /></th>
                 <th align="center">Sl No</th>
                 <th>Page Title</th>
                 <th>Status</th>
@@ -39,11 +38,6 @@
 			  if(count($display_result)>0){ 
 					foreach ($display_result as $key => $val):?>
               <tr>
-                <td  align="center">
-                <?php if($val['url_not_editable']==1){?>
-                <input type="checkbox" name="id[]"  value="<?php echo $val['id'];?>" />
-                <?php }?><input type="hidden" name="orderid[]"  value="<?php echo $val['id'];?>" />
-                </td>
                 <td class='priority'><?php echo $start_count;?> <input type="hidden" name="sort_order[]" value="<?php echo $val['sort_order'];?>" /></td>
                 <td><?php echo $val['page_heading'] ?></td>
                 <td align="center"><?php if($val['status']=='N'){?>

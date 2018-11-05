@@ -10,6 +10,7 @@ $route['default_controller'] = 'welcome';
 $route['testimonial'] = "frontend/cms/testimonial";
 $route['home'] = "frontend/cms/index";
 $route['contact-us'] = "frontend/cms/contact_us";
+$route['quick-enquiry'] = "frontend/cms/quick_enquiry";
 $route['(:any)'] = "frontend/cms/inner_pages/$1";
 /* FRONTEND */
 
@@ -206,6 +207,11 @@ $route['translate_uri_dashes'] = FALSE;
   $route['admin/add-testimonial'] = "backend/TestimonialController/add_testimonial";
   $route['admin/edit-testimonial/(:any)'] = "backend/TestimonialController/edit_testimonial/$1";
   $route['admin/del-testimonial/(:any)'] = "backend/TestimonialController/del_testimonial/$1";
+  
+  $route['admin/manage-gallery'] = "backend/GalleryController/manage_gallery";
+  $route['admin/add-gallery'] = "backend/GalleryController/add_gallery";
+  $route['admin/edit-gallery/(:any)'] = "backend/GalleryController/edit_gallery/$1";
+  $route['admin/del-gallery/(:any)'] = "backend/GalleryController/del_gallery/$1";
 /* CMS Admin */
 
 

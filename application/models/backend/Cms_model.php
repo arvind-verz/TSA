@@ -25,7 +25,13 @@
           }
 		  
 	
-	
+			 function get_subjects()
+			 {
+				 $this->db->select('*')
+						  ->from(DB_SUBJECT);
+				  $query = $this->db->get()->result_array();
+				  return $query; 
+			}
 		  function get_custom_menu_page_filter($position, $total_row_display , $limit_from, $FlterData) {
                   $this->db->select('*')
                           ->from(TBL_MENU)

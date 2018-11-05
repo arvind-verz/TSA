@@ -6,10 +6,7 @@ define('ADMINPANEL', 'Admin Panel');
 
 
 /* DB TABLES */
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 define('DB_DASHBOARD', 'dashboard');
 define('DB_SUBJECT', 'subject');
 define('DB_TUTOR', 'tutor');
@@ -22,7 +19,9 @@ define('DB_BOOK', 'Book');
 define('DB_MATERIAL', 'material');
 define('DB_INVOICE', 'invoice');
 define('DB_BILLING', 'billing');
-<<<<<<< HEAD
+define('DB_CONTACT', 'contact');
+define('DB_ENQUIRY', 'quick_enquiry');
+define('DB_GALLERY', 'gallery');
 
 define('TBL_MENU_POSITION' , 'menu_position');
 define('TBL_MENU' , 'menu'); 
@@ -30,12 +29,8 @@ define('TBL_CMS' ,'pages');
 define('DB_MODULES' ,'modules'); 
 define('DB_ADMIN_USER' ,'admin'); 
 define('DB_TESTIMONIAL' ,'testimonial');
-=======
-define('TBL_MENU_POSITION' , 'menu_position');
-define('TBL_MENU' , 'menu'); 
-define('TBL_CMS' ,'pages'); 
+ 
 
->>>>>>> master
 /* MODULES */
 define('LOGIN', 'Login');
 define('DASHBOARD', 'Dashboard');
@@ -52,25 +47,23 @@ define('SMS', 'SMS');
 define('SMS_TEMPLATE', 'SMS Template');
 define('SMS_HISTORY', 'SMS History');
 define('BILLING', 'Billing');
-<<<<<<< HEAD
 define('PERMISSION', 'Permission');
 define('TESTIMONIAL', 'Testimonial');
+define('GALLERY', 'Gallery');
 
-=======
->>>>>>> master
+
 define('MENU', 'Menu');
 define('MENU_MANAGE', 'Menu Management');
 define('CMS', 'Cms');
 define('CMS_MANAGE', 'Cms Management');
 define('PAGE', 'Page');
-<<<<<<< HEAD
+
 define('ROLE', 'Role');
-=======
 define('ROLESANDPERMISSION', 'Roles and Permission');
 define('USERS', 'Users');
 define('REPORTING', 'Reporting');
 define('PROFILE', 'Profile');
->>>>>>> master
+
 
 
 /* CRUD */

@@ -37,6 +37,25 @@
 			    return $query;
 			}
 			
+			function get_subjects()
+			{
+				$this->db->select('*')
+					 ->from(DB_SUBJECT);					 
+				$query = $this->db->get()->result_array();
+				
+			    return $query;
+			}
+			
+			function get_cms_subjects($subject_id)
+			{
+				$this->db->select('*')
+					 ->from(TBL_CMS)
+					  ->where('subject_id',$subject_id);					 
+				$query = $this->db->get()->result_array();
+				
+			    return $query;
+			}
+			
 			function get_members_cms()
 			{
 				$this->db->select('cp.*')

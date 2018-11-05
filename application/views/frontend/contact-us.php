@@ -30,16 +30,15 @@
 		</div>
 		<!-- Section END --> 
 		<!-- Section -->
-		<div class="bg"><img src="images/bg1.png" alt="" class="responsive"></div>
+		<div class="bg"><img src="<?php echo base_url('assets/images/bg1.png'); ?>" alt="" class="responsive"></div>
 		<div class="fullcontainer bg-color1">
 			<div class="container">
 				<div class="inner-container-md">
 					<div class="animatedParent" data-sequence="300">
-						<div class="title1 text-center txt-dark animated growIn" data-id="1"><span>Send</span> an <span>enquiry</span></div>
-						<p class="text-center animated growIn" data-id="2">Do you have any enquiries or suggestions? Fill out the enquiry form and we’ll get back to you soon!</p>
+						<?=$page[0]['page_content']?>
 					</div>
 					<div class="cont-sm">
-					 <?php echo form_open('contact'); ?>
+					 <?php echo form_open('contact-us'); ?>
 						<div class="form-holder pt50">
 							<div class="form-group">
 								<div class="row">
