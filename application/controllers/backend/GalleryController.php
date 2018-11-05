@@ -90,12 +90,13 @@ class GalleryController extends CI_Controller {
 					  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){						  
 						 $error = TRUE;  
 					  }else{
+						  list($width, $height) = getimagesize($_FILES['image_name']['tmp_name']);
 						  $config = array(
 							'source' => 'image_name', 
 							'temp' => 'temp',
 							'resize' => array(
-							array('height' => 80, 'width' => 150, 'save' => 'gallery/thumb/'),
-							array('height' => 205, 'width' => 205,'save' => 'gallery/original/')
+							array('height' => 322, 'width' => 561, 'save' => 'gallery/thumb/'),
+							array('height' => $height, 'width' => $width,'save' => 'gallery/original/')
 							)
 							);							
 							$image_name_name = $this->Allfunction->resize_image($config); // return the file anme
@@ -135,7 +136,7 @@ class GalleryController extends CI_Controller {
 		}
     }
 		
-	public function edit_testimonial($id) {
+	public function edit_gallery($id) {
 		
         $data_msg = array();
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
@@ -147,7 +148,7 @@ class GalleryController extends CI_Controller {
         $get_result = $this->Gallery->get_gallery_details($id);
         $details = $get_result->result_array();
 		
-		if (count($details) == 0) { redirect(site_url('admin/manage-testimonial'));}
+		if (count($details) == 0) { redirect(site_url('admin/manage-gallery'));}
 		
 		$data_msg['details'] = $details;        
 		$data_msg['meta_title'] = "Edit Gallery";
@@ -185,7 +186,7 @@ class GalleryController extends CI_Controller {
 				$data_msg['error_msg'] = $error_msg = strip_tags(validation_errors());
 				$this->load->view('backend/include/header', $data_msg);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/testimonial/edit_testimonial');
+        $this->load->view('backend/gallery/edit_gallery');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');			
 			}else{	
@@ -196,12 +197,13 @@ class GalleryController extends CI_Controller {
 					  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){						  
 						 $error = TRUE;  
 					  }else{
+						  list($width, $height) = getimagesize($_FILES['image_name']['tmp_name']);
 						  $config = array(
 							'source' => 'image_name', 
 							'temp' => 'temp',
 							'resize' => array(
-							array('height' => 80, 'width' => 80, 'save' => 'testimonial/thumb/'),
-							array('height' => 205, 'width' => 205, 'save' => 'testimonial/original/')
+							array('height' => 322, 'width' => 561, 'save' => 'gallery/thumb/'),
+							array('height' => $height, 'width' => $width, 'save' => 'gallery/original/')
 							)
 							);
 							
@@ -216,7 +218,7 @@ class GalleryController extends CI_Controller {
 					$data_msg['error_msg'] = $error_msg;
 					$this->load->view('backend/include/header', $data_msg);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/testimonial/edit_testimonial');
+        $this->load->view('backend/gallery/edit_gallery');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
 				}else { 
@@ -229,9 +231,9 @@ class GalleryController extends CI_Controller {
 							'content' => $post_data['content']
 						);
 						}else{							
-					$file = MAIN_SITE_AB_UPLOAD_PATH.'testimonial/original/'.$details[0]['image_name'];
+					$file = MAIN_SITE_AB_UPLOAD_PATH.'gallery/original/'.$details[0]['image_name'];
 					if(is_file($file)){unlink($file); } 
-					$file = MAIN_SITE_AB_UPLOAD_PATH.'testimonial/thumb/'.$details[0]['image_name'];
+					$file = MAIN_SITE_AB_UPLOAD_PATH.'gallery/thumb/'.$details[0]['image_name'];
 					if(is_file($file)){unlink($file); } 					 
 						$data = array(
 							'title' => $post_data['title'],
@@ -244,14 +246,14 @@ class GalleryController extends CI_Controller {
 						}
 					$this->Gallery->update_page_cms($data,  $id);	
 					$this->session->set_flashdata('success_msg', 'Successfully updated.');
-					redirect(site_url("admin/edit-testimonial/".$id));
+					redirect(site_url("admin/edit-gallery/".$id));
 				}
 			}
 		}else{
 		
 		$this->load->view('backend/include/header', $data_msg);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/testimonial/edit_testimonial');
+        $this->load->view('backend/gallery/edit_gallery');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
 		}
@@ -260,7 +262,7 @@ class GalleryController extends CI_Controller {
 	public function del_gallery($id) {
 		
         $data_msg = array();		
-		$this->Gallery->del_testimonial($id);						
+		$this->Gallery->del_gallery($id);						
 		$this->session->set_flashdata('success_msg', 'Successfully Removed');
 		redirect(site_url("admin/manage-gallery"));
     }

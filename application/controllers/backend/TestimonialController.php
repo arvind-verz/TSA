@@ -86,12 +86,13 @@ class TestimonialController extends CI_Controller {
 					  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){						  
 						 $error = TRUE;  
 					  }else{
+						  list($width, $height) = getimagesize($_FILES['image_name']['tmp_name']);
 						  $config = array(
 							'source' => 'image_name', 
 							'temp' => 'temp',
 							'resize' => array(
 							array('height' => 80, 'width' => 150, 'save' => 'testimonial/thumb/'),
-							array('height' => 205, 'width' => 205,'save' => 'testimonial/original/')
+							array('height' => $height, 'width' => $width,'save' => 'testimonial/original/')
 							)
 							);							
 							$image_name_name = $this->Allfunction->resize_image($config); // return the file anme
@@ -188,12 +189,14 @@ class TestimonialController extends CI_Controller {
 					  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){						  
 						 $error = TRUE;  
 					  }else{
-						  $config = array(
+						   list($width, $height) = getimagesize($_FILES['image_name']['tmp_name']);
+
+     					  $config = array(
 							'source' => 'image_name', 
 							'temp' => 'temp',
 							'resize' => array(
 							array('height' => 80, 'width' => 80, 'save' => 'testimonial/thumb/'),
-							array('height' => 205, 'width' => 205, 'save' => 'testimonial/original/')
+							array('height' => $height, 'width' => $width, 'save' => 'testimonial/original/')
 							)
 							);
 							

@@ -56,6 +56,16 @@
 			    return $query;
 			}
 			
+			function get_gallery()
+			{
+				$this->db->select('*')
+					 ->from(GALLERY);
+				 
+				$query = $this->db->get()->result_array();
+				
+			    return $query;
+			}
+			
 			function get_members_cms()
 			{
 				$this->db->select('cp.*')

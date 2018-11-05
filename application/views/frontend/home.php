@@ -1,6 +1,7 @@
 	<!-- Content Containers -->
 	<div class="main-container"> 
 		<?=$page[0]['page_content']?>
+        <?php //print_r($gallery);?>
 		<!-- Section -->
 		<div class="fullcontainer">
 			<div class="container">
@@ -9,30 +10,19 @@
 						<div class="title2 text-center txt-yellow animated growIn mb80" data-id="1">Latest Gallery</div>
 					</div>
 					<div class="row animatedParent" data-sequence="300">
+                    <?php foreach($gallery as $gal):?>
 						<div class="col-md-6 animated fadeInLeft" data-id="1">
 							<div class="row">
 								<div class="equalheight1 height960">
 									<div class="grid-tb">
 										<div class="grid-tc">
-											<div class="bdr-img img1"> <img src="<?php echo base_url('assets/images/home1.jpg'); ?>" alt="" class="responsive"> </div>
+											<div class="bdr-img img1"> <img src="<?php echo base_url('assets/upload/gallery/original/'.$gal['image_name']); ?>" alt="" class="responsive"> </div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6 animated fadeInRight" data-id="1">
-							<div class="row">
-								<div class="equalheight1 height960">
-									<div class="grid-tb">
-										<div class="grid-tc">
-											<div class="cont text-center">
-												<div class="title1 txt-dark"><span>Fresh,</span> clean and <span>well</span> designed for <span>optimal</span> learning.</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+                    <?php endforeach;?>
 					</div>
 					<div class="row animatedParent" data-sequence="300">
 						<div class="col-md-6 pull-right md animated fadeInRight" data-id="1">
