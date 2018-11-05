@@ -51,23 +51,13 @@
 						<i class="fa fa-file"></i> <span><?php echo INVOICE ?></span>
 					</a>
 				</li>
-<<<<<<< HEAD
-			 
-            
 
 				<li class="<?php if(current_url() == site_url('admin/students')) { echo 'active'; } ?>">
 
-				<li class="">
-
-=======
-				<li class="">
-					
->>>>>>> 6fb6073099acaaf0cd4565f17f13385a648c0758
 					<a href="<?php echo site_url('admin/students'); ?>">
 						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
 					</a>
 				</li>
-<<<<<<< HEAD
 
                 <li class="<?php if(current_url() == site_url('admin/permission')) { echo 'active'; } ?>">
 					<a href="<?php echo site_url('admin/permission'); ?>">
@@ -75,32 +65,14 @@
 					</a>
 				</li>
 				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history')) { echo 'active'; } ?>">
+
 				
-=======
-				<li class="">
-					
-					<a href="<?php echo site_url('admin/manage-menu'); ?>">
-						<i class="fa fa-dashboard"></i> <span><?php echo MENU ?></span>
-					</a>
-				</li>
-				<li class="">
-					
-					<a href="<?php echo site_url('admin/manage-cms'); ?>">
-						<i class="fa fa-dashboard"></i> <span><?php echo CMS ?></span>
-					</a>
-				</li>
-				<li class="">
-					
-					<a href="<?php echo site_url('admin/manage-testimonial'); ?>">
-						<i class="fa fa-dashboard"></i> <span><?php echo TESTIMONIAL ?></span>
-					</a>
-				</li>
 				<li class="<?php if(current_url() == site_url('admin/students')) { echo 'active'; } ?>">
 					<a href="<?php echo site_url('admin/students'); ?>">
 						<i class="fa fa-dashboard"></i> <span><?php echo STUDENT ?></span>
 					</a>
 				</li>
->>>>>>> 6fb6073099acaaf0cd4565f17f13385a648c0758
+
 				<li class="<?php if(current_url() == site_url('admin/users')) { echo 'active'; } ?>">
 					<a href="<?php echo site_url('admin/users'); ?>">
 						<i class="fa fa-users"></i> <span><?php echo USERS ?></span>
@@ -108,10 +80,7 @@
 				</li>
 				
 				<li class="treeview <?php if(current_url() == site_url('admin/sms_template') || current_url() == site_url('admin/sms_history') || current_url() == site_url('admin/sms_template/sms_template_create')) { echo 'active'; } ?>">
-<<<<<<< HEAD
 
-=======
->>>>>>> 6fb6073099acaaf0cd4565f17f13385a648c0758
 					<a href="#">
 						<i class="fa fa-envelope"></i> <span>SMS</span>
 						<span class="pull-right-container">
