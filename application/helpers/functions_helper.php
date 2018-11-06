@@ -30,6 +30,36 @@ function get_student_details($student_id = false)
     }
 }
 
+function get_student_profile() {
+    $ci = &get_instance();
+
+    if($ci->session->has_userdata('student_credentials')) {
+        $student_id = $ci->session->userdata('student_credentials');
+
+        $query = $ci->db->get_where(DB_STUDENT, ['id'    =>  $student_id['id'], 'email'    =>  $student_id['email']]);
+        $result = $query->row();
+        return $result;
+    }
+    return false;
+}
+
+function get_student_invoices() {
+    $ci = &get_instance();
+
+    if($ci->session->has_userdata('student_credentials')) {
+        $student_id = $ci->session->userdata('student_credentials');
+
+        $ci->db->select('*');
+        $ci->db->from(DB_INVOICE);
+        $ci->db->join(DB_STUDENT, DB_INVOICE . '.student_id = ' . DB_STUDENT . '.student_id');
+        $ci->db->where([DB_STUDENT . '.id' => $student_id['id'], DB_STUDENT . '.email' => $student_id['email']]);
+        $query = $ci->db->get();
+        $result = $query->result();
+        return $result;
+    }
+    return false;
+}
+
 function get_invoice_by_filename($filename = false)
 {
     $ci = &get_instance();

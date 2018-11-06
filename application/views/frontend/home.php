@@ -1,6 +1,11 @@
 	<!-- Content Containers -->
 	<div class="main-container"> 
-		<?=$page[0]['page_content']?>
+		<div class="fullcontainer full-mx">
+			<div class="home-pod-holder animatedParent" data-sequence="300">
+				<?=$page[0]['page_content']?>
+				<div class="clear"></div>
+			</div>
+		</div>
         <?php //print_r($gallery);?>
 		<!-- Section -->
 		<div class="fullcontainer">

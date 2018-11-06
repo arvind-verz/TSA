@@ -5,13 +5,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $route['default_controller'] = 'backend/AccountsController/index';
 
-$route['testimonial'] = "frontend/cms/testimonial";
-$route['gallery'] = "frontend/gallery/index";
-$route['home'] = "frontend/cms/index";
-$route['contact-us'] = "frontend/cms/contact_us";
-$route['quick-enquiry'] = "frontend/cms/quick_enquiry";
-$route['(:any)'] = "frontend/cms/inner_pages/$1";
-
 /* FRONTEND */
 
 
