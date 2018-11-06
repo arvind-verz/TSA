@@ -124,6 +124,7 @@ class Students extends CI_Model
     public function store()
     {
        // die(print_r($_POST));
+	   $password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
         $data = array(
             'student_id'     => $this->uniq_id,
             'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
@@ -137,7 +138,7 @@ class Students extends CI_Model
             'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
             'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : '',
             'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
-            'password'   => !empty($_POST['password']) ? md5($_POST['password']) : '',
+            'password'   => !empty($_POST['password']) ? $password_h : '',
             'created_at'   => $this->date,
             'updated_at'   => $this->date,
         );
@@ -257,6 +258,8 @@ class Students extends CI_Model
         //die(print_r($_POST));
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
+			
+			$password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
 			$data = array(
 				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
 				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
@@ -269,7 +272,7 @@ class Students extends CI_Model
 				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
 				'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : '',
 				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
-				'password'   => !empty($_POST['password']) ? md5($_POST['password']) : '',
+				'password'   => !empty($_POST['password']) ? $password_h : '',
 				'created_at'   => $this->date,
 				'updated_at'   => $this->date
 			);
