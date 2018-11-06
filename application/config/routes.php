@@ -2,12 +2,11 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-$route['default_controller'] = 'backend/AccountsController/index';
+$route['default_controller'] = 'frontend/cms/index';
 
 
 
 /* FRONTEND */
-
 
 
 /* LOGIN */

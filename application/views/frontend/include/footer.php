@@ -48,7 +48,13 @@
 <a href="#0" class="cd-top">Top</a> 
 <script src="<?php echo base_url('assets/js/animation.js'); ?>"></script> 
 <script src="<?php echo base_url('assets/js/slick.js'); ?>"></script> 
-<script src="<?php echo base_url('assets/js/plugins.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/sticky-kit.js'); ?>"></script> 
+<script src="<?php echo base_url('assets/js/sticky.js'); ?>"></script> 
+<script src="<?php echo base_url('assets/js/plugins.js'); ?>"></script> 
+<script src="<?php echo base_url('assets/js/mCustomScrollbar.js'); ?>"></script> 
+<script src="<?php echo base_url('assets/js/mscript.js'); ?>"></script>
+<link href="<?php echo base_url('assets/css/mCustomScrollbar.css'); ?>" rel="stylesheet" type="text/css" >
+
 
 <?php if($url=='gallery'):?>
 <script type="text/javascript" src="<?php echo base_url('assets/js/jquery.fancybox.js?v=2.1.5'); ?>"></script>
