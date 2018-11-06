@@ -50,7 +50,7 @@
                 <td><?php echo $val['content'] ?></td>
                 <!--<td><?php echo $val['url'] ?></td>-->
                 <td align="center"><?php if($val['status']==0){echo '<span class="glyphicon glyphicon-remove"></span>';}elseif ($val['status']==1){echo '<span class="glyphicon glyphicon-ok"></span>';} ?></td>
-                <td align="center"><a href="edit-testimonial/<?php echo $val['id'] ?>"><i aria-hidden="true" class="fa fa-pencil-square-o btn btn-warning"></i></a> <a href="del-testimonial/<?php echo $val['id'] ?>" onClick="return confirm('Are you sure want to delete.');"><i aria-hidden="true" class="fa fa-archive btn btn-danger"></i></a></td>
+                <td align="center"><a href="edit-gallery/<?php echo $val['id'] ?>"><i aria-hidden="true" class="fa fa-pencil-square-o btn btn-warning"></i></a> <a href="del-gallery/<?php echo $val['id'] ?>" onClick="return confirm('Are you sure want to delete.');"><i aria-hidden="true" class="fa fa-archive btn btn-danger"></i></a></td>
               </tr>
               <?php endforeach; ?>
               </tbody>

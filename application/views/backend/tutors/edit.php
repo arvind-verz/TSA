@@ -62,17 +62,21 @@
                                
                             </select>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="">Tutor Permission</label>
-                            <select name="tutor_permission" id="tutor_permission" class="form-control select2">
-                                <option value="">-- Select One --</option>
-                                <option <?php if(0==$tutor->tutor_permission) echo 'selected="selected"';?> value="0">Permission 1</option>
-                                <option <?php if(1==$tutor->tutor_permission) echo 'selected="selected"';?> value="1">Permission 2</option>
-                                <option <?php if(2==$tutor->tutor_permission) echo 'selected="selected"';?> value="2">Permission 3</option>
-                                <option <?php if(3==$tutor->tutor_permission) echo 'selected="selected"';?> value="3">Permission 4</option>
-                               
-                            </select>
-                        </div>
+                                <label>Tutor Permission</label>
+                                <select name="tutor_permission" id="tutor_permission" class="form-control select2">
+                                    <option value="">-- Select One --</option>
+                                    <?php
+                                    if(count($permission_data)) {
+                                    foreach($permission_data as $value) {
+                                    ?>
+                                    <option <?php if($value->id==$tutor->tutor_permission) echo 'selected="selected"';?> value="<?php echo isset($value->id) ? $value->id : '' ?>"><?php echo isset($value->name) ? $value->name : ''; ?></option>
+                                    <?php
+                                    }}
+                                    ?>
+                                </select>
+                            </div>
                         <div class="form-group">
                             <label for="">Password</label>
                             <input type="password" name="password" class="form-control" value="">

@@ -49,5 +49,15 @@
 <script src="<?php echo base_url('assets/js/animation.js'); ?>"></script> 
 <script src="<?php echo base_url('assets/js/slick.js'); ?>"></script> 
 <script src="<?php echo base_url('assets/js/plugins.js'); ?>"></script>
+
+<?php if($url=='gallery'):?>
+<script type="text/javascript" src="<?php echo base_url('assets/js/jquery.fancybox.js?v=2.1.5'); ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/jquery.fancybox.css?v=2.1.5'); ?>" media="screen" />
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.fancybox').fancybox();
+});
+</script>
+<?php endif;  ?>
 </body>
 </html>

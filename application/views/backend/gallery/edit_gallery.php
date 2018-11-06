@@ -25,8 +25,9 @@
                   <label for="location">Content :</label>
                   <textarea rows="4" class="form-control" cols="90" name="content" id="smallBody" ><?php echo $details[0]['content'];?></textarea>
                 </div>
-                
-                <p><img src="<?php echo base_url('assets/upload/testimonial/thumb/').$details[0]['image_name']; ?>" /></p>
+                <?php if($details[0]['image_name']!=""):?>
+                <p><img src="<?php echo base_url('assets/upload/gallery/thumb/').$details[0]['image_name']; ?>" /></p>
+                <?php endif;?>
                 <div class="form-group">
                   <label for="location">Pics (1400 X 500) : <span>*</span></label>
                   <input type="file" name="image_name" id="image_name" value="<?php echo $details[0]['image_name'];?>">

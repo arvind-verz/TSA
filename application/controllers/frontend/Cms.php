@@ -19,6 +19,7 @@ class Cms extends CI_Controller {
 		$data_msg['menu_id'] = $page[0]['menu_id'];
 		$data_msg['url'] = $url;
 		$data_msg['testimonials'] = $this->Cms_model->get_testimonials();
+		$data_msg['gallery'] = $this->Cms_model->get_gallery();
 	
 			$this->load->view('frontend/include/header', $data_msg);
 			$this->load->view('frontend/home');

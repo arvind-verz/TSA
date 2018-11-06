@@ -3,6 +3,11 @@
 	<section class="sidebar">
 		<!-- Sidebar user panel -->
 		<div class="user-panel">
+
+			<!-- /.search form -->
+			<!-- sidebar menu: : style can be found in sidebar.less -->
+			<ul class="sidebar-menu" data-widget="tree">
+				
 			<?php
 			/* TWO LEVEL MENU SUPPORT */
 			$menu_array = [
@@ -96,7 +101,8 @@
 			],
 			];
 			?>
-			<ul class="sidebar-menu" data-widget="tree">
+		<ul class="sidebar-menu" data-widget="tree">
+
 				<?php
 				if (count($menu_array)) {
 				foreach ($menu_array as $menu) {
@@ -120,6 +126,7 @@
 				}
 				?>
 				<li class="treeview <?php if (in_array(current_url(), $url_array)) {echo 'active';}?>">
+
 					<a href="#">
 						<?php echo $child_menu_icon; ?> <span><?php echo $value; ?></span>
 						<span class="pull-right-container">

@@ -52,6 +52,7 @@ class TutorController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = "Add Tutor";
+		$data['permission_data'] = get_permission_data();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -122,6 +123,7 @@ class TutorController extends CI_Controller
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(TUTOR, 'admin/tutors');
         $this->breadcrumbs->push(EDIT, 'admin/tutors/edit');
+		$data['permission_data'] = get_permission_data();
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = TUTOR . " <small> " . EDIT . ' #' . $id . " </small>";
