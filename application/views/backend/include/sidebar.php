@@ -6,7 +6,7 @@
 
 			<!-- /.search form -->
 			<!-- sidebar menu: : style can be found in sidebar.less -->
-			<ul class="sidebar-menu" data-widget="tree">
+	
 				
 			<?php
 			/* TWO LEVEL MENU SUPPORT */
@@ -102,7 +102,6 @@
 			];
 			?>
 		<ul class="sidebar-menu" data-widget="tree">
-
 				<?php
 				if (count($menu_array)) {
 				foreach ($menu_array as $menu) {
