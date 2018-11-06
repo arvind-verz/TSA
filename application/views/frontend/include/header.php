@@ -9,10 +9,14 @@
 <link href="<?php echo base_url('assets/css/bootstrap.css'); ?>" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url('assets/css/jcon-font.css'); ?>" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url('assets/css/animation.css'); ?>" rel="stylesheet" type="text/css">
+
 <!--[if lt IE 9]>
+
 <script src="js/html5.js"></script>
+
 <![endif]-->
-<script src="<?php echo base_url('assets/js/respond.min.js'); ?>"></script>
+
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/9F12A027-FF58-A44E-80DE-C95E46B0848B/main.js" charset="UTF-8"></script><script src="<?php echo base_url('assets/js/respond.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/jquery-latest.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/meanmenu.js'); ?>"></script>
@@ -20,6 +24,46 @@
 <link href="<?php echo base_url('assets/css/slick.css'); ?>" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url('assets/css/style.css'); ?>" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url('assets/css/responsive.css'); ?>" rel="stylesheet" type="text/css">
+
+<script>
+
+$(function(){
+
+    var subject_id = window.location.href;
+    console.log(subject_id.split('#')[1]);
+    if(subject_id.split('#')[1] !== undefined || subject_id.split('#')[1] != "undefined")
+    {
+
+        //console.log("inside");
+
+        console.log(subject_id+"   "+window.location.href);
+
+        $(".all_classes").removeClass("active");
+
+        $("#"+subject_id.split('#')[1]+"_active").addClass("active");
+
+    }
+
+    $(".subject_time").click(function(){
+
+        
+
+		var selected_id = (this).id;
+
+		console.log($("#"+selected_id).parent().prevAll().eq(1).text());
+
+		var trim_me = "Hi, I am interested in "+$("#"+selected_id).attr("subject_name")+", "+$("#"+selected_id).parent().prevAll().eq(1).text()+", "+$("#"+selected_id).text();
+
+
+
+		$("#message").text($.trim(trim_me.replace(/[\t\n]+/g,' ')))
+
+	});
+
+})
+
+</script>
+
 </head>
 <body>
 
