@@ -1,9 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-/* FRONTEND */
 
 $route['default_controller'] = 'frontend/cms/index';
+
+
+
+/* FRONTEND */
 
 
 /* LOGIN */
