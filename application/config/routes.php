@@ -3,12 +3,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 /* FRONTEND */
 
-<<<<<<< HEAD
-
-$route['default_controller'] = 'welcome';
-=======
 $route['default_controller'] = 'backend/AccountsController/index';
->>>>>>> e06e66d34f94956de59c2278fee8e88156aef92f
+
 $route['testimonial'] = "frontend/cms/testimonial";
 $route['gallery'] = "frontend/gallery/index";
 $route['home'] = "frontend/cms/index";
@@ -19,17 +15,27 @@ $route['(:any)'] = "frontend/cms/inner_pages/$1";
 /* FRONTEND */
 
 
-<<<<<<< HEAD
-$route['default_controller'] = 'backend/AccountsController/index';
-=======
 
+/* LOGIN */
+$route['login']         = 'frontend/AccountsController/index';
+$route['login/process'] = 'frontend/AccountsController/process';
+$route['logout']        = 'frontend/AccountsController/logout';
 
->>>>>>> e06e66d34f94956de59c2278fee8e88156aef92f
+$route['student-profile'] = 'frontend/Cms/student_profile';
+$route['student-invoices'] = 'frontend/Cms/student_invoices';
+
+$route['testimonial']        = "frontend/cms/testimonial";
+$route['home']               = "frontend/cms/index";
+$route['contact-us']         = "frontend/cms/contact_us";
+$route['quick-enquiry']      = "frontend/cms/quick_enquiry";
+$route['(:any)']             = "frontend/cms/inner_pages/$1";
+
+/* FRONTEND */
+
 
 /* BACKEND */
 
 //$route['default_controller'] = 'backend/AccountsController/index';
-
 
 /* BACKEND */
 
@@ -40,18 +46,13 @@ $route['default_controller'] = 'backend/AccountsController/index';
 
 /* PDF */
 //$route['admin/pdf/invoice/(:any)']         = 'backend/PdfController/my_mPDF/$1';
-<<<<<<< HEAD
-$route['admin/login']         = 'backend/AccountsController/index';
-$route['admin/login/process'] = 'backend/AccountsController/process';
-$route['admin/logout']        = 'backend/AccountsController/logout';
-=======
+
 
 $route['admin/cronjobs_PQWEas22'] = 'backend/CronController/index';
 $route['admin/login']             = 'backend/AccountsController/index';
 $route['admin/login/process']     = 'backend/AccountsController/process';
 $route['admin/logout']            = 'backend/AccountsController/logout';
 
->>>>>>> e06e66d34f94956de59c2278fee8e88156aef92f
 
 /* ROLES AND PERMISSION */
 $route['admin/users/profile']                            = 'backend/AccountsController/profile';
@@ -92,22 +93,6 @@ $route['admin/classes/delete/(:any)']             = 'backend/ClassController/del
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/ClassController/moveto_active_list/$1';
 
 /* Student Admin */
-<<<<<<< HEAD
-
-=======
-$route['admin/students']                = 'backend/StudentController/index';
-$route['admin/students/archive/(:any)'] = 'backend/StudentController/archive/$1';
-
-$route['admin/students/archived']                  = 'backend/StudentController/archived';
-$route['admin/students/create']                    = 'backend/StudentController/create';
-$route['admin/students/store']                     = 'backend/StudentController/store';
-$route['admin/students/search']                    = 'backend/StudentController/search';
-$route['admin/students/enroll']                    = 'backend/StudentController/enroll';
-$route['admin/students/edit/(:any)']               = 'backend/StudentController/edit/$1';
-$route['admin/students/update/(:any)']             = 'backend/StudentController/update/$1';
-$route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
-$route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
->>>>>>> e06e66d34f94956de59c2278fee8e88156aef92f
 
 
 $route['admin/students']                           = 'backend/StudentController/index';
@@ -121,7 +106,6 @@ $route['admin/students/edit/(:any)']               = 'backend/StudentController/
 $route['admin/students/update/(:any)']             = 'backend/StudentController/update/$1';
 $route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
 $route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
-
 
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
 
@@ -180,7 +164,7 @@ $route['admin/order/store']               = 'backend/OrderController/store';
 $route['admin/order/update_order_status'] = 'backend/OrderController/update_order_status';
 
 /* REPORTING */
-$route['admin/reporting'] = 'backend/ReportingController/index';
+$route['admin/reporting']                     = 'backend/ReportingController/index';
 $route['admin/reporting/get_reporting_sheet'] = 'backend/ReportingController/get_reporting_sheet';
 
 /* MATERIAL */
@@ -220,40 +204,11 @@ $route['admin/role/update/(:any)'] = 'backend/PermissionController/update_user/$
 $route['admin/role/delete/(:any)'] = 'backend/PermissionController/delete_user/$1';
 /* End Permission Admin */
 
-$route['404_override']         = '';
-$route['translate_uri_dashes'] = false;
 /* CMS Admin */
 
 
-  $route['admin/manage-menu'] = "backend/CmsController/manage_menu";
-  $route['admin/manage-menu-list/(:any)'] = "backend/CmsController/manage_menu_list/$1";
-  $route['admin/add-menu-item/(:any)'] = "backend/CmsController/add_menu_item/$1";
-  $route['admin/edit-menu-item/(:any)/(:any)'] = "backend/CmsController/edit_menu_item/$1/$2";
-  $route['admin/del-menu-item/(:any)/(:any)'] = "backend/CmsController/del_menu_item/$1/$2";
-  $route['admin/manage-cms'] = "backend/CmsController/manage_cms";
-  $route['admin/add-cms'] = "backend/CmsController/add_cms";
-  $route['admin/edit-cms/(:any)'] = "backend/CmsController/edit_cms/$1";
-  $route['admin/del-cms/(:any)'] = "backend/CmsController/del_cms/$1";
-  $route['admin/generate-page-list'] = "backend/CmsController/generate_page_list";
   
-  $route['admin/manage-testimonial'] = "backend/TestimonialController/manage_testimonial";
-  $route['admin/add-testimonial'] = "backend/TestimonialController/add_testimonial";
-  $route['admin/edit-testimonial/(:any)'] = "backend/TestimonialController/edit_testimonial/$1";
-  $route['admin/del-testimonial/(:any)'] = "backend/TestimonialController/del_testimonial/$1";
-  
-  $route['admin/manage-gallery'] = "backend/GalleryController/manage_gallery";
-  $route['admin/add-gallery'] = "backend/GalleryController/add_gallery";
-  $route['admin/edit-gallery/(:any)'] = "backend/GalleryController/edit_gallery/$1";
-  $route['admin/del-gallery/(:any)'] = "backend/GalleryController/del_gallery/$1";
 
-
-/* Tutor Admin */
-$route['404_override']         = '';
-$route['translate_uri_dashes'] = false;
-<<<<<<< HEAD
-
-=======
-/* CMS Admin */
 
 $route['admin/manage-menu']                  = "backend/CmsController/manage_menu";
 $route['admin/manage-menu-list/(:any)']      = "backend/CmsController/manage_menu_list/$1";
@@ -264,5 +219,21 @@ $route['admin/manage-cms']                   = "backend/CmsController/manage_cms
 $route['admin/add-cms']                      = "backend/CmsController/add_cms";
 $route['admin/edit-cms/(:any)']              = "backend/CmsController/edit_cms/$1";
 $route['admin/del-cms/(:any)']               = "backend/CmsController/del_cms/$1";
+$route['admin/generate-page-list']           = "backend/CmsController/generate_page_list";
+
+$route['admin/manage-testimonial']      = "backend/TestimonialController/manage_testimonial";
+$route['admin/add-testimonial']         = "backend/TestimonialController/add_testimonial";
+$route['admin/edit-testimonial/(:any)'] = "backend/TestimonialController/edit_testimonial/$1";
+$route['admin/del-testimonial/(:any)']  = "backend/TestimonialController/del_testimonial/$1";
+
+$route['admin/manage-gallery']      = "backend/GalleryController/manage_gallery";
+$route['admin/add-gallery']         = "backend/GalleryController/add_gallery";
+$route['admin/edit-gallery/(:any)'] = "backend/GalleryController/edit_gallery/$1";
+$route['admin/del-gallery/(:any)']  = "backend/GalleryController/del_gallery/$1";
 /* CMS Admin */
->>>>>>> e06e66d34f94956de59c2278fee8e88156aef92f
+
+/* Tutor Admin */
+$route['404_override']         = '';
+$route['translate_uri_dashes'] = false;
+
+
