@@ -1,9 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-/* FRONTEND */
 
 $route['default_controller'] = 'backend/AccountsController/index';
+
+
 
 /* FRONTEND */
 
