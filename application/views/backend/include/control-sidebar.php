@@ -14,28 +14,6 @@
         <!-- Home tab content -->
         <div class="tab-pane active" id="control-sidebar-home-tab">
             <ul class="control-sidebar-menu">
-                <!-- <li>
-                    <a href="{{ url('/admin/cms/settings/logo') }}">
-                        <i class="menu-icon fa fa-check">
-                        </i>
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">
-                                Logo
-                            </h4>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('/admin/cms/settings/header') }}">
-                        <i class="menu-icon fa fa-check">
-                        </i>
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">
-                                Header
-                            </h4>
-                        </div>
-                    </a>
-                </li> -->
                 <li>
                     <a href="<?php echo site_url('admin/manage-cms'); ?>">
                         <i class="menu-icon fa fa-check">
@@ -65,6 +43,17 @@
                         <div class="menu-info">
                             <h4 class="control-sidebar-subheading">
                                 <?php echo TESTIMONIAL ?>
+                            </h4>
+                        </div>
+                    </a>
+                </li>
+                 <li>
+                    <a href="<?php echo site_url('admin/manage-gallery'); ?>">
+                        <i class="menu-icon fa fa-check">
+                        </i>
+                        <div class="menu-info">
+                            <h4 class="control-sidebar-subheading">
+                                <?php echo GALLERY ?>
                             </h4>
                         </div>
                     </a>
