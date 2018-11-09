@@ -7,7 +7,7 @@
 			function get_gallery()
 			{
 				$this->db->select('*')
-					 ->from(GALLERY);
+					 ->from(DB_GALLERY);
 				 
 				$query = $this->db->get()->result_array();
 			    return $query;

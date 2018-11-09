@@ -4,9 +4,7 @@
 			<div class="container">
 				<div class="inner-container-md">
 					<div class="animatedParent" data-sequence="300">
-						<h1 class="title1 text-center txt-dark animated growIn" data-id="1"><span>What</span> our <span>students</span> <span>say</span></h1>
-						<p class="lead pcentered sm animated growIn" data-id="2">With dozens of testimonials from our students, we believe we’ve built a real community
-							dedicated to growth, support and positive learning. Don’t take our word for it.</p>
+						<?=$page[0]['page_content']?>
 					</div>
 					<div class="testimonial-grid">
                     <?php 

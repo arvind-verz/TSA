@@ -48,14 +48,14 @@
 <a href="#0" class="cd-top">Top</a> 
 <script src="<?php echo base_url('assets/js/animation.js'); ?>"></script> 
 <script src="<?php echo base_url('assets/js/slick.js'); ?>"></script> 
-<script src="<?php echo base_url('assets/js/sticky-kit.js'); ?>"></script> 
-<script src="<?php echo base_url('assets/js/sticky.js'); ?>"></script> 
-<script src="<?php echo base_url('assets/js/plugins.js'); ?>"></script> 
-<script src="<?php echo base_url('assets/js/mCustomScrollbar.js'); ?>"></script> 
-<script src="<?php echo base_url('assets/js/mscript.js'); ?>"></script>
-<link href="<?php echo base_url('assets/css/mCustomScrollbar.css'); ?>" rel="stylesheet" type="text/css" >
-
-
+<script src="<?php echo base_url('assets/js/plugins.js'); ?>"></script>
+<script src="<?php echo base_url('assets/js/jquery.paroller.js'); ?>"></script> 
+<script>
+    $(document)
+        .ready(function () {
+            $('[data-paroller-factor]').paroller();
+        });
+</script>
 <?php if($url=='gallery'):?>
 <script type="text/javascript" src="<?php echo base_url('assets/js/jquery.fancybox.js?v=2.1.5'); ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/jquery.fancybox.css?v=2.1.5'); ?>" media="screen" />
@@ -64,6 +64,20 @@ $(document).ready(function() {
 	$('.fancybox').fancybox();
 });
 </script>
+<?php endif;  ?>
+<script src="<?php echo base_url('assets/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'); ?>"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.datepicker').datepicker({
+			autoclose: true,
+			format: 'yyyy-mm-dd',
+		})
+	});
+</script>
+<?php if($url=='contact-us' || $url=='student-classes'):?>
+
+<script src="<?php echo base_url('assets/js/bootstrap-select.min.js'); ?>"></script>
+<link href="<?php echo base_url('assets/css/bootstrap-select.min.css'); ?>" rel="stylesheet" type="text/css">
 <?php endif;  ?>
 </body>
 </html>

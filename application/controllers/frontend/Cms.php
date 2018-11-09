@@ -62,14 +62,35 @@ class Cms extends CI_Controller {
 		$this->load->view('frontend/include/footer');
 	}
 	
+	public function student_classes() {
+		$this->accounts->is_logged_in();
+		$data = array();	
+		$url="home";	
+		$data['page'] =$page = $this->Cms_model->get_page($url);
+		$data['classes']  = $this->Cms_model->get_assign_class();
+		$data['menu_id'] = $page[0]['menu_id'];
+		$data['url'] = 'student-classes';
+		//$data['testimonials'] = $this->Cms_model->get_testimonials();
+
+		//$data['student_invoices']	= get_student_invoices();
+		$data['title'] = STUDENT . ' | Classes';
+		$data['page_title']	= STUDENT . ' | Classes';
+
+		$this->load->view('frontend/include/header', $data);
+		$this->load->view('frontend/student-classes');
+		$this->load->view('frontend/include/footer');
+	}
+	
+	
 	
 	public function inner_pages($url) {
 		//echo $url;die;
         $data_msg = array();		
 		$page = $this->Cms_model->get_page($url);
 		$page1 = $this->Cms_model->get_page_others($url); 
-		$data_msg['menu_id'] = $page[0]['menu_id'];
-		if(count($page)>0){			
+		
+		if(count($page)>0){	
+	
 			$data_msg['page'] = $page;		
 			$data_msg['menu_id'] = $page[0]['menu_id'];
 			$data_msg['page_id'] = $page[0]['id'];		
@@ -87,7 +108,17 @@ class Cms extends CI_Controller {
 		}
 		else
 		{
-			redirect(base_url("page-not-found"));	
+		
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push('404 Page', '404 Page');
+		$data_msg['menu_id'] = 0;
+		$data_msg['url'] = '404 Page';		
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
+		
+		$this->load->view('frontend/include/header', $data_msg);
+        $this->load->view('frontend/page-not-found');
+        $this->load->view('frontend/include/footer');	
+		//die('hiiiii');	
 		}
 		
 		if($url=='thank-you')
@@ -101,7 +132,7 @@ class Cms extends CI_Controller {
 		}
 		else if($url=='subjects')
 		{
-		//echo $url;die;
+		
 		$this->breadcrumbs->push('Home', 'home');
         $this->breadcrumbs->push('Subjects', 'subjects');
 		$data_msg['subjects'] = $this->Cms_model->get_subjects();
@@ -110,7 +141,7 @@ class Cms extends CI_Controller {
         $this->load->view('frontend/subjects');
         $this->load->view('frontend/include/footer');
 		}
-		else if($page[0]['template']=='About Us')
+		else if(count($page)>0 && $page[0]['template']=='About Us')
 		{
 		$this->breadcrumbs->push('Home', 'home');
         $this->breadcrumbs->push('About Us', 'about-us');
@@ -121,8 +152,11 @@ class Cms extends CI_Controller {
         $this->load->view('frontend/include/footer');
 		}
 		
-		else
+		else if(count($page)>0 && $page[0]['template']=='Full Width')
 		{
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/inner_page');
         $this->load->view('frontend/include/footer');
@@ -134,13 +168,69 @@ class Cms extends CI_Controller {
 	  
 	public function testimonial()
 	{
-		$data_msg = array();		
+		$data_msg = array();
+		$data_msg['url'] =$url="testimonial";	
+		$data_msg['page'] = $page = $this->Cms_model->get_page($url);
+		$data_msg['menu_id'] = $page[0]['menu_id'];
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();		
 		$data_msg['testimonials'] = $this->Cms_model->get_testimonials();
 		
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/testimonial');
         $this->load->view('frontend/include/footer');	
     }
+	
+	public function miss_class() {
+		$this->load->library('form_validation');
+		$configForm = array(
+               array(
+                     'field'   => 'remark',
+                     'label'   => 'Remark',
+                     'rules'   => 'required'
+                  ),
+				  array(
+                     'field'   => 'updated_at',
+                     'label'   => 'Date of Absence',
+                     'rules'   => 'required'
+                  )
+            );
+
+		$this->form_validation->set_rules($configForm); 
+		
+		if($_POST){
+			if ($this->form_validation->run() == FALSE)
+			{
+				$error_msg = validation_errors();
+				$data_msg['error_msg'] = $error_msg;
+        		$this->session->set_flashdata('error', $error_msg);
+				redirect(site_url("student-classes"));
+			}else{
+				$post_data = $_POST;
+				$status=array('0','1','0','0','0','0');
+				$data = array(
+								'remark' => $post_data['remark'],
+								'status' => json_encode($status),
+								'updated_at' => $post_data['updated_at']
+							); 
+							
+				$this->db->trans_start();
+                $this->db->where('student_id', $post_data['student_id']);
+           		$this->db->update(DB_ATTENDANCE, $data);
+				//$this->db->last_query();die;
+        		$this->db->trans_complete();
+							
+				$this->session->set_flashdata('success', 'Successfully added');
+				redirect(site_url("student-classes"));
+						
+					
+						
+			}
+		}
+	}
+	
+	
 	public function contact_us()
 	{
 		$data_msg = array();	
@@ -191,63 +281,9 @@ class Cms extends CI_Controller {
 				$data_msg['error_msg'] = $error_msg;
         		$this->view('contact',$data_msg);
 			}else{
-				$post_data = $_POST;
-
-				
-						/*	
-						$store_name = $this->Cms_model->get_site_options('site_name');
-						
-						$to = $this->Cms_model->get_site_options('to_email_address');
-						$domain = $this->Cms_model->get_site_options('domain_name');
-						
-						$auto_from = $this->Cms_model->get_site_options('from_email_address');
-						$auto_from_name = $this->Cms_model->get_site_options('from_email_name');
-						
-						
-						$contact_form = $this->Cms_model->get_template(3);
-						$auto_mail = $this->Cms_model->get_template(5);
-						
-						$body_auto = $auto_mail["body"];
-		
-						$body = $contact_form["body"];
-						
-						$body			  = str_replace("{SITE_URL}", base_url('/'), $body);
-						$body			  = str_replace("{SITE_LOGO}", '<img src="'.base_url('assets/upload/logo/original/'.$this->Cms_model->get_site_options('logo')).'" border="0"/>', $body);		
-						$body			  = str_replace("{SITE_NAME}", $store_name, $body);
-						$body			  = str_replace("{SALUTATION}", $post_data['salutation'], $body);	
-						$body			  = str_replace("{NAME}", $post_data['name'], $body);
-						$body			  = str_replace("{EMAIL}", $post_data['email'], $body);
-						$body			  = str_replace("{COMPANY}", $post_data['company'], $body);
-						$body			  = str_replace("{PHONE_NO}", $post_data['phone_no'], $body);
-						$body			  = str_replace("{ENQUIRY_TYPE}", $post_data['enquiry_type'], $body);
-						$body			  = str_replace("{MESSAGE}", $post_data['message'], $body);
-						$body			  = str_replace("{DOMAIN}", $domain, $body);
-						
-						$body_auto			  = str_replace("{SITE_URL}", base_url('/'), $body_auto);
-						$body_auto			  = str_replace("{SITE_LOGO}", '<img src="'.base_url('assets/upload/logo/original/'.$this->Cms_model->get_site_options('logo')).'" border="0"/>', $body_auto);		
-						$body_auto			  = str_replace("{SITE_NAME}", $store_name, $body_auto);
-						$body_auto			  = str_replace("{SALUTATION}", $post_data['salutation'], $body_auto);	
-						$body_auto			  = str_replace("{NAME}", $post_data['name'], $body_auto);
-						$body_auto			  = str_replace("{EMAIL}", $post_data['email'], $body_auto);
-						$body_auto			  = str_replace("{COMPANY}", $post_data['company'], $body_auto);
-						$body_auto			  = str_replace("{PHONE_NO}", $post_data['phone_no'], $body_auto);
-						$body_auto			  = str_replace("{ENQUIRY_TYPE}", $post_data['enquiry_type'], $body_auto);
-						$body_auto			  = str_replace("{MESSAGE}", $post_data['message'], $body_auto);
-						$body_auto			  = str_replace("{DOMAIN}", $domain, $body_auto);	
-						
-						
-						
-						$subject = $contact_form["subject"];
-						$subject = str_replace("{NAME}", $_POST['name'], $subject);
-						$auto_subject = $auto_mail["subject"];
-						$auto_subject = str_replace("{NAME}", $_POST['name'], $auto_subject);
-						
-						$bcc = $this->Cms_model->get_site_options('contact_email');
-						
-						$result = $this->Cms_model->batch_email($to, $_POST['email'], $_POST['name'], '', $subject, $body);
-						*/
-												
-								$data = array(
+		 $post_data = $_POST;
+		 $from_email = $to_email = "jafir.verz@gmail.com"; 
+         $data = array(
 												'name' => $post_data['fname'],
 												'email' => $post_data['email_id'],
 												'phone_no' => $post_data['phone'],
@@ -255,10 +291,67 @@ class Cms extends CI_Controller {
 												'message' => $post_data['message'],
 												'create_date' => date("Y-m-d H:m:s")
 											); 
-								$this->db->insert(DB_CONTACT , $data);
-								
-								//$this->Cms_model->batch_email($_POST['email'], $auto_from, $auto_from_name, '', $auto_subject, $body_auto);
-								redirect(base_url("thank-you"));
+				$message='<table>
+				  <tr>
+					<td>Name:</td>
+					<td>'.$post_data['fname'].'</td>
+				  </tr>
+				  <tr>
+					<td>Email Id:</td>
+					<td>'.$post_data['email_id'].'</td>
+				  </tr>
+				  <tr>
+					<td>Phone No:</td>
+					<td>'.$post_data['phone'].'</td>
+				  </tr>
+				  <tr>
+					<td>Enquiry Purpose:</td>
+					<td>'.$post_data['programme'].'</td>
+				  </tr>
+				  <tr>
+					<td>MESSAGE:</td>
+					<td>'.$post_data['message'].'</td>
+				  </tr>
+				</table>';		
+				
+											
+		$this->db->insert(DB_CONTACT , $data);
+		$insert_id = $this->db->insert_id();
+         if(isset($insert_id))
+		 {
+         //Load email library 
+         $this->load->library('email'); 
+		  $config = array (
+						  'mailtype' => 'html',
+						  'charset'  => 'utf-8',
+						  'priority' => '1'
+						   );
+		 $this->email->initialize($config); 
+         $this->email->from($from_email, $post_data['fname']); 
+         $this->email->to($to_email);
+         $this->email->subject('Contact Us form: TSA'); 
+         $this->email->message($message); 
+   
+         	 //Send mail 
+			 if($this->email->send())
+			 { 
+			 redirect(site_url("thank-you"));
+			 }
+			 else 
+			 {
+			  $this->session->set_flashdata("error","Error in sending Email."); 
+			  redirect(site_url("contact-us")); 
+			 }
+		 
+         }
+		 else
+		 {
+		 $this->session->set_flashdata("error","Error in DB."); 	
+		 redirect(site_url("contact-us")); 
+	     }
+
+		 
+		 
 						
 					
 						
@@ -273,7 +366,9 @@ class Cms extends CI_Controller {
 		}
 	}
 	public function quick_enquiry()
-	{$data_msg = array();	
+	{	
+		
+		$data_msg = array();	
 		$url="quick-enquiry";	
 		//$data_msg['testimonials'] = $this->Cms_model->get_testimonials();
 		$this->load->library('form_validation');
@@ -321,11 +416,56 @@ class Cms extends CI_Controller {
 												'message' => $post_data['message'],
 												'create_date' => date("Y-m-d H:m:s")
 											); 
-								$this->db->insert(DB_ENQUIRY , $data);
-								
-								//$this->Cms_model->batch_email($_POST['email'], $auto_from, $auto_from_name, '', $auto_subject, $body_auto);
-								redirect(site_url("thank-you"));
-						
+		 $this->db->insert(DB_ENQUIRY , $data);
+		 $insert_id = $this->db->insert_id();						
+
+		 
+											
+		
+				 if(isset($insert_id))
+				 {
+				 //Load email library 
+				 $this->load->library('email'); 
+				  
+				 $from_email = $to_email = "jafir.verz@gmail.com"; 
+		
+				 $message='<table>
+						  <tr>
+							<td>Name:</td>
+							<td>'.$post_data['fname'].'</td>
+						  </tr>
+						  <tr>
+							<td>Email Id:</td>
+							<td>'.$post_data['email_id'].'</td>
+						  </tr>
+						  <tr>
+							<td>Phone No:</td>
+							<td>'.$post_data['phone'].'</td>
+						  </tr>
+						  <tr>
+							<td>MESSAGE:</td>
+							<td>'.$post_data['message'].'</td>
+						  </tr>
+						</table>';		
+					$config = array (
+					  'mailtype' => 'html',
+					  'charset'  => 'utf-8',
+					  'priority' => '1'
+					   );
+				     $this->email->initialize($config); 
+					 $this->email->from($from_email, $post_data['fname']); 
+					 $this->email->to($to_email);
+					 $this->email->subject('Quick Enquiry: TSA'); 
+					 $this->email->message($message); 
+			   
+					 //Send mail 
+					 if($this->email->send())
+					 { 
+					 redirect(site_url("thank-you"));
+					 }
+					 
+				 
+				 }
 					
 						
 			}

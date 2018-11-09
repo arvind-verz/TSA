@@ -1191,7 +1191,6 @@ function get_invoice_result3($sid)
     $ci->db->where('order_details.student_id', $sid);
     $ci->db->where('order_details.status', 1);
     $ci->db->where('MONTH(orders.order_date) = MONTH(CURRENT_DATE())');
-    $ci->db->where('YEAR(orders.order_date) = YEAR(CURRENT_DATE())');
     $query = $ci->db->get();
     return $query->row();
 }
