@@ -20,6 +20,7 @@
 <link href="<?php echo base_url('assets/css/slick.css'); ?>" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url('assets/css/style.css'); ?>" rel="stylesheet" type="text/css">
 <link href="<?php echo base_url('assets/css/responsive.css'); ?>" rel="stylesheet" type="text/css">
+<link href="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/daterangepicker.css'); ?>" rel="stylesheet">
 </head>
 <body>
 
@@ -66,7 +67,7 @@
 			</div>
 		</div>
 	</div>
-	<?php }else if($url=='student-profile' || $url == 'student-invoices'){?>
+	<?php }else if($url=='student-profile' || $url == 'student-invoices' || $url == 'student-classes'){?>
 	<!-- Banner -->
 	<div class="banner-holder inner-banner background parallax" style="background-image:url(<?php echo base_url('assets/images/banner-about.jpg'); ?>)" data-img-width="1400" data-img-height="502" data-diff="100">
 		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.jpg'); ?>" alt="" class="responsive"></div>
@@ -83,7 +84,27 @@
 		<div class="clear"></div>
 	</div>
 	<!-- Banner END --> 
-    <?php }else if($url!='thank-you'){?>
+    <?php }
+	else if($url=='404 Page'){?>
+	<!-- Banner -->
+	<div class="banner-holder inner-banner background parallax" style="background-image:url(<?php echo base_url('assets/images/banner-about.jpg');?>);" data-img-width="1400" data-img-height="502" data-diff="100">
+		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>
+		<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.png'); ?>" alt="" class="responsive"></div>
+		<div class="bn-caption">
+			<div class="container">
+				<div class="bn-content">
+					<div>
+						<h2>404 Page</h2>
+                        <?php echo $breadcrumbs;?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<!-- Banner END --> 
+    <?php }
+	else if($url!='thank-you'){?>
 	<!-- Banner -->
 	<div class="banner-holder inner-banner background parallax" style="background-image:url(<?php if($page[0]['image_name']!='')  echo base_url('assets/upload/pagebanner/original/'.$page[0]['image_name']); else echo ''; ?>);" data-img-width="1400" data-img-height="502" data-diff="100">
 		<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>

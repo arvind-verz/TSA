@@ -4,7 +4,7 @@
     {
 
 			
-			public function get_page($url_name) {		
+			function get_page($url_name) {		
 				
 				$this->db->select('cp.*, m.menu_title, m.id as menu_id')
 					 ->from(TBL_CMS . ' as `cp`')
@@ -16,23 +16,7 @@
 			return $query;	
 						
 			} 
-			
-			public function get_assign_class() {		
-				$student_id = $this->session->userdata('student_credentials');
-				//print_r($student_id['id']);
-				$this->db->select('c.*,t.tutor_name,s.student_id')
-						 ->from(DB_STUDENT . ' as `s`')
-						 ->join(DB_CLASSES . ' as `c`' , 's.class_id = c.class_id')
-						 ->join(DB_TUTOR . ' as `t`' , 'c.tutor_id = t.id')
-						 ->where('s.id', $student_id['id']);
-				 
-				$query = $this->db->get()->result_array();
-			//echo $this->db->last_query();	
-			return $query;	
-						
-			} 
-			
-			public function get_page_others($url_name) {		
+			function get_page_others($url_name) {		
 				
 				$this->db->select('cp.*')
 					 ->from(TBL_CMS . ' as `cp`')
@@ -44,35 +28,7 @@
 						
 			}
 			
-			
-			public function get_subjects_name($ids) {		
-				
-				$this->db->select('s.id,s.subject_name')
-					 ->from(DB_SUBJECT . ' as `s`')
-					 ->where('s.is_archive',0)
-					 ->where_in('s.id', $ids);					 
-				$query = $this->db->get()->result_array();
-				//echo $this->db->last_query();
-			return $query;	
-						
-			}
-			
-			public function get_book($id) {		
-				
-				$this->db->select('m.book_name')
-					 ->from(DB_MATERIAL . ' as `m`')
-					 ->where('m.is_archive',0)
-					 ->like('m.subject', $id);					 
-				$query = $this->db->get()->result_array();
-				//echo $this->db->last_query();
-			if(count($query))
-			return $query[0];
-			else 
-			return false;	
-						
-			}
-			
-			public function get_testimonials()
+			function get_testimonials()
 			{
 				$this->db->select('*')
 					 ->from(DB_TESTIMONIAL);					 
@@ -81,28 +37,16 @@
 			    return $query;
 			}
 			
-			public function get_attendance($student_id)
+			function get_subjects()
 			{
 				$this->db->select('*')
-					    ->from(DB_ATTENDANCE)
-					    ->where('student_id', $student_id);					 
+					 ->from(DB_SUBJECT);					 
 				$query = $this->db->get()->result_array();
 				
 			    return $query;
 			}
 			
-			public function get_subjects()
-			{
-				$this->db->select('*')
-					 ->from(DB_SUBJECT . ' as `s`')
-					 ->join(TBL_CMS . ' as `c`' , 's.subject_id = c.subject_id')
-					 ;					 
-				$query = $this->db->get()->result_array();
-				
-			    return $query;
-			}
-			
-			public function get_cms_subjects($subject_id)
+			function get_cms_subjects($subject_id)
 			{
 				$this->db->select('*')
 					 ->from(TBL_CMS)
@@ -112,7 +56,7 @@
 			    return $query;
 			}
 			
-			public function get_gallery()
+			function get_gallery()
 			{
 				$this->db->select('*')
 					 ->from(DB_GALLERY);
@@ -122,7 +66,7 @@
 			    return $query;
 			}
 			
-			public function get_members_cms()
+			function get_members_cms()
 			{
 				$this->db->select('cp.*')
 					 ->from(TBL_JOIN_US_MEMBER . ' as `cp`')
@@ -132,7 +76,7 @@
 				return $query;
 			}
 			
-			public function get_faq() {		
+			function get_faq() {		
 				
 				$this->db->select('*')
 					 ->from(TBL_FAQ)
@@ -145,7 +89,31 @@
 			}
 			
 			
-			
+			function get_page_parent($menu_id)
+		    {
+			    $this->db->select('tm.*')
+					 ->from(TBL_MENU . ' as `tm`')
+					 ->where('tm.id', $menu_id);
+				return $this->db->get()->row_array();
+		    }
+		    
+		    function get_membership_type()
+
+			{
+
+				$this->db->select('cp.*')
+
+					 ->from(TBL_MEMBERSHIP_TYPE . ' as `cp`')
+
+					 ->where('cp.id', 1);
+
+					 //->where('cp.status', 'Y');					 
+
+				$query = $this->db->get()->row_array();
+
+				return $query;
+
+			}
 			
 	public function batch_email($to, $from, $formname, $recipients, $subject, $message) 
 	{
@@ -199,7 +167,7 @@
 	
 	}
 	
-	public function get_menu_pid_Mposition($pid,$Mposition){
+	function get_menu_pid_Mposition($pid,$Mposition){
         $this->db->select('cms.*, m.menu_title, cms.url_name, m.id, m.parent_id, m.external_url, m.link_type, m.link_target')
                 ->from(TBL_MENU. ' as m')
 				->join(TBL_CMS. ' as cms', 'cms.id = m.page_id', 'LEFT')
@@ -210,7 +178,7 @@
         $query = $this->db->get()->result_array();
         return $query;
     }
-	public function get_selected_menu_id($current_menu_id, $menu_id, $Mposition){
+	function get_selected_menu_id($current_menu_id, $menu_id, $Mposition){
         $this->db->select('cms.*, m.menu_title, cms.url_name, m.id, m.parent_id')
                 ->from(TBL_MENU. ' as m')
 				->join(TBL_CMS. ' as cms', 'cms.id = m.page_id', 'LEFT')
@@ -228,7 +196,7 @@
 			return $this->get_parent_selected_menu_id($query['parent_id'], $menu_id, $Mposition);	
 		}
     }
-	public function get_parent_selected_menu_id($parent_id, $menu_id, $Mposition){
+	function get_parent_selected_menu_id($parent_id, $menu_id, $Mposition){
 
         $this->db->select('cms.*, m.menu_title, cms.url_name, m.id, m.parent_id')
                 ->from(TBL_MENU. ' as m')

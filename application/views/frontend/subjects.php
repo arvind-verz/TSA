@@ -39,7 +39,7 @@
 
 		
 
-		<div class="bg"><img src="images/bg1.png" alt="" class="responsive"></div>
+		<div class="bg"><img src="<?php echo base_url('assets/images/bg1.png'); ?>" alt="" class="responsive"></div>
 
 		<div class="fullcontainer bg-color1">
 
@@ -54,8 +54,13 @@
 							<div class="subject-nav-holder pt25" id="menu-center" data-sticky_column>
 
 								<ul class="subject-nav">
-                                <?php foreach($subjects as $subject):?>
-									<li><a href="#<?php echo $subject['subject_name'];?>" id="<?php echo $subject['subject_name'];?>_active" class="all_classes"><?php echo $subject['subject_name'];?></a></li>
+                                <?php 
+								$i=0;
+								foreach($subjects as $subject):
+								$i++;
+								
+								?>
+									<li><a href="#<?php echo $subject['subject_id'];?>" id="<?php echo $subject['subject_id'];?>_active" class="all_classes <?php echo ($i==1) ? 'active' : '';?>"><?php echo $subject['subject_name'];?></a></li>
                                 <?php endforeach;?>
 								</ul>
 
@@ -66,8 +71,10 @@
 						<div class="col-sm-9 col-md-10">
                         <?php foreach($subjects as $subject):
 						$cms_sub=$this->Cms_model->get_cms_subjects($subject['subject_id']);
+						if(count($cms_sub)>0)
+						{
 						?>
-							<section class="sub-section" id="<?php echo $subject['subject_name'];?>">
+							<section class="sub-section" id="<?php echo $subject['subject_id'];?>">
 
 								<div class="title1 txt-dark"><span><?php echo $subject['subject_name'];?></span></div>
 
@@ -75,7 +82,10 @@
 
 
 							</section>
-                       <?php endforeach;?>
+                       <?php }else{echo 'Comtent not found';}
+					   
+					   
+					    endforeach;?>
 							
 						</div>
 
