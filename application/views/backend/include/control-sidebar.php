@@ -14,7 +14,7 @@
         <!-- Home tab content -->
         <div class="tab-pane active" id="control-sidebar-home-tab">
             <ul class="control-sidebar-menu">
-                <li>
+                <!-- <li>
                     <a href="{{ url('/admin/cms/settings/logo') }}">
                         <i class="menu-icon fa fa-check">
                         </i>
@@ -35,7 +35,7 @@
                             </h4>
                         </div>
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <a href="<?php echo site_url('admin/manage-cms'); ?>">
                         <i class="menu-icon fa fa-check">

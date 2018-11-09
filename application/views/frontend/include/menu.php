@@ -5,23 +5,23 @@
 	$selectMenu1 = $this->Cms_model->get_selected_menu_id($menu_id, $val['id'],'MainMenu');?>
     
     <?php  ?>
-    <li <?php if($selectMenu1=='Y'){echo 'class="active"';}elseif($url==$val['url_name']){echo 'class="active"';}?>>
+    <li <?php if($selectMenu1=='Y'){echo 'class="selected"';}elseif($url==$val['url_name']){echo 'class="selected"';}?>>
       <?php if($val['link_type']=='external'){?>
       <a href="<?php if($val['external_url']=='#'){ echo 'javascript:void(0);';}else{ echo $val['external_url'];}?>" <?php if($val['link_target']=='new_tab'){echo 'target="_blank"';}?>><?php echo $val['menu_title'];?></a>
       <?php }elseif($val['link_type']=='internal'){?>
       <a href="<?php echo site_url($val['url_name']);?>" <?php if($val['link_target']=='new_tab'){echo 'target="_blank"';}?> 
-	  <?php if($selectMenu1=='Y'){echo 'class="active"';}elseif($url==$val['url_name']){echo 'class="active"';}?>><?php echo $val['menu_title'];?></a>
+	  <?php if($selectMenu1=='Y'){echo 'class="selected"';}elseif($url==$val['url_name']){echo 'class="selected"';}?>><?php echo $val['menu_title'];?></a>
       <?php }?>
       <?php if(count($MenuSub)>0){?>
       <ul>
         <?php foreach ($MenuSub as $keym2 => $valm2){
 			$selectMenu2 = $this->Cms_model->get_selected_menu_id($menu_id, $valm2['id'],'MainMenu');?>
-        <li <?php if($selectMenu2=='Y'){echo 'class="active"';}elseif($url==$valm2['url_name']){echo 'class="active"';}?>>
+        <li <?php if($selectMenu2=='Y'){echo 'class="selected"';}elseif($url==$valm2['url_name']){echo 'class="selected"';}?>>
           <?php if($valm2['link_type']=='external'){?>
           <a href="<?php echo $valm2['external_url'];?>" <?php if($valm2['link_target']=='new_tab'){echo 'target="_blank"';}?>><?php echo $valm2['menu_title'];?></a>
           <?php }elseif($valm2['link_type']=='internal'){?>
           <a href="<?php echo site_url($valm2['url_name']);?>" <?php if($valm2['link_target']=='new_tab'){echo 'target="_blank"';}?>
-          <?php if($selectMenu2=='Y'){echo 'class="active"';}elseif($url==$valm2['url_name']){echo 'class="active"';}?>><?php echo $valm2['menu_title'];?></a>
+          <?php if($selectMenu2=='Y'){echo 'class="selected"';}elseif($url==$valm2['url_name']){echo 'class="selected"';}?>><?php echo $valm2['menu_title'];?></a>
           <?php }?>
           <?php $Menu3 = $this->Cms_model->get_menu_pid_Mposition($valm2['id'],'MainMenu');
 				if(count($Menu3)>0){?>

@@ -1,11 +1,36 @@
 	<!-- Content Containers -->
 	<div class="main-container"> 
+		<?php /*?><div class="fullcontainer full-mx">
+			<div class="home-pod-holder animatedParent" data-sequence="300">
+				<?=$page[0]['page_content']?>
+				<div class="clear"></div>
+			</div>
+		</div><?php */?>
+        
+        <!-- Section -->
+		<div class="fullcontainer" id="HomeAbout">
+			<div class="container">
+				<div class="inner-container-lg pb40">
+					<div class="animatedParent" data-sequence="300">
+						<div class="title-holder text-center">
+							<h1 class="title2  txt-yellow animated growIn" data-id="1">About TSA</h1>
+							<h2 class="title1 txt-dark pcentered sm animated growIn" data-id="2"><span>Here</span> at TSA, <span>we</span> recognize the needs of <span>each</span> and every <span>student.</span></h2>
+						</div>
+						<p class="lead pcentered sm animated growIn" data-id="3">The study of science helps us understand the world around us, but at times, the simplest of questions may have the most complex answers.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Section END --> 
+		<!-- Section -->
 		<div class="fullcontainer full-mx">
 			<div class="home-pod-holder animatedParent" data-sequence="300">
 				<?=$page[0]['page_content']?>
 				<div class="clear"></div>
 			</div>
 		</div>
+		<!-- Section END -->
+        
         <?php //print_r($gallery);?>
 		<!-- Section -->
 		<div class="fullcontainer">
@@ -15,8 +40,13 @@
 						<div class="title2 text-center txt-yellow animated growIn mb80" data-id="1">Latest Gallery</div>
 					</div>
 					<div class="row animatedParent" data-sequence="300">
-                    <?php foreach($gallery as $gal):?>
-						<div class="col-md-6 animated fadeInLeft" data-id="1">
+                    <?php 
+					$i=0;
+					foreach($gallery as $gal):
+					$i++;
+					?>
+                     <div class="row animatedParent" data-sequence="300">
+						<div class="<?php if($i%2!=0) echo 'col-md-6 animated fadeInLeft'; else echo 'col-md-6 pull-right md animated fadeInRight';?>" data-id="1">
 							<div class="row">
 								<div class="equalheight1 height960">
 									<div class="grid-tb">
@@ -27,27 +57,13 @@
 								</div>
 							</div>
 						</div>
-                    <?php endforeach;?>
-					</div>
-					<div class="row animatedParent" data-sequence="300">
-						<div class="col-md-6 pull-right md animated fadeInRight" data-id="1">
-							<div class="row">
-								<div class="equalheight1 height960">
-									<div class="grid-tb">
-										<div class="grid-tc">
-											<div class="bdr-img img2"> <img src="<?php echo base_url('assets/images/home2.jpg'); ?>" alt="" class="responsive"> </div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 pull-left md animated fadeInLeft" data-id="1">
+						<div class="col-md-6 animated fadeInRight" data-id="1">
 							<div class="row">
 								<div class="equalheight1 height960">
 									<div class="grid-tb">
 										<div class="grid-tc">
 											<div class="cont text-center">
-												<div class="title1 txt-dark"><span>We're</span> almost <span>ready</span> to welcome you at our brand new <span>premises!</span></div>
+												<div class="title1 txt-dark"><?php echo $gal['content']; ?></div>
 											</div>
 										</div>
 									</div>
@@ -55,6 +71,9 @@
 							</div>
 						</div>
 					</div>
+                    <?php endforeach;?>
+					</div>
+					
 					<div class="text-center pt80"><a href="#" class="button">View All</a></div>
 				</div>
 			</div>
