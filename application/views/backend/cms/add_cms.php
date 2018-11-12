@@ -116,9 +116,10 @@ $(function() {
 	$('#template').change(function() {
 		var result=$(this).val();
 		if(result=='Subject')
-		{
-		$('#subject').css('display','block');
-		}
+			$('#subject').css('display','block');
+		else
+			$('#subject').css('display','none');
+		
 	});
 });
 </script>
