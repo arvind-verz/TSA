@@ -15,6 +15,18 @@ function get_currency($currency_code = false)
     }
 }
 
+function get_student_status($class_id, $student_id) {
+    $ci = &get_instance();
+
+    if($class_id && $student_id) {
+        $query = $ci->db->get_where(DB_STUDENT, ['class_id' =>  $class_id, 'student_id' =>  $student_id]);
+        $result = $query->row();
+        if($result) {
+            return $result->status;
+        }
+    }
+}
+
 function get_student_details($student_id = false)
 {
     $ci = &get_instance();
@@ -155,7 +167,7 @@ function get_student_by_class_code($class_code = false)
     $ci->db->from(DB_CLASSES);
     $ci->db->join(DB_STUDENT, DB_CLASSES . '.class_id = ' . DB_STUDENT . '.class_id');
     $ci->db->where(DB_CLASSES . '.class_code', $class_code);
-    $ci->db->where([DB_STUDENT . '.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
+    $ci->db->where([DB_STUDENT . '.status' => 4, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
     $query  = $ci->db->get();
     $result = $query->result();
     if ($result) {
@@ -239,7 +251,7 @@ function get_students_enrolled($class_code = false)
     $ci->db->select('*, count(student.id) as total_students_enrolled');
     $ci->db->from(DB_STUDENT);
     $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.class_id');
-    $ci->db->where([DB_STUDENT . '.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
+    $ci->db->where([DB_STUDENT . '.status' => 4, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
     $query  = $ci->db->get();
     $result = $query->row();
     return $result->total_students_enrolled;
@@ -332,9 +344,9 @@ function get_attendance_sheet($class_code = false)
     $ci = &get_instance();
 
     $ci->db->select('*');
-    $ci->db->from('student');
-    $ci->db->join('class', 'student.class_id = class.class_id');
-    $ci->db->where(['class.class_code' => $class_code, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 3]);
+    $ci->db->from(DB_STUDENT);
+    $ci->db->join(DB_CLASSES, 'student.class_id = class.class_id');
+    $ci->db->where(['class.class_code' => $class_code, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 4]);
     $query = $ci->db->get();
     $query = $query->result();
     ?>
@@ -366,6 +378,53 @@ foreach ($query as $result) {
         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="X">
         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="G">
         <input type="hidden" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="H">
+    </td>
+    <td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
+</tr>
+<?php
+$i++;}
+}
+
+function get_attendance_edit_sheet($class_code, $attendance_date)
+{
+    $i  = 1;
+    $ci = &get_instance();
+
+    $ci->db->select('*');
+    $ci->db->from(DB_STUDENT);
+    $ci->db->join(DB_CLASSES, 'student.class_id = class.class_id');
+    $ci->db->join(DB_ATTENDANCE, 'student.student_id = attendance.student_id');
+    $ci->db->where(['class.class_code' => $class_code, 'DATE(attendance.attendance_date)' => $attendance_date, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 4]);
+    $query = $ci->db->get();
+    $query = $query->result();
+
+    ?>
+<tr>
+    <td></td>
+    <td></td>
+    <td>
+        <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="L" readonly>
+        <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="M" readonly>
+        <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E" readonly>
+        <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X" readonly>
+        <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G" readonly>
+    </td>
+    <td></td>
+</tr>
+<?php
+foreach ($query as $result) {
+        ?>
+<tr>
+    <td><?php echo $result->student_id; ?></td>
+    <td><?php echo $result->name; ?></td>
+    <td>
+        <input type="hidden" name="student_id[]" class="form-control" value="<?php echo $result->student_id; ?>">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='L') ? 1 : 0; ?>" placeholder="L">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='M') ? 1 : 0; ?>" placeholder="M">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='E') ? 1 : 0; ?>" placeholder="E">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='X') ? 1 : 0; ?>" placeholder="X">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='G') ? 1 : 0; ?>" placeholder="G">
+        <input type="hidden" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='H') ? 1 : 0; ?>" placeholder="H">
     </td>
     <td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
 </tr>
@@ -517,7 +576,7 @@ function get_order_student_content($id = false)
     $ci->db->select('*, student.id as stud_id');
     $ci->db->from('student');
     $ci->db->join('order_details', 'student.id = order_details.student_id');
-    $ci->db->where(['order_details.order_id' => $id, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 3]);
+    $ci->db->where(['order_details.order_id' => $id, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 4]);
     $query  = $ci->db->get();
     $result = $query->result();
     if ($result) {

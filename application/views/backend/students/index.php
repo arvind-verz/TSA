@@ -51,7 +51,7 @@ $(document).ready(function(){
                             </i> <?php echo ARCHIVED . ' ' . STUDENT ?>
                         </a>
                         <a class="pull-right add_class">
-                            <i aria-hidden="true" class="fa fa-archive">
+                            <i aria-hidden="true" class="fa fa-plus-circle">
                             </i> Add <?php echo CLASSES ?>
                         </a>            
                     </div>
@@ -177,7 +177,7 @@ $(document).ready(function(){
 								$clss=$this->students->get_classes($student->student_id);
                                 ?>
                                 <tr <?php if(isset($enr->collected) && $enr->collected==0 && $student->status==0) echo 'bgcolor="#F00"';?>>
-                                <td><?php if(is_null($student->status) || $student->status!=0){?><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/><?php }?></td>
+                                <td><input type="checkbox" class="checkbox" name="case[]" value="<?php echo $student->student_id;?>"/></td>
                                 <td><?php echo $student->name;?></td>
                                 <td><?php echo $student->email;?></td>
                                 <td><?php echo $student->username;?></td>
@@ -237,14 +237,17 @@ $(document).ready(function(){
        <?php echo form_open('admin/students/enroll'); ?>
         <div class="modal-body">
           <div class="form-group">
-                            <label for="">Select Status</label>
-                            <select name="student_status" id="student_status" class="form-control select2">
-                                <option value="-1">-- Select One --</option>
-                                <option value="0">Enrolled</option>
-                                <option value="1">Reserved</option>
-                                <option value="2">Waitlist</option>
-                                <option value="3">Final Settlement Sent</option>
-                               
+                            <label for="">Class Code: </label>
+                            <select name="class_code" class="form-control select2">
+                                <option value="0">-- Select One --</option>
+                                <?php
+                                if (count($classes)) {
+                                foreach ($classes as $class) {
+                                ?>
+                                <option value="<?php echo $class->class_id; ?>"><?php echo $class->class_code; ?></option>
+                                <?php
+                                }}
+                                ?>
                             </select>
                         </div>
           <div id="dis_content"></div>  
@@ -264,6 +267,8 @@ $(document).ready(function(){
 	$(window).load(function() {
 	$("#viewDetail").modal();
 	});
+
+
 </script>
   <div class="modal fade" id="viewDetail" role="dialog">
     <div class="modal-dialog">
@@ -393,7 +398,7 @@ $(document).ready(function(){
  
 <!-- Modal -->
 <script type="text/javascript">
-var option="";
+/*var option="";
 option+='<div class="form-group">';
 option+='<label for="">Select Class Code</label>';
 option+='<select name="class_code" class="form-control select2">';
@@ -402,22 +407,22 @@ option+='<?php if (count($classes)) {
 foreach ($classes as $class) {
 echo '<option value="'.$class->class_id.'">'.$class->class_id.'</option>';
 }} ?>';                              
-option+='</select></div>';
+option+='</select></div>';*/
 
 $(document).ready(function() {
-	$("#student_status").on('change', function(){
+	$("body").on('change', "#student_status", function(){
 		var reservation ="";var enrollment ="";
 		
-		reservation =option+'<div class="form-group"><label for="">Select Reservation Date</label><input type="text" name="reservation_date" class="form-control datepicker" value=""></div>';
-		enrollment = '<div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="" required="required"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="" required="required"></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected" value="0" type="radio" />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input required="required" type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Select Reservation Date</label><input required="required" type="text" name="reservation_date" class="form-control datepicker" value=""></div><div class="form-group"><label for="">Credit Value</label><input required="required" type="text" name="credit_value" class="form-control" value=""></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="ex_charges" required="required" class="form-control" value=""></div><div class="form-group"><label for="">Remarks</label><input  required="required" type="text" name="remarks" class="form-control" value=""></div>';
+		reservation ='<div class="form-group"><label for="">Select Reservation Date</label><input type="text" name="reservation_date" class="form-control datepicker" value="" autocomplete="off"></div>';
+		enrollment = '<div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="" required="required"></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected" value="0" type="radio" />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input required="required" type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Select Reservation Date</label><input required="required" type="text" name="reservation_date" class="form-control datepicker" value=""  autocomplete="off"></div><div class="form-group"><label for="">Credit Value</label><input required="required" type="text" name="credit_value" class="form-control" value=""></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="ex_charges" required="required" class="form-control" value=""></div><div class="form-group"><label for="">Remarks</label><input  required="required" type="text" name="remarks" class="form-control" value=""></div>';
 				
 		
-		if($(this).val()==0)
+		if($(this).val()==1)
 		{
 			$("#dis_content").html(enrollment);
 			
 		}
-		else if($(this).val()==1)
+		else if($(this).val()==2)
 		{
 			$("#dis_content").html(reservation);
 			
@@ -473,4 +478,52 @@ $(document).ready(function() {
 		}
     });
 });
+
+$(document).ready(function() {
+  $("select[name='class_code']").on("change", function() {
+    $("#myModal").find("button[type='submit']").show();
+    $(this).parents("div.form-group").next().html('');
+    var case_length = $("input[name='case[]']:checked").length;
+    var status_html = '<option value="2">Reserved</option> <option value="3">Waitlist</option>';
+    if(case_length==1) {
+      var class_id = $(this).val();
+      var student_id = $("input[name='case[]']:checked").val();
+      $.ajax({
+          type: 'GET',
+          url: '<?php echo site_url('admin/students/get_student_status'); ?>',
+          data: 'class_id=' + class_id + '&student_id=' + student_id,
+          async: false,
+          processData: false,
+          contentType: false,
+          success: function(data) {
+              if(data.trim()==4) {
+                status_html = '';
+                $("select[name='class_code']").parents("div.form-group").after('<p class="text-danger">Class has been assigned to student.</p>');
+                $("#myModal").find("button[type='submit']").hide();
+              }
+              else if(data.trim()==1) {
+                status_html = '<option value="4">Final Settlement Sent</option>';
+                student_status_modify(status_html);
+              }
+              else if(data.trim()==2) {
+                status_html = '<option value="1">Enrolled</option> ';
+                student_status_modify(status_html);
+              }
+              else {
+                student_status_modify(status_html);
+              }
+          }
+      })
+    }
+    
+  });
+});
+
+function student_status_modify(status_html) {
+  var student_status = '<div class="form-group student_status"> <label for="">Select Status</label> <select name="student_status" id="student_status" class="form-control select2"> <option value="0">-- Select One --</option> '+ status_html +' </select> </div>';
+    
+    $("div.form-group.student_status").remove();
+    $("select[name='class_code']").parents("div.form-group").after(student_status);
+    $(".select2").select2();
+}
 </script>
