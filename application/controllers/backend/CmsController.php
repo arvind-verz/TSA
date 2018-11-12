@@ -441,7 +441,7 @@ $data_msg['subjects'] = $this->Cms_model->get_subjects();
 					  $image_name_name = $details[0]['image_name'];
 				  }
 				
-				  
+
 				     
              $data = array(
 					'url_name' => preg_replace("/^'|[^A-Za-z0-9\'-]|'$/", '',$post_data['url_name']),
