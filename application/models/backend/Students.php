@@ -158,31 +158,33 @@ class Students extends CI_Model
 	
 	 public function store_2()
     {
-        //die(print_r($_POST));
+        die(print_r($_POST));
 		$student_code=explode(',',$_POST['student_code']);
 		$msg='';
-		if($_POST['student_status']==0)
+		if($_POST['student_status']==1)
 		{
 		foreach($student_code as $student)
 		{
+				$query = $this->db->get_where('student_enrollment', ['student_id'	=>	$student]);
+				if($query->num_rows()<1) {
+					$data = array(
+						'student_id'     => $student,
+						'enrollment_date'     => !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '',
+						'collected'      => !empty($_POST['depo_collected']) ? $_POST['depo_collected'] : '',
+						'deposit'   => !empty($_POST['deposit']) ? $_POST['deposit'] : '',
+						'remarks_deposit'   => !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '',
+						'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
+						'ex_charges'   => !empty($_POST['ex_charges']) ? $_POST['ex_charges'] : '',
+						'credit_value'   => !empty($_POST['credit_value']) ? $_POST['credit_value'] : '',
+						'remarks'    => !empty($_POST['remarks']) ? $_POST['remarks'] : '',
+						'created_at'   => $this->date,
+						'updated_at'   => $this->date
+					);
 			
-				$data = array(
-					'student_id'     => $student,
-					'enrollment_date'     => !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '',
-					'collected'      => !empty($_POST['depo_collected']) ? $_POST['depo_collected'] : '',
-					'deposit'   => !empty($_POST['deposit']) ? $_POST['deposit'] : '',
-					'remarks_deposit'   => !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '',
-					'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
-					'ex_charges'   => !empty($_POST['ex_charges']) ? $_POST['ex_charges'] : '',
-					'credit_value'   => !empty($_POST['credit_value']) ? $_POST['credit_value'] : '',
-					'remarks'    => !empty($_POST['remarks']) ? $_POST['remarks'] : '',
-					'created_at'   => $this->date,
-					'updated_at'   => $this->date
-				);
-		
-				$this->db->trans_start();
-				$this->db->insert('student_enrollment', $data);
-				$this->db->trans_complete();
+					$this->db->trans_start();
+					$this->db->insert('student_enrollment', $data);
+					$this->db->trans_complete();
+				}
 			
 			
 			$data2 = array(
@@ -198,7 +200,7 @@ class Students extends CI_Model
 			//echo $this->db->last_query();die;
 		}
 		}
-		else if($_POST['student_status']==1)
+		else if($_POST['student_status']==2)
 		{
 			foreach($student_code as $student)
 			{
@@ -233,14 +235,17 @@ class Students extends CI_Model
 		{
 			foreach($student_code as $student)
 			{
-				$data2 = array(
-				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
-				);
-				
-				$this->db->trans_start();
-				$this->db->where('student_id', $student);
-				$this->db->update('student', $data2);
-				$this->db->trans_complete();
+				$query = $this->db->get_where(DB_STUDENT, ['status'	=>	4, 'student_id'	=>	$student]);
+				if($query->num_rows()<1) {
+					$data2 = array(
+					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
+					);
+					
+					$this->db->trans_start();
+					$this->db->where('student_id', $student);
+					$this->db->update('student', $data2);
+					$this->db->trans_complete();
+				}
 			}
 		$msg='Updated successfully';
 		}

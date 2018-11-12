@@ -18,6 +18,10 @@
                             <i aria-hidden="true" class="fa fa-plus-circle">
                             </i> <?php echo CREATE . ' ' . ATTENDANCE ?>
                         </a>
+                        <a class="btn btn-warning" href="<?php echo site_url('admin/attendance/edit') ?>">
+                            <i aria-hidden="true" class="fa fa-pencil-square-o">
+                            </i> <?php echo EDIT . ' ' . ATTENDANCE ?>
+                        </a>
                     </div>
                     <div class="box-body">
                         <div class="col-lg-12">
