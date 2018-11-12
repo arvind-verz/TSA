@@ -102,6 +102,8 @@ $route['admin/students/edit/(:any)']               = 'backend/StudentController/
 $route['admin/students/update/(:any)']             = 'backend/StudentController/update/$1';
 $route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
 $route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
+$route['admin/students/get_student_status'] = 'backend/StudentController/get_student_status';
+
 
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
 
@@ -148,10 +150,13 @@ $route['admin/billing/update/(:any)'] = 'backend/BillingController/update/$1';
 $route['admin/attendance']                         = 'backend/AttendanceController/index';
 $route['admin/attendance/create']                  = 'backend/AttendanceController/create';
 $route['admin/attendance/store']                   = 'backend/AttendanceController/store';
+$route['admin/attendance/edit']                  = 'backend/AttendanceController/edit';
+$route['admin/attendance/update']                  = 'backend/AttendanceController/update';
 $route['admin/attendance/get_attendance_sheet']    = 'backend/AttendanceController/get_attendance_sheet';
 $route['admin/attendance/get_attendance_summary']  = 'backend/AttendanceController/get_attendance_summary';
 $route['admin/attendance/transfer_student']        = 'backend/AttendanceController/transfer_student';
 $route['admin/attendance/get_class_code_transfer'] = 'backend/AttendanceController/get_class_code_transfer';
+$route['admin/attendance/get_attendance_edit_sheet'] = 'backend/AttendanceController/get_attendance_edit_sheet';
 
 /* ORDER */
 $route['admin/order']                     = 'backend/OrderController/index';

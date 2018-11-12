@@ -140,4 +140,30 @@ class Attendance extends CI_Model
             return 'admin/attendance';
         }
     }
+
+    public function update()
+    {
+        for ($i = 0; $i < count($_POST['student_id']); $i++) {
+            $data = array(
+                'class_code'      => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
+                'student_id'      => !empty($_POST['student_id'][$i]) ? $_POST['student_id'][$i] : null,
+                'status'          => !empty($_POST['attendance_value' . ($i+1)]) ? json_encode($_POST['attendance_value' . ($i+1)]) : null,
+                'remark'          => !empty($_POST['attendance_remark'][$i]) ? $_POST['attendance_remark'][$i] : null,
+                'updated_at'      => $this->date,
+            );
+            $this->db->trans_start();
+            $this->db->where(['class_code'  =>  $_POST['class_code'], 'student_id'  =>  $_POST['student_id'][$i], 'attendance_date' =>  $_POST['attendance_date']]);
+            $this->db->update(DB_ATTENDANCE, $data);
+            $this->db->trans_complete();
+        }
+        
+
+        if ($this->db->trans_status() === false) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return redirect('admin/attendance/create');
+        } else {
+            $this->session->set_flashdata('success', ATTENDANCE . ' ' . MSG_UPDATED);
+            return redirect('admin/attendance');
+        }
+    }
 }

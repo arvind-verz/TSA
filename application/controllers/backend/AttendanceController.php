@@ -81,14 +81,35 @@ class AttendanceController extends CI_Controller
         print_r($result);
     }
 
-    public function edit($id)
+    public function edit()
     {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'edits');
+        $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
+        $this->breadcrumbs->push(EDIT, 'admin/attendance/edit');
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title']       = $this->title;
+        $data['page_title']  = ATTENDANCE . " <small> " . EDIT . " </small>";
+        $data['classes']     = get_classes();
 
+        $this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/attendance/edit');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
     }
 
-    public function update($id)
+    public function get_attendance_edit_sheet() {
+        $class_code = $_GET['class_code'];
+        $attendance_date = $_GET['attendance_date'];
+        print_r(get_attendance_edit_sheet($class_code, $attendance_date));
+    }
+
+    public function update()
     {
-        
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'edits');
+        $result = $this->attendance->update($_POST);
+        print_r($result);
     }
 
     public function delete($id)
