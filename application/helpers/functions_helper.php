@@ -827,7 +827,7 @@ function send_first_month_invoice($student_id)
             if ($query) {
                 $ci->load->library('M_pdf');
                 $ci->m_pdf->download_my_mPDF($invoice_file);
-                $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+                $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
                 if ($mail == true) {
                     //die(print_r($query));
                 }
@@ -909,7 +909,7 @@ function send_rest_month_invoice($student_id)
             if ($query) {
                 $ci->load->library('M_pdf');
                 $ci->m_pdf->download_my_mPDF($invoice_file);
-                $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+                $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
                 if ($mail == true) {
                     //die(print_r($query));
                 }
@@ -1006,7 +1006,7 @@ function send_archived_invoice($student_id)
     if ($query) {
         $ci->load->library('M_pdf');
         $ci->m_pdf->download_my_mPDF($invoice_file);
-        $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+        $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
         if ($mail == true) {
             //die(print_r($query));
             return true;
@@ -1099,7 +1099,7 @@ function send_final_settlement_invoice($student_id)
     if ($query) {
         $ci->load->library('M_pdf');
         $ci->m_pdf->download_my_mPDF($invoice_file);
-        $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+        $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
         if ($mail == true) {
             //die(print_r($query));
             return true;
@@ -1192,7 +1192,7 @@ function send_class_transfer_invoice($student_id)
     if ($query) {
         $ci->load->library('M_pdf');
         $ci->m_pdf->download_my_mPDF($invoice_file);
-        $mail = invoice_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+        $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
         if ($mail == true) {
             //die(print_r($query));
             return true;
@@ -1256,7 +1256,7 @@ function get_invoice_result3($sid)
 
 /* END RESULT FOR INVOICE */
 
-function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $type, $subject, $message)
+function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoice_amount = false, $type = false, $subject, $message)
 {
     $ci = &get_instance();
     $ci->load->library('email');
@@ -1280,12 +1280,12 @@ function invoice_mail($emailto, $invoice_id, $invoice_date, $invoice_amount, $ty
 
     $ci->email->send();
     echo $ci->email->print_debugger();*/
-    /*$to = "arvind.verz@gmail.com";
-    $subject = "My subject";
-    $txt = "Hello world!";
-    $headers = "From: purohitarvind77@gmail.com";
+    $to = $emailto;
+    $subject = $subject;
+    $txt = $message;
+    $headers = "From: info@verzdesign.com";
 
-    mail($to,$subject,$txt,$headers);*/
+    mail($to,$subject,$txt,$headers);
     return true;
 }
 

@@ -1,34 +1,31 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-
 $route['default_controller'] = 'frontend/Cms/index';
 
-
-
 /* FRONTEND */
-
-
 
 /* LOGIN */
-$route['login']         = 'frontend/AccountsController/index';
-$route['login/process'] = 'frontend/AccountsController/process';
-$route['logout']        = 'frontend/AccountsController/logout';
+//$route['login']         = 'frontend/AccountsController/index';
+$route['login/process']                                    = 'frontend/AccountsController/process';
+$route['login/reset-password/process']                     = 'frontend/AccountsController/reset_password_process';
+$route['login/reset-password/new-password/(:any)']         = 'frontend/AccountsController/reset_new_password/$1';
+$route['login/reset-password/new-password/process/(:any)'] = 'frontend/AccountsController/reset_new_password_process/$1';
+$route['logout']                                           = 'frontend/AccountsController/logout';
 
-$route['student-profile'] = 'frontend/Cms/student_profile';
+$route['student-profile']  = 'frontend/Cms/student_profile';
 $route['student-invoices'] = 'frontend/Cms/student_invoices';
-$route['student-classes'] = 'frontend/Cms/student_classes';
-$route['miss-class'] = 'frontend/Cms/miss_class';
-$route['gallery']        = "frontend/gallery/index";
-$route['testimonial']        = "frontend/cms/testimonial";
-$route['home']               = "frontend/cms/index";
-$route['contact-us']         = "frontend/cms/contact_us";
-$route['quick-enquiry']      = "frontend/cms/quick_enquiry";
-$route['(:any)']             = "frontend/cms/inner_pages/$1";
+$route['student-classes']  = 'frontend/Cms/student_classes';
+$route['miss-class']       = 'frontend/Cms/miss_class';
+$route['gallery']          = "frontend/gallery/index";
+$route['testimonial']      = "frontend/cms/testimonial";
+$route['home']             = "frontend/cms/index";
+$route['contact-us']       = "frontend/cms/contact_us";
+$route['quick-enquiry']    = "frontend/cms/quick_enquiry";
+$route['(:any)']           = "frontend/cms/inner_pages/$1";
 
 /* FRONTEND */
 
-
 /* BACKEND */
 
 //$route['default_controller'] = 'backend/AccountsController/index';
@@ -38,17 +35,14 @@ $route['(:any)']             = "frontend/cms/inner_pages/$1";
 //$route['default_controller'] = 'backend/AccountsController/index';
 
 /* BACKEND */
-
 
 /* PDF */
 //$route['admin/pdf/invoice/(:any)']         = 'backend/PdfController/my_mPDF/$1';
-
 
 $route['admin/cronjobs_PQWEas22'] = 'backend/CronController/index';
 $route['admin/login']             = 'backend/AccountsController/index';
 $route['admin/login/process']     = 'backend/AccountsController/process';
 $route['admin/logout']            = 'backend/AccountsController/logout';
-
 
 /* ROLES AND PERMISSION */
 $route['admin/users/profile']                            = 'backend/AccountsController/profile';
@@ -90,7 +84,6 @@ $route['admin/classes/moveto_active_list/(:any)'] = 'backend/ClassController/mov
 
 /* Student Admin */
 
-
 $route['admin/students']                           = 'backend/StudentController/index';
 $route['admin/students/archive/(:any)']            = 'backend/StudentController/archive/$1';
 $route['admin/students/archived']                  = 'backend/StudentController/archived';
@@ -102,8 +95,7 @@ $route['admin/students/edit/(:any)']               = 'backend/StudentController/
 $route['admin/students/update/(:any)']             = 'backend/StudentController/update/$1';
 $route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
 $route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
-$route['admin/students/get_student_status'] = 'backend/StudentController/get_student_status';
-
+$route['admin/students/get_student_status']        = 'backend/StudentController/get_student_status';
 
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
 
@@ -147,15 +139,15 @@ $route['admin/billing/edit/(:any)']   = 'backend/BillingController/edit/$1';
 $route['admin/billing/update/(:any)'] = 'backend/BillingController/update/$1';
 
 /* ATTENDANCE */
-$route['admin/attendance']                         = 'backend/AttendanceController/index';
-$route['admin/attendance/create']                  = 'backend/AttendanceController/create';
-$route['admin/attendance/store']                   = 'backend/AttendanceController/store';
-$route['admin/attendance/edit']                  = 'backend/AttendanceController/edit';
-$route['admin/attendance/update']                  = 'backend/AttendanceController/update';
-$route['admin/attendance/get_attendance_sheet']    = 'backend/AttendanceController/get_attendance_sheet';
-$route['admin/attendance/get_attendance_summary']  = 'backend/AttendanceController/get_attendance_summary';
-$route['admin/attendance/transfer_student']        = 'backend/AttendanceController/transfer_student';
-$route['admin/attendance/get_class_code_transfer'] = 'backend/AttendanceController/get_class_code_transfer';
+$route['admin/attendance']                           = 'backend/AttendanceController/index';
+$route['admin/attendance/create']                    = 'backend/AttendanceController/create';
+$route['admin/attendance/store']                     = 'backend/AttendanceController/store';
+$route['admin/attendance/edit']                      = 'backend/AttendanceController/edit';
+$route['admin/attendance/update']                    = 'backend/AttendanceController/update';
+$route['admin/attendance/get_attendance_sheet']      = 'backend/AttendanceController/get_attendance_sheet';
+$route['admin/attendance/get_attendance_summary']    = 'backend/AttendanceController/get_attendance_summary';
+$route['admin/attendance/transfer_student']          = 'backend/AttendanceController/transfer_student';
+$route['admin/attendance/get_class_code_transfer']   = 'backend/AttendanceController/get_class_code_transfer';
 $route['admin/attendance/get_attendance_edit_sheet'] = 'backend/AttendanceController/get_attendance_edit_sheet';
 
 /* ORDER */
@@ -197,10 +189,6 @@ $route['admin/role/delete/(:any)'] = 'backend/PermissionController/delete_user/$
 
 /* CMS Admin */
 
-
-  
-
-
 $route['admin/manage-menu']                  = "backend/CmsController/manage_menu";
 $route['admin/manage-menu-list/(:any)']      = "backend/CmsController/manage_menu_list/$1";
 $route['admin/add-menu-item/(:any)']         = "backend/CmsController/add_menu_item/$1";
@@ -226,5 +214,3 @@ $route['admin/del-gallery/(:any)']  = "backend/GalleryController/del_gallery/$1"
 /* Tutor Admin */
 $route['404_override']         = '';
 $route['translate_uri_dashes'] = false;
-
-

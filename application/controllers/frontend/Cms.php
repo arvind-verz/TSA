@@ -120,7 +120,6 @@ class Cms extends CI_Controller {
         $this->load->view('frontend/include/footer');	
 		//die('hiiiii');	
 		}
-		
 		if($url=='thank-you')
 		{
 		$this->breadcrumbs->push('Home', 'home');
@@ -132,14 +131,34 @@ class Cms extends CI_Controller {
 		}
 		else if($url=='subjects')
 		{
-		
-		$this->breadcrumbs->push('Home', 'home');
+		$this->breadcrumbs->push('Login', 'login');
         $this->breadcrumbs->push('Subjects', 'subjects');
 		$data_msg['subjects'] = $this->Cms_model->get_subjects();
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/subjects');
         $this->load->view('frontend/include/footer');
+		
+		}
+		else if($url=='login')
+		{
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push('Home', 'home');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->load->view('frontend/include/header', $data_msg);
+        $this->load->view('frontend/accounts/login');
+        $this->load->view('frontend/include/footer');
+		
+		}
+		else if($url=='reset-password')
+		{
+		$this->breadcrumbs->push('Home', 'home');
+        $this->breadcrumbs->push('Home', 'home');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->load->view('frontend/include/header', $data_msg);
+        $this->load->view('frontend/accounts/reset-password');
+        $this->load->view('frontend/include/footer');
+		
 		}
 		else if(count($page)>0 && $page[0]['template']=='About Us')
 		{

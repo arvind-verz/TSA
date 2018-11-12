@@ -9,34 +9,24 @@
                     <?=$page[0]['page_content']?>
                 </div>
                 <div class="cont-sm">
-                    <?php echo form_open('login/process'); ?>
+                    <?php echo form_open('login/reset-password/process'); ?>
                     <div class="form-holder pt50">
                         <?php $this->load->view('backend/include/messages')?>
-                        <?php if (validation_errors()) {?>
-                        <div class="col-lg-12">
-                            <div class="alert alert-danger alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <?php echo validation_errors(); ?>
-                            </div>
-                        </div>
-                        <?php }?>
+        <?php if (validation_errors()) {?>
+        <div class="col-lg-12">
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <?php echo validation_errors(); ?>
+            </div>
+        </div>
+        <?php }?>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-3">
                                     <label>Email</label>
                                 </div>
                                 <div class="col-sm-9">
-                                    <input type="email" name="email" class="form-control" placeholder="Email" value="<?php echo get_cookie('_cemail'); ?>">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <label>Password</label>
-                                </div>
-                                <div class="col-sm-9">
-                                    <input type="password" name="password" class="form-control" placeholder="Password" value="<?php echo get_cookie('_cpassword'); ?>">
+                                    <input type="email" name="email" class="form-control" placeholder="Email" value="">
                                 </div>
                             </div>
                         </div>
@@ -44,7 +34,7 @@
                             <div class="row">
                                 <div class="col-sm-9 col-sm-offset-3">
                                     <div class="text-center pt30">
-                                        <button class="button" type="submit">Login</button> <a href="<?php echo site_url('reset-password') ?>">Forgot Password? </a>
+                                        <button class="button" type="submit">Submit</button>
                                     </div>
                                 </div>
                             </div>
