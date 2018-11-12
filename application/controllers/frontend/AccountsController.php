@@ -60,4 +60,41 @@ class AccountsController extends CI_Controller
     public function logout() {
         $this->accounts->logout();
     }
+
+    public function reset_password_process() {
+        $data['title']       = $this->title;
+        $data['page_title']  = $this->title;
+
+        $config = [
+            [
+                'field' =>  'email',
+                'label' =>  'Email',
+                'rules' =>  'trim|required|valid_email',
+            ],
+        ];
+
+        $this->form_validation->set_rules($config);
+
+        
+        if ($this->form_validation->run() == FALSE)
+        {
+            return redirect('reset-password');
+        }
+        else
+        {
+            $result = $this->accounts->reset_password_process($_POST);
+            if($result==false) {
+                return redirect('reset-password');
+            }
+        }
+    }
+
+    public function reset_new_password() {
+        $data['title']       = "New Password";
+        $data['page_title']  = "New Password";
+
+        $this->load->view('backend/include/header_login', $data);
+        $this->load->view('frontend/accounts/new-password');
+        $this->load->view('backend/include/footer');
+    }
 }

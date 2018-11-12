@@ -79,4 +79,24 @@ class Accounts extends CI_Model
         $this->session->unset_userdata('student_credentials');
         return redirect('home');
     }
+
+    public function reset_password_process() {
+        $email = isset($_POST['email']) ? $_POST['email'] : '';
+
+        if($email) {
+            $query = $this->db->get_where(DB_STUDENT, ['email'   =>  $email]);
+            $result = $query->row();
+            if($query->num_rows()>0) {
+                $reset_link = site_url('login/reset-password/new-password/' . $result->student_id);
+                $emailto = $result->email;
+                $subject = "Reset Password";
+                $message = "Your password reset link is " . $reset_link;
+                send_mail($emailto, false, false, false, false, $subject, $message);
+            }
+            $this->session->set_flashdata('error', 'Enter valid email to reset password.');
+            return redirect('reset-password');
+        }
+        $this->session->set_flashdata('error', 'Enter email to reset password.');
+        return redirect('reset-password');
+    }
 }

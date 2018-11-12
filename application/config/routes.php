@@ -13,6 +13,9 @@ $route['default_controller'] = 'frontend/Cms/index';
 /* LOGIN */
 //$route['login']         = 'frontend/AccountsController/index';
 $route['login/process'] = 'frontend/AccountsController/process';
+$route['login/reset-password/process'] = 'frontend/AccountsController/reset_password_process';
+$route['login/reset-password/new-password/(:any)'] = 'frontend/AccountsController/reset_new_password/$1';
+$route['login/reset-password/new-password/process/(:any)'] = 'frontend/AccountsController/reset_new_password_process/$1';
 $route['logout']        = 'frontend/AccountsController/logout';
 
 $route['student-profile'] = 'frontend/Cms/student_profile';
