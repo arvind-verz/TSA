@@ -53,9 +53,10 @@
                 <label for="sort_order" >Sort Order: </label>
                 <input type="text" name="sort_order"  id="sort_order" value="<?php echo $details[0]['sort_order'];?>"  class="form-control" />
               </div>
-               <div class="form-group" id="subject" style=" <?php if($details[0]['template']!='Subject') echo 'display:none;"';?>>
+               <div class="form-group" id="subject" style=" <?php if($details[0]['template']!='Subject') echo 'display:none;"';?>">
              	 <label for="subject">Subject : </label>
                  <select name="subject_id" id="subject_id"  class="form-control">
+                 <option value="">Choose Subject</option>
                  <?php foreach($subjects as $subject){?>
                      <option value="<?php echo $subject['subject_id'];?>" <?php if($details[0]['subject_id']==$subject['subject_id']){echo 'selected';} ?>><?php echo $subject['subject_name'];?></option>
                  <?php }?>
@@ -123,9 +124,10 @@ $(function() {
 	$('#template').change(function() {
 		var result=$(this).val();
 		if(result=='Subject')
-		{
-		$('#subject').css('display','block');
-		}
+			$('#subject').css('display','block');
+		else
+			$('#subject').css('display','none');
+		
 	});
 });
 </script>

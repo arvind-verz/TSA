@@ -17,7 +17,9 @@ $route['logout']        = 'frontend/AccountsController/logout';
 
 $route['student-profile'] = 'frontend/Cms/student_profile';
 $route['student-invoices'] = 'frontend/Cms/student_invoices';
-
+$route['student-classes'] = 'frontend/Cms/student_classes';
+$route['miss-class'] = 'frontend/Cms/miss_class';
+$route['gallery']        = "frontend/gallery/index";
 $route['testimonial']        = "frontend/cms/testimonial";
 $route['home']               = "frontend/cms/index";
 $route['contact-us']         = "frontend/cms/contact_us";
