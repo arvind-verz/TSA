@@ -6,8 +6,9 @@ class Accounts extends CI_Model
     public function is_logged_in()
     {
         if(!($this->session->has_userdata('student_credentials'))) {
-            $this->logout();
+            return $this->logout();
         }
+        return true;
     }
 
     public function process()

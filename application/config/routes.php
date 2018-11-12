@@ -11,7 +11,7 @@ $route['default_controller'] = 'frontend/Cms/index';
 
 
 /* LOGIN */
-$route['login']         = 'frontend/AccountsController/index';
+//$route['login']         = 'frontend/AccountsController/index';
 $route['login/process'] = 'frontend/AccountsController/process';
 $route['logout']        = 'frontend/AccountsController/logout';
 
