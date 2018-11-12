@@ -1283,7 +1283,7 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
     $to = $emailto;
     $subject = $subject;
     $txt = $message;
-    $headers = "From: purohitarvind77@gmail.com";
+    $headers = "From: info@verzdesign.com";
 
     mail($to,$subject,$txt,$headers);
     return true;

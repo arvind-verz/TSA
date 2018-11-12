@@ -11,6 +11,15 @@
                 <div class="cont-sm">
                     <?php echo form_open('login/process'); ?>
                     <div class="form-holder pt50">
+                        <?php $this->load->view('backend/include/messages')?>
+                        <?php if (validation_errors()) {?>
+                        <div class="col-lg-12">
+                            <div class="alert alert-danger alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <?php echo validation_errors(); ?>
+                            </div>
+                        </div>
+                        <?php }?>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-3">

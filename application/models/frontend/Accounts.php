@@ -5,7 +5,7 @@ class Accounts extends CI_Model
 {
     public function is_logged_in()
     {
-        if(!($this->session->has_userdata('student_credentials'))) {
+        if (!($this->session->has_userdata('student_credentials'))) {
             return $this->logout();
         }
         return true;
@@ -17,8 +17,6 @@ class Accounts extends CI_Model
         $password    = isset($_POST['password']) ? $_POST['password'] : '';
         $remember_me = isset($_POST['remember_me']) ? $_POST['remember_me'] : 0;
 
-        
-
         $query = $this->db->get_where(DB_STUDENT, ['email' => $email]);
         if ($query->num_rows() > 0) {
             $result = $query->row();
@@ -29,7 +27,7 @@ class Accounts extends CI_Model
                         'value'  => $email,
                         'domain' => '',
                         'path'   => '/',
-                        'expire'    =>  36500,
+                        'expire' => 36500,
                     ];
                     set_cookie($cookie_email);
                     $cookie_password = [
@@ -37,11 +35,10 @@ class Accounts extends CI_Model
                         'value'  => $password,
                         'domain' => '',
                         'path'   => '/',
-                        'expire'    =>  36500,
+                        'expire' => 36500,
                     ];
                     set_cookie($cookie_password);
-                }
-                else {
+                } else {
                     $cookie_email = [
                         'name'   => '_cemail',
                         'domain' => '',
@@ -75,28 +72,54 @@ class Accounts extends CI_Model
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         $this->session->unset_userdata('student_credentials');
         return redirect('home');
     }
 
-    public function reset_password_process() {
+    public function reset_password_process()
+    {
         $email = isset($_POST['email']) ? $_POST['email'] : '';
 
-        if($email) {
-            $query = $this->db->get_where(DB_STUDENT, ['email'   =>  $email]);
+        if ($email) {
+            $query  = $this->db->get_where(DB_STUDENT, ['email' => $email]);
             $result = $query->row();
-            if($query->num_rows()>0) {
+            if ($query->num_rows() > 0) {
                 $reset_link = site_url('login/reset-password/new-password/' . $result->student_id);
-                $emailto = $result->email;
-                $subject = "Reset Password";
-                $message = "Your password reset link is " . $reset_link;
-                send_mail($emailto, false, false, false, false, $subject, $message);
+                $emailto    = $result->email;
+                $subject    = "Reset Password";
+                $message    = "Your password reset link is " . $reset_link;
+                $mail       = send_mail($emailto, false, false, false, false, $subject, $message);
+                if ($mail) {
+                    $this->session->set_flashdata('success', 'Password reset link has been sent to email.');
+                    return redirect('reset-password');
+                }
+
             }
-            $this->session->set_flashdata('error', 'Enter valid email to reset password.');
-            return redirect('reset-password');
+            return false;
         }
         $this->session->set_flashdata('error', 'Enter email to reset password.');
         return redirect('reset-password');
+    }
+
+    public function reset_new_password_process($student_id)
+    {
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        if ($student_id && $password) {
+            $query  = $this->db->get_where(DB_STUDENT, ['student_id' => $student_id]);
+            $result = $query->row();
+            if ($query->num_rows() > 0) {
+                $data = [
+                    'password'         => password_hash($password, PASSWORD_BCRYPT),
+                    'password_updates' => date('Y-m-d H:i:s'),
+                ];
+                $this->db->where(['student_id' => $student_id]);
+                $this->db->update(DB_STUDENT, $data);
+                $this->session->set_flashdata('success', 'Password has been changed successfully!');
+                return redirect('login');
+            }
+        }
+        return false;
     }
 }

@@ -1,7 +1,6 @@
-
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>TSA</b></a>
+        <a href="#"><b>New Password</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body col-lg-12">
@@ -15,7 +14,7 @@
         </div>
         <?php }?>
         <div class="col-lg-12">
-            <?php echo form_open('login/reset-password/new-password/process/'); ?>
+            <?php echo form_open('login/reset-password/new-password/process/' . $student_id); ?>
             <div class="form-group has-feedback">
                 <input type="password" name="password" class="form-control" placeholder="Password" value="">
             </div>
