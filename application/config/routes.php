@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-$route['default_controller'] = 'backend/AccountsController/index';
+$route['default_controller'] = 'frontend/Cms/index';
 
 
 
@@ -162,16 +162,6 @@ $route['admin/order/update_order_status'] = 'backend/OrderController/update_orde
 /* REPORTING */
 $route['admin/reporting']                     = 'backend/ReportingController/index';
 $route['admin/reporting/get_reporting_sheet'] = 'backend/ReportingController/get_reporting_sheet';
-
-/* MATERIAL */
-$route['admin/material']                           = 'backend/materialcontroller/index';
-$route['admin/material/archived']                  = 'backend/materialcontroller/archived';
-$route['admin/material/create']                    = 'backend/materialcontroller/create';
-$route['admin/material/store']                     = 'backend/materialcontroller/store';
-$route['admin/material/edit/(:any)']               = 'backend/materialcontroller/edit/$1';
-$route['admin/material/update/(:any)']             = 'backend/materialcontroller/update/$1';
-$route['admin/material/delete/(:any)']             = 'backend/materialcontroller/delete/$1';
-$route['admin/material/moveto_active_list/(:any)'] = 'backend/materialcontroller/moveto_active_list/$1';
 
 /* Tutor Admin */
 $route['admin/tutors']                           = 'backend/TutorController/index';
