@@ -87,9 +87,10 @@ class Accounts extends CI_Model
             $result = $query->row();
             if ($query->num_rows() > 0) {
                 $reset_link = site_url('login/reset-password/new-password/' . $result->student_id);
+                $name = $result->name;
                 $emailto    = $result->email;
                 $subject    = "Reset Password";
-                $message    = "Your password reset link is " . $reset_link;
+                $message    = password_reset_template($reset_link, $name);
                 $mail       = send_mail($emailto, false, false, false, false, $subject, $message);
                 if ($mail) {
                     $this->session->set_flashdata('success', 'Password reset link has been sent to email.');

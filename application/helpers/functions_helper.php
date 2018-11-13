@@ -4,24 +4,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
 function get_currency($currency_code = false)
 {
     $currency_array = [
-        'INR'   =>  '<i class="fa fa-inr" aria-hidden="true"></i> ',
-        'SGD'   =>  'SGD ',
+        'INR' => '<i class="fa fa-inr" aria-hidden="true"></i> ',
+        'SGD' => 'SGD ',
     ];
 
-    foreach($currency_array as $key => $value) {
-        if($currency_code==$key) {
+    foreach ($currency_array as $key => $value) {
+        if ($currency_code == $key) {
             echo $value;
         }
     }
 }
 
-function get_student_status($class_id, $student_id) {
+function get_student_status($class_id, $student_id)
+{
     $ci = &get_instance();
 
-    if($class_id && $student_id) {
-        $query = $ci->db->get_where(DB_STUDENT, ['class_id' =>  $class_id, 'student_id' =>  $student_id]);
+    if ($class_id && $student_id) {
+        $query  = $ci->db->get_where(DB_STUDENT, ['class_id' => $class_id, 'student_id' => $student_id]);
         $result = $query->row();
-        if($result) {
+        if ($result) {
             return $result->status;
         }
     }
@@ -42,30 +43,32 @@ function get_student_details($student_id = false)
     }
 }
 
-function get_student_profile() {
+function get_student_profile()
+{
     $ci = &get_instance();
 
-    if($ci->session->has_userdata('student_credentials')) {
+    if ($ci->session->has_userdata('student_credentials')) {
         $student_id = $ci->session->userdata('student_credentials');
 
-        $query = $ci->db->get_where(DB_STUDENT, ['id'    =>  $student_id['id'], 'email'    =>  $student_id['email']]);
+        $query  = $ci->db->get_where(DB_STUDENT, ['id' => $student_id['id'], 'email' => $student_id['email']]);
         $result = $query->row();
         return $result;
     }
     return false;
 }
 
-function get_student_invoices() {
+function get_student_invoices()
+{
     $ci = &get_instance();
 
-    if($ci->session->has_userdata('student_credentials')) {
+    if ($ci->session->has_userdata('student_credentials')) {
         $student_id = $ci->session->userdata('student_credentials');
 
         $ci->db->select('*');
         $ci->db->from(DB_INVOICE);
         $ci->db->join(DB_STUDENT, DB_INVOICE . '.student_id = ' . DB_STUDENT . '.student_id');
         $ci->db->where([DB_STUDENT . '.id' => $student_id['id'], DB_STUDENT . '.email' => $student_id['email']]);
-        $query = $ci->db->get();
+        $query  = $ci->db->get();
         $result = $query->result();
         return $result;
     }
@@ -419,12 +422,12 @@ foreach ($query as $result) {
     <td><?php echo $result->name; ?></td>
     <td>
         <input type="hidden" name="student_id[]" class="form-control" value="<?php echo $result->student_id; ?>">
-        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='L') ? 1 : 0; ?>" placeholder="L">
-        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='M') ? 1 : 0; ?>" placeholder="M">
-        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='E') ? 1 : 0; ?>" placeholder="E">
-        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='X') ? 1 : 0; ?>" placeholder="X">
-        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='G') ? 1 : 0; ?>" placeholder="G">
-        <input type="hidden" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status)=='H') ? 1 : 0; ?>" placeholder="H">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'L') ? 1 : 0; ?>" placeholder="L">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'M') ? 1 : 0; ?>" placeholder="M">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'E') ? 1 : 0; ?>" placeholder="E">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'X') ? 1 : 0; ?>" placeholder="X">
+        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'G') ? 1 : 0; ?>" placeholder="G">
+        <input type="hidden" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'H') ? 1 : 0; ?>" placeholder="H">
     </td>
     <td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
 </tr>
@@ -621,31 +624,32 @@ function get_reporting_sheet($date_from = false, $date_to = false)
 
     $ci->db->select('*, sum(invoice_amount) as total_invoice_amount, sum(amount_excluding_material) as total_amount_excluding_material, sum(material_amount) as total_material_amount');
     $ci->db->from(DB_INVOICE);
-    if($date_from || $date_to) {
+    if ($date_from || $date_to) {
         $ci->db->where('DATE(invoice_date) >=', $date_from);
         $ci->db->where('DATE(invoice_date) <=', $date_to);
     }
     $ci->db->group_by('student_id');
     $query  = $ci->db->get();
     $result = $query->result();
-    
-    if($date_from || $date_to) {
-        if(count($result)) {
-        foreach($result as $value) {
-        $class_code = get_class_code($value->student_id);
-        ?>
+
+    if ($date_from || $date_to) {
+        if (count($result)) {
+            foreach ($result as $value) {
+                $class_code = get_class_code($value->student_id);
+                ?>
         <tr>
             <td><?php echo $class_code['class_code']; ?></td>
             <td><?php echo get_subject_code($value->student_id); ?></td>
             <td><?php echo $class_code['tutor_id']; ?></td>
             <td><?php echo get_students_enrolled($class_code['class_code']); ?></td>
-            <td><?php get_currency('INR'); echo isset($value->total_amount_excluding_material) ? $value->total_amount_excluding_material : '-'; ?></td>
-            <td><?php get_currency('INR'); echo isset($value->total_material_amount) ? $value->total_material_amount : '-'; ?></td>
+            <td><?php get_currency('INR');
+                echo isset($value->total_amount_excluding_material) ? $value->total_amount_excluding_material : '-';?></td>
+            <td><?php get_currency('INR');
+                echo isset($value->total_material_amount) ? $value->total_material_amount : '-';?></td>
         </tr>
         <?php
-        }}    
-    }
-    else {
+}}
+    } else {
         return $result;
     }
 }
@@ -1261,35 +1265,41 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
     $ci = &get_instance();
     $ci->load->library('email');
 
-    /*$config['protocol']  = 'smtp';
-    $config['smtp_host'] = 'smtp.gmail.com';
-    $config['smtp_port'] = '465';
-    $config['smtp_user'] = 'arvind.verz@gmail.com';
-    $config['smtp_pass'] = '@321Verz123';
-    $config['mailpath']  = '/usr/sbin/sendmail';
-    $config['charset']   = 'iso-8859-1';
-    $config['wordwrap']  = true;
-    $config['mailtype']  = 'html';
+    $config['protocol']     = 'smtp';
+    $config['smtp_host']    = 'smtp.gmail.com';
+    $config['smtp_port']    = '587';
+    $config['smtp_user']    = 'arvind.verz@gmail.com';
+    $config['smtp_pass']    = 'zebCd6SXvZ5J73x';
+    $config['mailpath']     = '/usr/sbin/sendmail';
+    $config['smtp_crypto']  = "tls";
+    $config['smtp_timeout'] = "5";
+    $config['charset']      = 'iso-8859-1';
+    $config['wordwrap']     = true;
+    $config['mailtype']     = 'html';
+    $config['crlf']         = "\r\n";
+    $config['newline']      = "\r\n";
 
     $ci->email->initialize($config);
     $ci->email->from('arvind.verz@gmail.com', 'The Science Academy');
-    $ci->email->to('purohitarvind777@gmail.com');
+    $ci->email->to($emailto);
 
-    $ci->email->subject('Email Test');
-    $ci->email->message('Testing the email class.');
+    $ci->email->subject($subject);
+    $ci->email->message($message);
 
-    $ci->email->send();
-    echo $ci->email->print_debugger();*/
-    $to = $emailto;
-    $subject = $subject;
-    $txt = $message;
-    $headers = "From: info@verzdesign.com";
-
-    mail($to,$subject,$txt,$headers);
-    return true;
+    if ($ci->email->send()) {
+        return true;
+    }
 }
 
 function send_sms($recipient, $message)
 {
+    $app_id = '2927';
+    $app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
 
+    $ch = curl_init("http://www.smsdome.com/api/http/sendsms.aspx?appid=" . $app_id . "&appsecret=" . $app_secret . "&receivers=" . $recipient . "&content=" . $message . "&responseformat=JSON");
+    
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+
+    curl_exec($ch);
+    curl_close($ch);
 }
