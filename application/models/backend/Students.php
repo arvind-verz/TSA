@@ -158,7 +158,7 @@ class Students extends CI_Model
 	
 	 public function store_2()
     {
-        die(print_r($_POST));
+        //die(print_r($_POST));
 		$student_code=explode(',',$_POST['student_code']);
 		$msg='';
 		if($_POST['student_status']==1)
