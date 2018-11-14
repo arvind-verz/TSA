@@ -27,57 +27,37 @@ class Tutors extends CI_Model
 				$query = $this->db->get()->row_object();				
 				return $query;	
 	}
+
+	public function get_subjects()
+			 {
+				 $this->db->get('*')
+						  ->from(DB_SUBJECT);
+				  $query = $this->db->get();
+				  $result = $query->result();
+				  if($result) {
+				  return $query;
+				  } 
+			}
 	
-	public function get_tutors()
+	public function get_tutors($id = false)
 	{
 	
 			$this->db->select('*');
 			$this->db->from('tutor');
-			$this->db->where('is_archive!=',1);	
-			if(isset($_POST['search']) && $_POST['search']==1)
-			{
-				 if(isset($_POST['t_name']) && $_POST['t_name']!="")
-				 $this->db->like('tutor_name',$_POST['t_name']);	
-				 
-				 if(isset($_POST['t_email']) && $_POST['t_email']!="")
-				 $this->db->like('email',$_POST['t_email']);	
-				 
-				 if(isset($_POST['t_phone']) && $_POST['t_phone']!="")
-				 $this->db->like('phone',$_POST['t_phone']);
-				 
-				 if(isset($_POST['class_code']) && $_POST['class_code']!="")
-				 $this->db->like('class_code',$_POST['class_code']);
-				 
-				 if(isset($_POST['t_id']) && $_POST['t_id']!="")
-				 $this->db->like('tutor_id',$_POST['t_id']);
-				 
-				 if(isset($_POST['t_scheme']) && $_POST['t_scheme']!="")
-				 $this->db->where('salary_scheme',$_POST['t_scheme']);
-			}			 
-			$query = $this->db->get()->result_object();			
-				//echo $this->db->last_query();	
-			return $query;	
-	}
-	
-	public function get_tutor($id)
-	{
-	
-			$this->db->select('*')
-					 ->from('tutor')
-					 ->where('tutor_id',$id);				 
-				$query = $this->db->get()->row_object();
-				//echo $this->db->last_query();					
-				return $query;	
-	}
-	
-	public function get_subjects()
-	{
-	
-			$this->db->select('*')
-					 ->from('subject');				 
-			$query = $this->db->get()->result_object();
-				//echo $this->db->last_query();					
-			return $query;	
+			$this->db->join('aauth_users', 'tutor.tutor_id = aauth_users.id');
+			if($id) {
+				$this->db->join('aauth_perm_to_user', 'aauth_perm_to_user.user_id = aauth_users.id');
+				$this->db->where(['tutor.tutor_id'	=>	$id]);
+			}
+			$this->db->where('tutor.is_archive', 0);
+			$query = $this->db->get();
+			if($id) {
+				$result = $query->row();
+			}
+			else {
+				$result =	$query->result();
+			}
+			return $result;	
 	}
 	
 	public function get_archived_tutors()
@@ -85,30 +65,10 @@ class Tutors extends CI_Model
 	
 			$this->db->select('*');
 			$this->db->from('tutor');
-			
-			if(isset($_POST['search']) && $_POST['search']==1)
-			{
-				 if(isset($_POST['t_name']) && $_POST['t_name']!="")
-				 $this->db->like('tutor_name',$_POST['t_name']);	
-				 
-				 if(isset($_POST['t_email']) && $_POST['t_email']!="")
-				 $this->db->like('email',$_POST['t_email']);	
-				 
-				 if(isset($_POST['t_phone']) && $_POST['t_phone']!="")
-				 $this->db->like('phone',$_POST['t_phone']);
-				 
-				 if(isset($_POST['class_code']) && $_POST['class_code']!="")
-				 $this->db->like('class_code',$_POST['class_code']);
-				 
-				 if(isset($_POST['t_id']) && $_POST['t_id']!="")
-				 $this->db->like('tutor_id',$_POST['t_id']);
-				 
-				 if(isset($_POST['t_scheme']) && $_POST['t_scheme']!="")
-				 $this->db->where('salary_scheme',$_POST['t_scheme']);
-			}	
-				$this->db->where('is_archive',1);				 
-				$query = $this->db->get()->result_object();				
-				return $query;	
+			$this->db->join('aauth_users', 'tutor.tutor_id = aauth_users.id');
+			$this->db->where('tutor.is_archive',1);				 
+			$query = $this->db->get()->result_object();				
+			return $query;	
 	}
 	
 	public function search()
@@ -122,26 +82,31 @@ class Tutors extends CI_Model
 	}
     public function store()
     {
-        //die(print_r($_POST));
-		$password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    	//die(print_r($_POST));
+    	$email = isset($_POST['email']) ? $_POST['email'] : '';
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        $tutor_name = isset($_POST['tutor_name']) ? $_POST['tutor_name'] : '';
+        $perm_id = isset($_POST['tutor_permission']) ? $_POST['tutor_permission'] : '';
+
+    	$this->db->trans_start();
+    	$result = $this->aauth->create_user($email, $password, false, 3);
+        if($result) {
+            $this->aauth->allow_user($result, $perm_id);
+	    }
         $data = array(
-            'tutor_id'     => $this->uniq_id,
+            'tutor_id'     => $result,
             'tutor_name'   => !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null,
-            'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
             'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
             'address'    => !empty($_POST['address']) ? $_POST['address'] : null,
             'subject'   => !empty($_POST['subject']) ? $_POST['subject'] : null,
             'salary_scheme'    => !empty($_POST['salary_scheme']) ? $_POST['salary_scheme'] : null,
             'remark'  => !empty($_POST['remark']) ? $_POST['remark'] : null,
-            'tutor_permission' => !empty($_POST['tutor_permission']) ? $_POST['tutor_permission'] : null,
-            'password'   => !empty($_POST['password']) ? $password_h : null,
             'created_at'   => $this->date,
             'updated_at'   => $this->date,
         );
 
-        $this->db->trans_start();
         $this->db->insert('tutor', $data);
-        $this->db->trans_complete();
+	    $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);

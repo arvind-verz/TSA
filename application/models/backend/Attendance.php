@@ -166,4 +166,38 @@ class Attendance extends CI_Model
             return redirect('admin/attendance');
         }
     }
+
+    public function miss_class_request($class_id) {
+        $student = $this->session->userdata('student_credentials');
+        $query = $this->db->get_where(DB_STUDENT, ['id'    =>  $student['id']]);
+        $result = $query->row();
+
+        $query1 = $this->db->get_where(DB_CLASSES, ['id'    =>  $class_id]);
+        $result1 = $query1->row();
+        if($result && $result1) {
+            $class_code = $result1->class_code;
+            $student_id = $result->student_id;
+            $current_date = date('Y-m-d');
+            
+            $query = $this->db->get_where(DB_ATTENDANCE, ['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
+            $result = $query->row();
+            if($result) {
+                $attendance_date = date("Y-m-d", strtotime($result->attendance_date));
+                if($result->status=='["0","1","0","0","0","0"]') {
+                    return "updated";
+                }
+                if($attendance_date==$current_date) {
+                    $data = [
+                        'status' => json_encode(["0","1","0","0","0","0"]),
+                    ];
+                    $this->db->where(['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
+                    $this->db->update(DB_ATTENDANCE, $data);
+                    return "success";
+                }
+                return "failed";
+            }
+            return "pending";
+        }
+        return "failed";
+    }
 }

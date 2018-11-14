@@ -73,7 +73,7 @@ class Accounts extends CI_Model
         $perm_id = isset($_POST['perm_id']) ? $_POST['perm_id'] : '';
 
         if($email && $password && $username && $perm_id && strlen($password)>=6) {
-            $result = $this->aauth->create_user($email, $password, $username);
+            $result = $this->aauth->create_user($email, $password, $username, 2);
             if($result) {
                 $this->aauth->allow_user($result, $perm_id);
                 $this->session->set_flashdata('success', USERS . ' ' . MSG_CREATED);

@@ -53,6 +53,7 @@ class TutorController extends CI_Controller
         $data['title']       = $this->title;
         $data['page_title']  = "Add Tutor";
 		$data['permission_data'] = get_permission_data();
+        $data['subjects']   = get_subject();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -80,28 +81,61 @@ class TutorController extends CI_Controller
     public function store()
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'creates');
-                $this->load->library('form_validation');
 
-			$this->form_validation->set_rules('tutor_name', 'Name', 'required');
-			$this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[tutor.email]');
-			$this->form_validation->set_rules('phone', 'phone', 'required');
-			$this->form_validation->set_rules('salary_scheme', 'salary_scheme', 'required');
-			$this->form_validation->set_rules('subject', 'subject', 'required');
-			$this->form_validation->set_rules('tutor_permission', 'tutor_permission', 'required');
-			$this->form_validation->set_rules('password', 'Password','trim|required|min_length[8]|matches[passconf]');
-			$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required');
-                
+        $config = [
+            [
+                'field' => 'tutor_name',
+                'label' => 'Name',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'email',
+                'label' => 'Email',
+                'rules' => 'trim|required|valid_email|is_unique[aauth_users.email]',
+            ],
+            [
+                'field' => 'phone',
+                'label' => 'Phone',
+                'rules' => 'trim|required|numeric',
+            ],
+            [
+                'field' => 'salary_scheme',
+                'label' => 'Salary Scheme',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'subject',
+                'label' => 'Subject',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'tutor_permission',
+                'label' => 'Tutor Permission',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'trim|required|min_length[6]',
+            ],
+            [
+                'field' => 'confirm_password',
+                'label' => 'Confirm Password',
+                'rules' => 'trim|required|matches[password]',
+            ],
+        ];
 
-                if ($this->form_validation->run() == FALSE)
-                {
-                         $this->session->set_flashdata('error', validation_errors());
-            			 return redirect('admin/tutors/create');
-                }
-                else
-                {
-					$this->tutors->store($_POST);
-                       
-                }
+        $this->form_validation->set_rules($config);
+
+        if ($this->form_validation->run() == FALSE)
+        {
+    		$this->create();
+        }
+        else
+        {
+			$this->tutors->store($_POST);
+               
+        }
 		
 		//$this->classes->store($_POST);
     }
@@ -128,7 +162,8 @@ class TutorController extends CI_Controller
         $data['title']       = $this->title;
         $data['page_title']  = TUTOR . " <small> " . EDIT . ' #' . $id . " </small>";
         $data['crud_id']     = $id;
-        $data['tutor']     = $this->tutors->get_tutor($id);
+        $data['tutor']     = $this->tutors->get_tutors($id);
+        $data['subjects']     = get_subject();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');

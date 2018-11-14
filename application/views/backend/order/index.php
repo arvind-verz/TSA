@@ -68,7 +68,7 @@
                                     </td>
                                     <td>
                                         <select name="order_student_id" class="form-control select2" multiple="multiple">
-                                            <?php get_order_student_content($order->order_id); ?>
+                                            <?php get_order_student_content($order->order_id, $order->class_code); ?>
                                         </select>
                                     </td>
                                     <td>

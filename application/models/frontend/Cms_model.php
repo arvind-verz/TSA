@@ -19,16 +19,14 @@
 			
 			public function get_assign_class() {		
 				$student_id = $this->session->userdata('student_credentials');
-				//print_r($student_id['id']);
-				$this->db->select('c.*,t.tutor_name,s.student_id')
-						 ->from(DB_STUDENT . ' as `s`')
-						 ->join(DB_CLASSES . ' as `c`' , 's.class_id = c.class_id')
-						 ->join(DB_TUTOR . ' as `t`' , 'c.tutor_id = t.id')
-						 ->where('s.id', $student_id['id']);
-				 
-				$query = $this->db->get()->result_array();
-			//echo $this->db->last_query();	
-			return $query;	
+				$this->db->select('*');
+				$this->db->from(DB_STUDENT);
+    			$this->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+    			$this->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
+				$this->db->where('student.id', $student_id['id']);
+				$query = $this->db->get();
+				$result = $query->result();	
+				return $result;	
 						
 			} 
 			
@@ -81,14 +79,19 @@
 			    return $query;
 			}
 			
-			public function get_attendance($student_id)
+			public function get_attendance($student_id = false)
 			{
 				$this->db->select('*')
 					    ->from(DB_ATTENDANCE)
 					    ->where('student_id', $student_id);					 
-				$query = $this->db->get()->result_array();
-				
-			    return $query;
+				$query = $this->db->get();
+				if($student_id) {
+					$result = $query->row();
+				}
+				else {
+					$result = $query->result();
+				}
+			    return $result;
 			}
 			
 			public function get_subjects()

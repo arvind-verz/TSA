@@ -719,7 +719,7 @@ class Aauth
      * @param string $username User's username
      * @return int|bool False if create fails or returns user id if successful
      */
-    public function create_user($email, $pass, $username = false)
+    public function create_user($email, $pass, $username = false, $type)
     {
 
         $valid = true;
@@ -760,6 +760,7 @@ class Aauth
             'email'        => $email,
             'pass'         => $this->hash_password($pass, 0), // Password cannot be blank but user_id required for salt, setting bad password for now
             'username'     => (!$username) ? '' : $username,
+            'user_type'  =>  $type,
             'date_created' => date("Y-m-d H:i:s"),
         );
 

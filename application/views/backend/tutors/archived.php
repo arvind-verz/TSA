@@ -4,10 +4,10 @@
         <h1>
         <?php print_r($page_title);?>
         </h1>
-        <?php //echo '<pre>'; print_r($classes); echo '</pre>';?>
+        <?php print_r($breadcrumbs); ?>
     </section>
     <?php 
-	$this->load->view('backend/include/messages');	?>
+	$this->load->view('backend/include/messages'); ?>
     <!-- Main content -->
     <section class="content">
     
@@ -21,55 +21,8 @@
                             </i> <?php echo CREATE . ' ' . TUTOR ?>
                         </a>
                     </div>
-                    
- <?php echo form_open('admin/tutors'); ?>
-                <div class="col-md-4">
-                <div class="form-group">
-                          <label for="">Tutor Name</label>
-                          <input type="text" name="t_name" class="form-control" value="<?php echo set_value('s_name');?>">
-                        </div>
-                </div>
-                <div class="col-md-4">
-                <div class="form-group">
-                          <label for="">Tutor Email</label>
-                          <input type="text" name="t_email" class="form-control" value="<?php echo set_value('s_email');?>">
-                        </div>
-                </div>
-                <div class="col-md-4">
-                <div class="form-group">
-                          <label for="">Tutor Phone Number</label>
-                          <input type="text" name="t_phone" class="form-control" value="<?php echo set_value('s_phone');?>">
-                        </div>
-                </div>
-           
-
-                <div class="col-md-4">
-                <div class="form-group">
-                          <label for="">Class Code</label>
-                          <input type="text" name="class_code" class="form-control" value="<?php echo set_value('p_name');?>">
-                        </div>
-                </div>
-                <div class="col-md-4">
-                <div class="form-group">
-                          <label for="">Tutor ID</label>
-                          <input type="text" name="t_id" class="form-control" value="<?php echo set_value('p_email');?>">
-                        </div>
-                </div>
-                <div class="col-md-4">
-                <div class="form-group">
-                          <label for="">Salary Scheme</label>
-                          <input type="text" name="t_scheme" class="form-control" value="<?php echo set_value('p_phone');?>">
-                        </div>
-                </div>
-               <div class="col-md-4">
-                <div class="form-group"> 
-                <input type="hidden" name="search" value="1" />
-                <button type="submit" class="btn btn-info">Search</button>
-                </div>
-                </div>
-
- <?php echo form_close(); ?> 
-                    <div class="box-body">
+                   
+                    <div class="box-body table-responsive">
                         <table class="table table-striped table-bordered text-center" id="datatable" style="width:100%">
                             <thead>
                                 <tr>
@@ -79,9 +32,6 @@
                                     </th>
                                     <th>
                                         Email
-                                    </th>
-                                    <th>
-                                       Class <br />Code
                                     </th>
                                     <th>
                                        Subject 
@@ -111,7 +61,6 @@
                                 <td></td>
                                 <td><?php echo isset($tutor->subject) ? $tutor->subject : '-' ?></td>
                                 <td><?php echo isset($tutor->phone) ? $tutor->phone : '-' ?></td>
-                                <td></td>
                                 <td><a onclick="return confirm('Are you sure you want to back this tutor?');" title="Archive" href="<?php echo site_url('admin/tutors/moveto_active_list/'.$tutor->tutor_id) ?>">Move to<br />Active list</a> </td>
                                
                                 </tr>

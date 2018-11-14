@@ -15,12 +15,54 @@ function get_currency($currency_code = false)
     }
 }
 
+function get_tutor_of_class($tutor_id) {
+    $ci = &get_instance();
+
+    $query = $ci->db->get_where(DB_TUTOR, ['tutor_id'    =>  $tutor_id]);
+    $result = $query->row();
+    if($result) {
+        return $result->tutor_name;
+    }
+}
+
+function get_user_type($user_type) {
+    $user_type_arr = ['Admin', 'User', 'Tutor'];
+
+    return $user_type_arr[($user_type-1)];
+}
+
+function get_enrolled_classes($student_id)
+{
+    $ci         = &get_instance();
+    $class_code = [];
+    if ($student_id) {
+        $ci->db->select('*');
+        $ci->db->from(DB_CLASSES);
+        $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
+        $ci->db->where(['student_to_class.student_id' => $student_id]);
+        $query  = $ci->db->get();
+        $result = $query->result();
+        foreach ($result as $value) {
+            $class_code[] = $value->class_code;
+        }
+        return implode(', ', $class_code);
+    } else {
+        return "-";
+    }
+}
+
 function get_student_status($class_id, $student_id)
 {
     $ci = &get_instance();
 
     if ($class_id && $student_id) {
-        $query  = $ci->db->get_where(DB_STUDENT, ['class_id' => $class_id, 'student_id' => $student_id]);
+        $ci->db->select('*');
+        $ci->db->from(DB_STUDENT);
+        $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+        $ci->db->where(['student_to_class.class_id' => $class_id, 'student.student_id' => $student_id]);
+        $ci->db->order_by('student.id', 'DESC');
+        $ci->db->limit(1);
+        $query  = $ci->db->get();
         $result = $query->row();
         if ($result) {
             return $result->status;
@@ -101,7 +143,7 @@ function get_invoice_no()
 
 function get_all_modules()
 {
-    return ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'REPORTING', 'SMS_TEMPLATE', 'SMS_HISTORY'];
+    return ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'REPORTING', 'SMS_TEMPLATE', 'SMS_HISTORY', 'SMS_REMINDER'];
 }
 
 function get_module_access_data($type, $module, $value, $perm_id)
@@ -162,15 +204,27 @@ function get_users_data($id = false)
     return $result;
 }
 
+function get_class_code_by_class($class_id)
+{
+    $ci = &get_instance();
+
+    $query  = $ci->db->get_where(DB_CLASSES, ['class_id' => $class_id]);
+    $result = $query->row();
+    if ($result) {
+        return $result->class_code;
+    }
+}
+
 function get_student_by_class_code($class_code = false)
 {
     $ci = &get_instance();
 
     $ci->db->select('*, student.id as student_id');
-    $ci->db->from(DB_CLASSES);
-    $ci->db->join(DB_STUDENT, DB_CLASSES . '.class_id = ' . DB_STUDENT . '.class_id');
+    $ci->db->from(DB_STUDENT);
+    $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+    $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
     $ci->db->where(DB_CLASSES . '.class_code', $class_code);
-    $ci->db->where([DB_STUDENT . '.status' => 4, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
+    $ci->db->where(['student_to_class.status' => 4, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
     $query  = $ci->db->get();
     $result = $query->result();
     if ($result) {
@@ -189,6 +243,17 @@ function get_sms_condition($id = false)
         return $sms_condition[($id - 1)];
     }
     return $sms_condition;
+}
+
+function get_fee_reminder()
+{
+    $ci = &get_instance();
+
+    $query  = $ci->db->get(DB_SMS_REMINDER);
+    $result = $query->row();
+    if ($result) {
+        return $result;
+    }
 }
 
 function level($value = false)
@@ -216,15 +281,17 @@ function get_class_code($student_id = false)
 
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
-    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.class_id');
+    $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+    $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
     $ci->db->where(['student.student_id' => $student_id]);
     $query  = $ci->db->get();
     $result = $query->row();
-
-    return [
-        'class_code' => $result->class_code,
-        'tutor_id'   => $result->tutor_id,
-    ];
+    if ($result) {
+        return [
+            'class_code' => $result->class_code,
+            'tutor_id'   => $result->tutor_id,
+        ];
+    }
 }
 
 function get_subject_code($student_id = false)
@@ -234,7 +301,8 @@ function get_subject_code($student_id = false)
     $subject_list = [];
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
-    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.class_id');
+    $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+    $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
     $query   = $ci->db->get();
     $result  = $query->row();
     $subject = json_decode($result->subject);
@@ -253,8 +321,10 @@ function get_students_enrolled($class_code = false)
 
     $ci->db->select('*, count(student.id) as total_students_enrolled');
     $ci->db->from(DB_STUDENT);
-    $ci->db->join(DB_CLASSES, DB_STUDENT . '.class_id = ' . DB_CLASSES . '.class_id');
-    $ci->db->where([DB_STUDENT . '.status' => 4, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
+    $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+    $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
+
+    $ci->db->where(['student_to_class.status' => 4, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
     $query  = $ci->db->get();
     $result = $query->row();
     return $result->total_students_enrolled;
@@ -348,8 +418,10 @@ function get_attendance_sheet($class_code = false)
 
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
-    $ci->db->join(DB_CLASSES, 'student.class_id = class.class_id');
-    $ci->db->where(['class.class_code' => $class_code, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 4]);
+    $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+    $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
+
+    $ci->db->where(['student_to_class.status' => 4, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
     $query = $ci->db->get();
     $query = $query->result();
     ?>
@@ -395,9 +467,10 @@ function get_attendance_edit_sheet($class_code, $attendance_date)
 
     $ci->db->select('*');
     $ci->db->from(DB_STUDENT);
-    $ci->db->join(DB_CLASSES, 'student.class_id = class.class_id');
+    $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+    $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
     $ci->db->join(DB_ATTENDANCE, 'student.student_id = attendance.student_id');
-    $ci->db->where(['class.class_code' => $class_code, 'DATE(attendance.attendance_date)' => $attendance_date, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 4]);
+    $ci->db->where(['student_to_class.status' => 4, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code, 'DATE(attendance.attendance_date)' => $attendance_date]);
     $query = $ci->db->get();
     $query = $query->result();
 
@@ -437,14 +510,15 @@ $i++;}
 
 function get_invoice_sheet($class_code = false)
 {
-
     $ci = &get_instance();
 
+    $query  = $ci->db->get_where(DB_CLASSES, ['class_code' => $class_code]);
+    $result = $query->row();
+
     $ci->db->select('*');
-    $ci->db->from(DB_INVOICE);
-    $ci->db->join(DB_STUDENT, 'invoice.student_id = student.student_id');
-    $ci->db->join(DB_CLASSES, 'student.class_id = class.class_id');
-    $ci->db->where('class.class_code', $class_code);
+    $ci->db->from(DB_STUDENT);
+    $ci->db->join(DB_INVOICE, 'invoice.student_id = student.student_id');
+    $ci->db->where('invoice.class_id', $result->class_id);
     $query  = $ci->db->get();
     $result = $query->result();
 
@@ -572,20 +646,22 @@ function get_order_student($id = false)
     }
 }
 
-function get_order_student_content($id = false)
+function get_order_student_content($order_id, $class_code)
 {
     $ci = &get_instance();
 
     $ci->db->select('*, student.id as stud_id');
-    $ci->db->from('student');
+    $ci->db->from(DB_STUDENT);
+    $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+    $ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
     $ci->db->join('order_details', 'student.id = order_details.student_id');
-    $ci->db->where(['order_details.order_id' => $id, 'student.is_archive' => 0, 'student.is_active' => 1, 'student.status' => 4]);
+    $ci->db->where(['order_details.order_id' => $order_id, 'student.is_archive' => 0, 'student.is_active' => 1, 'student_to_class.status' => 4, 'class.class_code' => $class_code]);
     $query  = $ci->db->get();
     $result = $query->result();
     if ($result) {
         foreach ($result as $value) {
             ?>
-            <option value="<?php echo $value->stud_id; ?>"><?php echo $value->name; ?></option>
+            <option value="<?php echo $value->stud_id; ?>"><?php echo $value->name . ' - ' . get_class_code_by_class($value->class_id); ?></option>
             <?php
 }
     }
@@ -778,6 +854,7 @@ function send_first_month_invoice($student_id)
 
     $result3 = get_invoice_result3($result2->sid);
 
+    $class_id       = $result2->class_id;
     $emailto        = $result2->email;
     $fees           = isset($result2->monthly_fees) ? $result2->monthly_fees : 0;
     $extra_charges  = isset($result2->ex_charges) ? $result2->ex_charges : 0;
@@ -818,6 +895,7 @@ function send_first_month_invoice($student_id)
                 'invoice_id'                => $invoice_id,
                 'invoice_no'                => get_invoice_no(),
                 'student_id'                => $student_id,
+                'class_id'                  => $class_id,
                 'invoice_date'              => $date,
                 'invoice_amount'            => $invoice_amount,
                 'amount_excluding_material' => $amount_excluding_material,
@@ -861,6 +939,7 @@ function send_rest_month_invoice($student_id)
 
     $result3 = get_invoice_result3($result2->sid);
 
+    $class_id       = $result2->class_id;
     $emailto        = $result2->email;
     $fees           = isset($result2->monthly_fees) ? $result2->monthly_fees : 0;
     $extra_charges  = isset($result2->ex_charges) ? $result2->ex_charges : 0;
@@ -900,6 +979,7 @@ function send_rest_month_invoice($student_id)
                 'invoice_id'                => $invoice_id,
                 'invoice_no'                => get_invoice_no(),
                 'student_id'                => $student_id,
+                'class_id'                  => $class_id,
                 'invoice_date'              => $date,
                 'invoice_amount'            => $invoice_amount,
                 'amount_excluding_material' => $amount_excluding_material,
@@ -965,6 +1045,7 @@ function send_archived_invoice($student_id)
 
     $result3 = get_invoice_result3($result2->sid);
 
+    $class_id        = $result2->class_id;
     $emailto         = $result2->email;
     $fees            = isset($result2->monthly_fees) ? $result2->monthly_fees : 0;
     $extra_charges   = isset($result2->ex_charges) ? $result2->ex_charges : 0;
@@ -995,6 +1076,7 @@ function send_archived_invoice($student_id)
         'invoice_id'                => $invoice_id,
         'invoice_no'                => get_invoice_no(),
         'student_id'                => $student_id,
+        'class_id'                  => $class_id,
         'invoice_date'              => $date,
         'invoice_amount'            => $invoice_amount,
         'amount_excluding_material' => $amount_excluding_material,
@@ -1058,6 +1140,7 @@ function send_final_settlement_invoice($student_id)
 
     $result3 = get_invoice_result3($result2->sid);
 
+    $class_id        = $result2->class_id;
     $emailto         = $result2->email;
     $fees            = isset($result2->monthly_fees) ? $result2->monthly_fees : 0;
     $extra_charges   = isset($result2->ex_charges) ? $result2->ex_charges : 0;
@@ -1088,6 +1171,7 @@ function send_final_settlement_invoice($student_id)
         'invoice_id'                => $invoice_id,
         'invoice_no'                => get_invoice_no(),
         'student_id'                => $student_id,
+        'class_id'                  => $class_id,
         'invoice_date'              => $date,
         'invoice_amount'            => $invoice_amount,
         'amount_excluding_material' => $amount_excluding_material,
@@ -1152,6 +1236,7 @@ function send_class_transfer_invoice($student_id)
 
     $result3 = get_invoice_result3($result2->sid);
 
+    $class_id        = $result2->class_id;
     $emailto         = $result2->email;
     $fees            = isset($result2->monthly_fees) ? $result2->monthly_fees : 0;
     $extra_charges   = isset($result2->ex_charges) ? $result2->ex_charges : 0;
@@ -1182,6 +1267,7 @@ function send_class_transfer_invoice($student_id)
         'invoice_id'                => $invoice_id,
         'invoice_no'                => get_invoice_no(),
         'student_id'                => $student_id,
+        'class_id'                  => $class_id,
         'invoice_date'              => $date,
         'invoice_amount'            => $invoice_amount,
         'amount_excluding_material' => $amount_excluding_material,
@@ -1239,6 +1325,7 @@ function get_invoice_result2($student_id)
         $ci->db->where('YEAR(attendance.attendance_date) = YEAR(CURRENT_DATE())');
         $ci->db->limit(1);
         $query = $ci->db->get();
+        //die(print_r($ci->db->last_query()));
         return $query->row();
     }
 }
@@ -1262,7 +1349,7 @@ function get_invoice_result3($sid)
 
 function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoice_amount = false, $type = false, $subject, $message)
 {
-    $ci = &get_instance();
+    /*$ci = &get_instance();
     $ci->load->library('email');
 
     $config['protocol']     = 'smtp';
@@ -1288,16 +1375,17 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
 
     if ($ci->email->send()) {
         return true;
-    }
+    }*/
+    return true;
 }
 
 function send_sms($recipient, $message)
 {
-    $app_id = '2927';
+    $app_id     = '2927';
     $app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
 
     $ch = curl_init("http://www.smsdome.com/api/http/sendsms.aspx?appid=" . $app_id . "&appsecret=" . $app_secret . "&receivers=" . $recipient . "&content=" . $message . "&responseformat=JSON");
-    
+
     curl_setopt($ch, CURLOPT_HEADER, 0);
 
     curl_exec($ch);

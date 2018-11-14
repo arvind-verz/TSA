@@ -66,4 +66,25 @@ class Sms extends CI_Model
             return redirect('admin/sms_template');
         }
     }
+
+    public function sms_reminder_store() {
+        $fee_reminder = isset($_POST['fee_reminder']) ? $_POST['fee_reminder'] : null;
+        $late_fee_reminder = isset($_POST['late_fee_reminder']) ? $_POST['late_fee_reminder'] : null;
+
+        $data = [
+            'fee_reminder'  =>  $fee_reminder,
+            'late_fee_reminder' =>  $late_fee_reminder,
+        ];
+
+        $query = $this->db->get(DB_SMS_REMINDER);
+        if($query->num_rows()>0) {
+            $this->db->update(DB_SMS_REMINDER, $data);
+            $this->session->set_flashdata('success', SMS_REMINDER . ' ' . MSG_UPDATED);
+        }
+        else {
+            $this->db->insert(DB_SMS_REMINDER, $data);
+            $this->session->set_flashdata('success', SMS_REMINDER . ' ' . MSG_CREATED);
+        }
+        return redirect('admin/sms_reminder');
+    }
 }

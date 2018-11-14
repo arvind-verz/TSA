@@ -19,6 +19,7 @@ define('DB_BOOK', 'Book');
 define('DB_MATERIAL', 'material');
 define('DB_INVOICE', 'invoice');
 define('DB_BILLING', 'billing');
+define('DB_SMS_REMINDER', 'sms_reminder');
 
 define('DB_CONTACT', 'contact');
 define('DB_ENQUIRY', 'quick_enquiry');
@@ -47,6 +48,7 @@ define('INVOICE', 'Invoice');
 define('SMS', 'SMS');
 define('SMS_TEMPLATE', 'SMS Template');
 define('SMS_HISTORY', 'SMS History');
+define('SMS_REMINDER', 'SMS Reminder');
 define('BILLING', 'Billing');
 
 define('PERMISSION', 'Permission');

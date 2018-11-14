@@ -8,7 +8,14 @@
     </section>
 
     <?php $this->load->view('backend/include/messages') ?>
-    
+    <?php if (validation_errors()) {?>
+    <div class="col-lg-12">
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <?php echo validation_errors(); ?>
+        </div>
+    </div>
+    <?php }?>
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
@@ -28,19 +35,19 @@
                         
                         <div class="form-group">
                             <label for="">Email</label>
-                            <input type="email" name="email" class="form-control" value="">
+                            <input type="email" name="email" class="form-control" value="<?php echo set_value('email');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Username</label>
-                            <input type="text" name="username" class="form-control" value="">
+                            <input type="text" name="username" class="form-control" value="<?php echo set_value('username');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Phone</label>
-                            <input type="tel" name="phone" class="form-control" value="">
+                            <input type="tel" name="phone" class="form-control" value="<?php echo set_value('phone');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Age</label>
-                            <input type="number" name="age" class="form-control" value="">
+                            <input type="number" name="age" class="form-control" value="<?php echo set_value('age');?>">
                         </div>
                         
                         <div class="form-group">
@@ -48,7 +55,7 @@
                             <div class="col-sm-1"><label for="">Gender</label></div>
                             <div class="col-sm-2">
                             <label class="radio-inline">
-                                 <input name="gender" checked="checked"  value="0" type="radio" />Male
+                                 <input name="gender" value="0" type="radio" checked/>Male
                              </label>
                             </div>
                             <div class="col-sm-2">
@@ -60,19 +67,19 @@
                         </div>
                         <div class="form-group">
                             <label for="">Parent Name</label>
-                            <input type="text" name="parent_name" class="form-control" value="">
+                            <input type="text" name="parent_name" class="form-control" value="<?php echo set_value('parent_name');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Parent Email</label>
-                            <input type="email" name="parent_email" class="form-control" value="">
+                            <input type="email" name="parent_email" class="form-control" value="<?php echo set_value('parent_email');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Siblings</label>
-                            <input type="text" name="siblings" class="form-control" value="">
+                            <input type="text" name="siblings" class="form-control" value="<?php echo set_value('siblings');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Parents Phone</label>
-                            <input type="text" name="parents_phone" class="form-control" value="">
+                            <input type="text" name="parents_phone" class="form-control" value="<?php echo set_value('parents_phone');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Password</label>
@@ -80,11 +87,11 @@
                         </div>
                         <div class="form-group">
                             <label for="">Confirm Password</label>
-                            <input type="password" name="passconf" class="form-control" value="">
+                            <input type="password" name="confirm_password" class="form-control" value="">
                         </div>
                     </div>
                     <div class="box-footer">
-                        <a href="<?php echo site_url('admin/classes'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
+                        <a href="<?php echo site_url('admin/students'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                         <button type="submit" class="btn btn-info pull-right"><?php echo SUBMIT ?></button>
                     </div>
                     <?php echo form_close(); ?>
