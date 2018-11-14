@@ -97,6 +97,10 @@
 			'title' => SMS_HISTORY,
 			'url'   => 'admin/sms_history',
 			],
+			[
+			'title' => SMS_REMINDER,
+			'url'   => 'admin/sms_reminder',
+			],
 			],
 			],
 			];

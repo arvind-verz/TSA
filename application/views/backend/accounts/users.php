@@ -70,6 +70,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Access Control</th>
+                                        <th>Type</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -80,9 +81,10 @@
                                     foreach($users_data as $value) {
                                     ?>
                                     <tr>
-                                        <td><?php echo $value->username; ?></td>
-                                        <td><?php echo $value->email; ?></td>
-                                        <td><?php echo $value->name; ?></td>
+                                        <td><?php echo !empty($value->username) ? $value->username : '-'; ?></td>
+                                        <td><?php echo !empty($value->email) ? $value->email : '-'; ?></td>
+                                        <td><?php echo !empty($value->name) ? $value->name : '-'; ?></td>
+                                        <td><?php echo get_user_type($value->user_type); ?></td>
                                         <td>
                                             <a href="<?php echo site_url('admin/users/edit/' . $value->aauth_users_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
                                         </td>

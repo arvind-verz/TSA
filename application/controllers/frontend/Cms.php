@@ -70,9 +70,6 @@ class Cms extends CI_Controller {
 		$data['classes']  = $this->Cms_model->get_assign_class();
 		$data['menu_id'] = $page[0]['menu_id'];
 		$data['url'] = 'student-classes';
-		//$data['testimonials'] = $this->Cms_model->get_testimonials();
-
-		//$data['student_invoices']	= get_student_invoices();
 		$data['title'] = STUDENT . ' | Classes';
 		$data['page_title']	= STUDENT . ' | Classes';
 

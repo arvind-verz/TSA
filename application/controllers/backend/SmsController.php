@@ -95,4 +95,25 @@ class SmsController extends CI_Controller
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS', 'edits');
         $this->sms->sms_template_update($id, $_POST);
     }
+
+    public function sms_reminder() {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS_REMINDER', 'views');
+        $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(SMS_REMINDER, 'admin/sms_reminder');;
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title'] = $this->title;
+        $data['page_title'] = SMS_REMINDER;
+        $data['fee_reminder'] = get_fee_reminder();
+
+        $this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/sms/sms_reminder');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
+    }
+
+    public function sms_reminder_store() {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS_REMINDER', 'creates');
+        $this->sms->sms_reminder_store($_POST);
+    }
 }

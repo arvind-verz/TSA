@@ -64,9 +64,10 @@ class Students extends CI_Model
 	
 			$this->db->select('*')
 					 ->from('student')
-					 ->where('student_id',$id);				 
+					 ->join('student_to_class', 'student.student_id=student_to_class.student_id')
+					 ->where('student.student_id',$id);			 
 				$query = $this->db->get()->row_object();
-				//echo $this->db->last_query();					
+				//echo $this->db->last_query();				
 				return $query;	
 	}
 	
@@ -161,8 +162,17 @@ class Students extends CI_Model
         //die(print_r($_POST));
 		$student_code=explode(',',$_POST['student_code']);
 		$msg='';
+		if($_POST['student_status']==4) {
+			$data2 = array(
+				'is_active'   => 1,
+			);
+			
+			$this->db->where(['student_id'	=>	$student]);
+			$this->db->update('student', $data2);
+		}
 		if($_POST['student_status']==1)
 		{
+			$this->db->trans_start();
 		foreach($student_code as $student)
 		{
 				$query = $this->db->get_where('student_enrollment', ['student_id'	=>	$student]);
@@ -181,53 +191,44 @@ class Students extends CI_Model
 						'updated_at'   => $this->date
 					);
 			
-					$this->db->trans_start();
+					
 					$this->db->insert('student_enrollment', $data);
-					$this->db->trans_complete();
+					
 				}
-			
-			
-			$data2 = array(
-			'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
-			'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
-			);
-			
-			$this->db->trans_start();
-			$this->db->where('student_id', $student);
-			$this->db->update('student', $data2);
-			$this->db->trans_complete();
-			$msg='Enrolled successfully';
-			//echo $this->db->last_query();die;
+				$data2 = array(
+					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
+					);
+					
+					$this->db->where(['student_id'	=>	$student, 'class_id'	=>	$_POST['class_code']]);
+					$this->db->update('student_to_class', $data2);
+					$msg='Enrolled successfully';
 		}
+		$this->db->trans_complete();
 		}
 		else if($_POST['student_status']==2)
 		{
 			foreach($student_code as $student)
 			{
 				$data2 = array(
+				'student_id'	=>	$student,
+				'class_id'	=>	!empty($_POST['class_code']) ? $_POST['class_code'] : '',
 				'reservation_date'    => !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '',
-
-				'class_id'    => !empty($_POST['class_code']) ? $_POST['class_code'] : '',
-
-				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
+				'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : '',
+				'created_at'   => date('Y-m-d H:i:s'),
 				);
-					/*foreach($_POST['class_code'] as $class):
-					if($student!="all")
-					{
-						$data3 = array(
-						'student_id'    => $student,
-						'class_id'   => $class
-						);
-						
-						$this->db->trans_start();
-						$this->db->insert('student_to_class', $data3);
-						$this->db->trans_complete();
-					}
-					endforeach;*/
-				$this->db->trans_start();
-				$this->db->where('student_id', $student);
-				$this->db->update('student', $data2);
-				$this->db->trans_complete();
+				
+				$query = $this->db->get_where('student_to_class', ['student_id'	=>	$student, 'class_id'	=>	$_POST['class_code']]);
+				if($query->num_rows()>0) {
+					$this->db->trans_start();
+					$this->db->where('student_to_class', ['student_id'	=>	$student, 'class_id'	=>	$$_POST['class_code']]);
+					$this->db->update('student_to_class', $data2);
+					$this->db->trans_complete();
+				}
+				else {
+					$this->db->trans_start();
+					$this->db->insert('student_to_class', $data2);
+					$this->db->trans_complete();
+				}
 			}
 		$msg='Reserved successfully';
 		}
@@ -235,17 +236,14 @@ class Students extends CI_Model
 		{
 			foreach($student_code as $student)
 			{
-				$query = $this->db->get_where(DB_STUDENT, ['status'	=>	4, 'student_id'	=>	$student]);
-				if($query->num_rows()<1) {
 					$data2 = array(
 					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
 					);
 					
 					$this->db->trans_start();
-					$this->db->where('student_id', $student);
-					$this->db->update('student', $data2);
+					$this->db->where(['student_id'	=> $student, 'class_id'	=>	$_POST['class_code']]);
+					$this->db->update('student_to_class', $data2);
 					$this->db->trans_complete();
-				}
 			}
 		$msg='Updated successfully';
 		}

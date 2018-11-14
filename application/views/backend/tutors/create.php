@@ -8,7 +8,14 @@
     </section>
 
     <?php $this->load->view('backend/include/messages') ;
-	$subjects=$this->tutors->get_subjects();
+    if (validation_errors()) {?>
+    <div class="col-lg-12">
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <?php echo validation_errors(); ?>
+        </div>
+    </div>
+    <?php }
 	?>
     
     <!-- Main content -->
@@ -26,15 +33,15 @@
                         
                         <div class="form-group">
                             <label for="">Email</label>
-                            <input type="email" name="email" class="form-control" value="">
+                            <input type="email" name="email" class="form-control" value="<?php echo set_value('email');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Phone</label>
-                            <input type="tel" name="phone" class="form-control" value="">
+                            <input type="tel" name="phone" class="form-control" value="<?php echo set_value('phone');?>">
                         </div>
                         <div class="form-group">
                             <label for="">Address</label>
-                            <textarea name="address" class="form-control"></textarea>
+                            <textarea name="address" class="form-control"><?php echo set_value('address');?></textarea>
                         </div> 
                         <div class="form-group">
                             <label for="">Salary Scheme</label>
@@ -46,7 +53,7 @@
                         </div>                       
                         <div class="form-group">
                             <label for="">Remarks </label>
-                            <input type="text" name="remarks" class="form-control" value="">
+                            <input type="text" name="remarks" class="form-control" value="<?php echo set_value('remarks');?>">
                         </div>
                          <div class="form-group">
                             <label for="">Subject </label>
@@ -80,11 +87,11 @@
                         </div>
                         <div class="form-group">
                             <label for="">Confirm Password</label>
-                            <input type="password" name="passconf" class="form-control" value="">
+                            <input type="password" name="confirm_password" class="form-control" value="">
                         </div>
                     </div>
                     <div class="box-footer">
-                        <a href="<?php echo site_url('admin/classes'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
+                        <a href="<?php echo site_url('admin/tutors'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                         <button type="submit" class="btn btn-info pull-right"><?php echo SUBMIT ?></button>
                     </div>
                     <?php echo form_close(); ?>

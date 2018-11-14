@@ -4,9 +4,9 @@
         <h1><?php print_r($page_title); ?></h1>
         <?php print_r($breadcrumbs); ?>
     </section> 
-	<?php 
+	<?php
 	$this->load->view('backend/include/messages');
-	$subjects=$this->tutors->get_subjects();
+	//$subjects=$this->tutors->get_subjects();
 	?>
    
     <!-- Main content -->
@@ -57,7 +57,7 @@
                                 <option value="">-- Select One --</option>
                                 <?php if(count($subjects)>0){
 								      foreach($subjects as $subject):?>
-									  <option <?php if($subject->subject_code==$tutor->subject) echo 'selected="selected"';?> value="<?php echo $subject->subject_code;?>"><?php echo $subject->subject_name;?></option>
+									  <option <?php if($subject->subject_code==$tutor->subject) {echo 'selected';}?> value="<?php echo $subject->subject_code;?>"><?php echo $subject->subject_name;?></option>
 								<?php endforeach;}?>
                                
                             </select>
@@ -71,7 +71,7 @@
                                     if(count($permission_data)) {
                                     foreach($permission_data as $value) {
                                     ?>
-                                    <option <?php if($value->id==$tutor->tutor_permission) echo 'selected="selected"';?> value="<?php echo isset($value->id) ? $value->id : '' ?>"><?php echo isset($value->name) ? $value->name : ''; ?></option>
+                                    <option <?php if($value->id==$tutor->perm_id) echo 'selected';?> value="<?php echo isset($value->id) ? $value->id : '' ?>"><?php echo isset($value->name) ? $value->name : ''; ?></option>
                                     <?php
                                     }}
                                     ?>
@@ -87,7 +87,7 @@
                         </div>
                     </div>
                     <div class="box-footer">
-                        <a href="<?php echo site_url('admin/classes'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
+                        <a href="<?php echo site_url('admin/tutors'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                         <button type="submit" class="btn btn-info pull-right"><?php echo UPDATES ?></button>
                     </div>
                     <?php echo form_close(); ?>

@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div class="box-footer">
-                        <a href="<?php echo site_url('admin/classes'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
+                        <a href="<?php echo site_url('admin/students'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                         <button type="submit" class="btn btn-info pull-right"><?php echo UPDATES ?></button>
                     </div>
                     <?php echo form_close(); ?>
