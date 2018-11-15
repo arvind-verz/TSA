@@ -106,11 +106,11 @@ class Cms extends CI_Controller {
 		else
 		{
 		
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push('404 Page', '404 Page');
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push('404 Page', '404 Page');
 		$data_msg['menu_id'] = 0;
 		$data_msg['url'] = '404 Page';		
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();
 		
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/page-not-found');
@@ -119,19 +119,19 @@ class Cms extends CI_Controller {
 		}
 		if($url=='thank-you')
 		{
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push($page[0]['page_heading'], '#');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/thank-you');
         $this->load->view('frontend/include/footer');
 		}
 		else if($url=='subjects')
 		{
-		$this->breadcrumbs->push('Login', 'login');
-        $this->breadcrumbs->push('Subjects', 'subjects');
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push('Subjects', 'subjects');
 		$data_msg['subjects'] = $this->Cms_model->get_subjects();
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/subjects');
         $this->load->view('frontend/include/footer');
@@ -139,9 +139,9 @@ class Cms extends CI_Controller {
 		}
 		else if($url=='login')
 		{
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push('Home', 'home');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push('Home', 'home');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/accounts/login');
         $this->load->view('frontend/include/footer');
@@ -149,9 +149,9 @@ class Cms extends CI_Controller {
 		}
 		else if($url=='reset-password')
 		{
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push('Home', 'home');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push('Reset Password', 'home');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/accounts/reset-password');
         $this->load->view('frontend/include/footer');
@@ -159,10 +159,10 @@ class Cms extends CI_Controller {
 		}
 		else if(count($page)>0 && $page[0]['template']=='About Us')
 		{
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push('About Us', 'about-us');
-        $this->breadcrumbs->push($page[0]['page_heading'], '#');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push('About Us', 'about-us');
+        $this->breadcrumbs2->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/about');
         $this->load->view('frontend/include/footer');
@@ -170,9 +170,9 @@ class Cms extends CI_Controller {
 		
 		else if(count($page)>0 && $page[0]['template']=='Full Width')
 		{
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push($page[0]['page_heading'], '#');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();	
 		$this->load->view('frontend/include/header', $data_msg);
         $this->load->view('frontend/inner_page');
         $this->load->view('frontend/include/footer');
@@ -188,9 +188,9 @@ class Cms extends CI_Controller {
 		$data_msg['url'] =$url="testimonial";	
 		$data_msg['page'] = $page = $this->Cms_model->get_page($url);
 		$data_msg['menu_id'] = $page[0]['menu_id'];
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push($page[0]['page_heading'], '#');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();		
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();		
 		$data_msg['testimonials'] = $this->Cms_model->get_testimonials();
 		
 		$this->load->view('frontend/include/header', $data_msg);
@@ -257,9 +257,9 @@ class Cms extends CI_Controller {
 		
 		$data_msg['menu_id'] = $page[0]['menu_id'];
 		$data_msg['url'] = $url;
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push('Contact Us', 'contact-us');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push('Contact Us', 'contact-us');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();	
 		
 		$configForm = array(
                array(
@@ -550,6 +550,17 @@ class Cms extends CI_Controller {
         $this->view('membership_type_cms',$data_msg);
 		
 	}
+
+	public function miss_class_request() {
+        $class_id = isset($_GET['class_id']) ? $_GET['class_id'] : '';
+        print_r(miss_class_request($class_id));
+    }
 	
-	
+	public function student_classes_search() {
+        $searchby = isset($_GET['searchby']) ? $_GET['searchby'] : '';
+        $sortby = isset($_GET['sortby']) ? $_GET['sortby'] : '';
+        $searchfield = isset($_GET['searchfield']) ? $_GET['searchfield'] : '';
+
+        print_r(get_student_classes_search_data($searchby, $sortby, $searchfield));
+    }
 }

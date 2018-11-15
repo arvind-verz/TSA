@@ -236,8 +236,8 @@ class StudentController extends CI_Controller
 
     public function get_student_status()
     {
-        $class_id   = $_GET['class_id'];
-        $student_id = $_GET['student_id'];
+        $class_id   = isset($_GET['class_id']) ? $_GET['class_id'] : '';
+        $student_id = isset($_GET['student_id']) ? $_GET['student_id'] : '';
         print_r(get_student_status($class_id, $student_id));
     }
 }

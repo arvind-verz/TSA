@@ -161,6 +161,7 @@ class Students extends CI_Model
     {
         //die(print_r($_POST));
 		$student_code=explode(',',$_POST['student_code']);
+		$class_id=$_POST['class_code'];
 		$msg='';
 		if($_POST['student_status']==4) {
 			$data2 = array(
@@ -175,10 +176,12 @@ class Students extends CI_Model
 			$this->db->trans_start();
 		foreach($student_code as $student)
 		{
-				$query = $this->db->get_where('student_enrollment', ['student_id'	=>	$student]);
+				$query = $this->db->get_where('student_enrollment', ['student_id'	=>	$student, 'class_id'	=>	$class_id]);
+				$result = $query->row();
 				if($query->num_rows()<1) {
 					$data = array(
 						'student_id'     => $student,
+						'class_id'     => $class_id,
 						'enrollment_date'     => !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '',
 						'collected'      => !empty($_POST['depo_collected']) ? $_POST['depo_collected'] : '',
 						'deposit'   => !empty($_POST['deposit']) ? $_POST['deposit'] : '',
@@ -190,13 +193,32 @@ class Students extends CI_Model
 						'created_at'   => $this->date,
 						'updated_at'   => $this->date
 					);
-			
 					
+					$this->db->select('*');
+					$this->db->from(DB_STUDENT);
+					$this->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+					$this->db->where(['student_to_class.class_id'	=>	$class_id]);
+					$query1 = $this->db->get();
+                	$result1 = $query1->row();
+                	if($result1) {
+						$recipients = [
+		                    'phone' =>  $result1->phone,
+		                    'parents_phone' =>  $result1->parents_phone,
+		                ];
+
+		                $message = "Hello " . $result1->name . ", You are enrolled successfully on " . date('Y-m-d', strtotime($result1->reservation_date . ' -1 days'));
+
+		                foreach($recipients as $recipient) {
+		                    send_sms($recipient, $message, 1, $class_code);
+		                }
+		            }
+
 					$this->db->insert('student_enrollment', $data);
 					
 				}
 				$data2 = array(
-					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
+					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : '',
+					'updated_at'   => $this->date,
 					);
 					
 					$this->db->where(['student_id'	=>	$student, 'class_id'	=>	$_POST['class_code']]);
@@ -220,7 +242,7 @@ class Students extends CI_Model
 				$query = $this->db->get_where('student_to_class', ['student_id'	=>	$student, 'class_id'	=>	$_POST['class_code']]);
 				if($query->num_rows()>0) {
 					$this->db->trans_start();
-					$this->db->where('student_to_class', ['student_id'	=>	$student, 'class_id'	=>	$$_POST['class_code']]);
+					$this->db->where('student_to_class', ['student_id'	=>	$student, 'class_id'	=>	$_POST['class_code']]);
 					$this->db->update('student_to_class', $data2);
 					$this->db->trans_complete();
 				}
@@ -237,7 +259,8 @@ class Students extends CI_Model
 			foreach($student_code as $student)
 			{
 					$data2 = array(
-					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : ''
+					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : '',
+					'updated_at'   => $this->date
 					);
 					
 					$this->db->trans_start();
