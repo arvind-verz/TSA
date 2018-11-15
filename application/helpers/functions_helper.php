@@ -15,20 +15,22 @@ function get_currency($currency_code = false)
     }
 }
 
-function get_tutor_of_class($tutor_id) {
+function get_tutor_of_class($tutor_id)
+{
     $ci = &get_instance();
 
-    $query = $ci->db->get_where(DB_TUTOR, ['tutor_id'    =>  $tutor_id]);
+    $query  = $ci->db->get_where(DB_TUTOR, ['tutor_id' => $tutor_id]);
     $result = $query->row();
-    if($result) {
+    if ($result) {
         return $result->tutor_name;
     }
 }
 
-function get_user_type($user_type) {
+function get_user_type($user_type)
+{
     $user_type_arr = ['Admin', 'User', 'Tutor'];
 
-    return $user_type_arr[($user_type-1)];
+    return $user_type_arr[($user_type - 1)];
 }
 
 function get_enrolled_classes($student_id)
@@ -49,6 +51,102 @@ function get_enrolled_classes($student_id)
     } else {
         return "-";
     }
+}
+
+function miss_class_request($class_id) {
+    $ci         = &get_instance();
+    $student = $ci->session->userdata('student_credentials');
+    $query = $ci->db->get_where(DB_STUDENT, ['id'    =>  $student['id']]);
+    $result = $query->row();
+
+    $query1 = $ci->db->get_where(DB_CLASSES, ['class_id'    =>  $class_id]);
+    $result1 = $query1->row();
+    if($result && $result1) {
+        $class_code = $result1->class_code;
+        $student_id = $result->student_id;
+        $current_date = date('Y-m-d');
+        
+        $query = $ci->db->get_where(DB_ATTENDANCE, ['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
+        $result = $query->row();
+        if($result) {
+            $attendance_date = date("Y-m-d", strtotime($result->attendance_date));
+            if($result->status=='["0","1","0","0","0","0"]') {
+                return "updated";
+            }
+            if($attendance_date==$current_date) {
+                $data = [
+                    'status' => json_encode(["0","1","0","0","0","0"]),
+                ];
+                $ci->db->where(['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
+                $ci->db->update(DB_ATTENDANCE, $data);
+                return "success";
+            }
+            return "failed";
+        }
+        return "pending";
+    }
+    return "failed";
+}
+
+function get_student_classes_search_data($searchby, $sortby, $searchfield) {
+    $ci = &get_instance();
+
+    if($searchfield) {
+        if(empty($searchby)) {
+            $searchby = 'classname';
+        }
+        if($searchby=='classname') {
+            $ci->db->select('*');
+            $ci->db->from(DB_CLASSES);
+            $ci->db->like('class_name', $searchfield, 'both');
+        }
+        if($searchby=='tutor') {
+            $ci->db->select('*');
+            $ci->db->from(DB_CLASSES);
+            $ci->db->join(DB_TUTOR, 'class.tutor_id = tutor.tutor_id');
+            $ci->db->like('tutor.tutor_name', $searchfield, 'both');
+        }
+    }
+    if($sortby) {
+        if($sortby=='name') {
+            $ci->db->select('*');
+            $ci->db->from(DB_CLASSES);
+            $ci->db->order_by('class_name', 'ASC');
+        }
+        if($sortby=='date') {
+            $ci->db->select('*');
+            $ci->db->from(DB_CLASSES);
+            $ci->db->order_by('created_at', 'ASC');
+        }
+    }
+    $query = $ci->db->get();
+    $result = $query->result();
+
+    if(count($result)) {
+    foreach($result as $class) {
+    ?>
+    <div class="col-md-6">
+        <div class="row-inner-md">
+            <div class="class-box">
+                <div class="class-hd">
+                    <?php echo isset($class->class_name) ? $class->class_name : '-'; ?>
+                </div>
+                <div class="class-info">
+                    <ul>
+                        <li><strong>Status</strong><span class="cinfo txt-green">Enrolled</span></li>
+                        <li><strong>Tutor</strong><span class="cinfo"><?php echo get_tutor_of_class($class->tutor_id); ?></span></li>
+                        <li><strong>Frequency (Monthly)</strong><span class="cinfo"><?php echo isset($class->frequency) ? $class->frequency : '-'; ?></span></li>
+                        <li><strong>Monthly Fee</strong><span class="cinfo">$<?php echo isset($class->monthly_fees) ? $class->monthly_fees : '-'; ?></span></li>
+                        <li><strong>First Lesson Date</strong><span class="cinfo">1 Jun 2018</span></li>
+                        <li><strong>Last Lesson Date</strong><span class="cinfo">N/A</span></li>
+                    </ul>
+                    <a href="javascript:void(0);" name="<?php echo isset($class->class_id) ? $class->class_id : ''; ?>" class="button btn-light miss_class_request">Miss Class Request</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+    }}
 }
 
 function get_student_status($class_id, $student_id)
@@ -797,6 +895,56 @@ function get_sms_template($id = false)
     }
 }
 
+function get_sms_history($id = false) {
+    $ci = &get_instance();
+
+    if ($id) {
+        $query  = $ci->db->get_where('sent_sms', ['id' => $id]);
+        $result = $query->row();
+    } else {
+        $query  = $ci->db->get('sent_sms');
+        $result = $query->result();
+    }
+    if ($query) {
+        return $result;
+    }
+}
+
+function get_student_details_by_sms_history($recipient) {
+    $ci = &get_instance();
+    
+    if ($recipient) {
+        $ci->db->select('*');
+        $ci->db->from(DB_STUDENT);
+        $ci->db->where(['phone' => $recipient]);
+        $ci->db->limit(1);
+        $query = $ci->db->get();
+        $result = $query->row();
+        if($result) {
+            return [
+                'student_name'  =>  $result->name,
+                'student_id'    =>  $result->student_id,
+            ];
+        }
+    }
+    return false;
+}
+
+function get_pre_condition_template($reason) {
+    $ci = &get_instance();
+
+    $condition_array = ['Student absent without leave', 'Fee reminder', 'Late Fee reminder', 'Student filled a miss class request', 'Reminder one day before reservation', 'Centre wide announcements'];
+
+    $query = $ci->db->get_where('sms_template', ['reason'    =>  $reason]);
+    $result = $query->row();
+    if($result) {
+        return [
+            'pre_condition' =>  $condition_array[($reason-1)],
+            'template_name' =>  $result->template_name,
+        ];
+    }
+}
+
 function get_billing($id = false)
 {
     $ci = &get_instance();
@@ -1374,20 +1522,39 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
     $ci->email->message($message);
 
     if ($ci->email->send()) {
-        return true;
+    return true;
     }*/
     return true;
 }
 
-function send_sms($recipient, $message)
+function send_sms($recipient, $message, $template_id = null, $class_code = null)
 {
+    $ci = &get_instance();
+
+    $status     = 0;
     $app_id     = '2927';
     $app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
 
-    $ch = curl_init("http://www.smsdome.com/api/http/sendsms.aspx?appid=" . $app_id . "&appsecret=" . $app_secret . "&receivers=" . $recipient . "&content=" . $message . "&responseformat=JSON");
+    $url = "http://www.smsdome.com/api/http/sendsms.aspx?appid=" . urlencode($app_id) . "&appsecret=" . urlencode($app_secret) . "&receivers=" . urlencode($recipient) . "&content=" . urlencode($message) . "&responseformat=JSON";
 
-    curl_setopt($ch, CURLOPT_HEADER, 0);
+    $ch = curl_init($url);
 
-    curl_exec($ch);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $result   = curl_exec($ch);
+    $response = json_decode($result);
     curl_close($ch);
+    if ($response->result->status == 'OK') {
+        $status = 1;
+    }
+    $data = [
+        'template_id' => $template_id,
+        'class_code' => $class_code,
+        'recipient'   => $recipient,
+        'message'     => $message,
+        'status'      => $status,
+        'created_at'  => date('Y-m-d H:i:s'),
+    ];
+    $ci->db->insert('sent_sms', $data);
 }

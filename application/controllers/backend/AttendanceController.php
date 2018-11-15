@@ -116,10 +116,4 @@ class AttendanceController extends CI_Controller
     {
        
     }
-
-    public function miss_class_request() {
-        $class_id = isset($_GET['class_id']) ? $_GET['class_id'] : '';
-        $result = $this->attendance->miss_class_request($class_id);
-        print_r($result);
-    }
 }

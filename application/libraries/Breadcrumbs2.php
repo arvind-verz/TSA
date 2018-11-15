@@ -10,13 +10,14 @@
  * @copyright 	Copyright (c) 2012, Buti
  * @link		https://github.com/nobuti/codeigniter-breadcrumb
  */
-class Breadcrumbs {
+
+class Breadcrumbs2 {
 	
 	/**
 	 * Breadcrumbs stack
 	 *
      */
-	private $breadcrumbs = array();
+	private $breadcrumbs2 = array();
 	 	
 	 /**
 	  * Constructor
@@ -28,7 +29,7 @@ class Breadcrumbs {
 	{	
 		$this->ci =& get_instance();
 		// Load config file
-		$this->ci->load->config('breadcrumbs');
+		$this->ci->load->config('breadcrumbs2');
 		// Get breadcrumbs display options
 		$this->tag_open = $this->ci->config->item('tag_open');
 		$this->tag_close = $this->ci->config->item('tag_close');
@@ -60,7 +61,7 @@ class Breadcrumbs {
 		$href = site_url($href);
 		
 		// push breadcrumb
-		$this->breadcrumbs[$href] = array('page' => $page, 'href' => $href);
+		$this->breadcrumbs2[$href] = array('page' => $page, 'href' => $href);
 	}
 	
 	// --------------------------------------------------------------------
@@ -82,7 +83,7 @@ class Breadcrumbs {
 		$href = site_url($href);
 		
 		// add at firts
-		array_unshift($this->breadcrumbs, array('page' => $page, 'href' => $href));
+		array_unshift($this->breadcrumbs2, array('page' => $page, 'href' => $href));
 	}
 	
 	// --------------------------------------------------------------------
@@ -95,14 +96,14 @@ class Breadcrumbs {
 	 */		
 	function show()
 	{
-		if ($this->breadcrumbs) {
+		if ($this->breadcrumbs2) {
 		
 			// set output variable
 			$output = $this->tag_open;
 			
 			// construct output
-			foreach ($this->breadcrumbs as $key => $crumb) {
-				$keys = array_keys($this->breadcrumbs);
+			foreach ($this->breadcrumbs2 as $key => $crumb) {
+				$keys = array_keys($this->breadcrumbs2);
 				if (end($keys) == $key) {
 					$output .= $this->crumb_last_open . '' . $crumb['page'] . '' . $this->crumb_close;
 				} else {
@@ -119,7 +120,6 @@ class Breadcrumbs {
 	}
 
 }
-
 // END Breadcrumbs Class
 
 /* End of file Breadcrumbs.php */

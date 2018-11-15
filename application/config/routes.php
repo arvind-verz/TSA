@@ -13,6 +13,9 @@ $route['login/reset-password/new-password/(:any)']         = 'frontend/AccountsC
 $route['login/reset-password/new-password/process/(:any)'] = 'frontend/AccountsController/reset_new_password_process/$1';
 $route['logout']                                           = 'frontend/AccountsController/logout';
 
+$route['attendance/miss_class_request']   = 'frontend/Cms/miss_class_request';
+$route['students/student-classes-search'] = 'frontend/Cms/student_classes_search';
+
 $route['student-profile']  = 'frontend/Cms/student_profile';
 $route['student-invoices'] = 'frontend/Cms/student_invoices';
 $route['student-classes']  = 'frontend/Cms/student_classes';
@@ -131,7 +134,7 @@ $route['admin/sms_template/sms_template_update/(:any)'] = 'backend/SmsController
 
 $route['admin/sms_history'] = 'backend/SmsController/sms_history';
 
-$route['admin/sms_reminder'] = 'backend/SmsController/sms_reminder';
+$route['admin/sms_reminder']       = 'backend/SmsController/sms_reminder';
 $route['admin/sms_reminder/store'] = 'backend/SmsController/sms_reminder_store';
 
 /* BILLING */
@@ -152,9 +155,6 @@ $route['admin/attendance/get_attendance_summary']    = 'backend/AttendanceContro
 $route['admin/attendance/transfer_student']          = 'backend/AttendanceController/transfer_student';
 $route['admin/attendance/get_class_code_transfer']   = 'backend/AttendanceController/get_class_code_transfer';
 $route['admin/attendance/get_attendance_edit_sheet'] = 'backend/AttendanceController/get_attendance_edit_sheet';
-$route['admin/attendance/miss_class_request'] = 'backend/AttendanceController/miss_class_request';
-
-
 
 /* ORDER */
 $route['admin/order']                     = 'backend/OrderController/index';

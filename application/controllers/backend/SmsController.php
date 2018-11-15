@@ -39,6 +39,7 @@ class SmsController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title'] = $this->title;
         $data['page_title'] = SMS_HISTORY;
+        $data['sms_history'] = get_sms_history();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');

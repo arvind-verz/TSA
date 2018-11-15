@@ -24,29 +24,29 @@
 					<div class="search-by fleft">
 						<label>Search By:</label>
 						<div class="tool-control fright">
-							<select class="selectpicker alt" data-width="100%" data-style="" title="Class Name">
-								<option>Select</option>
-								<option>Select</option>
+							<select class="selectpicker alt searchby" data-width="100%" data-style="" title="Class Name">
+								<option value="classname">Class Name</option>
+								<option value="tutor">Tutor</option>
 							</select>
 						</div>
 						<div class="clear"></div>
 					</div>
 					<div class="tool-input fleft">
-						<input type="text" placeholder="WR-S" class="form-control alt">
+						<input type="text" placeholder="WR-S" class="form-control alt searchfield">
 					</div>
 					<div class="short-by fright">
 						<label>Sort By:</label>
 						<div class="tool-control fright">
-							<select class="selectpicker alt" data-width="100%" data-style="" title="<i class='jcon-down-thin'></i> Name">
-								<option>Select</option>
-								<option>Select</option>
+							<select class="selectpicker alt sortby" data-width="100%" data-style="" title="<i class='jcon-down-thin'></i> Name">
+								<option value="name">Name</option>
+								<option value="date">Date</option>
 							</select>
 						</div>
 						<div class="clear"></div>
 					</div>
 					<div class="clear"></div>
 				</div>
-				<div class="row pt40">
+				<div class="row pt40 display_data">
 					<?php
 					if(count($classes)) {
 					foreach($classes as $class) {
@@ -66,7 +66,7 @@
 										<li><strong>First Lesson Date</strong><span class="cinfo">1 Jun 2018</span></li>
 										<li><strong>Last Lesson Date</strong><span class="cinfo">N/A</span></li>
 									</ul>
-									<a href="javascript:void(0);" name="<?php echo isset($class->id) ? $class->id : ''; ?>" class="button btn-light miss_class_request">Miss Class Request</a>
+									<a href="javascript:void(0);" name="<?php echo isset($class->class_id) ? $class->class_id : ''; ?>" class="button btn-light miss_class_request">Miss Class Request</a>
 								</div>
 							</div>
 						</div>
@@ -83,7 +83,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("a.miss_class_request").on("click", function() {
+		$("body").on("click", "a.miss_class_request", function() {
 			$("a.miss_class_request").next().remove();
 			var r = confirm("Are you sure?");
 			var class_id = $(this).attr("name");
@@ -91,7 +91,7 @@
 			if(r==true) {
 				$.ajax({
 					type: 'GET',
-	                url: '<?php echo site_url('admin/attendance/miss_class_request'); ?>',
+	                url: '<?php echo site_url('attendance/miss_class_request'); ?>',
 	                data: 'class_id=' + class_id,
 	                async: false,
 	                processData: false,
@@ -112,6 +112,41 @@
 	                }
 				});
 			}
+		});
+
+		$("select.sortby").on("change", function() {
+			var sortby = $("select.sortby").val();
+
+			$.ajax({
+				type: 'GET',
+                url: '<?php echo site_url('students/student-classes-search'); ?>',
+                data: 'sortby=' + sortby,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                	//alert(data);
+                	$(".display_data").html(data);
+                }
+            });
+		});
+
+		$("input.searchfield, select.searchby").on("change", function() {
+			var searchby = $("select.searchby").val();
+			var searchfield = $("input.searchfield").val();
+
+			$.ajax({
+				type: 'GET',
+                url: '<?php echo site_url('students/student-classes-search'); ?>',
+                data: 'searchby=' + searchby + '&searchfield=' + searchfield,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                	//alert(data);
+                	$(".display_data").html(data);
+                }
+            });
 		});
 	});
 </script>
