@@ -12,7 +12,6 @@ class Attendance extends CI_Model
 
     public function store()
     {
-        //die(print_r($_POST['attendance_value3']));
         $query = $this->db->get_where(DB_ATTENDANCE, ['class_code' => $_POST['class_code'], 'attendance_date' => $_POST['attendance_date']]);
         if($query->num_rows()>0) {
         	$this->session->set_flashdata('warning', ATTENDANCE . ' ' . MSG_EXIST);
@@ -29,7 +28,25 @@ class Attendance extends CI_Model
                 'created_at'      => $this->date,
                 'updated_at'      => $this->date,
             );
+            $missed_class = $_POST['attendance_value' . ($i+1)][1];
+            $class_code = $_POST['class_code'];
             $this->db->trans_start();
+            if($missed_class==1) {
+                $query = $this->db->get_where(DB_STUDENT, ['student_id'  =>  $_POST['student_id'][$i]]);
+                $result = $query->row();
+                if($result) {
+                    $recipients = [
+                        'phone' =>  $result->phone,
+                        'parents_phone' =>  $result->parents_phone,
+                    ];
+
+                    $message = "Hello " . $result->name . ", Your class has been missed on " . date('Y-m-d', strtotime($this->date));
+
+                    foreach($recipients as $recipient) {
+                        send_sms($recipient, $message, 1, $class_code);
+                    }
+                }
+            }
             $this->db->insert(DB_ATTENDANCE, $data);
             $this->db->trans_complete();
         }

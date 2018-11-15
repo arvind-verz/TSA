@@ -66,16 +66,27 @@ function miss_class_request($class_id) {
         $student_id = $result->student_id;
         $current_date = date('Y-m-d');
         
-        $query = $ci->db->get_where(DB_ATTENDANCE, ['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
-        $result = $query->row();
-        if($result) {
-            $attendance_date = date("Y-m-d", strtotime($result->attendance_date));
-            if($result->status=='["0","1","0","0","0","0"]') {
+        $query2 = $ci->db->get_where(DB_ATTENDANCE, ['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
+        $result2 = $query2->row();
+        if($result2) {
+            $attendance_date = date("Y-m-d", strtotime($result2->attendance_date));
+            if($result2->status=='["0","1","0","0","0","0"]') {
                 return "updated";
             }
             if($attendance_date==$current_date) {
+                $recipients = [
+                    'phone' =>  $result->phone,
+                    'parents_phone' =>  $result->parents_phone,
+                ];
+
+                $message = "Hello " . $result->name . ", You have request for missed class dated on " . date('Y-m-d', strtotime($result2->attendance_date));
+                foreach($recipients as $recipient) {
+                    send_sms($recipient, $message, 4, $result1->class_code);
+                }
+
                 $data = [
                     'status' => json_encode(["0","1","0","0","0","0"]),
+                    'missed_update' =>  date('Y-m-d H:i:s'),
                 ];
                 $ci->db->where(['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
                 $ci->db->update(DB_ATTENDANCE, $data);
@@ -1531,6 +1542,9 @@ function send_sms($recipient, $message, $template_id = null, $class_code = null)
 {
     $ci = &get_instance();
 
+    if(empty($recipient)) {
+        return false;
+    }
     $status     = 0;
     $app_id     = '2927';
     $app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
