@@ -156,7 +156,7 @@ class StudentController extends CI_Controller
             $file_name_placeholder = array_keys($_FILES);
             $image_file = $_FILES['profile_picture']['name'];
 
-            $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0]);
+            $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0], 1);
             
             
             $this->students->store($_POST);
@@ -168,6 +168,7 @@ class StudentController extends CI_Controller
 
     public function enroll()
     {
+        
         $this->students->store_2($_POST);
     }
 
@@ -202,7 +203,7 @@ class StudentController extends CI_Controller
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('name', 'Name', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|is_unique[student.email]');
+        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('phone', 'Phone', 'required');
         $this->form_validation->set_rules('age', 'Age', 'required');
@@ -220,6 +221,9 @@ class StudentController extends CI_Controller
             $this->session->set_flashdata('error', validation_errors());
             return redirect('admin/students/edit/' . $id);
         } else {
+            $image_file = $_FILES['profile_picture']['name'];
+
+            $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0], 0);
             $this->students->update($id, $_POST);
 
         }
