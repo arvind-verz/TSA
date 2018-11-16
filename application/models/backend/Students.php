@@ -125,7 +125,11 @@ class Students extends CI_Model
     public function store()
     {
        // die(print_r($_POST));
+       $name = !empty($_POST['name']) ? $_POST['name'] : '';
+       $email = !empty($_POST['email']) ? $_POST['email'] : '';
 	   $password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
+	   $login_link = site_url('login');
+
         $data = array(
             'student_id'     => $this->uniq_id,
             'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
@@ -147,6 +151,7 @@ class Students extends CI_Model
 
         $this->db->trans_start();
         $this->db->insert('student', $data);
+        student_registration_template($name, $email, $password, $login_link);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
