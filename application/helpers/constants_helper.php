@@ -48,7 +48,7 @@ define('INVOICE', 'Invoice');
 define('SMS', 'SMS');
 define('SMS_TEMPLATE', 'SMS Template');
 define('SMS_HISTORY', 'SMS History');
-define('SMS_REMINDER', 'SMS Reminder');
+define('SMS_REMINDER', 'SMS Reminder & Announcement');
 define('BILLING', 'Billing');
 
 define('PERMISSION', 'Permission');

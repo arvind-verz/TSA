@@ -117,4 +117,13 @@ class SmsController extends CI_Controller
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS_REMINDER', 'creates');
         $this->sms->sms_reminder_store($_POST);
     }
+
+    public function sms_announcement() {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SMS_REMINDER', 'views');
+        print_r($this->sms->sms_announcement());
+    }
+
+    public function delete_sms_history($id) {
+        $result = $this->sms->delete_sms_history($id);
+    }
 }

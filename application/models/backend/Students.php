@@ -140,6 +140,7 @@ class Students extends CI_Model
             'siblings' => !empty($_POST['siblings']) ? $_POST['siblings'] : '',
             'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
             'password'   => !empty($_POST['password']) ? $password_h : '',
+            'is_active'   => 1,
             'created_at'   => $this->date,
             'updated_at'   => $this->date,
         );

@@ -133,9 +133,12 @@ $route['admin/sms_template/sms_template_edit/(:any)']   = 'backend/SmsController
 $route['admin/sms_template/sms_template_update/(:any)'] = 'backend/SmsController/sms_template_update/$1';
 
 $route['admin/sms_history'] = 'backend/SmsController/sms_history';
+$route['admin/delete_sms_history/(:any)'] = 'backend/SmsController/delete_sms_history/$1';
 
 $route['admin/sms_reminder']       = 'backend/SmsController/sms_reminder';
 $route['admin/sms_reminder/store'] = 'backend/SmsController/sms_reminder_store';
+
+$route['admin/sms_announcement']       = 'backend/SmsController/sms_announcement';
 
 /* BILLING */
 $route['admin/billing']               = 'backend/BillingController/index';
