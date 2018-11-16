@@ -124,14 +124,15 @@ class Students extends CI_Model
 	
     public function store()
     {
-       // die(print_r($_POST));
        $name = !empty($_POST['name']) ? $_POST['name'] : '';
        $email = !empty($_POST['email']) ? $_POST['email'] : '';
+       $password = $_POST['password'];
 	   $password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
 	   $login_link = site_url('login');
 
         $data = array(
             'student_id'     => $this->uniq_id,
+            'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : null,
             'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
             'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
             'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
@@ -151,7 +152,9 @@ class Students extends CI_Model
 
         $this->db->trans_start();
         $this->db->insert('student', $data);
-        student_registration_template($name, $email, $password, $login_link);
+        $subject = "Welcome to The Science Academy";
+        $message = student_registration_template($name, $email, $password, $login_link);
+        send_mail($email, false, false, false, false, $subject, $message);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {

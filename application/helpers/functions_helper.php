@@ -1602,9 +1602,9 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
     $ci->email->message($message);
 
     if ($ci->email->send()) {
-    return true;
+        return true;
     }*/
-    return true;
+    return false;
 }
 
 function send_sms($recipient, $message, $template_id = null, $class_code = null)

@@ -153,6 +153,12 @@ class StudentController extends CI_Controller
         if ($this->form_validation->run() == false) {
             $this->create();
         } else {
+            $file_name_placeholder = array_keys($_FILES);
+            $image_file = $_FILES['profile_picture']['name'];
+
+            $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0]);
+            
+            
             $this->students->store($_POST);
 
         }

@@ -416,7 +416,7 @@ function student_registration_template($name, $email, $password, $login_link)
 									<tr>
 										<td class='content-cell'>
 											<h1>Welcome, " . $name . "!</h1>
-											<p>Thanks for trying [Product Name]. We're thrilled to have you on board.</p>
+											<p>Thanks for trying The Science Academy. We're thrilled to have you on board.</p>
 											<p>To get the most out of The Science Academy, do this primary next step:</p>
 											<!-- Action -->
 											<table class='body-action' align='center' width='100%' cellpadding='0' cellspacing='0'>
@@ -445,9 +445,6 @@ function student_registration_template($name, $email, $password, $login_link)
 												<tr>
 													<td class='attributes_content'>
 														<table width='100%' cellpadding='0' cellspacing='0'>
-															<tr>
-																<td class='attributes_item'><strong>Login Page:</strong> " . $login_link . "</td>
-															</tr>
 															<tr>
 																<td class='attributes_item'><strong>Email:</strong> " . $email . "</td>
 															</tr>

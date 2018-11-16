@@ -54,6 +54,7 @@ class Cms extends CI_Controller {
 		$data['testimonials'] = $this->Cms_model->get_testimonials();
 
 		$data['student_invoices']	= get_student_invoices();
+		$data['student_profile']	= get_student_profile();
 		$data['title'] = STUDENT . ' | Invoices';
 		$data['page_title']	= STUDENT . ' | Invoices';
 
@@ -68,6 +69,7 @@ class Cms extends CI_Controller {
 		$url="home";	
 		$data['page'] =$page = $this->Cms_model->get_page($url);
 		$data['classes']  = $this->Cms_model->get_assign_class();
+		$data['student_profile']	= get_student_profile();
 		$data['menu_id'] = $page[0]['menu_id'];
 		$data['url'] = 'student-classes';
 		$data['title'] = STUDENT . ' | Classes';

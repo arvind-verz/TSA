@@ -16,17 +16,6 @@ $route['logout']                                           = 'frontend/AccountsC
 $route['attendance/miss_class_request']   = 'frontend/Cms/miss_class_request';
 $route['students/student-classes-search'] = 'frontend/Cms/student_classes_search';
 
-$route['student-profile']  = 'frontend/Cms/student_profile';
-$route['student-invoices'] = 'frontend/Cms/student_invoices';
-$route['student-classes']  = 'frontend/Cms/student_classes';
-$route['miss-class']       = 'frontend/Cms/miss_class';
-$route['gallery']          = "frontend/gallery/index";
-$route['testimonial']      = "frontend/cms/testimonial";
-$route['home']             = "frontend/cms/index";
-$route['contact-us']       = "frontend/cms/contact_us";
-$route['quick-enquiry']    = "frontend/cms/quick_enquiry";
-$route['(:any)']           = "frontend/cms/inner_pages/$1";
-
 /* FRONTEND */
 
 /* BACKEND */
@@ -43,6 +32,7 @@ $route['(:any)']           = "frontend/cms/inner_pages/$1";
 //$route['admin/pdf/invoice/(:any)']         = 'backend/PdfController/my_mPDF/$1';
 
 $route['admin/cronjobs_PQWEas22'] = 'backend/CronController/index';
+$route['admin']                   = 'backend/AccountsController/index';
 $route['admin/login']             = 'backend/AccountsController/index';
 $route['admin/login/process']     = 'backend/AccountsController/process';
 $route['admin/logout']            = 'backend/AccountsController/logout';
@@ -132,13 +122,13 @@ $route['admin/sms_template/sms_template_store']         = 'backend/SmsController
 $route['admin/sms_template/sms_template_edit/(:any)']   = 'backend/SmsController/sms_template_edit/$1';
 $route['admin/sms_template/sms_template_update/(:any)'] = 'backend/SmsController/sms_template_update/$1';
 
-$route['admin/sms_history'] = 'backend/SmsController/sms_history';
+$route['admin/sms_history']               = 'backend/SmsController/sms_history';
 $route['admin/delete_sms_history/(:any)'] = 'backend/SmsController/delete_sms_history/$1';
 
 $route['admin/sms_reminder']       = 'backend/SmsController/sms_reminder';
 $route['admin/sms_reminder/store'] = 'backend/SmsController/sms_reminder_store';
 
-$route['admin/sms_announcement']       = 'backend/SmsController/sms_announcement';
+$route['admin/sms_announcement'] = 'backend/SmsController/sms_announcement';
 
 /* BILLING */
 $route['admin/billing']               = 'backend/BillingController/index';
@@ -221,5 +211,20 @@ $route['admin/del-gallery/(:any)']  = "backend/GalleryController/del_gallery/$1"
 /* CMS Admin */
 
 /* Tutor Admin */
+
+/* FRONTEND */
+$route['student-profile']  = 'frontend/Cms/student_profile';
+$route['student-invoices'] = 'frontend/Cms/student_invoices';
+$route['student-classes']  = 'frontend/Cms/student_classes';
+$route['miss-class']       = 'frontend/Cms/miss_class';
+$route['gallery']          = "frontend/gallery/index";
+$route['testimonial']      = "frontend/cms/testimonial";
+$route['home']             = "frontend/cms/index";
+$route['contact-us']       = "frontend/cms/contact_us";
+$route['quick-enquiry']    = "frontend/cms/quick_enquiry";
+$route['(:any)']           = "frontend/cms/inner_pages/$1";
+
+/* END FRONTEND */
+
 $route['404_override']         = '';
 $route['translate_uri_dashes'] = false;

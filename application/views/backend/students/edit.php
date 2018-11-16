@@ -19,6 +19,10 @@
                           <input type="text" name="name" class="form-control" value="<?php echo isset($student->name) ? $student->name : '' ?>">
                         </div>
                         <div class="form-group">
+                          <label for="">Profile</label>
+                          <input type="file" name="profile_picture" class="form-control" value="<?php echo isset($student->profile_picture) ? $student->profile_picture : '' ?>">
+                        </div>
+                        <div class="form-group">
                          <label for="">NRIC</label>
                          <input type="text" name="nric" class="form-control" value="<?php echo isset($student->nric) ? $student->nric : '' ?>">
                         </div>
