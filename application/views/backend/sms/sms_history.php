@@ -36,6 +36,9 @@
                                         <?php echo SMS_TEMPLATE ?> Used
                                     </th>
                                     <th>
+                                        Status
+                                    </th>
+                                    <th>
                                         <?php echo ACTION ?>
                                     </th>
                                 </tr>
@@ -52,9 +55,12 @@
                                     <td><?php echo isset($student_details['student_name']) ? $student_details['student_name'] : '-'; ?></td>
                                     <td><?php echo isset($student_details['student_id']) ? $student_details['student_id'] : '-'; ?></td>
                                     <td><?php echo isset($history->created_at) ? date('d M, Y H:i A', strtotime($history->created_at)) : '-'; ?></td>
-                                    <td><?php echo isset($pre_condition_templat['pre_condition']) ? $pre_condition_templat['pre_condition'] : '-'; ?></td>
-                                    <td><?php echo isset($pre_condition_templat['template_name']) ? $pre_condition_templat['template_name'] : '-'; ?></td>
-                                    <td></td>
+                                    <td><?php echo isset($pre_condition_template['pre_condition']) ? $pre_condition_template['pre_condition'] : '-'; ?></td>
+                                    <td><?php echo isset($pre_condition_template['template_name']) ? $pre_condition_template['template_name'] : '-'; ?></td>
+                                    <td><?php echo isset($history->status) ? ($history->status==1) ? '<p class="text-success">Sent</p>' : '<p class="text-danger">Not Sent</p>' : '-'; ?></td>
+                                    <td>
+                                        <a href="<?php echo site_url('admin/delete_sms_history/' . $history->id) ?>" onclick="return confirm('Are you sure you want to delete?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
+                                    </td>
                                 </tr>
                                 <?php
                                 }}

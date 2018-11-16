@@ -22,11 +22,15 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/students/store'); ?>
+                    <?php echo form_open_multipart('admin/students/store'); ?>
                     <div class="box-body">
                         <div class="form-group">
                           <label for="">Name</label>
                           <input type="text" name="name" class="form-control" value="<?php echo set_value('name');?>">
+                        </div>
+                        <div class="form-group">
+                          <label for="">Profile</label>
+                          <input type="file" name="profile_picture" class="form-control" value="<?php echo set_value('profile_picture');?>">
                         </div>
                         <div class="form-group">
                          <label for="">NRIC</label>

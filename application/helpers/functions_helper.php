@@ -15,6 +15,11 @@ function get_currency($currency_code = false)
     }
 }
 
+function get_all_modules()
+{
+    return ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'REPORTING', 'SMS_TEMPLATE', 'SMS_HISTORY', 'SMS_REMINDER'];
+}
+
 function get_tutor_of_class($tutor_id)
 {
     $ci = &get_instance();
@@ -248,11 +253,6 @@ function get_invoice_no()
     } else {
         return 'INV001';
     }
-}
-
-function get_all_modules()
-{
-    return ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'REPORTING', 'SMS_TEMPLATE', 'SMS_HISTORY', 'SMS_REMINDER'];
 }
 
 function get_module_access_data($type, $module, $value, $perm_id)
@@ -781,9 +781,9 @@ function get_student($id = false)
     $ci = &get_instance();
 
     if ($id) {
-        $query = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0, 'id' => $id]);
+        $query = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0, 'is_active' => 1, 'id' => $id]);
     } else {
-        $query = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0]);
+        $query = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0, 'is_active' => 1]);
     }
     if ($query) {
         return $query->result();
@@ -794,7 +794,7 @@ function get_student_by_student_id($id = false)
 {
     $ci = &get_instance();
 
-    $query  = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0, 'student_id' => $id]);
+    $query  = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0, 'is_active' => 1, 'student_id' => $id]);
     $result = $query->row();
     if ($result) {
         return $result->name;
@@ -909,14 +909,19 @@ function get_sms_template($id = false)
 function get_sms_history($id = false) {
     $ci = &get_instance();
 
+    $ci->db->select('*');
+    $ci->db->from('sent_sms');
     if ($id) {
-        $query  = $ci->db->get_where('sent_sms', ['id' => $id]);
+        $ci->db->where(['id' => $id]);
+        $query  = $ci->db->get();
         $result = $query->row();
     } else {
-        $query  = $ci->db->get('sent_sms');
+        $ci->db->where(['deleted_at' => null]);
+        $ci->db->order_by('created_at', 'ASC');
+        $query  = $ci->db->get();
         $result = $query->result();
     }
-    if ($query) {
+    if ($result) {
         return $result;
     }
 }
@@ -1506,6 +1511,70 @@ function get_invoice_result3($sid)
 
 /* END RESULT FOR INVOICE */
 
+function fee_reminder() {
+    $ci = &get_instance();
+
+    $query = $ci->db->get('sms_reminder');
+    $result = $query->result();
+    if($result) {
+        $fee_reminder = date('Y-m-d', strtotime($result->fee_reminder));
+        $today_date = date('Y-m-d');
+
+        if($fee_reminder->$today_date) {
+            $query1 = $ci->db->get(DB_INVOICE);
+            $result1 = $query1->result();
+            if($result) {
+                foreach($result as $row) {
+                    if(empty($row->status) || $row->status==1 || $row->status==2) {
+                        $student_details = get_student($row->student_id);
+                        $recipients = [
+                            'phone' =>  $student_details->phone,
+                            'parents_phone' =>  $student_details->parents_phone,
+                        ];
+                        $message = "Dear " . $student_details->name . ', Your Invoice #' . $row->invoice_no . ' payment of amount $' . $row->invoice_amount . ' is pending. Pay at the counter.';
+                        $class_code = get_class_code_by_class($row->class_id);
+                        foreach($recipients as $recipient) {
+                            send_sms($recipient, $message, 2, $class_code);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+function late_fee_reminder() {
+    $ci = &get_instance();
+
+    $query = $ci->db->get('sms_reminder');
+    $result = $query->result();
+    if($result) {
+        $late_fee_reminder = date('Y-m-d', strtotime($result->late_fee_reminder));
+        $today_date = date('Y-m-d');
+
+        if($late_fee_reminder->$today_date) {
+            $query1 = $ci->db->get(DB_INVOICE);
+            $result1 = $query1->result();
+            if($result) {
+                foreach($result as $row) {
+                    if($row->status==5) {
+                        $student_details = get_student($row->student_id);
+                        $recipients = [
+                            'phone' =>  $student_details->phone,
+                            'parents_phone' =>  $student_details->parents_phone,
+                        ];
+                        $message = "Dear " . $student_details->name . ', Your Invoice #' . $row->invoice_no . ' payment of amount $' . $row->invoice_amount . ' is pending. Pay at the counter. Late Fees could be charged';
+                        $class_code = get_class_code_by_class($row->class_id);
+                        foreach($recipients as $recipient) {
+                            send_sms($recipient, $message, 3, $class_code);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoice_amount = false, $type = false, $subject, $message)
 {
     /*$ci = &get_instance();
@@ -1533,9 +1602,9 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
     $ci->email->message($message);
 
     if ($ci->email->send()) {
-    return true;
+        return true;
     }*/
-    return true;
+    return false;
 }
 
 function send_sms($recipient, $message, $template_id = null, $class_code = null)

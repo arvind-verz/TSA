@@ -87,4 +87,36 @@ class Sms extends CI_Model
         }
         return redirect('admin/sms_reminder');
     }
+
+    public function sms_announcement() {
+        $this->db->select('*');
+        $this->db->from(DB_STUDENT);
+        $this->db->group_by('phone');
+        $query = $this->db->get();
+        $result = $query->result();
+        if($result) {
+            foreach($result as $row) {
+                $recipient = $row->phone;
+                $message = "Hello " . $row->name . ", Tomorrow is Holiday. Stay at home and enjoy!";
+                send_sms($recipient, $message, 1);
+            }
+            return "success";
+        }
+        return false;
+    }
+
+    public function delete_sms_history($id) {
+        if($id) {
+            $data = [
+                'deleted_at'    =>  $this->date,
+            ];
+            $this->db->where(['id'  =>  $id]);
+            $this->db->update('sent_sms', $data);
+            $this->session->set_flashdata('success', 'Data has been deleted.');
+        }
+        else {
+            $this->session->set_flashdata('error', 'Something went wrong');
+        }
+        return redirect('admin/sms_history');
+    }
 }
