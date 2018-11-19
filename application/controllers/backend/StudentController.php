@@ -94,7 +94,7 @@ class StudentController extends CI_Controller
             [
                 'field' => 'username',
                 'label' => 'Username',
-                'rules' => 'required',
+                'rules' => 'required|is_unique[student.username]',
             ],
             [
                 'field' => 'phone',

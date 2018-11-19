@@ -59,5 +59,12 @@
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAyo44V823PEdTTSwswtXWTQIxmCa4--8"></script> 
 <script type="text/javascript" src="<?php echo base_url('assets/js/map.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/jquery.fancybox.js?v=2.1.5'); ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/jquery.fancybox.css?v=2.1.5'); ?>" media="screen" />
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.fancybox').fancybox();
+});
+</script>
 </body>
 </html>
