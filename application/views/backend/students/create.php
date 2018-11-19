@@ -104,3 +104,10 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("input[name='nric']").on("change", function() {
+            $("input[name='username']").val($(this).val());
+        });
+    });
+</script>

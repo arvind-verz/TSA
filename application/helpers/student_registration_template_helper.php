@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-function student_registration_template($name, $email, $password, $login_link)
+function student_registration_template($name, $username = false, $email, $password, $login_link)
 {
 	return "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml'>
@@ -446,7 +446,7 @@ function student_registration_template($name, $email, $password, $login_link)
 													<td class='attributes_content'>
 														<table width='100%' cellpadding='0' cellspacing='0'>
 															<tr>
-																<td class='attributes_item'><strong>Email:</strong> " . $email . "</td>
+																<td class='attributes_item'><strong>Username:</strong> " . $username . "</td>
 															</tr>
 															<tr>
 																<td class='attributes_item'><strong>Password:</strong> " . $password . "</td>

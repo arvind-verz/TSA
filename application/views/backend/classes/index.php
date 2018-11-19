@@ -136,3 +136,12 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#datatable').DataTable({
+        "order": [
+            [0, "desc"]
+        ]
+    });
+});
+</script>

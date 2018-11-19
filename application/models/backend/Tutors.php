@@ -83,11 +83,12 @@ class Tutors extends CI_Model
     public function store()
     {
     	//die(print_r($_POST));
+    	$name = !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null;
     	$email = isset($_POST['email']) ? $_POST['email'] : '';
         $password = isset($_POST['password']) ? $_POST['password'] : '';
         $tutor_name = isset($_POST['tutor_name']) ? $_POST['tutor_name'] : '';
         $perm_id = isset($_POST['tutor_permission']) ? $_POST['tutor_permission'] : '';
-
+        $login_link = site_url('admin/login');
     	$this->db->trans_start();
     	$result = $this->aauth->create_user($email, $password, false, 3);
         if($result) {
@@ -106,6 +107,9 @@ class Tutors extends CI_Model
         );
 
         $this->db->insert('tutor', $data);
+        $subject = "Welcome to The Science Academy";
+        $message = student_registration_template($name, $email, $password, $login_link);
+        send_mail($email, false, false, false, false, $subject, $message);
 	    $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {

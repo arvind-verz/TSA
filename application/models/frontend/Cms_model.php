@@ -24,6 +24,7 @@
     			$this->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
     			$this->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
 				$this->db->where('student.id', $student_id['id']);
+				$this->db->order_by(DB_CLASSES . '.created_at', 'DESC');
 				$query = $this->db->get();
 				$result = $query->result();	
 				return $result;	

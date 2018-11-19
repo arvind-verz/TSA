@@ -125,6 +125,7 @@ class Students extends CI_Model
     public function store()
     {
        $name = !empty($_POST['name']) ? $_POST['name'] : '';
+       $username = !empty($_POST['username']) ? url_title($_POST['username']) : '';
        $email = !empty($_POST['email']) ? $_POST['email'] : '';
        $password = $_POST['password'];
 	   $password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
@@ -136,7 +137,7 @@ class Students extends CI_Model
             'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
             'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
             'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
-            'username'      => !empty($_POST['username']) ? $_POST['username'] : '',
+            'username'      => !empty($_POST['username']) ? url_title($_POST['username']) : '',
             'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
             'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
             'gender'   => $_POST['gender'],
@@ -153,7 +154,7 @@ class Students extends CI_Model
         $this->db->trans_start();
         $this->db->insert('student', $data);
         $subject = "Welcome to The Science Academy";
-        $message = student_registration_template($name, $email, $password, $login_link);
+        $message = student_registration_template($name, $username, $email, $password, $login_link);
         send_mail($email, false, false, false, false, $subject, $message);
         $this->db->trans_complete();
 
