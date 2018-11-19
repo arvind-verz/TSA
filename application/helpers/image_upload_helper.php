@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-function upload_image_file($image_file, $image_placeholder, $do_resize)
+function upload_image_file($image_file, $image_placeholder)
 {
     $ci = &get_instance();
 
@@ -14,9 +14,7 @@ function upload_image_file($image_file, $image_placeholder, $do_resize)
     $ci->upload->initialize($config);
 
     if ($ci->upload->do_upload($image_placeholder)) {
-        if($do_resize==1) {
-            upload_image_resize($config['file_name']);
-        }
+        upload_image_resize($config['file_name']);
         return $ci->upload->data('file_name');
     }
 }

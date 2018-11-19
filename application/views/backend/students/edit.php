@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/students/update/' . $student->student_id); ?>
+                    <?php echo form_open_multipart('admin/students/update/' . $student->student_id); ?>
                     <div class="box-body">
                         <div class="form-group">
                           <label for="">Name</label>
@@ -20,7 +20,9 @@
                         </div>
                         <div class="form-group">
                           <label for="">Profile</label>
-                          <input type="file" name="profile_picture" class="form-control" value="<?php echo isset($student->profile_picture) ? $student->profile_picture : '' ?>">
+                          <input type="file" name="profile_picture" class="form-control" value="">
+                          <input type="hidden" name="profile_picture_exist" class="form-control" value="<?php echo isset($student->profile_picture) ? $student->profile_picture : '' ?>">
+                          <img src="<?php echo isset($student->profile_picture) ? base_url('assets/files/profile_picture/' . $student->profile_picture) : '' ?>" alt="" width="100px">
                         </div>
                         <div class="form-group">
                          <label for="">NRIC</label>

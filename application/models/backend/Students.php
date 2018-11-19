@@ -296,7 +296,7 @@ class Students extends CI_Model
 			
 			$password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
 			$data = array(
-				'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : null,
+				'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : $_POST['profile_picture_exist'],
 				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
 				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
 				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
@@ -316,7 +316,7 @@ class Students extends CI_Model
 		else
 		{
 		$data = array(
-			'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : null,
+			'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : $_POST['profile_picture_exist'],
 				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
 				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
 				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
