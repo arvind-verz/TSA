@@ -107,8 +107,8 @@
 									<p class="size18 txt-dark"><strong><?=$test['title']?></strong></p>
 									<a href="<?php echo site_url("testimonial");?>" class="button btn-sm">Read More</a> </div>
 							</div>
-						</div>
-                        <div class="home-testimonial-slide">
+						</div><!-- 
+						                        <div class="home-testimonial-slide">
 							<div class="htbox">
 								<div class="testi-img-holder">
 									<div class="testi-img"><img src="<?php echo base_url("assets/upload/testimonial/original/".$test['image_name']);?>" alt="" class="responsive"></div>
@@ -118,7 +118,7 @@
 									<p class="size18 txt-dark"><strong><?=$test['title']?></strong></p>
 									<a href="<?php echo site_url("testimonial");?>" class="button btn-sm">Read More</a> </div>
 							</div>
-						</div>
+						</div> -->
                         <?php endforeach;?>	
 					</div>
 				</div>
