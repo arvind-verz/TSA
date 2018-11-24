@@ -8,13 +8,38 @@ class CmsController extends CI_Controller {
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
         $this->result = $this->accounts->get_login_user_id();
-		$this->title = ADMINPANEL . ' | ' . TUTOR;
+		$this->title = ADMINPANEL . ' | ' . CMS;
+    }
+
+    public function manage_logo() {
+    	$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'LOGO', 'views');
+    	$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(LOGO, 'admin/manage-menu ');
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title']       = $this->title . ' - ' . LOGO;
+        $data['page_title']  = LOGO;
+		$data['meta_title'] = LOGO;
+
+		$this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/cms/manage_logo');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
+    }
+
+    public function manage_logo_upload() {
+    	$file_name_placeholder = array_keys($_FILES);
+        $image_file = $_FILES['logo']['name'];
+        if($image_file) {
+        	$_POST['logo'] = upload_image_file($image_file, $file_name_placeholder[0], 250, 99, 'logo');
+        	$this->Cms_model->manage_logo_upload($_POST);
+        }
     }
 	
 	public function manage_menu() {
 		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MENU', 'views'); 
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(TUTOR, 'admin/manage-menu                              ');
+        $this->breadcrumbs->push(TUTOR, 'admin/manage-menu ');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = MENU_MANAGE;

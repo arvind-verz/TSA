@@ -20,11 +20,41 @@
 	<section class="content">
 		<!-- Small boxes (Stat box) -->
 		<div class="row">
+			<?php
+			if($this->session->userdata('user_credentials')['id']==1) {
+			?>
+			<div class="col-lg-12">
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">Change Email</h3>
+					</div>					
+					<?php echo form_open('admin/users/user_details/update'); ?>
+					<div class="box-body">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label>Username</label>
+								<input class="form-control" type="text" name="username" value="<?php echo $user_data->username; ?>" placeholder="">
+							</div>
+							<div class="form-group">
+								<label>Email <span class="text-muted">Note: This email will be used for sending email from TSA</span></label>
+								<input class="form-control" type="text" name="email" value="<?php echo $user_data->email; ?>" placeholder="">
+							</div>
+						</div>
+					</div>
+					<div class="box-footer">
+                        <button type="submit" class="btn btn-info pull-right"><?php echo UPDATES ?></button>
+                    </div>
+                    <?php echo form_close(); ?>
+				</div>
+			</div>
+			<?php
+			}
+			?>
 			<div class="col-lg-12">
 				<div class="box">
 					<div class="box-header with-border">
 						<h3 class="box-title">Change Password</h3>
-					</div>
+					</div>					
 					<?php echo form_open('admin/users/profile/update'); ?>
 					<div class="box-body">
 						<div class="col-lg-12">

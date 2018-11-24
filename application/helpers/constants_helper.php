@@ -56,7 +56,7 @@ define('TESTIMONIAL', 'Testimonial');
 define('GALLERY', 'Gallery');
 
 
-
+define('LOGO', 'Logo');
 define('MENU', 'Menu');
 define('MENU_MANAGE', 'Menu Management');
 define('CMS', 'Cms');

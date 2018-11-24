@@ -1,5 +1,24 @@
 <?php class Cms_model extends CI_Model {
 
+      public function manage_logo_upload()
+      {
+        $data = [
+          'logo'  =>  $_POST['logo'],
+        ];
+
+        $query = $this->db->get('logo');
+        if($query->num_rows()>0) {
+          $this->db->update('logo', $data);
+          $this->session->set_flashdata('success', LOGO . ' ' . MSG_UPDATED);
+        }
+        else {
+          $this->db->insert('logo', $data);
+          $this->session->set_flashdata('success', LOGO . ' ' . MSG_CREATED);
+        }
+        
+            return redirect('admin/manage-logo');
+      }
+
 		  function count_menu_page_filter($position, $FlterData) {
                   $this->db->select('count(id) as `TotalNum`')
                           ->from(TBL_MENU)

@@ -148,4 +148,19 @@ class Accounts extends CI_Model
         }
         return false;
     }
+
+    public function userDetailsUpdate() {
+        $user_data = $this->session->userdata('user_credentials');
+
+        $email = isset($_POST['email']) ? $_POST['email'] : null;
+        $username = isset($_POST['username']) ? $_POST['username'] : null;
+        if($email && $username) {
+            $user_update = $this->aauth->update_user($user_data['id'], $email, false, $username);
+            if($user_update) {
+                $this->session->set_flashdata('success', PROFILE . ' ' . MSG_UPDATED);
+                return redirect('admin/users/profile');
+            }
+        }
+        return false;
+    }
 }
