@@ -445,7 +445,10 @@ class Cms extends CI_Controller {
 				 //Load email library 
 				 $this->load->library('email'); 
 				  
-				 $from_email = $to_email = "jafir.verz@gmail.com"; 
+				 $from_email = $post_data['email_id'];
+				 $ci->db->get_where('aauth_users', ['id' =>  1]);
+    				$result = $result->row();
+				 $to_email = $result->email; 
 		
 				 $message='<table>
 						  <tr>

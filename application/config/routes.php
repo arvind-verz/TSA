@@ -38,6 +38,7 @@ $route['admin/login/process']     = 'backend/AccountsController/process';
 $route['admin/logout']            = 'backend/AccountsController/logout';
 
 /* ROLES AND PERMISSION */
+$route['admin/users/user_details/update']                     = 'backend/AccountsController/userDetailsUpdate';
 $route['admin/users/profile']                            = 'backend/AccountsController/profile';
 $route['admin/users/profile/update']                     = 'backend/AccountsController/profileUpdate';
 $route['admin/users']                                    = 'backend/AccountsController/users';
@@ -188,6 +189,8 @@ $route['admin/role/delete/(:any)'] = 'backend/PermissionController/delete_user/$
 
 /* CMS Admin */
 
+$route['admin/manage-logo']                  = "backend/CmsController/manage_logo";
+$route['admin/manage-logo/upload']                  = "backend/CmsController/manage_logo_upload";
 $route['admin/manage-menu']                  = "backend/CmsController/manage_menu";
 $route['admin/manage-menu-list/(:any)']      = "backend/CmsController/manage_menu_list/$1";
 $route['admin/add-menu-item/(:any)']         = "backend/CmsController/add_menu_item/$1";

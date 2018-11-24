@@ -295,6 +295,7 @@ class AccountsController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title_perm;
         $data['page_title']  = PROFILE;
+        $data['user_data'] = get_users_data_by_id($this->session->userdata('user_credentials')['id']);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -335,5 +336,33 @@ class AccountsController extends CI_Controller
                 $this->profile();
             }
         }
+    }
+
+    public function userDetailsUpdate() {
+        $config = [
+            [
+                'field' =>  'username',
+                'label' =>  'Username',
+                'rules' =>  'trim|required',
+            ],
+            [
+                'field' =>  'email',
+                'label' =>  'Email',
+                'rules' =>  'trim|required|xss_clean|valid_email',
+            ],
+        ];
+
+        $this->form_validation->set_rules($config);
+
+        
+        if ($this->form_validation->run() == FALSE) {
+            $this->profile();
+        }
+        else {
+            $result = $this->accounts->userDetailsUpdate($_POST);
+            if($result==false) {
+                $this->profile();
+            }
+        }   
     }
 }

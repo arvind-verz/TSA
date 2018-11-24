@@ -1,5 +1,34 @@
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
+    <?php
+        $menu_array = [
+        [
+        'title' => LOGO,
+        'icon'  => '<i class="menu-icon fa fa-check"></i>',
+        'url'   => 'admin/manage-logo',
+        ],
+        [
+        'title' => CMS,
+        'icon'  => '<i class="menu-icon fa fa-check"></i>',
+        'url'   => 'admin/manage-cms',
+        ],
+        [
+        'title' => MENU,
+        'icon'  => '<i class="menu-icon fa fa-check"></i>',
+        'url'   => 'admin/manage-menu',
+        ],
+        [
+        'title' => TESTIMONIAL,
+        'icon'  => '<i class="menu-icon fa fa-check"></i>',
+        'url'   => 'admin/manage-testimonial',
+        ],
+        [
+        'title' => GALLERY,
+        'icon'  => '<i class="menu-icon fa fa-check"></i>',
+        'url'   => 'admin/manage-gallery',
+        ],
+        ];
+    ?>
     <!-- Create the tabs -->
     <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
         <li class="active">
@@ -14,50 +43,26 @@
         <!-- Home tab content -->
         <div class="tab-pane active" id="control-sidebar-home-tab">
             <ul class="control-sidebar-menu">
+                <?php
+                
+                if (count($menu_array)) {
+                foreach ($menu_array as $menu) {
+                if (count($menu) > 1) {
+                ?>
                 <li>
-                    <a href="<?php echo site_url('admin/manage-cms'); ?>">
-                        <i class="menu-icon fa fa-check">
-                        </i>
+                    <a href="<?php echo site_url($menu['url']); ?>">
+                        <?php echo $menu['icon']; ?>
                         <div class="menu-info">
                             <h4 class="control-sidebar-subheading">
-                                <?php echo CMS ?>
+                                <?php echo $menu['title']; ?>
                             </h4>
                         </div>
                     </a>
                 </li>
-                <li>
-                    <a href="<?php echo site_url('admin/manage-menu'); ?>">
-                        <i class="menu-icon fa fa-check">
-                        </i>
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">
-                                <?php echo MENU ?>
-                            </h4>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo site_url('admin/manage-testimonial'); ?>">
-                        <i class="menu-icon fa fa-check">
-                        </i>
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">
-                                <?php echo TESTIMONIAL ?>
-                            </h4>
-                        </div>
-                    </a>
-                </li>
-                 <li>
-                    <a href="<?php echo site_url('admin/manage-gallery'); ?>">
-                        <i class="menu-icon fa fa-check">
-                        </i>
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">
-                                <?php echo GALLERY ?>
-                            </h4>
-                        </div>
-                    </a>
-                </li>
+                <?php
+                }}}
+                ?>
+                
             </ul>
             <!-- /.control-sidebar-menu -->
         </div>

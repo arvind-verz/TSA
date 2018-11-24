@@ -294,6 +294,17 @@ function get_permission_access_module($perm_id = false)
     return implode(', ', $modules);
 }
 
+function get_users_data_by_id($id) {
+    $ci = &get_instance();
+
+    $query = $ci->db->get_where('aauth_users', ['id'    =>  $id]);
+    $result = $query->row();
+    if($result) {
+        return $result;
+    }
+
+}
+
 function get_users_data($id = false)
 {
     $ci = &get_instance();
@@ -1578,6 +1589,8 @@ function late_fee_reminder() {
 function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoice_amount = false, $type = false, $subject, $message)
 {
     /*$ci = &get_instance();
+    $ci->db->get_where('aauth_users', ['id' =>  1]);
+    $result = $result->row();
     $ci->load->library('email');
 
     $config['protocol']     = 'smtp';
@@ -1595,7 +1608,7 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
     $config['newline']      = "\r\n";
 
     $ci->email->initialize($config);
-    $ci->email->from('arvind.verz@gmail.com', 'The Science Academy');
+    $ci->email->from($result->email, 'The Science Academy');
     $ci->email->to($emailto);
 
     $ci->email->subject($subject);

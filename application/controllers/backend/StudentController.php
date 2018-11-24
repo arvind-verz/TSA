@@ -156,7 +156,7 @@ class StudentController extends CI_Controller
             $file_name_placeholder = array_keys($_FILES);
             $image_file = $_FILES['profile_picture']['name'];
 
-            $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0]);
+            $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0], 200, 200);
             
             
             $this->students->store($_POST);
@@ -224,7 +224,7 @@ class StudentController extends CI_Controller
             $file_name_placeholder = array_keys($_FILES);
             $image_file = $_FILES['profile_picture']['name'];
             if($image_file) {
-                $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0]);
+                $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0], 200, 200);
             }
             $this->students->update($id, $_POST);
 
