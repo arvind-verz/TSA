@@ -21,6 +21,8 @@
               <div class="form-group">
                 <label for="page_heading" >Logo</label>
                 <input type="file" name="logo"  value="" class="form-control" />
+                <br/>
+                <img src="<?php echo isset($logo->logo) ? base_url('assets/files/logo/' . $logo->logo) : ''; ?>" width="100px" style="background: blue;">
               </div>
               
             </div>
@@ -28,7 +30,7 @@
             <button type="submit" class="btn btn-primary">Save</button>
           </div>
           <?php echo form_close(); ?>
-</div>
+            </div>
             </div>
         </div>
     </section>

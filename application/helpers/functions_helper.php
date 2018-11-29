@@ -58,42 +58,52 @@ function get_enrolled_classes($student_id)
     }
 }
 
-function miss_class_request($class_id) {
-    $ci         = &get_instance();
-    $student = $ci->session->userdata('student_credentials');
-    $query = $ci->db->get_where(DB_STUDENT, ['id'    =>  $student['id']]);
-    $result = $query->row();
+function get_logo()
+{
+    $ci = &get_instance();
 
-    $query1 = $ci->db->get_where(DB_CLASSES, ['class_id'    =>  $class_id]);
+    $query  = $ci->db->get('logo');
+    $result = $query->row();
+    return $result;
+}
+
+function miss_class_request($class_id)
+{
+    $ci      = &get_instance();
+    $student = $ci->session->userdata('student_credentials');
+    $query   = $ci->db->get_where(DB_STUDENT, ['id' => $student['id']]);
+    $result  = $query->row();
+
+    $query1  = $ci->db->get_where(DB_CLASSES, ['class_id' => $class_id]);
     $result1 = $query1->row();
-    if($result && $result1) {
-        $class_code = $result1->class_code;
-        $student_id = $result->student_id;
+    if ($result && $result1) {
+        $class_code   = $result1->class_code;
+        $student_id   = $result->student_id;
         $current_date = date('Y-m-d');
-        
-        $query2 = $ci->db->get_where(DB_ATTENDANCE, ['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
+
+        $query2  = $ci->db->get_where(DB_ATTENDANCE, ['class_code' => $class_code, 'student_id' => $student_id, 'attendance_date' => $current_date]);
         $result2 = $query2->row();
-        if($result2) {
+        if ($result2) {
             $attendance_date = date("Y-m-d", strtotime($result2->attendance_date));
-            if($result2->status=='["0","1","0","0","0","0"]') {
+            if ($result2->status == '["0","1","0","0","0","0"]') {
                 return "updated";
             }
-            if($attendance_date==$current_date) {
+            if ($attendance_date == $current_date) {
                 $recipients = [
-                    'phone' =>  $result->phone,
-                    'parents_phone' =>  $result->parents_phone,
+                    'phone'         => $result->phone,
+                    'parents_phone' => $result->parents_phone,
                 ];
 
                 $message = "Hello " . $result->name . ", You have request for missed class dated on " . date('Y-m-d', strtotime($result2->attendance_date));
-                foreach($recipients as $recipient) {
+                foreach ($recipients as $recipient) {
                     send_sms($recipient, $message, 4, $result1->class_code);
                 }
 
                 $data = [
-                    'status' => json_encode(["0","1","0","0","0","0"]),
-                    'missed_update' =>  date('Y-m-d H:i:s'),
+                    'status'        => json_encode(["0", "1", "0", "0", "0", "0"]),
+                    'missed_update' => date('Y-m-d H:i:s'),
                 ];
-                $ci->db->where(['class_code'  =>  $class_code, 'student_id'   =>  $student_id, 'attendance_date'  =>  $current_date]);
+                $ci->db->where(['class_code' => $class_code, 'student_id' => $student_id, 'attendance_date' => $current_date]);
                 $ci->db->update(DB_ATTENDANCE, $data);
                 return "success";
             }
@@ -104,43 +114,44 @@ function miss_class_request($class_id) {
     return "failed";
 }
 
-function get_student_classes_search_data($searchby, $sortby, $searchfield) {
+function get_student_classes_search_data($searchby, $sortby, $searchfield)
+{
     $ci = &get_instance();
 
-    if($searchfield) {
-        if(empty($searchby)) {
+    if ($searchfield) {
+        if (empty($searchby)) {
             $searchby = 'classname';
         }
-        if($searchby=='classname') {
+        if ($searchby == 'classname') {
             $ci->db->select('*');
             $ci->db->from(DB_CLASSES);
             $ci->db->like('class_name', $searchfield, 'both');
         }
-        if($searchby=='tutor') {
+        if ($searchby == 'tutor') {
             $ci->db->select('*');
             $ci->db->from(DB_CLASSES);
             $ci->db->join(DB_TUTOR, 'class.tutor_id = tutor.tutor_id');
             $ci->db->like('tutor.tutor_name', $searchfield, 'both');
         }
     }
-    if($sortby) {
-        if($sortby=='name') {
+    if ($sortby) {
+        if ($sortby == 'name') {
             $ci->db->select('*');
             $ci->db->from(DB_CLASSES);
             $ci->db->order_by('class_name', 'ASC');
         }
-        if($sortby=='date') {
+        if ($sortby == 'date') {
             $ci->db->select('*');
             $ci->db->from(DB_CLASSES);
             $ci->db->order_by('created_at', 'ASC');
         }
     }
-    $query = $ci->db->get();
+    $query  = $ci->db->get();
     $result = $query->result();
 
-    if(count($result)) {
-    foreach($result as $class) {
-    ?>
+    if (count($result)) {
+        foreach ($result as $class) {
+            ?>
     <div class="col-md-6">
         <div class="row-inner-md">
             <div class="class-box">
@@ -162,7 +173,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield) {
         </div>
     </div>
     <?php
-    }}
+}}
 }
 
 function get_student_status($class_id, $student_id)
@@ -294,12 +305,13 @@ function get_permission_access_module($perm_id = false)
     return implode(', ', $modules);
 }
 
-function get_users_data_by_id($id) {
+function get_users_data_by_id($id)
+{
     $ci = &get_instance();
 
-    $query = $ci->db->get_where('aauth_users', ['id'    =>  $id]);
+    $query  = $ci->db->get_where('aauth_users', ['id' => $id]);
     $result = $query->row();
-    if($result) {
+    if ($result) {
         return $result;
     }
 
@@ -917,7 +929,8 @@ function get_sms_template($id = false)
     }
 }
 
-function get_sms_history($id = false) {
+function get_sms_history($id = false)
+{
     $ci = &get_instance();
 
     $ci->db->select('*');
@@ -937,37 +950,39 @@ function get_sms_history($id = false) {
     }
 }
 
-function get_student_details_by_sms_history($recipient) {
+function get_student_details_by_sms_history($recipient)
+{
     $ci = &get_instance();
-    
+
     if ($recipient) {
         $ci->db->select('*');
         $ci->db->from(DB_STUDENT);
         $ci->db->where(['phone' => $recipient]);
         $ci->db->limit(1);
-        $query = $ci->db->get();
+        $query  = $ci->db->get();
         $result = $query->row();
-        if($result) {
+        if ($result) {
             return [
-                'student_name'  =>  $result->name,
-                'student_id'    =>  $result->student_id,
+                'student_name' => $result->name,
+                'student_id'   => $result->student_id,
             ];
         }
     }
     return false;
 }
 
-function get_pre_condition_template($reason) {
+function get_pre_condition_template($reason)
+{
     $ci = &get_instance();
 
     $condition_array = ['Student absent without leave', 'Fee reminder', 'Late Fee reminder', 'Student filled a miss class request', 'Reminder one day before reservation', 'Centre wide announcements'];
 
-    $query = $ci->db->get_where('sms_template', ['reason'    =>  $reason]);
+    $query  = $ci->db->get_where('sms_template', ['reason' => $reason]);
     $result = $query->row();
-    if($result) {
+    if ($result) {
         return [
-            'pre_condition' =>  $condition_array[($reason-1)],
-            'template_name' =>  $result->template_name,
+            'pre_condition' => $condition_array[($reason - 1)],
+            'template_name' => $result->template_name,
         ];
     }
 }
@@ -1522,29 +1537,30 @@ function get_invoice_result3($sid)
 
 /* END RESULT FOR INVOICE */
 
-function fee_reminder() {
+function fee_reminder()
+{
     $ci = &get_instance();
 
-    $query = $ci->db->get('sms_reminder');
+    $query  = $ci->db->get('sms_reminder');
     $result = $query->result();
-    if($result) {
+    if ($result) {
         $fee_reminder = date('Y-m-d', strtotime($result->fee_reminder));
-        $today_date = date('Y-m-d');
+        $today_date   = date('Y-m-d');
 
-        if($fee_reminder->$today_date) {
-            $query1 = $ci->db->get(DB_INVOICE);
+        if ($fee_reminder->$today_date) {
+            $query1  = $ci->db->get(DB_INVOICE);
             $result1 = $query1->result();
-            if($result) {
-                foreach($result as $row) {
-                    if(empty($row->status) || $row->status==1 || $row->status==2) {
+            if ($result) {
+                foreach ($result as $row) {
+                    if (empty($row->status) || $row->status == 1 || $row->status == 2) {
                         $student_details = get_student($row->student_id);
-                        $recipients = [
-                            'phone' =>  $student_details->phone,
-                            'parents_phone' =>  $student_details->parents_phone,
+                        $recipients      = [
+                            'phone'         => $student_details->phone,
+                            'parents_phone' => $student_details->parents_phone,
                         ];
-                        $message = "Dear " . $student_details->name . ', Your Invoice #' . $row->invoice_no . ' payment of amount $' . $row->invoice_amount . ' is pending. Pay at the counter.';
+                        $message    = "Dear " . $student_details->name . ', Your Invoice #' . $row->invoice_no . ' payment of amount $' . $row->invoice_amount . ' is pending. Pay at the counter.';
                         $class_code = get_class_code_by_class($row->class_id);
-                        foreach($recipients as $recipient) {
+                        foreach ($recipients as $recipient) {
                             send_sms($recipient, $message, 2, $class_code);
                         }
                     }
@@ -1554,29 +1570,30 @@ function fee_reminder() {
     }
 }
 
-function late_fee_reminder() {
+function late_fee_reminder()
+{
     $ci = &get_instance();
 
-    $query = $ci->db->get('sms_reminder');
+    $query  = $ci->db->get('sms_reminder');
     $result = $query->result();
-    if($result) {
+    if ($result) {
         $late_fee_reminder = date('Y-m-d', strtotime($result->late_fee_reminder));
-        $today_date = date('Y-m-d');
+        $today_date        = date('Y-m-d');
 
-        if($late_fee_reminder->$today_date) {
-            $query1 = $ci->db->get(DB_INVOICE);
+        if ($late_fee_reminder->$today_date) {
+            $query1  = $ci->db->get(DB_INVOICE);
             $result1 = $query1->result();
-            if($result) {
-                foreach($result as $row) {
-                    if($row->status==5) {
+            if ($result) {
+                foreach ($result as $row) {
+                    if ($row->status == 5) {
                         $student_details = get_student($row->student_id);
-                        $recipients = [
-                            'phone' =>  $student_details->phone,
-                            'parents_phone' =>  $student_details->parents_phone,
+                        $recipients      = [
+                            'phone'         => $student_details->phone,
+                            'parents_phone' => $student_details->parents_phone,
                         ];
-                        $message = "Dear " . $student_details->name . ', Your Invoice #' . $row->invoice_no . ' payment of amount $' . $row->invoice_amount . ' is pending. Pay at the counter. Late Fees could be charged';
+                        $message    = "Dear " . $student_details->name . ', Your Invoice #' . $row->invoice_no . ' payment of amount $' . $row->invoice_amount . ' is pending. Pay at the counter. Late Fees could be charged';
                         $class_code = get_class_code_by_class($row->class_id);
-                        foreach($recipients as $recipient) {
+                        foreach ($recipients as $recipient) {
                             send_sms($recipient, $message, 3, $class_code);
                         }
                     }
@@ -1615,7 +1632,7 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
     $ci->email->message($message);
 
     if ($ci->email->send()) {
-        return true;
+    return true;
     }*/
     return false;
 }
@@ -1624,7 +1641,7 @@ function send_sms($recipient, $message, $template_id = null, $class_code = null)
 {
     $ci = &get_instance();
 
-    if(empty($recipient)) {
+    if (empty($recipient)) {
         return false;
     }
     $status     = 0;
@@ -1646,7 +1663,7 @@ function send_sms($recipient, $message, $template_id = null, $class_code = null)
     }
     $data = [
         'template_id' => $template_id,
-        'class_code' => $class_code,
+        'class_code'  => $class_code,
         'recipient'   => $recipient,
         'message'     => $message,
         'status'      => $status,
