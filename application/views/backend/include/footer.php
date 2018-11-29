@@ -41,7 +41,9 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="<?php echo base_url('assets/plugins/iCheck/icheck.min.js'); ?>"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#datatable").DataTable();
+		$("#datatable").DataTable({
+			"ordering": false
+		});
 		$('.select2').select2();
 		$('.datepicker').datepicker({
 			autoclose: true,

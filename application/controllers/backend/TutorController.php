@@ -187,7 +187,7 @@ class TutorController extends CI_Controller
                
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
-		$this->form_validation->set_rules('password', 'Password','trim|required|min_length[8]|matches[passconf]');
+		$this->form_validation->set_rules('password', 'Password','trim|required|min_length[6]|matches[passconf]');
 		$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required');
 		}
                 

@@ -720,9 +720,9 @@ function get_subject($id = false)
     $ci = &get_instance();
 
     if ($id) {
-        $query = $ci->db->get_where(DB_SUBJECT, ['is_archive' => 0, 'subject_id' => $id]);
+        $query = $ci->db->order_by('created_at', 'desc')->get_where(DB_SUBJECT, ['is_archive' => 0, 'subject_id' => $id]);
     } else {
-        $query = $ci->db->get_where(DB_SUBJECT, ['is_archive' => 0]);
+        $query = $ci->db->order_by('created_at', 'desc')->get_where(DB_SUBJECT, ['is_archive' => 0]);
     }
     if ($query) {
         return $query->result();

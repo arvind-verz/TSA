@@ -108,7 +108,7 @@ class Tutors extends CI_Model
 
         $this->db->insert('tutor', $data);
         $subject = "Welcome to The Science Academy";
-        $message = student_registration_template($name, $email, $password, $login_link);
+        $message = student_registration_template($name, false, $email, $password, $login_link);
         send_mail($email, false, false, false, false, $subject, $message);
 	    $this->db->trans_complete();
 
@@ -200,34 +200,43 @@ class Tutors extends CI_Model
 
     public function update($id)
     {
-        //die(print_r($_POST));
+        
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
+			$name = !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null;
+    	$email = isset($_POST['email']) ? $_POST['email'] : '';
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        $tutor_name = isset($_POST['tutor_name']) ? $_POST['tutor_name'] : '';
+        $perm_id = isset($_POST['tutor_permission']) ? $_POST['tutor_permission'] : '';
+        $this->aauth->update_user($id, $email, $password, $name);
+        
 			$password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
 			$data = array(
             'tutor_name'   => !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null,
-            'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
             'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
             'address'    => !empty($_POST['address']) ? $_POST['address'] : null,
             'subject'   => !empty($_POST['subject']) ? $_POST['subject'] : null,
             'salary_scheme'    => !empty($_POST['salary_scheme']) ? $_POST['salary_scheme'] : null,
             'remark'  => !empty($_POST['remarks']) ? $_POST['remarks'] : null,
-            'tutor_permission' => !empty($_POST['tutor_permission']) ? $_POST['tutor_permission'] : null,
             'password'   => !empty($_POST['password']) ? $password_h : null,
             'created_at'   => $this->date,
             'updated_at'   => $this->date);
 		}
 		else
 		{
+			$name = !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null;
+    	$email = isset($_POST['email']) ? $_POST['email'] : '';
+        $tutor_name = isset($_POST['tutor_name']) ? $_POST['tutor_name'] : '';
+        $perm_id = isset($_POST['tutor_permission']) ? $_POST['tutor_permission'] : '';
+        $this->aauth->update_user($id, $email, false, $name);
+
 		$data = array(
             'tutor_name'   => !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null,
-            'email'     => !empty($_POST['email']) ? $_POST['email'] : null,
             'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
             'address'    => !empty($_POST['address']) ? $_POST['address'] : null,
             'subject'   => !empty($_POST['subject']) ? $_POST['subject'] : null,
             'salary_scheme'    => !empty($_POST['salary_scheme']) ? $_POST['salary_scheme'] : null,
             'remark'  => !empty($_POST['remarks']) ? $_POST['remarks'] : null,
-            'tutor_permission' => !empty($_POST['tutor_permission']) ? $_POST['tutor_permission'] : null,
             'created_at'   => $this->date,
             'updated_at'   => $this->date);
 		

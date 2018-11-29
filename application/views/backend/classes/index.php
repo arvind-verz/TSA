@@ -24,7 +24,7 @@
                         </a>
                     </div>
                     <div class="box-body">
-                        <table class="table table-striped table-bordered text-center" id="datatable" style="width:100%">
+                        <table class="table table-striped table-bordered text-center datatable" id="" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>
@@ -138,7 +138,7 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#datatable').DataTable({
+    $('table.datatable').DataTable({
         "order": [
             [0, "desc"]
         ]
