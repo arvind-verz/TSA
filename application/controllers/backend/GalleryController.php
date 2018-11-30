@@ -6,10 +6,13 @@ class GalleryController extends CI_Controller {
 		$this->title = ADMINPANEL . ' | ' . GALLERY;
         $this->load->model('backend/Gallery', '', TRUE);
 		$this->load->model('backend/Allfunction', '', TRUE);
+		$this->load->model('backend/accounts', 'accounts');
+		$this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
     }
 
     public function manage_gallery() {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'GALLERY', 'views');
 		$data_msg = array();	        
         $data_msg['meta_title'] = "Gallery Manager";		
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
