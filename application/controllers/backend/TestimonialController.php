@@ -6,10 +6,13 @@ class TestimonialController extends CI_Controller {
 		$this->title = ADMINPANEL . ' | ' . TESTIMONIAL;
         $this->load->model('backend/Testimonial', '', TRUE);
 		$this->load->model('backend/Allfunction', '', TRUE);
+		$this->load->model('backend/accounts', 'accounts');
+		$this->accounts->is_logged_in();
+        $this->result = $this->accounts->get_login_user_id();
     }
 
     public function manage_testimonial() {
-		
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TESTIMONIAL', 'views');
 		$data_msg = array();	        
         $data_msg['meta_title'] = "Banner Manager";		
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');

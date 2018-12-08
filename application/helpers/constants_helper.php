@@ -93,7 +93,7 @@ define('MSG_CREATED', ' has been created successfully.');
 define('MSG_UPDATED', ' has been updated successfully.');
 define('MSG_DELETED', ' has been deleted successfully.');
 define('MSG_ARCHIVED', ' has been moved to archived successfully.');
-define('MSG_ERROR', ' Error occured while manipulating data.');
+define('MSG_ERROR', ' Error occured! Something went wrong.');
 define('MSG_MOVED', ' has been moved to active list successfully.');
 define('MSG_EXIST', ' already exist within our system.');
 define('MSG_TRANSFERRED', ' has been transferred successfully.');

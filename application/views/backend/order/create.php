@@ -39,7 +39,7 @@
                                     if(count($subjects)) {
                                     foreach($subjects as $subject) {
                                     ?>
-                                    <option value="<?php echo $subject->id ?>"><?php echo $subject->subject_name ?></option>
+                                    <option value="<?php echo $subject->id ?>"><?php echo $subject->subject_name; ?></option>
                                     <?php
                                     }}
                                     ?>
@@ -92,4 +92,20 @@
             }
         })
     });
+
+    /*$("select.subject").on("change", function() {
+        var subject = $(this).val();
+        $.ajax({
+            type: 'GET',
+            url: '<?php echo site_url('admin/material/get_books_by_subject'); ?>',
+            data: 'subject=' + subject,
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                //alert(data);
+                $(".students").html(data);
+            }
+        })
+    });*/
 </script>

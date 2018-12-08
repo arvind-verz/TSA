@@ -73,7 +73,7 @@ class TutorController extends CI_Controller
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/tutors/archived');
+        $this->load->view('backend/tutors/index');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
@@ -82,62 +82,10 @@ class TutorController extends CI_Controller
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'creates');
 
-        $config = [
-            [
-                'field' => 'tutor_name',
-                'label' => 'Name',
-                'rules' => 'required',
-            ],
-            [
-                'field' => 'email',
-                'label' => 'Email',
-                'rules' => 'trim|required|valid_email|is_unique[aauth_users.email]',
-            ],
-            [
-                'field' => 'phone',
-                'label' => 'Phone',
-                'rules' => 'trim|required|numeric',
-            ],
-            [
-                'field' => 'salary_scheme',
-                'label' => 'Salary Scheme',
-                'rules' => 'required',
-            ],
-            [
-                'field' => 'subject',
-                'label' => 'Subject',
-                'rules' => 'required',
-            ],
-            [
-                'field' => 'tutor_permission',
-                'label' => 'Tutor Permission',
-                'rules' => 'required',
-            ],
-            [
-                'field' => 'password',
-                'label' => 'Password',
-                'rules' => 'trim|required|min_length[6]',
-            ],
-            [
-                'field' => 'confirm_password',
-                'label' => 'Confirm Password',
-                'rules' => 'trim|required|matches[password]',
-            ],
-        ];
-
-        $this->form_validation->set_rules($config);
-
-        if ($this->form_validation->run() == FALSE)
-        {
-    		$this->create();
+        $result = $this->tutors->store($_POST);
+        if($result==false) {
+            $this->create();
         }
-        else
-        {
-			$this->tutors->store($_POST);
-               
-        }
-		
-		//$this->classes->store($_POST);
     }
 	
 	public function enroll()
@@ -177,32 +125,10 @@ class TutorController extends CI_Controller
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'edits');
         $this->load->library('form_validation');
 
-            $this->form_validation->set_rules('tutor_name', 'Name', 'required');
-			$this->form_validation->set_rules('email', 'Email', 'required');
-			$this->form_validation->set_rules('phone', 'phone', 'required');
-			$this->form_validation->set_rules('salary_scheme', 'salary_scheme', 'required');
-			$this->form_validation->set_rules('subject', 'subject', 'required');
-			$this->form_validation->set_rules('tutor_permission', 'tutor_permission', 'required');
-
-               
-		if(isset($_POST['password']) && $_POST['password']!="")
-		{
-		$this->form_validation->set_rules('password', 'Password','trim|required|min_length[8]|matches[passconf]');
-		$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required');
-		}
-                
-
-                if ($this->form_validation->run() == FALSE)
-                {
-                         $this->session->set_flashdata('error', validation_errors());
-            			 return redirect('admin/tutors/edit/'.$id);
-                }
-                else
-                {
-					$this->tutors->update($id, $_POST);
-                       
-                }
-		
+        $result = $this->tutors->update($id, $_POST);
+		if($result==false) {
+            $this->edit($id);
+        }
 		
     }
 	public function moveto_active_list($id)

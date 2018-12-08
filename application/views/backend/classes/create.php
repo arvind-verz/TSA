@@ -38,12 +38,12 @@
                             <label for="">Level</label>
                             <select name="level" class="form-control select2">
                                 <option value="">-- Select One --</option>
-                                <option value="0">S1</option>
-                                <option value="1">S2</option>
-                                <option value="2">S3</option>
-                                <option value="3">S4</option>
-                                <option value="4">S5</option>
-                                <option value="5">S6</option>
+                                <option value="1">S1</option>
+                                <option value="2">S2</option>
+                                <option value="3">S3</option>
+                                <option value="4">S4</option>
+                                <option value="5">S5</option>
+                                <option value="6">S6</option>
                             </select>
                         </div>
                         <div class="form-group">

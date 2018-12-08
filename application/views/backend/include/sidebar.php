@@ -32,6 +32,11 @@
 			'url'   => 'admin/classes',
 			],
 			[
+			'title' => STUDENT,
+			'icon'  => '<i class="fa fa-black-tie"></i>',
+			'url'   => 'admin/students',
+			],
+			[
 			'title' => ATTENDANCE,
 			'icon'  => '<i class="fa fa-check-circle-o"></i>',
 			'url'   => 'admin/attendance',
@@ -55,11 +60,6 @@
 			'title' => INVOICE,
 			'icon'  => '<i class="fa fa-file"></i>',
 			'url'   => 'admin/invoice',
-			],
-			[
-			'title' => STUDENT,
-			'icon'  => '<i class="fa fa-dashboard"></i>',
-			'url'   => 'admin/students',
 			],
 			/*[
 			'title' => MENU,

@@ -11,18 +11,18 @@ class SubjectController extends CI_Controller
         $this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
         $this->result = $this->accounts->get_login_user_id();
-        $this->title = ADMINPANEL . ' | ' . SUBJECT;
+        $this->title  = ADMINPANEL . ' | ' . SUBJECT;
     }
 
     public function index()
     {
-        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'views');       
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SUBJECT, 'admin/subject');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
-        $data['title'] = $this->title;
-        $data['page_title'] = SUBJECT;
-        $data['subjects']     = get_subject();
+        $data['title']       = $this->title;
+        $data['page_title']  = SUBJECT;
+        $data['subjects']    = get_subject();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -33,14 +33,14 @@ class SubjectController extends CI_Controller
 
     public function archived()
     {
-        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'views');   
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(SUBJECT, 'admin/subject');
         $this->breadcrumbs->push(ARCHIVED, 'admin/archived');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = SUBJECT . " <small> " . ARCHIVED . " </small>";
-        $data['subjects']     = get_archived(DB_SUBJECT);
+        $data['subjects']    = get_archived(DB_SUBJECT);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -100,7 +100,6 @@ class SubjectController extends CI_Controller
     public function delete($id)
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'SUBJECT', 'deletes');
-        die();
         $this->subject->delete($id, $_POST);
     }
 

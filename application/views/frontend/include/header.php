@@ -76,7 +76,8 @@ $(function(){
 	<!-- Header -->
 	<header id="header" class="header">
 		<div class="container">
-			<div class="logo"><a href="<?php echo site_url('home'); ?>"><img src="<?php echo base_url('assets/images/logo.png'); ?>" alt="The Science Academy Pte Ltd" /></a></div>
+			<?php $logo	=	get_logo(); ?>
+			<div class="logo"><a href="<?php echo site_url('home'); ?>"><img src="<?php echo isset($logo->logo) ? base_url('assets/files/logo/' . $logo->logo) : ''; ?>" alt="The Science Academy Pte Ltd" /></a></div>
 			<!--<div class="top-user"> <a href="#" class="tp-user"><i class="jcon-user-1 ileft"></i>Login</a> </div>!-->
 			<div class="topRightContainer">
 				<div class="nav-wrapper">

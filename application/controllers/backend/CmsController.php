@@ -19,6 +19,7 @@ class CmsController extends CI_Controller {
         $data['title']       = $this->title . ' - ' . LOGO;
         $data['page_title']  = LOGO;
 		$data['meta_title'] = LOGO;
+		$data['logo']	=	get_logo();
 
 		$this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');

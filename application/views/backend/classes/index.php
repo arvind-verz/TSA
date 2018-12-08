@@ -24,7 +24,7 @@
                         </a>
                     </div>
                     <div class="box-body">
-                        <table class="table table-striped table-bordered text-center" id="datatable" style="width:100%">
+                        <table class="table table-striped table-bordered text-center datatable" id="" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>
@@ -50,6 +50,9 @@
                                     </th>
                                     <th>
                                         Monthly Fees(S$)
+                                    </th>
+                                    <th>
+                                        Deposit Fees(S$)
                                     </th>
                                     <th>
                                         Level
@@ -93,19 +96,22 @@
                                         <?php echo isset($class->class_time) ? $class->class_time : '-' ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($class->class_day) ? $class->class_day : '-' ?>
+                                        <?php echo isset($class->frequency) ? $class->frequency : '-' ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($class->class_month) ? $class->class_month : '-' ?>
+                                        <?php echo isset($class->class_day) ? $class->class_day : '-' ?>
                                     </td>
                                     <td>
                                         <?php echo isset($class->monthly_fees) ? $class->monthly_fees : '-' ?>
                                     </td>
                                     <td>
+                                        <?php echo isset($class->deposit_fees) ? $class->deposit_fees : '-' ?>
+                                    </td>
+                                    <td>
                                         <?php echo isset($class->level) ? level($class->level) : '-'; ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($class->class_size) ? get_students_enrolled($class->class_code) . '/' . $class->class_size : '-' ?>
+                                        <?php echo isset($class->class_size) ? get_students_enrolled($class->class_id) . '/' . $class->class_size : '-' ?>
                                     </td>
                                     <?php
                                     if (current_url() == site_url('admin/classes/archived')) {
@@ -121,7 +127,7 @@
                                     ?>
                                     <td>
                                         <a href="<?php echo site_url('admin/classes/edit/' . $class->class_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
-                                        <a href="<?php echo site_url('admin/classes/delete/' . $class->class_id) ?>" onclick="return confirm('Are you sure you want to archive?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
+                                        <a href="<?php echo site_url('admin/classes/delete/' . $class->class_id) ?>" onclick="return confirm('Are you sure you want to archive this class?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
                                     </td>
                                     <?php }?>
                                 </tr>
@@ -138,7 +144,7 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#datatable').DataTable({
+    $('table.datatable').DataTable({
         "order": [
             [0, "desc"]
         ]
