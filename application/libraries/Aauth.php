@@ -730,10 +730,10 @@ class Aauth
                 $valid = false;
             }
         }
-        if ($this->user_exist_by_username($username) && $username != false) {
+        /*if ($this->user_exist_by_username($username) && $username != false) {
             $this->error($this->CI->lang->line('aauth_error_username_exists'));
             $valid = false;
-        }
+        }*/
 
         if ($this->user_exist_by_email($email)) {
             $this->error($this->CI->lang->line('aauth_error_email_exists'));
@@ -820,7 +820,7 @@ class Aauth
         }
 
         if ($email != false) {
-            if ($this->user_exist_by_email($email)) {
+            if ($this->user_exist_by_email($email, $user_id)) {
                 $this->error($this->CI->lang->line('aauth_error_update_email_exists'));
                 $valid = false;
             }
@@ -840,11 +840,11 @@ class Aauth
             $data['pass'] = $this->hash_password($pass, $user_id);
         }
 
-        if ($user->username == $username) {
+        /*if ($user->username == $username) {
             $username = false;
-        }
+        }*/
 
-        if ($username != false) {
+        /*if ($username != false) {
             if ($this->user_exist_by_username($username)) {
                 $this->error($this->CI->lang->line('aauth_error_update_username_exists'));
                 $valid = false;
@@ -854,7 +854,7 @@ class Aauth
                 $valid = false;
             }
             $data['username'] = $username;
-        }
+        }*/
 
         if (!$valid || empty($data)) {
             return false;
@@ -1162,9 +1162,11 @@ class Aauth
      *
      * @return bool
      */
-    public function user_exist_by_email($user_email)
+    public function user_exist_by_email($user_email, $user_id)
     {
         $query = $this->aauth_db->where('email', $user_email);
+
+        $query = $this->aauth_db->where_not_in('id', $user_id);
 
         $query = $this->aauth_db->get($this->config_vars['users']);
 

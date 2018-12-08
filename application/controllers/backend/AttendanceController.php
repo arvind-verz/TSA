@@ -116,4 +116,10 @@ class AttendanceController extends CI_Controller
     {
        
     }
+
+    public function get_attendance_date_by_class_code()
+    {
+        $class_code = isset($_GET['class_code']) ? $_GET['class_code'] : '';
+        print_r(get_attendance_date_by_class_code($class_code));
+    }
 }

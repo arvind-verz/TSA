@@ -128,12 +128,39 @@
                             <div class="col-lg-12">
                                 <div class="col-lg-4">
                                     <div class="form-group">
+                                        <label for=""><?php echo BILLING ?> Name</label>
+                                        <input type="text" name="billing_name[]" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for=""><?php echo BILLING ?> Range</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control pull-right date_range" name="date_range[]">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group mt-5">
+                                        <label>
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[3]" value="1"> Rest Week
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
                                         <label for="">Invoice Generation Date</label>
                                         <div class="input-group">
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right datepicker" name="invoice_generation_date" autocomplete="off">
+                                            <input type="text" class="form-control pull-right datepicker2" name="invoice_generation_date" autocomplete="off">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -151,3 +178,11 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.datepicker2').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+        })
+    })
+</script>

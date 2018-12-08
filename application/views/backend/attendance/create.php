@@ -31,8 +31,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="">Date</label>
-                                <input type="text" name="attendance_date" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
+                                <label for="">Date : <span class="attendance_date"></span></label>
+                                <input type="hidden" name="attendance_date" class="form-control" value="">
                             </div>
                             <div class="form-group pull-right">
                                 <button type="button" class="btn btn-info copy_fist_line">Copy First Line</button>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                     <div class="box-footer">
-                        <a href="<?php echo site_url('admin/classes'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
+                        <a href="<?php echo site_url('admin/attendance'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                         <button type="submit" class="btn btn-info pull-right"><?php echo SUBMIT ?></button>
                     </div>
                     <?php echo form_close(); ?>
@@ -112,7 +112,26 @@ $("body").on("change", "select[name='class_code']", function() {
                 //alert(data);
                 $("select[name='class_code_transfer']").html(data);
             }
-        })
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '<?php echo site_url('admin/attendance/get_attendance_date_by_class_code'); ?>',
+            data: 'class_code=' + class_code,
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                //alert(data);
+                if(data.trim()!='') {
+                    $(".attendance_date").text(data);$("input[name='attendance_date']").val(data);
+                }
+                else {
+                    $(".attendance_date").text('Attendance sheet not available.');
+                    $("tbody.display_data").html('');
+                }
+            }
+        });
     }
     else {
         $("select[name='class_code_transfer']").html('<option value="">-- Select One --</option>');

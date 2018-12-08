@@ -90,6 +90,11 @@ $route['admin/students/update/(:any)']             = 'backend/StudentController/
 $route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
 $route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
 $route['admin/students/get_student_status']        = 'backend/StudentController/get_student_status';
+$route['admin/students/get_enrollment_type_popup_content']        = 'backend/StudentController/get_enrollment_type_popup_content';
+$route['admin/students/get_class_size']        = 'backend/StudentController/get_class_size';
+$route['admin/students/enrollment_decision']        = 'backend/StudentController/enrollment_decision';
+
+
 
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
 
@@ -108,6 +113,7 @@ $route['admin/material/edit/(:any)']               = 'backend/MaterialController
 $route['admin/material/update/(:any)']             = 'backend/MaterialController/update/$1';
 $route['admin/material/delete/(:any)']             = 'backend/MaterialController/delete/$1';
 $route['admin/material/moveto_active_list/(:any)'] = 'backend/MaterialController/moveto_active_list/$1';
+$route['admin/material/get_book_price_range'] = 'backend/MaterialController/get_book_price_range';
 
 $route['admin/material/get_student_by_class_code'] = 'backend/MaterialController/get_student_by_class_code';
 
@@ -149,6 +155,8 @@ $route['admin/attendance/get_attendance_summary']    = 'backend/AttendanceContro
 $route['admin/attendance/transfer_student']          = 'backend/AttendanceController/transfer_student';
 $route['admin/attendance/get_class_code_transfer']   = 'backend/AttendanceController/get_class_code_transfer';
 $route['admin/attendance/get_attendance_edit_sheet'] = 'backend/AttendanceController/get_attendance_edit_sheet';
+$route['admin/attendance/get_attendance_date_by_class_code'] = 'backend/AttendanceController/get_attendance_date_by_class_code';
+
 
 /* ORDER */
 $route['admin/order']                     = 'backend/OrderController/index';
