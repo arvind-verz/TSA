@@ -28,9 +28,9 @@ class AccountsController extends CI_Controller
 
         $config = [
             [
-                'field' => 'email',
-                'label' => 'Email',
-                'rules' => 'trim|required|valid_email',
+                'field' => 'username',
+                'label' => 'Username',
+                'rules' => 'trim|required',
             ],
             [
                 'field' => 'password',

@@ -114,6 +114,7 @@ $route['admin/material/update/(:any)']             = 'backend/MaterialController
 $route['admin/material/delete/(:any)']             = 'backend/MaterialController/delete/$1';
 $route['admin/material/moveto_active_list/(:any)'] = 'backend/MaterialController/moveto_active_list/$1';
 $route['admin/material/get_book_price_range'] = 'backend/MaterialController/get_book_price_range';
+$route['admin/material/get_books_by_subject'] = 'backend/MaterialController/get_books_by_subject';
 
 $route['admin/material/get_student_by_class_code'] = 'backend/MaterialController/get_student_by_class_code';
 
