@@ -44,7 +44,7 @@
                             <div class="row">
                                 <div class="col-sm-9 col-sm-offset-3">
                                     <div class="text-center pt30">
-                                        <button class="button" type="submit">Login</button> <a href="<?php echo site_url('reset-password') ?>">Forgot Password? </a>
+                                        <button class="button" type="submit">Login</button>
                                     </div>
                                 </div>
                             </div>
