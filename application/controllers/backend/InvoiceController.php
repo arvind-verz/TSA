@@ -17,7 +17,7 @@ class InvoiceController extends CI_Controller
     public function index()
     {
         //print_r(send_sms('8980492244', 'Dear Demo Testing, You are been registered successfully. Thank you'));
-        //send_archived_invoice('5bff79ab2387f');        
+        //send_archived_invoice('5c0b5e1014b3d');        
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'INVOICE', 'views'); 
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(INVOICE, 'admin/invoice');

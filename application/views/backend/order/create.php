@@ -26,7 +26,7 @@
                                     if(count($classes)) {
                                     foreach($classes as $class) {
                                     ?>
-                                    <option value="<?php echo $class->class_code ?>"><?php echo $class->class_code ?></option>
+                                    <option value="<?php echo $class->class_code; ?>"><?php echo $class->class_code ?></option>
                                     <?php
                                     }}
                                     ?>
@@ -52,16 +52,7 @@
                             </div>
                             <div class="form-group">
                                 <label for=""><?php echo BOOK ?> ID</label>
-                                <select name="book_id" class="form-control select2">
-                                    <option value="">-- Select One --</option>
-                                    <?php
-                                    if(count($books)) {
-                                    foreach($books as $book) {
-                                    ?>
-                                    <option value="<?php echo $book->id ?>"><?php echo $book->material_id ?></option>
-                                    <?php
-                                    }}
-                                    ?>
+                                <select name="book_id" class="form-control select2 books">
                                 </select>
                             </div>
                         </div>
@@ -77,35 +68,46 @@
     </section>
 </div>
 <script type="text/javascript">
-    $("select[name=class_code]").on("change", function() {
-        var class_code = $(this).val();
-        $.ajax({
-            type: 'GET',
-            url: '<?php echo site_url('admin/material/get_student_by_class_code'); ?>',
-            data: 'class_code=' + class_code,
-            async: false,
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                //alert(data);
-                $(".students").html(data);
-            }
-        })
-    });
+    $(document).ready(function() {
 
-    /*$("select.subject").on("change", function() {
-        var subject = $(this).val();
-        $.ajax({
-            type: 'GET',
-            url: '<?php echo site_url('admin/material/get_books_by_subject'); ?>',
-            data: 'subject=' + subject,
-            async: false,
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                //alert(data);
-                $(".students").html(data);
+        $("select[name=class_code]").on("change", function() {
+            var class_code = $(this).val();
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/material/get_student_by_class_code'); ?>',
+                data: 'class_code=' + class_code,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    //alert(data);
+                    $(".students").html(data);
+                }
+            })
+        });
+
+        $("select.subject").on("change", function() {
+            var subject = $(this).val();
+            
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/material/get_books_by_subject'); ?>',
+                data: 'subject=' + subject,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $(".books").html(data);
+                }
+            })
+        });
+
+        $("select.students").on("change", function() {
+            var student = $(this).val();
+            if(student.indexOf('all')>-1)
+            {
+                $(this).val('all');
             }
-        })
-    });*/
+        });
+    });
 </script>

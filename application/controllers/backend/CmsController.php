@@ -165,7 +165,7 @@ class CmsController extends CI_Controller {
         $data_msg = array();		
 		$this->Cms_model->del_menu_item($id);						
 		$this->session->set_flashdata('success_msg', 'Successfully Removed');
-		redirect(site_url("manage-menu-list/".$position));       
+		return redirect("admin/manage-menu-list/".$position);       
     }
 	
 	public function edit_menu_item($position,$id) {

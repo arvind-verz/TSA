@@ -12,7 +12,7 @@ class Order extends CI_Model
 
     public function store()
     {
-        //die(print_r($_POST));
+        
         $data = array(
             'order_date' => $this->date,
             'class_code' => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
@@ -26,6 +26,24 @@ class Order extends CI_Model
         $this->db->insert(DB_ORDER . 's', $data);
 
         $order_id = $this->db->insert_id();
+        if($_POST['student'][0]=='all')
+        {
+            $_POST['student'] = [];
+            $this->db->select('*, student.id as student_id');
+            $this->db->from(DB_STUDENT);
+            $this->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+            $this->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
+            $this->db->where(DB_CLASSES . '.class_code', $_POST['class_code']);
+            $this->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
+            $query  = $this->db->get();
+            $result = $query->result();
+            if($result){
+                foreach($result as $row)
+                {
+                    $_POST['student'][] = $row->student_id;
+                }
+            }
+        }
         foreach ($_POST['student'] as $student) {
             $data1 = array(
                 'student_id' => $student,

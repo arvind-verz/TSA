@@ -13,18 +13,18 @@ class Accounts extends CI_Model
 
     public function process()
     {
-        $email       = isset($_POST['email']) ? $_POST['email'] : '';
+        $username       = isset($_POST['username']) ? $_POST['username'] : '';
         $password    = isset($_POST['password']) ? $_POST['password'] : '';
         $remember_me = isset($_POST['remember_me']) ? $_POST['remember_me'] : 0;
 
-        $query = $this->db->get_where(DB_STUDENT, ['email' => $email]);
+        $query = $this->db->get_where(DB_STUDENT, ['username' => $username, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
         if ($query->num_rows() > 0) {
             $result = $query->row();
             if (password_verify($password, $result->password)) {
                 if ($remember_me) {
                     $cookie_email = [
-                        'name'   => '_cemail',
-                        'value'  => $email,
+                        'name'   => '_cusername',
+                        'value'  => $username,
                         'domain' => '',
                         'path'   => '/',
                         'expire' => 36500,
@@ -54,8 +54,8 @@ class Accounts extends CI_Model
                 }
 
                 $student_data = array(
-                    'username'  => $result->username,
-                    'email'     => $result->email,
+                    'email'  => $result->email,
+                    'username'     => $result->username,
                     'id'        => $result->id,
                     'logged_in' => true,
                 );
@@ -63,11 +63,11 @@ class Accounts extends CI_Model
                 $this->session->set_userdata('student_credentials', $student_data);
                 return redirect('student-profile');
             } else {
-                $this->session->set_flashdata('error', $this->lang->line('aauth_error_login_failed_email'));
+                $this->session->set_flashdata('error', $this->lang->line('aauth_error_login_failed_name'));
                 return redirect("login");
             }
         } else {
-            $this->session->set_flashdata('error', $this->lang->line('aauth_error_login_failed_email'));
+            $this->session->set_flashdata('error', $this->lang->line('aauth_error_login_failed_name'));
             return redirect("login");
         }
     }

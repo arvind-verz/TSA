@@ -123,4 +123,10 @@ class MaterialController extends CI_Controller
         $price_to = isset($_GET['price_to']) ? $_GET['price_to'] : '';
         print_r(get_book_price_range($price_from, $price_to));
     }
+
+    public function get_books_by_subject()
+    {
+        $subjects = isset($_GET['subject']) ? explode(',', $_GET['subject']) : '';
+        print_r(get_books_by_subject($subjects));
+    }
 }

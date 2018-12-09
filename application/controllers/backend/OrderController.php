@@ -55,7 +55,37 @@ class OrderController extends CI_Controller
     public function store()
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ORDER', 'creates');
-        $this->order->store($_POST);
+        $config = [
+            [
+                'field' => 'class_code',
+                'label' => 'Class Code',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'subject[]',
+                'label' => 'Subject',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'student[]',
+                'label' => 'Student',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'book_id',
+                'label' => 'Book ID',
+                'rules' => 'required',
+            ],
+        ];
+
+        $this->form_validation->set_rules($config);
+
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('error', validation_errors());
+            $this->create();
+        } else {
+            $this->order->store($_POST);
+        }
     }
 
     public function update_order_status()
