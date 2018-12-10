@@ -46,10 +46,12 @@ $route['admin/users/roles-and-permission/create']        = 'backend/AccountsCont
 $route['admin/users/roles-and-permission/store']         = 'backend/AccountsController/permission_store';
 $route['admin/users/roles-and-permission/edit/(:any)']   = 'backend/AccountsController/permission_edit/$1';
 $route['admin/users/roles-and-permission/update/(:any)'] = 'backend/AccountsController/permission_update/$1';
+$route['admin/users/roles-and-permission/delete/(:any)'] = 'backend/AccountsController/permission_delete/$1';
 
 $route['admin/users/create']        = 'backend/AccountsController/users_create';
 $route['admin/users/store']         = 'backend/AccountsController/users_store';
 $route['admin/users/edit/(:any)']   = 'backend/AccountsController/users_edit/$1';
+$route['admin/users/delete/(:any)']   = 'backend/AccountsController/users_delete/$1';
 $route['admin/users/update/(:any)'] = 'backend/AccountsController/users_update/$1';
 
 $route['admin/denied-access-control'] = 'backend/AccountsController/denied_access';
@@ -93,7 +95,7 @@ $route['admin/students/get_student_status']        = 'backend/StudentController/
 $route['admin/students/get_enrollment_type_popup_content']        = 'backend/StudentController/get_enrollment_type_popup_content';
 $route['admin/students/get_class_size']        = 'backend/StudentController/get_class_size';
 $route['admin/students/enrollment_decision']        = 'backend/StudentController/enrollment_decision';
-
+$route['admin/students/get_view_all_contents']        = 'backend/StudentController/get_view_all_contents';
 
 
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
@@ -147,10 +149,10 @@ $route['admin/billing/update/(:any)'] = 'backend/BillingController/update/$1';
 
 /* ATTENDANCE */
 $route['admin/attendance']                           = 'backend/AttendanceController/index';
-$route['admin/attendance/create']                    = 'backend/AttendanceController/create';
+$route['admin/attendance/create-edit/(:any)']                    = 'backend/AttendanceController/create/$1';
 $route['admin/attendance/store']                     = 'backend/AttendanceController/store';
-$route['admin/attendance/edit']                      = 'backend/AttendanceController/edit';
-$route['admin/attendance/update']                    = 'backend/AttendanceController/update';
+//$route['admin/attendance/edit']                      = 'backend/AttendanceController/edit';
+//$route['admin/attendance/update']                    = 'backend/AttendanceController/update';
 $route['admin/attendance/get_attendance_sheet']      = 'backend/AttendanceController/get_attendance_sheet';
 $route['admin/attendance/get_attendance_summary']    = 'backend/AttendanceController/get_attendance_summary';
 $route['admin/attendance/transfer_student']          = 'backend/AttendanceController/transfer_student';

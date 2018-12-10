@@ -70,7 +70,12 @@
                 </div>
                 <div class="form-group">
                     <label for="">Siblings</label>
-                    <input type="text" name="siblings" class="form-control" value="<?php echo set_value('siblings');?>">
+                    <select name="siblings[]" class="form-control select2" multiple>
+                        <?php if(student_names) {
+                        foreach($student_names as $student_name) { ?>
+                        <option value="<?php echo $student_name->name ?>"><?php echo $student_name->name . ' - ' . $student_name->nric; ?></option>
+                        <?php }} ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="">Parents Phone</label>

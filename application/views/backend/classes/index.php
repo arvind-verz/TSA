@@ -23,7 +23,7 @@
                             </i> <?php echo ARCHIVED . ' ' . CLASSES ?>
                         </a>
                     </div>
-                    <div class="box-body">
+                    <div class="box-body table-responsive">
                         <table class="table table-striped table-bordered text-center datatable" id="" style="width:100%">
                             <thead>
                                 <tr>
@@ -135,6 +135,55 @@
                                 }}
                                 ?>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>
+                                        <?php echo CLASSES ?> Name
+                                    </th>
+                                    <th>
+                                        <?php echo CLASSES ?> Code
+                                    </th>
+                                    <th>
+                                        <?php echo TUTOR ?> ID
+                                    </th>
+                                    <th>
+                                        <?php echo SUBJECT ?>
+                                    </th>
+                                    <th>
+                                        Time
+                                    </th>
+                                    <th>
+                                        Frequency
+                                    </th>
+                                    <th>
+                                        Day
+                                    </th>
+                                    <th>
+                                        Monthly Fees(S$)
+                                    </th>
+                                    <th>
+                                        Deposit Fees(S$)
+                                    </th>
+                                    <th>
+                                        Level
+                                    </th>
+                                    <th>
+                                        Class Size
+                                    </th>
+                                    <?php
+                                    if (current_url() == site_url('admin/classes/archived')) {
+                                    ?>
+                                    <th>
+                                        <?php echo ARCHIVED ?> At
+                                    </th>
+                                    <?php
+                                    }
+                                    ?>
+                                    <th>
+                                        <?php echo ACTION ?>
+                                    </th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -144,10 +193,30 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('table.datatable').DataTable({
+    // Setup - add a text input to each footer cell
+    $('table tfoot th').each( function () {
+        var title = $(this).text().trim();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    } );
+ 
+    // DataTable
+    var table = $('table').DataTable({
         "order": [
             [0, "desc"]
         ]
     });
-});
+ 
+    // Apply the search
+    table.columns().every( function () {
+        var that = this;
+ 
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+} );
 </script>

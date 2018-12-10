@@ -26,7 +26,8 @@
                             </div>
 
                             <div class="box-body table-responsive">
-                                <table class="table table-striped table-bordered" id="datatable" style="width:100%">
+                                <table class="table table-striped table-bordered" style="width:100%">
+
                                     <thead>
                                         <tr>
                                             <th>Tutor ID</th>
@@ -84,6 +85,33 @@
                                             }}
                                             ?>
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Tutor ID</th>
+                                                <th>
+                                                    Tutor Name
+                                                </th>
+                                                <th>
+                                                    Email
+                                                </th>
+                                                <th>Class Code</th>
+                                                <th>
+                                                    Subject
+                                                </th>
+                                                <th>
+                                                    Phone Number
+                                                </th>
+                                                <th>Salary Scheme</th>
+                                                <?php
+                                                if (current_url() == site_url('admin/tutors/archived')) {
+                                                    ?>
+                                                    <th>Archived At</th>
+                                                <?php } ?>
+                                                <th>
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -91,3 +119,28 @@
                     </div>
                 </section>
             </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    // Setup - add a text input to each footer cell
+                    $('table tfoot th').each( function () {
+                        var title = $(this).text();
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    } );
+                 
+                    // DataTable
+                    var table = $('table').DataTable();
+                 
+                    // Apply the search
+                    table.columns().every( function () {
+                        var that = this;
+                 
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                            if ( that.search() !== this.value ) {
+                                that
+                                    .search( this.value )
+                                    .draw();
+                            }
+                        } );
+                    } );
+                } );
+            </script>

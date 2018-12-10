@@ -95,10 +95,10 @@
 												<td><strong>Siblings</strong></td>
 												<td>
 													<?php
-													$siblings = explode(",", $student_profile->siblings);
+													$siblings = json_decode($student_profile->siblings);
 													if(count($siblings)) {
 														foreach($siblings as $sibling) {
-															echo ucwords($sibling) . '<br/>';
+															echo ucwords($sibling) . ', <br/>';
 														}
 													}
 													else {

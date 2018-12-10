@@ -568,8 +568,8 @@ class Cms extends CI_Controller {
 
 	public function miss_class_request() {
         $class_id = isset($_GET['class_id']) ? $_GET['class_id'] : '';
-        $reason = isset($_GET['reason']) ? $_GET['reason'] : '';
-        $date_of_absence = isset($_GET['date_of_absence']) ? $_GET['date_of_absence'] : '';
+        $reason = isset($_GET['reason']) ? $_GET['reason'] : null;
+        $date_of_absence = isset($_GET['date_of_absence']) ? $_GET['date_of_absence'] : null;
         print_r(miss_class_request($class_id, $reason, $date_of_absence));
     }
 	

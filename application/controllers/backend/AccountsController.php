@@ -365,4 +365,14 @@ class AccountsController extends CI_Controller
             }
         }   
     }
+
+    public function users_delete($id)
+    {
+        $this->accounts->users_delete($id);
+    }
+
+    public function permission_delete($id)
+    {
+        $this->accounts->permission_delete($id);
+    }
 }

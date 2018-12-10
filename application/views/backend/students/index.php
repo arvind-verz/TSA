@@ -31,12 +31,10 @@
                             <i aria-hidden="true" class="fa fa-archive">
                             </i> <?php echo ARCHIVED . ' ' . STUDENT ?>
                         </a>
-
                     </p>
-                    
                     </div>
                     <div class="box-body table-responsive">
-                        <table class="table table-striped table-bordered" style="width:100%">
+                        <table class="table table-bordered" style="width:100%">
                             <thead>
                                 <tr>
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
@@ -110,24 +108,26 @@
                                 <?php
                                 if(count($students)) {
                                 foreach($students as $student) {
-                                ?>
-                                <tr>
+                                ?>                                
+                                <tr class="<?php if(has_enrollment_content($student->student_id, $student->class_id, 'depo_collected')=='No') {echo 'bg-danger';} ?>">
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
-                                    <td><input type="checkbox" class="checkbox" name="student_id" value="<?php echo $student->student_id;?>"/></td>
+                                    <td><input type="hidden" name="student_id_ref" value="<?php echo $student->student_id; ?>">
+                                <input type="hidden" name="class_id_ref" value="<?php echo $student->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id" value="<?php echo $student->student_id;?>"/></td>
                                 <?php } ?>
                                     <td><?php echo $student->name;?></td>
                                     <td><?php echo $student->email;?></td>
                                     <td><?php echo isset($student->username) ? $student->username : '-' ?></td>
                                     <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
-                                    <td><?php print_r(get_enrolled_classes($student->student_id));?></td>
+                                    <td><?php echo isset($student->class_code) ? $student->class_code : '-' ?></td>
                                     <td><?php echo isset($student->gender) ? ($student->gender==0) ? 'Male' : 'Female' : '-' ?></td>
                                     <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
                                     <td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>
                                     <td><?php echo isset($student->parent_name ) ? $student->parent_name  : '-' ?></td>
                                     <td><?php echo isset($student->parent_email ) ? $student->parent_email  : '-' ?></td>
                                     <td><?php echo isset($student->parents_phone ) ? $student->parents_phone  : '-' ?></td>
-                                    <td><?php echo isset($student->siblings) ? $student->siblings  : '-' ?></td>
-                                    <td><?php //echo get_enrollment_status($student->student_id;); ?></td>
+                                    <td><?php $siblings = json_decode($student->siblings);
+                                    if($siblings) {foreach($siblings as $sibling) {echo $sibling . ', ';}} ?></td>
+                                    <td><?php echo get_enrollment_status($student->status); ?></td>
                                     <td><?php echo isset($student->remark) ? $student->remark : '-' ?></td>
                                     <td>
                                         <div class="form-group">
@@ -136,16 +136,20 @@
                                                 <option name="Edit" value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
                                                 <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
                                                 <option value="Final Settlement">Final Settlement</option>
-                                                <option value="<?php echo base_url();?>index.php/admin/students/?sid=<?php echo $student->student_id;?>">View all details</option>
+                                                <option value="view_all_details" name="view_all_details">View all details</option>
                                                 <option value="<?php echo base_url();?>index.php/admin/students/?sid=<?php echo $student->student_id;?>">Edit Class</option>
                                             </select>
                                         </div>
                                     </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>
+                                        <select name="material" class="form-control select2">
+                                            <?php echo get_material_associated($student->id, $student->class_id); ?>
+                                        </select>
+                                    </td>
+                                    <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'extra_charges'); ?></td>
+                                    <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'depo_collected'); ?></td>
                                     <?php if (current_url() == site_url('admin/students/archived')) { ?>
-                                        <td><?php echo isset($class->updated_at) ? date('d-m-Y H:i A', strtotime($class->updated_at)) : '-' ?></td>
+                                        <td><?php echo get_student_archive_at($student->student_id); ?></td>
                                         <td>
                                             <a href="<?php echo base_url();?>index.php/admin/students/moveto_active_list/<?php echo $student->student_id;?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
                                         </td>
@@ -155,6 +159,75 @@
                                 }}
                                 ?>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
+                                    <th class="no-sort">#</th>
+                                <?php } ?>
+                                    <th>
+                                        Student <br/> Name
+                                    </th>
+                                    <th>
+                                        Student <br/> Email
+                                    </th>
+                                    <th>
+                                        Student <br/> Username
+                                    </th>
+                                    <th>
+                                        Student <br/> NRIC
+                                    </th>
+                                    <th>
+                                        Enrolled <br />classes
+                                    </th>
+                                    <th>
+                                        Student <br/> Gender
+                                    </th>
+                                    <th>
+                                        Student <br/> Age
+                                    </th>
+                                    <th>
+                                        Student <br/> Phone <br />Number
+                                    </th>
+                                    <th>
+                                        Parents <br />Name
+                                    </th>
+                                    <th>
+                                        Parents <br />Email
+                                    </th>
+                                    <th>
+                                        Parents <br />Phone
+                                    </th>
+                                    <th>
+                                        Siblings
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th>
+                                        Remark
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                    <th>
+                                        Material <br /> Associated
+                                    </th>
+                                    <th>
+                                        Extra <br /> Charges <br /> Applied
+                                    </th>
+                                    <th>
+                                        Deposit <br /> Collected
+                                    </th>
+                                    <?php if (current_url() == site_url('admin/students/archived')) { ?>
+                                    <th>
+                                        Archive At
+                                    </th>
+                                    <th>
+                                        #
+                                    </th>
+                                <?php } ?>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -202,13 +275,56 @@
     </div>
 </div>
 
+<div class="modal fade" id="ViewAllDetails" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">View Details</h4>
+            </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 display_content">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+        </div>
+
+    </div>
+</div>
+
 <script type="text/javascript">
 $(document).ready(function() {
-    $("table").dataTable({
+    $('table tfoot tr th').each( function () {
+        var title = $(this).text().trim();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    } );
+ 
+    // DataTable
+    var table = $('table').DataTable({
         columnDefs: [
           { targets: 'no-sort', orderable: false }
         ]
     });
+ 
+    // Apply the search
+    table.columns().every( function () {
+        var that = this;
+ 
+        $( 'input', this.footer() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
 
     $("body").on('change', "select[name='enrollment_type']", function(){
         var reservation = enrollment = type = "";
@@ -279,6 +395,25 @@ $(document).ready(function() {
             window.location=$(this).val();
             
         }
+        else if(attrname=='view_all_details')
+        {
+            var student_id = $(this).parents("tbody").find("input[name='student_id_ref']").val();
+            var class_id = $(this).parents("tbody").find("input[name='class_id_ref']").val();
+            $.ajax({
+            type: 'GET',
+            url: '<?php echo site_url('admin/students/get_view_all_contents'); ?>',
+            data: 'student_id=' + student_id + '&class_id=' + class_id,
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                $("div.display_content").html(data);
+                $("#ViewAllDetails").modal('show');
+            }
+        });
+            
+        }
+        $(this).val('');
     });
 
     $("body").on("change", "select[name='class_code']",  function() {

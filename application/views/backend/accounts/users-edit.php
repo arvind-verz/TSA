@@ -47,6 +47,14 @@
                                     ?>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select name="status" class="form-control select2">
+                                    <option value="">-- Select One --</option>
+                                    <option value="0" <?php if($users_data->banned==0) {echo 'selected';} ?>>Active</option>
+                                    <option value="1" <?php if($users_data->banned==1) {echo 'selected';} ?>>Inactive</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="box-footer">

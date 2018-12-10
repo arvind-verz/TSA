@@ -51,6 +51,14 @@
                                     ?>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select name="status" class="form-control select2">
+                                    <option value="">-- Select One --</option>
+                                    <option value="0">Active</option>
+                                    <option value="1">Inactive</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="box-footer">

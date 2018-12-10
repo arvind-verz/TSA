@@ -14,8 +14,7 @@ class Attendance extends CI_Model
     {
         $query = $this->db->get_where(DB_ATTENDANCE, ['class_code' => $_POST['class_code'], 'attendance_date' => $_POST['attendance_date']]);
         if($query->num_rows()>0) {
-        	$this->session->set_flashdata('warning', ATTENDANCE . ' ' . MSG_EXIST);
-            return redirect('admin/attendance/create');
+        	$this->update($_POST);
         }
         
         for ($i = 0; $i < count($_POST['student_id']); $i++) {
@@ -84,7 +83,7 @@ class Attendance extends CI_Model
                 if(count($date_collection)) {
                 foreach($date_collection as $dates) {
                 ?>
-                <th><?php echo date('d M', strtotime($dates)); ?></th>
+                <th class="no-sort attendance" data-date="<?php echo $dates; ?>" style="cursor: pointer;"><?php echo date('d M', strtotime($dates)); ?></th>
                 <?php
                 }}
                 ?>
@@ -134,24 +133,34 @@ class Attendance extends CI_Model
     public function transfer_student() {
         $student_id = $_GET['student_id'];
         $class_code = $_GET['class_code'];
-
+        $old_class_code = $_GET['old_class_code'];
+        
         $query = $this->db->get_where(DB_CLASSES, ['class_code' => $class_code]);
         $result = $query->row();
 
+
+
+        $query1 = $this->db->get_where(DB_CLASSES, ['class_code' => $old_class_code]);
+        $result1 = $query1->row();
+
         $this->db->trans_start();
         foreach($student_id as $id) {
-            $data = [
-                'class_id' =>   $result->id
-            ];
-            $this->db->where('student_id', $id);
-            $this->db->update(STUDENT, $data);
-            send_class_transfer_invoice($id);
+            $query = $this->db->get_where('student_to_class', ['class_id' => $result->class_id, 'student_id'    =>  $id]);
+            if($query->num_rows()<1) {
+                $data = [
+                    'class_id' =>   $result->class_id,
+                ];
+                $this->db->where('student_id', $id);
+                $this->db->where('class_id', $result1->class_id);
+                $this->db->update('student_to_class', $data);
+                send_class_transfer_invoice($id);
+            }
         }
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
-            return 'admin/attendance/create';
+            return 'admin/attendance';
         } else {
             $this->session->set_flashdata('success', STUDENT . ' ' . MSG_TRANSFERRED);
             return 'admin/attendance';

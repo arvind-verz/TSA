@@ -165,7 +165,6 @@ $item_details = json_decode($invoice_data->invoice_data);
         </tr>
         <?php
         foreach($item_details as $key => $value) {
-        if($value) {
         ?>
         <tr class="item last">
             <td>
@@ -177,7 +176,7 @@ $item_details = json_decode($invoice_data->invoice_data);
             </td>
         </tr>
         <?php
-        }}
+        }
         ?>
         
         <tr class="total">

@@ -17,6 +17,7 @@ class StudentController extends CI_Controller
 
     public function index()
     {
+        //die(print_r(get_student()));
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(STUDENT, 'admin/students');
@@ -48,6 +49,7 @@ class StudentController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = "Add Student";
+        $data['student_names'] = get_student_names_with_nric();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -63,7 +65,9 @@ class StudentController extends CI_Controller
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = STUDENT . " <small> " . ARCHIVED . " </small>";
-        $data['students']    = $this->students->get_archived_classes();
+        $data['students']    = get_student_archived();
+        $data['classes']     = get_classes();
+        $data['enrollment_type'] = get_enrollment_type();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -146,6 +150,7 @@ class StudentController extends CI_Controller
         $data['page_title']  = STUDENT . " <small> " . EDIT . ' #' . $id . " </small>";
         $data['crud_id']     = $id;
         $data['student']     = $this->students->get_student($id);
+        $data['student_names'] = get_student_names_with_nric();
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -242,5 +247,12 @@ class StudentController extends CI_Controller
         $class_id = !empty($_GET['class_id']) ? $_GET['class_id'] : '';
         $student_id = !empty($_GET['student_id']) ? $_GET['student_id'] : '';
         print_r(enrollment_decision($class_id, $student_id));
+    }
+
+    public function get_view_all_contents()
+    {
+        $class_id = !empty($_GET['class_id']) ? $_GET['class_id'] : '';
+        $student_id = !empty($_GET['student_id']) ? $_GET['student_id'] : '';
+        print_r(get_view_all_contents($student_id, $class_id));
     }
 }
