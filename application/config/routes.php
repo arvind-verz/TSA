@@ -46,10 +46,12 @@ $route['admin/users/roles-and-permission/create']        = 'backend/AccountsCont
 $route['admin/users/roles-and-permission/store']         = 'backend/AccountsController/permission_store';
 $route['admin/users/roles-and-permission/edit/(:any)']   = 'backend/AccountsController/permission_edit/$1';
 $route['admin/users/roles-and-permission/update/(:any)'] = 'backend/AccountsController/permission_update/$1';
+$route['admin/users/roles-and-permission/delete/(:any)'] = 'backend/AccountsController/permission_delete/$1';
 
 $route['admin/users/create']        = 'backend/AccountsController/users_create';
 $route['admin/users/store']         = 'backend/AccountsController/users_store';
 $route['admin/users/edit/(:any)']   = 'backend/AccountsController/users_edit/$1';
+$route['admin/users/delete/(:any)']   = 'backend/AccountsController/users_delete/$1';
 $route['admin/users/update/(:any)'] = 'backend/AccountsController/users_update/$1';
 
 $route['admin/denied-access-control'] = 'backend/AccountsController/denied_access';

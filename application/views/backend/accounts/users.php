@@ -16,7 +16,7 @@
                     <div class="box-header with-border">
                         <a href="<?php echo site_url('admin/users/roles-and-permission/create') ?>" class="btn btn-info">
                             <i aria-hidden="true" class="fa fa-plus-circle">
-                        </i> Create Permission and Roles</a>
+                        </i> Create Permission</a>
                     </div>
                     <div class="box-body">
                         <div class="col-lg-12 table-responsive">
@@ -24,7 +24,8 @@
                                 <thead>
                                     <tr>
                                         <th>Title</th>
-                                        <th>Modules</th>
+                                        <th>Modules Access</th>
+                                        <th>Role Access</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -37,8 +38,10 @@
                                     <tr>
                                         <td><?php echo $value->name; ?></td>
                                         <td><?php echo get_permission_access_module($value->id); ?></td>
+                                        <td>View, Create, Edit, Delete</td>
                                         <td>
                                             <a href="<?php echo site_url('admin/users/roles-and-permission/edit/' . $value->id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                                            <a href="<?php echo site_url('admin/users/roles-and-permission/delete/' . $value->id) ?>" title="Edit" onclick="return confirm('Are you sure you want to delete this?');"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                     <?php
@@ -60,7 +63,7 @@
                     <div class="box-header with-border">
                         <a href="<?php echo site_url('admin/users/create') ?>" class="btn btn-info">
                             <i aria-hidden="true" class="fa fa-plus-circle">
-                        </i> Create Users</a>
+                        </i> Create Roles</a>
                     </div>
                     <div class="box-body">
                         <div class="col-lg-12 table-responsive">
@@ -68,9 +71,10 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Access Control</th>
-                                        <th>Type</th>
+                                        <th>Permission Type</th>
+                                        <th>Date of Account Creation</th>
+                                        <th>Last Login</th>
+                                        <th>Last Updated</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -82,11 +86,13 @@
                                     ?>
                                     <tr>
                                         <td><?php echo !empty($value->username) ? $value->username : '-'; ?></td>
-                                        <td><?php echo !empty($value->email) ? $value->email : '-'; ?></td>
                                         <td><?php echo !empty($value->name) ? $value->name : '-'; ?></td>
-                                        <td><?php echo get_user_type($value->user_type); ?></td>
+                                        <td><?php echo !empty($value->date_created) ? date("d M, Y H:i A", strtotime($value->date_created)) : '-'; ?></td>
+                                        <td><?php echo !empty($value->last_login) ? date("d M, Y H:i A", strtotime($value->last_login)) : '-'; ?></td>
+                                        <td><?php echo !empty($value->updated_at) ? date("d M, Y H:i A", strtotime($value->updated_at)) : '-'; ?></td>
                                         <td>
                                             <a href="<?php echo site_url('admin/users/edit/' . $value->aauth_users_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                                            <a href="<?php echo site_url('admin/users/delete/' . $value->aauth_users_id) ?>" title="Edit" onclick="return confirm('Are you sure you want to delete this?');"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                     <?php

@@ -808,7 +808,7 @@ class Aauth
      * @param string|bool $name User's name, or FALSE if not to be updated
      * @return bool Update fails/succeeds
      */
-    public function update_user($user_id, $email = false, $pass = false, $username = false)
+    public function update_user($user_id, $email = false, $pass = false, $username = false, $updated_at = false, $deleted_at = false)
     {
 
         $data  = array();
@@ -853,9 +853,11 @@ class Aauth
                 $this->error($this->CI->lang->line('aauth_error_username_invalid'));
                 $valid = false;
             }
-            $data['username'] = $username;
+            
         }*/
-
+        $data['username'] = $username;
+        $data['updated_at'] = $updated_at;
+        $data['deleted_at'] = $deleted_at;
         if (!$valid || empty($data)) {
             return false;
         }

@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="col-lg-12 table-responsive">
-                            <table class="table table-hover" id="datatable" style="width:100%">
+                            <table class="table table-hover"  style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Class Code</th>
@@ -50,7 +50,7 @@
                                         <td><?php echo $class_code['class_code']; ?></td>
                                         <td><?php echo get_subject_code($value->student_id); ?></td>
                                         <td><?php echo $class_code['tutor_id']; ?></td>
-                                        <td><?php echo get_students_enrolled($class_code['class_code']); ?></td>
+                                        <td><?php echo get_students_enrolled($value->class_id); ?></td>
                                         <td><?php get_currency('INR'); echo isset($value->total_amount_excluding_material) ? $value->total_amount_excluding_material : '-'; ?></td>
                                         <td><?php get_currency('INR'); echo isset($value->total_material_amount) ? $value->total_material_amount : '-'; ?></td>
                                     </tr>
@@ -68,6 +68,12 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+        $("table").dataTable({
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'csv'
+                        ]
+                    });
         $("input[name='date_from'], input[name='date_to']").on("change", function() {
             var date_from = $("input[name='date_from']").val();
             var date_to = $("input[name='date_to']").val();
@@ -82,7 +88,12 @@
                 success: function(data) {
                     //alert(data);
                     $(".display_data").html(data);
-                    $("table#datatable").dataTable();
+                    $("table").dataTable({
+                        dom: 'Bfrtip',
+        buttons: [
+            'csv'
+        ]
+                    });
                 }
             })
         });

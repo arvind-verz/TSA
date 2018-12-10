@@ -507,6 +507,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             $query  = $ci->db->get();
             $result = $query->row();
         } else {
+            $ci->db->where(['aauth_users.deleted_at' => null]);
             $query  = $ci->db->get();
             $result = $query->result();
         }
@@ -1375,7 +1376,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     $extra_charges = $result1->extra_charges;
                     $deposit = $result1->deposit;
                     $credit_value = $result1->credit_value;
-                    $invoice_amount = $amount_excluding_material = 0;
+                    $invoice_amount = $amount_excluding_material = $credit_amount = 0;
              
    
     $result2 = get_invoice_result2($result1->sid);
@@ -1391,8 +1392,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         'material_fees'  => $book_charges,
     ];
 
-    $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  =>  date('Y-m-d H:i:s')]);
+    $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  =>  $date]);
     $result          = $query->row();
+    if(!$result) {
+        return false;
+    } 
     $billing_data    = json_decode($result->billing);
     $counter         = [];
     $i               = 0;
@@ -1402,10 +1406,6 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         'subject' => $subject,
         'message' => $message,
     ];
-
-    if ($result->invoice_generation_date != date('Y-m-d H:i:s')) {
-        return false;
-    }
 
     $query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' =>  $student_id, 'class_code'   =>  $result1->class_code]);
     if($query->num_rows()>0) {
@@ -1438,9 +1438,19 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         ];
         $query = $ci->db->insert(DB_INVOICE, $data);
         if ($query) {
+            
+            if($credit_value>0) {
+                $credit_amount = ($credit_value - $invoice_amount);
+                $ci->db->where('student_id', $student_id);
+                $ci->db->where('class_id', $class_id);
+                $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
+            }
+            foreach($emailto as $email) {
+                $mail = send_mail($email, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+            }
             $ci->load->library('M_pdf');
             $ci->m_pdf->download_my_mPDF($invoice_file);
-            $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+            
             if ($mail == true) {
                 //die(print_r($query));
             }
@@ -1475,7 +1485,7 @@ function send_rest_month_invoice($student_id, $class_id)
                     $extra_charges = $result1->extra_charges;
                     $deposit = $result1->deposit;
                     $credit_value = $result1->credit_value;
-                    $invoice_amount = $amount_excluding_material = 0;
+                    $invoice_amount = $amount_excluding_material = $credit_amount = 0;
              
    
     $result2 = get_invoice_result2($result1->sid);
@@ -1491,8 +1501,11 @@ function send_rest_month_invoice($student_id, $class_id)
         'material_fees'  => $book_charges,
     ];
 
-    $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  =>  date('Y-m-d H:i:s')]);
+    $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  =>  $date]);
     $result          = $query->row();
+    if(!$result) {
+        return false;
+    }
     $billing_data    = json_decode($result->billing);
     $counter         = [];
     $i               = 0;
@@ -1502,10 +1515,6 @@ function send_rest_month_invoice($student_id, $class_id)
         'subject' => $subject,
         'message' => $message,
     ];
-
-    if ($result->invoice_generation_date != date('Y-m-d H:i:s')) {
-        return false;
-    }
 
     $query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' =>  $student_id, 'class_code'   =>  $result1->class_code]);
     if($query->num_rows()>0) {
@@ -1527,9 +1536,19 @@ function send_rest_month_invoice($student_id, $class_id)
         ];
         $query = $ci->db->insert(DB_INVOICE, $data);
         if ($query) {
+            
+            if($credit_value>0) {
+                $credit_amount = ($credit_value - $invoice_amount);
+                $ci->db->where('student_id', $student_id);
+                $ci->db->where('class_id', $class_id);
+                $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
+            }
+            foreach($emailto as $email) {
+                $mail = send_mail($email, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+            }
             $ci->load->library('M_pdf');
             $ci->m_pdf->download_my_mPDF($invoice_file);
-            $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+            
             if ($mail == true) {
                 //die(print_r($query));
             }

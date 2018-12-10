@@ -71,10 +71,13 @@ class Accounts extends CI_Model
         $password = isset($_POST['password']) ? $_POST['password'] : '';
         $username = isset($_POST['username']) ? $_POST['username'] : '';
         $perm_id = isset($_POST['perm_id']) ? $_POST['perm_id'] : '';
-
+        $status = isset($_POST['status']) ? $_POST['status'] : '';
         if($email && $password && $username && $perm_id && strlen($password)>=6) {
             $result = $this->aauth->create_user($email, $password, $username, 2);
             if($result) {
+                if($status==1) {
+                    $this->aauth->ban_user($result);
+                }
                 $this->aauth->allow_user($result, $perm_id);
                 $this->session->set_flashdata('success', USERS . ' ' . MSG_CREATED);
                 return redirect('admin/users');
@@ -87,9 +90,16 @@ class Accounts extends CI_Model
         $email = isset($_POST['email']) ? $_POST['email'] : '';
         $username = isset($_POST['username']) ? $_POST['username'] : '';
         $perm_id = isset($_POST['perm_id']) ? $_POST['perm_id'] : '';
-
+        $status = isset($_POST['status']) ? $_POST['status'] : '';
+        $update_at = date('Y-m-d H:i:s');
         if($email && $username && $perm_id) {
-            $result = $this->aauth->update_user($id, $email, false, $username);
+            $result = $this->aauth->update_user($id, $email, false, $username, $update_at);
+            if($status==1) {
+                    $this->aauth->ban_user($id);
+                }
+                else {
+                    $this->aauth->unban_user($id);
+                }
             $this->aauth->update_allow_user($id, $perm_id);
             $this->session->set_flashdata('success', USERS . ' ' . MSG_UPDATED);
             return redirect('admin/users');
@@ -162,5 +172,21 @@ class Accounts extends CI_Model
             }
         }
         return false;
+    }
+
+    public function users_delete($id)
+    {
+        $deleted_at = date('Y-m-d H:i:s');
+        $this->aauth->update_user($id, false, false, false, false, $deleted_at);
+        $this->session->set_flashdata('success', 'Role ' . MSG_DELETED);
+        redirect('admin/users');
+    }
+
+    public function permission_delete($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('aauth_perms');
+        $this->db->where('perm_id', $id);
+        $this->db->delete('aauth_permission_access');
     }
 }
