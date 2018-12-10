@@ -14,14 +14,14 @@
             <div class="col-lg-12">
                 <div class="box">
                     <div class="box-header">
-                        <a class="btn btn-info" href="<?php echo site_url('admin/attendance/create') ?>">
+                        <!-- <a class="btn btn-info" href="<?php echo site_url('admin/attendance/create') ?>">
                             <i aria-hidden="true" class="fa fa-plus-circle">
                             </i> <?php echo CREATE . ' ' . ATTENDANCE ?>
                         </a>
                         <a class="btn btn-warning" href="<?php echo site_url('admin/attendance/edit') ?>">
                             <i aria-hidden="true" class="fa fa-pencil-square-o">
                             </i> <?php echo EDIT . ' ' . ATTENDANCE ?>
-                        </a>
+                        </a> -->
                     </div>
                     <div class="box-body">
                         <div class="col-lg-12">
@@ -68,22 +68,37 @@
     </section>
 </div>
 <script type="text/javascript">
-    $("select[name='class_code'], select[name='class_month']").on("change", function() {
-        var class_code = $("select[name='class_code']").val();
-        var class_month = $("select[name='class_month']").val();
-        if(class_month!='' && class_code!='') {
-            $.ajax({
-                type: 'GET',
-                url: '<?php echo site_url('admin/attendance/get_attendance_summary'); ?>',
-                data: 'class_code=' + class_code + '&class_month=' + class_month,
-                async: false,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    //alert(data);
-                    $(".display_data").html(data).dataTable();
-                }
-            })
-        }
+
+    $(document).ready(function() {
+        $("body").on("click", "th.attendance", function() {
+            var date = $(this).attr("data-date");
+            window.location.href = '<?php echo site_url("admin/attendance/create-edit/") ?>' + date;
+        });
+
+        $("select[name='class_code'], select[name='class_month']").on("change", function() {
+            if ($.fn.DataTable.isDataTable(".display_data")) {
+                $('.display_data').DataTable().clear().destroy();
+            }
+            var class_code = $("select[name='class_code']").val();
+            var class_month = $("select[name='class_month']").val();
+            if(class_month!='' && class_code!='') {
+                $.ajax({
+                    type: 'GET',
+                    url: '<?php echo site_url('admin/attendance/get_attendance_summary'); ?>',
+                    data: 'class_code=' + class_code + '&class_month=' + class_month,
+                    async: false,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        //alert(data);
+                        $(".display_data").html(data).dataTable({
+                            columnDefs: [
+                              { targets: 'no-sort', orderable: false }
+                            ]
+                        });
+                    }
+                })
+            }
+        });
     });
 </script>

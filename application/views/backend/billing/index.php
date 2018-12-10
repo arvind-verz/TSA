@@ -2,7 +2,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-        <?php print_r($page_title);?>
+        <?php print_r($page_title); ?>
         </h1>
         <?php print_r($breadcrumbs);?>
     </section>
@@ -38,7 +38,7 @@
                                 ?>
                                 <tr>
                                     <td>
-                                        <?php echo isset($billing->invoice_generation_date) ? date('d-m-Y', strtotime($billing->invoice_generation_date)) : '-' ?>
+                                        <?php echo isset($billing->invoice_generation_date) ? date('d-m-Y H:i:s', strtotime($billing->invoice_generation_date)) : '-' ?>
                                     </td>
                                     <td>
                                         <a href="<?php echo site_url('admin/billing/edit/' . $billing->id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>

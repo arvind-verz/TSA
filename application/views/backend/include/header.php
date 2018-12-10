@@ -25,6 +25,7 @@
         <!-- jvectormap -->
         <link href="<?php echo base_url('assets/plugins/jvectormap/jquery-jvectormap.css'); ?>" rel="stylesheet">
         <!-- Date Picker -->
+        <link href="<?php echo base_url('assets/css/bootstrap-datetimepicker.css'); ?>" rel="stylesheet">
         <link href="<?php echo base_url('assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'); ?>" rel="stylesheet">
         <link href="<?php echo base_url('assets/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css'); ?>" rel="stylesheet">
         <!-- Daterange picker -->
@@ -44,7 +45,10 @@
         <script src="<?php echo base_url('assets/plugins/jquery/dist/jquery.min.js'); ?>"></script>
         <!-- jQuery UI 1.11.4 -->
         <script src="<?php echo base_url('assets/plugins/jquery-ui/jquery-ui.min.js'); ?>"></script>
+        
         <script src="<?php echo base_url('assets/plugins/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>
+        <script src="<?php echo base_url('assets/js/moment-with-locales.js'); ?>"></script>
+        <script src="<?php echo base_url('assets/js/bootstrap-datetimepicker.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url();?>editor/tinymce/tinymce.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>editor/fancybox/jquery.fancybox.css" media="screen" />
 <script type="text/javascript" src="<?php echo base_url();?>editor/fancybox/jquery.fancybox.js"></script>

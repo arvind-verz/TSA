@@ -17,6 +17,9 @@
                     <?php echo form_open('admin/billing/store'); ?>
                     <div class="box-body">
                         <div class="row">
+                            <?php
+                            for($i=0;$i<5;$i++) {
+                            ?>
                             <div class="col-lg-12">
                                 <div class="col-lg-4">
                                     <div class="form-group">
@@ -39,119 +42,12 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[0]" value="1"> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[<?php echo $i; ?>]" value="<?php echo ($i+1); ?>"> Rest Week
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label for=""><?php echo BILLING ?> Name</label>
-                                        <input type="text" name="billing_name[]" class="form-control" value="">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label for=""><?php echo BILLING ?> Range</label>
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <input type="text" class="form-control pull-right date_range" name="date_range[]">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group mt-5">
-                                        <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[1]" value="1"> Rest Week
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label for=""><?php echo BILLING ?> Name</label>
-                                        <input type="text" name="billing_name[]" class="form-control" value="">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label for=""><?php echo BILLING ?> Range</label>
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <input type="text" class="form-control pull-right date_range" name="date_range[]">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group mt-5">
-                                        <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[2]" value="1"> Rest Week
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label for=""><?php echo BILLING ?> Name</label>
-                                        <input type="text" name="billing_name[]" class="form-control" value="">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label for=""><?php echo BILLING ?> Range</label>
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <input type="text" class="form-control pull-right date_range" name="date_range[]">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group mt-5">
-                                        <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[3]" value="1"> Rest Week
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label for=""><?php echo BILLING ?> Name</label>
-                                        <input type="text" name="billing_name[]" class="form-control" value="">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label for=""><?php echo BILLING ?> Range</label>
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-calendar"></i>
-                                            </div>
-                                            <input type="text" class="form-control pull-right date_range" name="date_range[]">
-                                        </div>
-                                        <!-- /.input group -->
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group mt-5">
-                                        <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[3]" value="1"> Rest Week
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php } ?>
                             <div class="col-lg-12">
                                 <div class="col-lg-4">
                                     <div class="form-group">
@@ -160,7 +56,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right datepicker2" name="invoice_generation_date" autocomplete="off">
+                                            <input type="text" class="form-control pull-right datetimepicker1" name="invoice_generation_date" autocomplete="off">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -179,10 +75,9 @@
     </section>
 </div>
 <script type="text/javascript">
-    $(document).ready(function() {
-        $('.datepicker2').datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-        })
-    })
+        $(function () {
+            $('.datetimepicker1').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss'
+});
+        });
 </script>

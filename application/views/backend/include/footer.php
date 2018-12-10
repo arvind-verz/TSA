@@ -56,6 +56,13 @@ $.widget.bridge('uibutton', $.ui.button);
 		})
 
 		$('.date_range').daterangepicker();
+
+        $(function () {
+	        $.fn.datepicker.noConflict = function(){
+   $.fn.datepicker = old;
+   return this;
+};
+	    });
 	});
 </script>
 </body>

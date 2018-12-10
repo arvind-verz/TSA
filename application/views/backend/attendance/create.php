@@ -24,15 +24,15 @@
                                     if (count($classes)) {
                                     foreach ($classes as $class) {
                                     ?>
-                                    <option value="<?php echo $class->class_code ?>"><?php echo $class->class_code ?></option>
+                                    <option value="<?php echo $class->class_code; ?>"><?php echo $class->class_code ?></option>
                                     <?php
                                     }}
                                     ?>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="">Date : <span class="attendance_date"></span></label>
-                                <input type="hidden" name="attendance_date" class="form-control" value="">
+                                <label for="">Date : <?php echo $attendance_date; ?></label>
+                                <input type="hidden" name="attendance_date" class="form-control" value="<?php echo $attendance_date; ?>">
                             </div>
                             <div class="form-group pull-right">
                                 <button type="button" class="btn btn-info copy_fist_line">Copy First Line</button>
@@ -82,12 +82,13 @@
 <script type="text/javascript">
 $("body").on("change", "select[name='class_code']", function() {
     var class_code = $("select[name='class_code']").val();
+    var attendance_date = $("input[name='attendance_date']").val();
     var content = '<tr> <td></td><td></td><td> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="L" readonly> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="M" readonly> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E" readonly> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X" readonly> <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G" readonly> </td><td></td></tr>';
     if (class_code != '') {
         $.ajax({
             type: 'GET',
             url: '<?php echo site_url('admin/attendance/get_attendance_sheet'); ?>',
-            data: 'class_code=' + class_code,
+            data: 'class_code=' + class_code + '&attendance_date=' + attendance_date,
             async: false,
             processData: false,
             contentType: false,
@@ -114,7 +115,7 @@ $("body").on("change", "select[name='class_code']", function() {
             }
         });
 
-        $.ajax({
+        /*$.ajax({
             type: 'GET',
             url: '<?php echo site_url('admin/attendance/get_attendance_date_by_class_code'); ?>',
             data: 'class_code=' + class_code,
@@ -131,7 +132,7 @@ $("body").on("change", "select[name='class_code']", function() {
                     $("tbody.display_data").html('');
                 }
             }
-        });
+        });*/
     }
     else {
         $("select[name='class_code_transfer']").html('<option value="">-- Select One --</option>');
@@ -153,7 +154,7 @@ $("body").on("change", ".attendance", function() {
     });
 });
 
-$("button.copy_fist_line").on("click", function() {
+$("body").on("click", "button.copy_fist_line", function() {
     var current_value = $("input[name='attendance_value1[]']");
     var i = 2;
     current_value.each(function() {
@@ -162,21 +163,22 @@ $("button.copy_fist_line").on("click", function() {
     });
 });
 
-$("button.transfer_student").on("click", function() {
+$("body").on("click", "button.transfer_student", function() {
     var storage = [];
     $("input[name='student_id_transfer']:checked").each(function() {
         storage.push($(this).val());
     });
     var class_code_transfer = $("select[name='class_code_transfer']").val();
+    var old_class_code = $("select[name='class_code']").val();
     if(storage != '' && class_code_transfer != '') {
-        transfer_students(class_code_transfer, storage);
+        transfer_students(old_class_code, class_code_transfer, storage);
     }
     else {
         alert("Please select student for transfer to particular class.");
     }
 })
 
-$("input[name='student_id_transfer_all']").on("change", function() {
+$("body").on("change", "input[name='student_id_transfer_all']", function() {
     var storage = [];
     $("tbody tr td input[name='student_id_transfer']").each(function() {
         if($("input[name='student_id_transfer_all']").is(":checked")) {
@@ -190,8 +192,9 @@ $("input[name='student_id_transfer_all']").on("change", function() {
     })
 });
 
-function transfer_students(class_code_transfer, storage) {
-    $.get("<?php echo site_url('admin/attendance/transfer_student'); ?>", {class_code : class_code_transfer, student_id : storage}, function(data) {
+function transfer_students(old_class_code, class_code_transfer, storage) {
+    //alert(class_code_transfer)
+    $.get("<?php echo site_url('admin/attendance/transfer_student'); ?>", {old_class_code : old_class_code, class_code : class_code_transfer, student_id : storage}, function(data) {
             window.location.href = data.trim();
     })
 }

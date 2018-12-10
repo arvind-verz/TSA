@@ -43,7 +43,7 @@
                                 <?php } ?>
                             </div>
                             <div class="box-body">
-                                <table class="table table-striped table-bordered text-center" id="datatable" style="width:100%">
+                                <table class="table table-striped table-bordered text-center" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>
@@ -114,6 +114,36 @@
                                             }}
                                             ?>
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>
+                                                <?php echo BOOK ?> Name
+                                            </th>
+                                            <th>
+                                                <?php echo SUBJECT ?>
+                                            </th>
+                                            <th>
+                                                <?php echo BOOK ?> Price
+                                            </th>
+                                            <th>
+                                                <?php echo BOOK ?> Version
+                                            </th>
+                                            
+                                            
+                                            <?php
+                                            if (current_url() == site_url('admin/material/archived')) {
+                                                ?>
+                                                <th>
+                                                    <?php echo ARCHIVED ?> At
+                                                </th>
+                                                <?php
+                                            }
+                                            ?>
+                                            <th>
+                                                <?php echo ACTION ?>
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -123,6 +153,26 @@
             </div>
             <script type="text/javascript">
                 $(document).ready(function() {
+                    $('table tfoot th').each( function () {
+                        var title = $(this).text().trim();
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    } );
+                 
+                    // DataTable
+                    var table = $('table').DataTable();
+                 
+                    // Apply the search
+                    table.columns().every( function () {
+                        var that = this;
+                 
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                            if ( that.search() !== this.value ) {
+                                that
+                                    .search( this.value )
+                                    .draw();
+                            }
+                        } );
+                    } );
                     $("input[name='price_from'], input[name='price_to']").on("change", function() {
                         var price_from = $("input[name='price_from']").val();
                         var price_to = $("input[name='price_to']").val();
@@ -137,7 +187,26 @@
                             success: function(data) {
                     //alert(data);
                     $(".display_data").html(data);
-                    $("table#datatable").dataTable();
+                    $('table tfoot th').each( function () {
+                        var title = $(this).text().trim();
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    } );
+                 
+                    // DataTable
+                    var table = $('table').DataTable();
+                 
+                    // Apply the search
+                    table.columns().every( function () {
+                        var that = this;
+                 
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                            if ( that.search() !== this.value ) {
+                                that
+                                    .search( this.value )
+                                    .draw();
+                            }
+                        } );
+                    } );
                 }
             })
                     });
