@@ -98,8 +98,6 @@ $route['admin/students/enrollment_decision']        = 'backend/StudentController
 $route['admin/students/get_view_all_contents']        = 'backend/StudentController/get_view_all_contents';
 
 
-$route['admin/classes/moveto_active_list/(:any)'] = 'backend/classcontroller/moveto_active_list/$1';
-
 /* ORDER */
 $route['admin/order']                     = 'backend/OrderController/index';
 $route['admin/order/create']              = 'backend/OrderController/create';

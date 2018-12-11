@@ -89,16 +89,23 @@ class Sms extends CI_Model
     }
 
     public function sms_announcement() {
+        $message = get_sms_template_content(7);
+        if(!$message) {
+            return false;
+        }
         $this->db->select('*');
         $this->db->from(DB_STUDENT);
-        $this->db->group_by('phone');
+        $this->db->join("student_to_class", 'student.student_id = student_to_class.student_id');
+        $this->db->join(DB_CLASSES, 'class.class_id = student_to_class.class_id');
+        $this->db->where(['student_to_class.status' =>  3, 'student.is_active'  =>  1, 'student.is_archive' =>  0]);
+        $this->db->group_by('student.phone');
         $query = $this->db->get();
         $result = $query->result();
         if($result) {
             foreach($result as $row) {
                 $recipient = $row->phone;
-                $message = "Hello " . $row->name . ", Tomorrow is Holiday. Stay at home and enjoy!";
-                send_sms($recipient, $message, 1);
+                $class_code = $row->class_code;
+                send_sms($recipient, $message, 7, $class_code);
             }
             return "success";
         }

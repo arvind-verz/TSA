@@ -63,11 +63,11 @@ class Tutors extends CI_Model
 	public function get_archived_tutors()
 	{
 
-		$this->db->select('*');
+		$this->db->select('*, tutor.updated_at as updated_at');
 		$this->db->from('tutor');
 		$this->db->join('aauth_users', 'tutor.user_id = aauth_users.id');
 		$this->db->where('tutor.is_archive',1);				 
-		$query = $this->db->get()->result_object();				
+		$query = $this->db->get()->result_object();	
 		return $query;	
 	}
 	
@@ -212,10 +212,10 @@ class Tutors extends CI_Model
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
 			$password = isset($_POST['password']) ? $_POST['password'] : '';
-			$result = $this->aauth->update_user($user_id, $email, $password, $name);
+			$result = $this->aauth->update_user($user_id, $email, $password, $name, $this->date, false);
 		}
 		else {
-			$result = $this->aauth->update_user($user_id, $email, false, $name);
+			$result = $this->aauth->update_user($user_id, $email, false, $name, $this->date, false);
 		}
 
 		$data = array(

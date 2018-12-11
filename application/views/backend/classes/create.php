@@ -65,7 +65,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Frequency <span class="text-muted">(per month)</span></label>
-                            <input type="text" name="frequency" class="form-control" value="">
+                            <input type="number" name="frequency" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Time</label>

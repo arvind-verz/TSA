@@ -39,7 +39,7 @@ class Attendance extends CI_Model
                         'parents_phone' =>  $result->parents_phone,
                     ];
 
-                    $message = "Hello " . $result->name . ", Your class has been missed on " . date('Y-m-d', strtotime($this->date));
+                    $message = get_sms_template_content(1);
 
                     foreach($recipients as $recipient) {
                         send_sms($recipient, $message, 1, $class_code);
@@ -67,10 +67,12 @@ class Attendance extends CI_Model
         $query = $this->db->get_where(DB_CLASSES, ['class_code' => $class_code]);
         $result = $query->row();
         if($result) {
+
             $this->db->select('*');
-            $this->db->from('attendance');
-            $this->db->where(['class_code' => $class_code]);
-            $this->db->group_by('student_id');
+            $this->db->from(DB_CLASSES);
+            $this->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
+            $this->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
+            $this->db->where(['class.class_code' => $class_code, 'student_to_class.status' =>  3, 'student.is_active'   =>  1, 'student.is_archive' =>  0]);
             $query1 = $this->db->get();
             $result1 = $query1->result();
 

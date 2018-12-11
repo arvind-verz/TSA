@@ -404,7 +404,7 @@ function student_registration_template($name, $username, $email, $password, $log
 						<tr>
 							<td class='email-masthead'>
 								<a href='" . site_url('home') . "' class='email-masthead_name'>
-									<img src=" . base_url('assets/images/img3.png') . " alt='The Science Academy'>
+									<img src=" . base_url('assets/images/img3.png') . " alt='The Science Academy' width='100px'>
 								</a>
 							</td>
 						</tr>

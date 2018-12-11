@@ -137,7 +137,7 @@ class TutorController extends CI_Controller
 	$cur_date = date('Y-m-d H:i:s');	
 	$data = array(
             'is_archive'   => 0,
-			'updated_at'   => $cur_date
+			'updated_at'   => $cur_date,
         );
 	$this->tutors->update_archive2($id,$data);	
 	

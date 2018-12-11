@@ -404,7 +404,7 @@ function tutor_registration_template($name, $email, $password, $login_link)
 						<tr>
 							<td class='email-masthead'>
 								<a href='" . site_url('home') . "' class='email-masthead_name'>
-									<img src=" . base_url('assets/images/img3.png') . " alt='The Science Academy'>
+									<img src=" . base_url('assets/images/img3.png') . " alt='The Science Academy' width='100px'>
 								</a>
 							</td>
 						</tr>

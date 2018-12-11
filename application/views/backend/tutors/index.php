@@ -59,6 +59,7 @@
                                     <tbody>
                                         <?php
                                         if ($tutors) {
+                                            //die(print_r($tutors));
                                             foreach ($tutors as $tutor) {
                                                 ?>
                                                 <tr>
