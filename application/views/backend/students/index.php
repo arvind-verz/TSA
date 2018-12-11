@@ -137,13 +137,15 @@
                                                 <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
                                                 <option value="Final Settlement">Final Settlement</option>
                                                 <option value="view_all_details" name="view_all_details">View all details</option>
-                                                <option value="<?php echo base_url();?>index.php/admin/students/?sid=<?php echo $student->student_id;?>">Edit Class</option>
+                                                <?php if($student->status!='') { ?>
+                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>">Edit Class</option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                     </td>
                                     <td>
                                         <select name="material" class="form-control select2">
-                                            <?php echo get_material_associated($student->id, $student->class_id); ?>
+                                            <?php echo get_material_associated($student->id, $student->class_code); ?>
                                         </select>
                                     </td>
                                     <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'extra_charges'); ?></td>
@@ -413,6 +415,11 @@ $(document).ready(function() {
         });
             
         }
+        else if(attrname=='edit_class')
+        {
+            $("input#student_id").val($(this).find('option:selected').attr("data-id"));
+            $("#myModal").modal('show');
+        }
         $(this).val('');
     });
 
@@ -435,31 +442,67 @@ $(document).ready(function() {
 
     function enrollment_decision()
     {
-        var class_size = $("p.class_size").text();
-        class_size.split('/');
+        var class_size = ($("p.class_size").text()).split('/').map(Number);
         if(class_size[0]==class_size[1])
         {
-            $("#dis_content").html('<p class="text-success">Class is enrolled fully. Please select another class to proceed.</p>');
+            $("select[name='enrollment_type']").val('').trigger("change");
+            $("#dis_content").html('<p class="text-danger">Class is enrolled fully. Please select another class to proceed.</p>');
             $("button[type='submit']").attr("disabled", true);
         }
-        var class_id = $("select[name='class_code']").val();
-        var student_id = $("input#student_id").val();
-        $.ajax({
-            type: 'GET',
-            url: '<?php echo site_url('admin/students/enrollment_decision'); ?>',
-            data: 'class_id=' + class_id + '&student_id=' + student_id,
-            async: false,
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                if(data.trim()==true)
-                {
-                    $("#dis_content").html('<p class="text-success">You are already enrolled for this class.</p>');
+        else {
+            var class_id = $("select[name='class_code']").val();
+            var student_id = $("input#student_id").val();
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/students/enrollment_decision'); ?>',
+                data: 'class_id=' + class_id + '&student_id=' + student_id,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if(data.trim()==true)
+                    {
+                        $("select[name='enrollment_type']").val('').trigger("change");
+                        $("#dis_content").html('<p class="text-success">You are already enrolled for this class.</p>');
+                    }
                 }
-            }
-        });
+            });
+        }
+        //
 
     }
+
+    /*function enrollment_decision()
+    {
+        var class_size = ($("p.class_size").text()).split('/').map(Number);
+        if(class_size[0]==class_size[1])
+        {
+            $("select[name='enrollment_type']").val('').trigger("change");
+            $("#dis_content").html('<p class="text-danger">Class is enrolled fully. Please select another class to proceed.</p>');
+            $("button[type='submit']").attr("disabled", true);
+        }
+        else {
+            var class_id = $("select[name='class_code']").val();
+            var student_id = $("input#student_id").val();
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/students/enrollment_decision'); ?>',
+                data: 'class_id=' + class_id + '&student_id=' + student_id,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if(data.trim()==true)
+                    {
+                        $("select[name='enrollment_type']").val('').trigger("change");
+                        $("#dis_content").html('<p class="text-success">You are already enrolled for this class.</p>');
+                    }
+                }
+            });
+        }
+        //
+
+    }*/
     
 });
 </script>

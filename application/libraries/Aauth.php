@@ -735,7 +735,7 @@ class Aauth
             $valid = false;
         }*/
 
-        if ($this->user_exist_by_email($email)) {
+        if ($this->user_exist_by_email($email, false)) {
             $this->error($this->CI->lang->line('aauth_error_email_exists'));
             $valid = false;
         }
@@ -1164,12 +1164,12 @@ class Aauth
      *
      * @return bool
      */
-    public function user_exist_by_email($user_email, $user_id)
+    public function user_exist_by_email($user_email, $user_id = false)
     {
         $query = $this->aauth_db->where('email', $user_email);
-
-        $query = $this->aauth_db->where_not_in('id', $user_id);
-
+        if($user_id) {
+            $query = $this->aauth_db->where_not_in('id', $user_id);
+        }
         $query = $this->aauth_db->get($this->config_vars['users']);
 
         if ($query->num_rows() > 0) {

@@ -208,6 +208,7 @@ class Students extends CI_Model
 		$reservation_date = !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '';
 
 		if($enrollment_type==1) {
+			
 			$data1 = [
 				'reservation_date'	=>	$reservation_date,
 				'status'	=>	$enrollment_type,
@@ -231,9 +232,10 @@ class Students extends CI_Model
 		];
 
 
-		$query = $this->db->get_where('student_to_class', ['student_id'	=>	$student_id, 'status !='	=>	3]);
+		$query = $this->db->get_where('student_to_class', ['student_id'	=>	$student_id, 'class_id'	=>	$class_id, 'status !='	=>	3]);
 		if($query->num_rows()>0) {
 			$this->db->where('student_id', $student_id);
+			$this->db->where('class_id', $class_id);
 			$this->db->update('student_to_class', $data1);
 		}
 		else {
@@ -319,7 +321,7 @@ class Students extends CI_Model
         //die(print_r($_POST));
 		$data = array(
 			'is_archive'   => 1,
-			'updated_at'   => 1
+			'updated_at'   => date('Y-m-d H:i:s'),
 		);
 
 		$this->db->trans_start();

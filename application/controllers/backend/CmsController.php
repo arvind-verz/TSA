@@ -35,6 +35,11 @@ class CmsController extends CI_Controller {
         	$_POST['logo'] = upload_image_file($image_file, $file_name_placeholder[0], 250, 99, 'logo');
         	$this->Cms_model->manage_logo_upload($_POST);
         }
+        else
+        {
+        	$this->session->set_flashdata('error', 'Select a file to upload.');
+        	return redirect('admin/manage-logo');
+        }
     }
 	
 	public function manage_menu() {
