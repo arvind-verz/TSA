@@ -10,6 +10,7 @@
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.7 -->
         <link href="<?php echo base_url('assets/plugins/bootstrap/dist/css/bootstrap.min.css'); ?>" rel="stylesheet">
+
         <!-- Font Awesome -->
         <link href="<?php echo base_url('assets/plugins/font-awesome/css/font-awesome.min.css'); ?>" rel="stylesheet">
         <!-- Ionicons -->
@@ -25,20 +26,22 @@
         <!-- jvectormap -->
         <link href="<?php echo base_url('assets/plugins/jvectormap/jquery-jvectormap.css'); ?>" rel="stylesheet">
         <!-- Date Picker -->
-        <link href="<?php echo base_url('assets/css/bootstrap-datetimepicker.css'); ?>" rel="stylesheet">
-        <link href="<?php echo base_url('assets/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'); ?>" rel="stylesheet">
+
+        
         <link href="<?php echo base_url('assets/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css'); ?>" rel="stylesheet">
         <!-- Daterange picker -->
         <link href="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/daterangepicker.css'); ?>" rel="stylesheet">
         <link href="<?php echo base_url('assets/plugins/iCheck/all.css'); ?>" rel="stylesheet">
         <!-- bootstrap wysihtml5 - text editor -->
         <link href="<?php echo base_url('assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'); ?>" rel="stylesheet">
+        
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <link href="<?php echo base_url('assets/css/bootstrap-datetimepicker.css'); ?>" rel="stylesheet">
         <!-- Google Font -->
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" rel="stylesheet">
 
@@ -49,7 +52,7 @@
         <script src="<?php echo base_url('assets/plugins/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script> -->
         <script src="<?php echo base_url('assets/js/moment-with-locales.js'); ?>"></script>
-        <script src="<?php echo base_url('assets/js/bootstrap-datetimepicker.js'); ?>"></script>
+        <script src="<?php echo base_url('assets/js/bootstrap-datetimepicker.min.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url();?>editor/tinymce/tinymce.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>editor/fancybox/jquery.fancybox.css" media="screen" />
 <script type="text/javascript" src="<?php echo base_url();?>editor/fancybox/jquery.fancybox.js"></script>

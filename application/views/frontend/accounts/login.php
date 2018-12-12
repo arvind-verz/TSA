@@ -40,6 +40,13 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-9 col-sm-offset-3">
+                                    <div class="g-recaptcha" data-sitekey="6LcIe4AUAAAAAK1_MMN1Fj4sCapfHnXuHTTe24aY"></div>
+                                </div>
+                            </div>
+                        </div> -->
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-sm-9 col-sm-offset-3">

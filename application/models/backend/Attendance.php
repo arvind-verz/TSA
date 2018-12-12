@@ -133,29 +133,29 @@ class Attendance extends CI_Model
     }
 
     public function transfer_student() {
+
         $student_id = $_GET['student_id'];
         $class_code = $_GET['class_code'];
         $old_class_code = $_GET['old_class_code'];
-        
-        $query = $this->db->get_where(DB_CLASSES, ['class_code' => $class_code]);
-        $result = $query->row();
-
-
-
-        $query1 = $this->db->get_where(DB_CLASSES, ['class_code' => $old_class_code]);
-        $result1 = $query1->row();
+        $old_class_id = get_class_id_by_class_code($old_class_code);
+        $class_id = get_class_id_by_class_code($class_code);
 
         $this->db->trans_start();
         foreach($student_id as $id) {
-            $query = $this->db->get_where('student_to_class', ['class_id' => $result->class_id, 'student_id'    =>  $id]);
+            $query = $this->db->get_where('student_to_class', ['class_id' => $class_id, 'student_id'    =>  $id]);
             if($query->num_rows()<1) {
+                if(send_class_transfer_invoice($id, $old_class_id)==false)
+                {
+                    $this->session->set_flashdata('error', MSG_ERROR);
+                    return 'admin/attendance';
+                }
                 $data = [
-                    'class_id' =>   $result->class_id,
+                    'class_id' =>   $class_id,
                 ];
                 $this->db->where('student_id', $id);
-                $this->db->where('class_id', $result1->class_id);
+                $this->db->where('class_id', $class_id);
                 $this->db->update('student_to_class', $data);
-                send_class_transfer_invoice($id);
+                
             }
         }
         $this->db->trans_complete();

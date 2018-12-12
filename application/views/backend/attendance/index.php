@@ -33,7 +33,7 @@
                                     if (count($classes)) {
                                     foreach ($classes as $class) {
                                     ?>
-                                    <option value="<?php echo $class->class_code ?>"><?php echo $class->class_code ?></option>
+                                    <option value="<?php echo $class->class_code ?>" data-id="<?php echo $class->class_id; ?>"><?php echo $class->class_code ?></option>
                                     <?php
                                     }}
                                     ?>
@@ -72,7 +72,9 @@
     $(document).ready(function() {
         $("body").on("click", "th.attendance", function() {
             var date = $(this).attr("data-date");
-            window.location.href = '<?php echo site_url("admin/attendance/create-edit/") ?>' + date;
+            var class_id = $("select[name='class_code'] option:selected").attr("data-id");
+            //alert(class_id);
+            window.location.href = '<?php echo site_url("admin/attendance/create-edit/") ?>' + class_id + '/' + date;
         });
 
         $("select[name='class_code'], select[name='class_month']").on("change", function() {

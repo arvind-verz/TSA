@@ -70,6 +70,47 @@ class Students extends CI_Model
 				//echo $this->db->last_query();				
 		return $query;	
 	}
+
+	public function update_enrollment()
+	{
+		$student_id = !empty($_POST['student_id']) ? $_POST['student_id'] : '';
+		$class_id = !empty($_POST['class_id']) ? $_POST['class_id'] : '';
+		$enrollment_date = !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '';
+		$deposit = !empty($_POST['deposit']) ? $_POST['deposit'] : '';
+		$deposit_collected = !empty($_POST['deposit_collected']) ? $_POST['deposit_collected'] : '';
+		$remarks_deposit = !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '';
+		$credit_value = !empty($_POST['credit_value']) ? $_POST['credit_value'] : '';
+		$extra_charges = !empty($_POST['extra_charges']) ? $_POST['extra_charges'] : '';
+		$remarks = !empty($_POST['remarks']) ? $_POST['remarks'] : '';
+
+		if($student_id && $class_id && $enrollment_date)
+		{
+			$data = [
+				'enrollment_date'	=>	$enrollment_date,
+				'deposit'			=>	$deposit,
+				'deposit_collected'	=>	$deposit_collected,
+				'remarks_deposit'	=>	$remarks_deposit,
+				'credit_value'		=>	$credit_value,
+				'extra_charges'		=>	$extra_charges,
+				'remarks'			=>	$remarks,
+			];
+			$this->db->trans_start();
+			$this->db->where('student_id', $student_id);
+			$this->db->where('class_id', $class_id);
+			$this->db->update('student_enrollment', $data);
+			$this->db->trans_complete();
+
+			if ($this->db->trans_status() === false) {
+				$this->session->set_flashdata('error', MSG_ERROR);
+				return redirect('admin/students/create');
+			} else {
+				$this->session->set_flashdata('success', STUDENT . ' details ' . MSG_UPDATED);
+				return redirect('admin/students');
+			}
+		}
+		$this->session->set_flashdata('error', MSG_ERROR);
+		return redirect('admin/students/create');
+	}
 	
 	public function get_archived_classes()
 	{
@@ -127,10 +168,11 @@ class Students extends CI_Model
 		$name = !empty($_POST['name']) ? $_POST['name'] : '';
 		$username = !empty($_POST['username']) ? url_title($_POST['username']) : '';
 		$email = !empty($_POST['email']) ? $_POST['email'] : '';
+		$parent_email = !empty($_POST['parent_email']) ? $_POST['parent_email'] : '';
 		$password = $_POST['password'];
 		$password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
 		$login_link = site_url('login');
-
+		$email_to = [$email, $parent_email];
 		$data = array(
 			'student_id'     => $this->uniq_id,
 			'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : null,
@@ -155,7 +197,7 @@ class Students extends CI_Model
 		$this->db->insert('student', $data);
 		$subject = "Welcome to The Science Academy";
 		$message = student_registration_template($name, $username, $email, $password, $login_link);
-		send_mail($email, false, false, false, false, $subject, $message);
+		send_mail($email_to, false, false, false, false, $subject, $message);
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === false) {
@@ -257,7 +299,12 @@ class Students extends CI_Model
 
 	public function update($id)
 	{
-        //die(print_r($_POST));
+        $query = $this->db->get_where(DB_STUDENT, ['email'	=>	$email, 'student_id !='	=>	$id]);
+        if($query->num_rows()>0)
+        {
+        	$this->session->set_flashdata('error', 'Email ID exists in our system.');
+			return redirect('admin/students/edit/'.$id);
+        }
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
 
@@ -325,8 +372,14 @@ class Students extends CI_Model
 		);
 
 		$this->db->trans_start();
+		if(send_archived_invoice($id)==false)
+		{
+			$this->session->set_flashdata('error', MSG_ERROR);
+			return redirect('admin/students');
+		}
 		$this->db->where('student_id', $id);
 		$this->db->update('student', $data);
+		
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === false) {
@@ -334,6 +387,41 @@ class Students extends CI_Model
 			return redirect('admin/students');
 		} else {
 			$this->session->set_flashdata('success','Student archived successfully.');
+			return redirect('admin/students');
+		}
+	}
+
+	public function final_settlement($student_id)
+	{
+		$data = array(
+			'status'   => 4,
+			'updated_at'   => date('Y-m-d H:i:s'),
+		);
+
+		$data1 = array(
+			'is_archive'   => 1,
+			'updated_at'   => date('Y-m-d H:i:s'),
+		);
+
+		$this->db->trans_start();
+		if(send_final_settlement_invoice($student_id)==false)
+		{
+			$this->session->set_flashdata('error', MSG_ERROR);
+			return redirect('admin/students');
+		}
+		$this->db->where('student_id', $student_id);
+		$this->db->update('student_to_class', $data);
+
+		$this->db->where('student_id', $id);
+		$this->db->update('student', $data1);
+		
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === false) {
+			$this->session->set_flashdata('error', MSG_ERROR);
+			return redirect('admin/students');
+		} else {
+			$this->session->set_flashdata('success','Student Final Settlement done successfully.');
 			return redirect('admin/students');
 		}
 	}

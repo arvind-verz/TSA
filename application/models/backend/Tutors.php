@@ -209,6 +209,18 @@ class Tutors extends CI_Model
 		$email = isset($_POST['email']) ? $_POST['email'] : '';
 		$tutor_name = isset($_POST['tutor_name']) ? $_POST['tutor_name'] : '';
 		$perm_id = isset($_POST['tutor_permission']) ? $_POST['tutor_permission'] : '';
+
+		$this->db->select('*');
+		$this->db->from(DB_TUTOR);
+		$this->db->join('aauth_users', 'tutor.user_id = aauth_users.id');
+		$this->db->where(['aauth_users.email'	=>	$email, 'tutor.tutor_id !='	=>	$id]);
+		$query = $this->db->get();
+		if($query->num_rows()>0)
+		{
+			$this->session->set_flashdata('error', 'Email ID exists in our system.');
+			return redirect('admin/tutors/edit/'.$id);
+		}
+
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
 			$password = isset($_POST['password']) ? $_POST['password'] : '';
