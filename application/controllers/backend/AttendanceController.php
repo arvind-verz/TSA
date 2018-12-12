@@ -37,7 +37,7 @@ class AttendanceController extends CI_Controller
         
     }
 
-    public function create($date)
+    public function create($class_id, $date)
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
@@ -48,6 +48,7 @@ class AttendanceController extends CI_Controller
         $data['page_title']  = ATTENDANCE . " <small> " . CREATE . " </small>";
         $data['classes']     = get_classes();
         $data['attendance_date']    =   $date;
+        $data['class_code']    =   get_class_code_by_class($class_id);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');

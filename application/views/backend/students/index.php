@@ -145,7 +145,7 @@
                                     </td>
                                     <td>
                                         <select name="material" class="form-control select2">
-                                            <?php echo get_material_associated($student->id, $student->class_code); ?>
+                                            <?php echo get_material_associated($student->sid, $student->class_code); ?>
                                         </select>
                                     </td>
                                     <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'extra_charges'); ?></td>

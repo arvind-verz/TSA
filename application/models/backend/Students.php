@@ -299,7 +299,12 @@ class Students extends CI_Model
 
 	public function update($id)
 	{
-        //die(print_r($_POST));
+        $query = $this->db->get_where(DB_STUDENT, ['email'	=>	$email, 'student_id !='	=>	$id]);
+        if($query->num_rows()>0)
+        {
+        	$this->session->set_flashdata('error', 'Email ID exists in our system.');
+			return redirect('admin/students/edit/'.$id);
+        }
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
 

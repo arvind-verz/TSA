@@ -82,10 +82,42 @@ class TutorController extends CI_Controller
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'creates');
 
-        $result = $this->tutors->store($_POST);
-        if($result==false) {
+        $config = [
+            [
+                'field' => 'tutor_id',
+                'label' => 'Tutor ID',
+                'rules' => 'required|is_unique[tutor.tutor_id]',
+            ],
+            [
+                'field' => 'email',
+                'label' => 'Email',
+                'rules' => 'trim|required|valid_email|is_unique[student.email]',
+            ],
+            [
+                'field' => 'tutor_permission',
+                'label' => 'Tutor Permission',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'trim|required|min_length[6]',
+            ],
+        ];
+
+        $this->form_validation->set_rules($config);
+
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('error', validation_errors());
             $this->create();
+        } else {
+            $result = $this->tutors->store($_POST);
+            if($result==false) {
+                $this->create();
+            }
         }
+
+        
     }
 	
 	public function enroll()
@@ -123,11 +155,41 @@ class TutorController extends CI_Controller
     public function update($id)
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'edits');
-        $this->load->library('form_validation');
+        
+        $config = [
+            [
+                'field' => 'tutor_id',
+                'label' => 'Tutor ID',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'email',
+                'label' => 'Email',
+                'rules' => 'trim|required|valid_email',
+            ],
+            [
+                'field' => 'tutor_permission',
+                'label' => 'Tutor Permission',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'trim|min_length[6]',
+            ],
+        ];
 
-        $result = $this->tutors->update($id, $_POST);
-		if($result==false) {
+        $this->form_validation->set_rules($config);
+
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('error', validation_errors());
             $this->edit($id);
+        } else {
+
+            $result = $this->tutors->update($id, $_POST);
+    		if($result==false) {
+                $this->edit($id);
+            }
         }
 		
     }

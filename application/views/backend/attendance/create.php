@@ -24,7 +24,7 @@
                                     if (count($classes)) {
                                     foreach ($classes as $class) {
                                     ?>
-                                    <option value="<?php echo $class->class_code; ?>"><?php echo $class->class_code ?></option>
+                                    <option value="<?php echo $class->class_code; ?>" <?php if($class->class_code==$class_code) {echo 'selected';} ?>><?php echo $class->class_code ?></option>
                                     <?php
                                     }}
                                     ?>
@@ -80,6 +80,10 @@
     </section>
 </div>
 <script type="text/javascript">
+$(document).ready(function() {
+    $("select[name='class_code']").trigger("change");
+});
+
 $("body").on("change", "select[name='class_code']", function() {
     var class_code = $("select[name='class_code']").val();
     var attendance_date = $("input[name='attendance_date']").val();

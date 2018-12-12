@@ -150,7 +150,7 @@ $route['admin/billing/update/(:any)'] = 'backend/BillingController/update/$1';
 
 /* ATTENDANCE */
 $route['admin/attendance']                           = 'backend/AttendanceController/index';
-$route['admin/attendance/create-edit/(:any)']                    = 'backend/AttendanceController/create/$1';
+$route['admin/attendance/create-edit/(:any)/(:any)']                    = 'backend/AttendanceController/create/$1/$2';
 $route['admin/attendance/store']                     = 'backend/AttendanceController/store';
 //$route['admin/attendance/edit']                      = 'backend/AttendanceController/edit';
 //$route['admin/attendance/update']                    = 'backend/AttendanceController/update';
