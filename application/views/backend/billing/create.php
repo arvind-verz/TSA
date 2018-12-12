@@ -76,8 +76,6 @@
 </div>
 <script type="text/javascript">
         $(function () {
-            $('.datetimepicker1').datetimepicker({
-    format: 'YYYY-MM-DD HH:mm:ss'
-});
+            $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});
         });
 </script>

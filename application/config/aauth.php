@@ -114,8 +114,8 @@ $config_aauth["default"] = array(
 
  'recaptcha_active'               => false,
  'recaptcha_login_attempts'       => 4,
- 'recaptcha_siteKey'              => '',
- 'recaptcha_secret'               => '',
+ 'recaptcha_siteKey'              => '6LcIe4AUAAAAAK1_MMN1Fj4sCapfHnXuHTTe24aY',
+ 'recaptcha_secret'               => '6LcIe4AUAAAAAH3JdwdFls3SgTYuG8cw-B6Mx7eu',
 
  'totp_active'                    => false,
  'totp_only_on_ip_change'         => false,

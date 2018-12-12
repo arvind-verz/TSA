@@ -193,8 +193,9 @@ $("body").on("change", "input[name='student_id_transfer_all']", function() {
 });
 
 function transfer_students(old_class_code, class_code_transfer, storage) {
-    //alert(class_code_transfer)
     $.get("<?php echo site_url('admin/attendance/transfer_student'); ?>", {old_class_code : old_class_code, class_code : class_code_transfer, student_id : storage}, function(data) {
+        //alert(data);
+        //$(".box-footer").after(data);
             window.location.href = data.trim();
     })
 }

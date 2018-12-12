@@ -87,15 +87,18 @@ $route['admin/students/create']                    = 'backend/StudentController/
 $route['admin/students/store']                     = 'backend/StudentController/store';
 $route['admin/students/search']                    = 'backend/StudentController/search';
 $route['admin/students/enroll']                    = 'backend/StudentController/enroll';
+$route['admin/students/enroll/update_enrollment']             = 'backend/StudentController/update_enrollment';
 $route['admin/students/edit/(:any)']               = 'backend/StudentController/edit/$1';
 $route['admin/students/update/(:any)']             = 'backend/StudentController/update/$1';
 $route['admin/students/delete/(:any)']             = 'backend/StudentController/delete/$1';
 $route['admin/students/moveto_active_list/(:any)'] = 'backend/StudentController/moveto_active_list/$1';
 $route['admin/students/get_student_status']        = 'backend/StudentController/get_student_status';
 $route['admin/students/get_enrollment_type_popup_content']        = 'backend/StudentController/get_enrollment_type_popup_content';
+$route['admin/students/get_enrollment_type_popup_content_update']        = 'backend/StudentController/get_enrollment_type_popup_content_update';
 $route['admin/students/get_class_size']        = 'backend/StudentController/get_class_size';
 $route['admin/students/enrollment_decision']        = 'backend/StudentController/enrollment_decision';
 $route['admin/students/get_view_all_contents']        = 'backend/StudentController/get_view_all_contents';
+$route['admin/students/final_settlement/(:any)']            = 'backend/StudentController/final_settlement/$1';
 
 
 /* ORDER */
@@ -225,6 +228,8 @@ $route['admin/del-gallery/(:any)']  = "backend/GalleryController/del_gallery/$1"
 /* Tutor Admin */
 
 /* FRONTEND */
+$route['contact-us/submit']           = "frontend/cms/contact_us_form";
+$route['quick-enquiry/submit']           = "frontend/cms/quick_enquiry_form";
 $route['student-profile']  = 'frontend/Cms/student_profile';
 $route['student-invoices'] = 'frontend/Cms/student_invoices';
 $route['student-classes']  = 'frontend/Cms/student_classes';

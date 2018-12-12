@@ -102,6 +102,11 @@ class StudentController extends CI_Controller
                 'rules' => 'required|is_unique[student.username]',
             ],
             [
+                'field' => 'parent_email',
+                'label' => 'Parent Email',
+                'rules' => 'trim|required',
+            ],
+            [
                 'field' => 'password',
                 'label' => 'Password',
                 'rules' => 'trim|required|min_length[6]',
@@ -186,6 +191,11 @@ class StudentController extends CI_Controller
                 'rules' => 'required',
             ],
             [
+                'field' => 'parent_email',
+                'label' => 'Parent Email',
+                'rules' => 'trim|required',
+            ],
+            [
                 'field' => 'password',
                 'label' => 'Password',
                 'rules' => 'trim|min_length[6]',
@@ -254,5 +264,22 @@ class StudentController extends CI_Controller
         $class_id = !empty($_GET['class_id']) ? $_GET['class_id'] : '';
         $student_id = !empty($_GET['student_id']) ? $_GET['student_id'] : '';
         print_r(get_view_all_contents($student_id, $class_id));
+    }
+
+    public function final_settlement($student_id)
+    {
+        $this->students->final_settlement($student_id);
+    }
+
+    public function get_enrollment_type_popup_content_update()
+    {
+        $class_id = !empty($_GET['class_id']) ? $_GET['class_id'] : '';
+        $student_id = !empty($_GET['student_id']) ? $_GET['student_id'] : '';
+        print_r(get_enrollment_type_popup_content_update($student_id, $class_id));
+    }
+
+    public function update_enrollment()
+    {
+        $this->students->update_enrollment($_POST);
     }
 }

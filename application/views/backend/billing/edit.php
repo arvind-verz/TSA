@@ -21,6 +21,7 @@
                             $billing_group = json_decode($billing->billing);
                             //die(print_r($billing_group));
                             $i = 0;
+                            if($billing_group) {
                             foreach($billing_group as $billings) {
                             ?>
                             <div class="col-lg-12">
@@ -50,9 +51,38 @@
                                         </label>
                                     </div>
                                 </div>
-                                
                             </div>
-                            <?php $i++;} ?>
+                            <?php $i++;}}else {
+                                for($i=0;$i<5;$i++) {
+                            ?>
+                            <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for=""><?php echo BILLING ?> Name</label>
+                                        <input type="text" name="billing_name[]" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label for=""><?php echo BILLING ?> Range</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control pull-right date_range" name="date_range[]">
+                                        </div>
+                                        <!-- /.input group -->
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group mt-5">
+                                        <label>
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[<?php echo $i; ?>]" value="<?php echo ($i+1); ?>"> Rest Week
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php }} ?>
                             <div class="col-lg-12">
                                 <div class="col-lg-4">
                                     <div class="form-group">
@@ -81,8 +111,6 @@
 </div>
 <script type="text/javascript">
         $(function () {
-            $('.datetimepicker1').datetimepicker({
-    format: 'YYYY-MM-DD HH:mm:ss',
-            });
+            $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});
         });
 </script>

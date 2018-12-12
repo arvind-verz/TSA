@@ -98,9 +98,9 @@
                                     <th>
                                         Archive At
                                     </th>
-                                    <th>
+                                    <!-- <th>
                                         #
-                                    </th>
+                                    </th> -->
                                 <?php } ?>
                                 </tr>
                             </thead>
@@ -135,10 +135,10 @@
                                                 <option value="">-- Select One --</option>
                                                 <option name="Edit" value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
                                                 <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
-                                                <option value="Final Settlement">Final Settlement</option>
+                                                <option name="final_settlement" value="<?php echo base_url();?>index.php/admin/students/final_settlement/<?php echo $student->student_id;?>">Final Settlement</option>
                                                 <option value="view_all_details" name="view_all_details">View all details</option>
                                                 <?php if($student->status!='') { ?>
-                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>">Edit Class</option>
+                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>">Edit Class</option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -152,9 +152,9 @@
                                     <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'depo_collected'); ?></td>
                                     <?php if (current_url() == site_url('admin/students/archived')) { ?>
                                         <td><?php echo get_student_archive_at($student->student_id); ?></td>
-                                        <td>
+                                        <!-- <td>
                                             <a href="<?php echo base_url();?>index.php/admin/students/moveto_active_list/<?php echo $student->student_id;?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
-                                        </td>
+                                        </td> -->
                                     <?php } ?>
                                 </tr>
                                 <?php
@@ -224,9 +224,6 @@
                                     <th>
                                         Archive At
                                     </th>
-                                    <th>
-                                        #
-                                    </th>
                                 <?php } ?>
                                 </tr>
                             </tfoot>
@@ -273,7 +270,34 @@
                 </div>
                 <?php echo form_close(); ?>
         </div>
+    </div>
+</div>
 
+<div class="modal fade" id="myModalEditClass" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Assign Class Updates</h4>
+            </div>
+            <?php echo form_open('admin/students/enroll/update_enrollment'); ?>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Status: Enrolled</label>
+                        <input type="hidden" name="enrollment_type" value="3">
+                    </div>
+                    <div id="dis_content1"></div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="student_id" id="student_id" value="" />
+                    <input type="hidden" name="class_id" id="class_id" value="" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+                <?php echo form_close(); ?>
+        </div>
     </div>
 </div>
 
@@ -297,7 +321,6 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
         </div>
-
     </div>
 </div>
 
@@ -391,6 +414,13 @@ $(document).ready(function() {
             window.location=$(this).val();
             }   
         }
+        if(attrname=='final_settlement')
+        {
+        var archive=confirm("Are you sure you want to Final Settlement this student?");
+            if (archive==true){
+            window.location=$(this).val();
+            }   
+        }
         else if(attrname=='Edit')
         {
         
@@ -417,8 +447,22 @@ $(document).ready(function() {
         }
         else if(attrname=='edit_class')
         {
-            $("input#student_id").val($(this).find('option:selected').attr("data-id"));
-            $("#myModal").modal('show');
+            var student_id = $(this).parents("tbody").find("input[name='student_id_ref']").val();
+            var class_id = $(this).parents("tbody").find("input[name='class_id_ref']").val();
+            $("input#student_id").val(student_id);
+            $("input#class_id").val(class_id);
+            $("#myModalEditClass").modal('show');
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/students/get_enrollment_type_popup_content_update'); ?>',
+                data: 'class_id=' + class_id + '&student_id=' + student_id,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $("#dis_content1").html(data);
+                }
+            });
         }
         $(this).val('');
     });

@@ -1,263 +1,375 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
-    class Cms_model extends CI_Model
+class Cms_model extends CI_Model
+{
+
+    public function get_page($url_name)
     {
 
-			
-			public function get_page($url_name) {		
-				
-				$this->db->select('cp.*, m.menu_title, m.id as menu_id')
-					 ->from(TBL_CMS . ' as `cp`')
-					 ->join(TBL_MENU . ' as `m`' , 'm.page_id = cp.id')
-					 ->where('cp.url_name', $url_name)
-					 ->where('cp.status', 'Y');					 
-				$query = $this->db->get()->result_array();
-			//echo $this->db->last_query();	
-			return $query;	
-						
-			} 
-			
-			public function get_assign_class() {		
-				$student_id = $this->session->userdata('student_credentials');
-				$this->db->select('*');
-				$this->db->from(DB_STUDENT);
-    			$this->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
-    			$this->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
-				$this->db->where('student.id', $student_id['id']);
-				$this->db->order_by(DB_CLASSES . '.created_at', 'DESC');
-				$query = $this->db->get();
-				$result = $query->result();	
-				return $result;	
-						
-			} 
-			
-			public function get_page_others($url_name) {		
-				
-				$this->db->select('cp.*')
-					 ->from(TBL_CMS . ' as `cp`')
-					 ->where('cp.url_name', $url_name)
-					 ->where('cp.status', 'Y');					 
-				$query = $this->db->get()->result_array();
-				
-			return $query;	
-						
-			}
-			
-			
-			public function get_subjects_name($ids) {		
-				
-				$this->db->select('s.id,s.subject_name')
-					 ->from(DB_SUBJECT . ' as `s`')
-					 ->where('s.is_archive',0)
-					 ->where_in('s.id', $ids);					 
-				$query = $this->db->get()->result_array();
-				//echo $this->db->last_query();
-			return $query;	
-						
-			}
-			
-			public function get_book($id) {		
-				
-				$this->db->select('m.book_name')
-					 ->from(DB_MATERIAL . ' as `m`')
-					 ->where('m.is_archive',0)
-					 ->like('m.subject', $id);					 
-				$query = $this->db->get()->result_array();
-				//echo $this->db->last_query();
-			if(count($query))
-			return $query[0];
-			else 
-			return false;	
-						
-			}
-			
-			public function get_testimonials()
-			{
-				$this->db->select('*')
-					 ->from(DB_TESTIMONIAL);					 
-				$query = $this->db->get()->result_array();
-				
-			    return $query;
-			}
-			
-			public function get_attendance($student_id = false)
-			{
-				$this->db->select('*')
-					    ->from(DB_ATTENDANCE)
-					    ->where('student_id', $student_id);					 
-				$query = $this->db->get();
-				if($student_id) {
-					$result = $query->row();
-				}
-				else {
-					$result = $query->result();
-				}
-			    return $result;
-			}
-			
-			public function get_subjects()
-			{
-				$this->db->select('*')
-					 ->from(DB_SUBJECT . ' as `s`')
-					 ->join(TBL_CMS . ' as `c`' , 's.subject_id = c.subject_id')
-					 ;					 
-				$query = $this->db->get()->result_array();
-				
-			    return $query;
-			}
-			
-			public function get_cms_subjects($subject_id)
-			{
-				$this->db->select('*')
-					 ->from(TBL_CMS)
-					  ->where('subject_id',$subject_id);					 
-				$query = $this->db->get()->result_array();
-				
-			    return $query;
-			}
-			
-			public function get_gallery()
-			{
-				$this->db->select('*')
-					 ->from(DB_GALLERY);
-				 
-				$query = $this->db->get()->result_array();
-				
-			    return $query;
-			}
-			
-			public function get_members_cms()
-			{
-				$this->db->select('cp.*')
-					 ->from(TBL_JOIN_US_MEMBER . ' as `cp`')
-					 ->where('cp.id', 1);
-					 //->where('cp.status', 'Y');					 
-				$query = $this->db->get()->row_array();
-				return $query;
-			}
-			
-			public function get_faq() {		
-				
-				$this->db->select('*')
-					 ->from(TBL_FAQ)
-					 ->where('status','Y')
-					 ->order_by('sort_order', 'ASC');					 						 
-				$query = $this->db->get()->result_array();
-				
-			return $query;	
-			
-			}
-			
-			
-			
-			
-	public function batch_email($to, $from, $formname, $recipients, $subject, $message) 
-	{
-	   $config = Array(
-			      'protocol' => $this->get_site_options('protocol'),
-			      'smtp_host' => $this->get_site_options('smtp_host'),
-			      'smtp_port' => $this->get_site_options('smtp_port'),
-			      'smtp_user' => $this->get_site_options('smtp_user'),
-			      'smtp_pass' => $this->get_site_options('smtp_pass'),
-				  'mailtype' => $this->get_site_options('mailtype'), 
-        		  'charset'   => $this->get_site_options('charset')
-			);
-	  $this->load->library('email', $config);
-	  $this->email->clear(TRUE);
-	  $this->email->from($from, $formname); 
-	  $this->email->to($to);
-	  $this->email->bcc($recipients);
-	  $this->email->subject($subject);
-	  $this->email->message($message);  
-	
-	  $this->email->send();
-	  
-	  //echo $this->email->print_debugger(); die();
-	  return TRUE;
-	
-	}
-	
-	public function batch_email_attach($to, $from, $formname, $recipients, $subject, $message, $attachFile) 
-	{
-	   $config = Array(
-			      'protocol' => $this->get_site_options('protocol'),
-			      'smtp_host' => $this->get_site_options('smtp_host'),
-			      'smtp_port' => $this->get_site_options('smtp_port'),
-			      'smtp_user' => $this->get_site_options('smtp_user'),
-			      'smtp_pass' => $this->get_site_options('smtp_pass'),
-				  'mailtype' => $this->get_site_options('mailtype'), 
-        		  'charset'   => $this->get_site_options('charset')
-			);
-	  $this->load->library('email', $config);
-	  $this->email->clear(TRUE);
-	  $this->email->from($from, $formname); 
-	  $this->email->to($to);
-	  $this->email->bcc($recipients);
-	  $this->email->subject($subject);
-	  $this->email->message($message); 
-	  $this->email->attach($attachFile); 
-	
-	  $this->email->send();
-	  //echo $this->email->print_debugger(); die();
-	  return TRUE;
-	
-	}
-	
-	public function get_menu_pid_Mposition($pid,$Mposition){
+        $this->db->select('cp.*, m.menu_title, m.id as menu_id')
+            ->from(TBL_CMS . ' as `cp`')
+            ->join(TBL_MENU . ' as `m`', 'm.page_id = cp.id')
+            ->where('cp.url_name', $url_name)
+            ->where('cp.status', 'Y');
+        $query = $this->db->get()->result_array();
+        //echo $this->db->last_query();
+        return $query;
+
+    }
+
+    public function get_assign_class()
+    {
+        $student_id = $this->session->userdata('student_credentials');
+        $this->db->select('*');
+        $this->db->from(DB_STUDENT);
+        $this->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+        $this->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
+        $this->db->where('student.id', $student_id['id']);
+        $this->db->order_by(DB_CLASSES . '.created_at', 'DESC');
+        $query  = $this->db->get();
+        $result = $query->result();
+        return $result;
+
+    }
+
+    public function get_page_others($url_name)
+    {
+
+        $this->db->select('cp.*')
+            ->from(TBL_CMS . ' as `cp`')
+            ->where('cp.url_name', $url_name)
+            ->where('cp.status', 'Y');
+        $query = $this->db->get()->result_array();
+
+        return $query;
+
+    }
+
+    public function get_subjects_name($ids)
+    {
+
+        $this->db->select('s.id,s.subject_name')
+            ->from(DB_SUBJECT . ' as `s`')
+            ->where('s.is_archive', 0)
+            ->where_in('s.id', $ids);
+        $query = $this->db->get()->result_array();
+        //echo $this->db->last_query();
+        return $query;
+
+    }
+
+    public function get_book($id)
+    {
+
+        $this->db->select('m.book_name')
+            ->from(DB_MATERIAL . ' as `m`')
+            ->where('m.is_archive', 0)
+            ->like('m.subject', $id);
+        $query = $this->db->get()->result_array();
+        //echo $this->db->last_query();
+        if (count($query)) {
+            return $query[0];
+        } else {
+            return false;
+        }
+
+    }
+
+    public function get_testimonials()
+    {
+        $this->db->select('*')
+            ->from(DB_TESTIMONIAL);
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+
+    public function get_attendance($student_id = false)
+    {
+        $this->db->select('*')
+            ->from(DB_ATTENDANCE)
+            ->where('student_id', $student_id);
+        $query = $this->db->get();
+        if ($student_id) {
+            $result = $query->row();
+        } else {
+            $result = $query->result();
+        }
+        return $result;
+    }
+
+    public function get_subjects()
+    {
+        $this->db->select('*')
+            ->from(DB_SUBJECT . ' as `s`')
+            ->join(TBL_CMS . ' as `c`', 's.subject_id = c.subject_id')
+        ;
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+
+    public function get_cms_subjects($subject_id)
+    {
+        $this->db->select('*')
+            ->from(TBL_CMS)
+            ->where('subject_id', $subject_id);
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+
+    public function get_gallery()
+    {
+        $this->db->select('*')
+            ->from(DB_GALLERY);
+
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+
+    public function get_members_cms()
+    {
+        $this->db->select('cp.*')
+            ->from(TBL_JOIN_US_MEMBER . ' as `cp`')
+            ->where('cp.id', 1);
+        //->where('cp.status', 'Y');
+        $query = $this->db->get()->row_array();
+        return $query;
+    }
+
+    public function get_faq()
+    {
+
+        $this->db->select('*')
+            ->from(TBL_FAQ)
+            ->where('status', 'Y')
+            ->order_by('sort_order', 'ASC');
+        $query = $this->db->get()->result_array();
+
+        return $query;
+
+    }
+
+    public function batch_email($to, $from, $formname, $recipients, $subject, $message)
+    {
+        $config = array(
+            'protocol'  => $this->get_site_options('protocol'),
+            'smtp_host' => $this->get_site_options('smtp_host'),
+            'smtp_port' => $this->get_site_options('smtp_port'),
+            'smtp_user' => $this->get_site_options('smtp_user'),
+            'smtp_pass' => $this->get_site_options('smtp_pass'),
+            'mailtype'  => $this->get_site_options('mailtype'),
+            'charset'   => $this->get_site_options('charset'),
+        );
+        $this->load->library('email', $config);
+        $this->email->clear(true);
+        $this->email->from($from, $formname);
+        $this->email->to($to);
+        $this->email->bcc($recipients);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        $this->email->send();
+
+        //echo $this->email->print_debugger(); die();
+        return true;
+
+    }
+
+    public function batch_email_attach($to, $from, $formname, $recipients, $subject, $message, $attachFile)
+    {
+        $config = array(
+            'protocol'  => $this->get_site_options('protocol'),
+            'smtp_host' => $this->get_site_options('smtp_host'),
+            'smtp_port' => $this->get_site_options('smtp_port'),
+            'smtp_user' => $this->get_site_options('smtp_user'),
+            'smtp_pass' => $this->get_site_options('smtp_pass'),
+            'mailtype'  => $this->get_site_options('mailtype'),
+            'charset'   => $this->get_site_options('charset'),
+        );
+        $this->load->library('email', $config);
+        $this->email->clear(true);
+        $this->email->from($from, $formname);
+        $this->email->to($to);
+        $this->email->bcc($recipients);
+        $this->email->subject($subject);
+        $this->email->message($message);
+        $this->email->attach($attachFile);
+
+        $this->email->send();
+        //echo $this->email->print_debugger(); die();
+        return true;
+
+    }
+
+    public function get_menu_pid_Mposition($pid, $Mposition)
+    {
         $this->db->select('cms.*, m.menu_title, cms.url_name, m.id, m.parent_id, m.external_url, m.link_type, m.link_target')
-                ->from(TBL_MENU. ' as m')
-				->join(TBL_CMS. ' as cms', 'cms.id = m.page_id', 'LEFT')
-				->where('m.parent_id', $pid)
-				->where('m.position', $Mposition)
-				->order_by('m.sort_order','ASC')
-				->order_by('m.menu_position','ASC');
+            ->from(TBL_MENU . ' as m')
+            ->join(TBL_CMS . ' as cms', 'cms.id = m.page_id', 'LEFT')
+            ->where('m.parent_id', $pid)
+            ->where('m.position', $Mposition)
+            ->order_by('m.sort_order', 'ASC')
+            ->order_by('m.menu_position', 'ASC');
         $query = $this->db->get()->result_array();
         return $query;
     }
-	public function get_selected_menu_id($current_menu_id, $menu_id, $Mposition){
+    public function get_selected_menu_id($current_menu_id, $menu_id, $Mposition)
+    {
         $this->db->select('cms.*, m.menu_title, cms.url_name, m.id, m.parent_id')
-                ->from(TBL_MENU. ' as m')
-				->join(TBL_CMS. ' as cms', 'cms.id = m.page_id', 'LEFT')
-				->where('m.id', $current_menu_id)
-				->where('m.position', $Mposition)
-				->where('cms.status', 'Y')
-				->order_by('m.menu_position','ASC')
-				->order_by('m.sort_order','ASC');
+            ->from(TBL_MENU . ' as m')
+            ->join(TBL_CMS . ' as cms', 'cms.id = m.page_id', 'LEFT')
+            ->where('m.id', $current_menu_id)
+            ->where('m.position', $Mposition)
+            ->where('cms.status', 'Y')
+            ->order_by('m.menu_position', 'ASC')
+            ->order_by('m.sort_order', 'ASC');
         $query = $this->db->get()->row_array();
-		if($query['id']==$menu_id){
-			return 'Y';
-		}elseif($query['id']!=$menu_id && $query['parent_id']==0){
-			return 'N';
-		}else{
-			return $this->get_parent_selected_menu_id($query['parent_id'], $menu_id, $Mposition);	
-		}
+        if ($query['id'] == $menu_id) {
+            return 'Y';
+        } elseif ($query['id'] != $menu_id && $query['parent_id'] == 0) {
+            return 'N';
+        } else {
+            return $this->get_parent_selected_menu_id($query['parent_id'], $menu_id, $Mposition);
+        }
     }
-	public function get_parent_selected_menu_id($parent_id, $menu_id, $Mposition){
+    public function get_parent_selected_menu_id($parent_id, $menu_id, $Mposition)
+    {
 
         $this->db->select('cms.*, m.menu_title, cms.url_name, m.id, m.parent_id')
-                ->from(TBL_MENU. ' as m')
-				->join(TBL_CMS. ' as cms', 'cms.id = m.page_id', 'LEFT')
-				->where('m.id', $parent_id)
-				->where('m.position', $Mposition)
-				->order_by('m.menu_position','ASC')
-				->order_by('m.sort_order','ASC');
+            ->from(TBL_MENU . ' as m')
+            ->join(TBL_CMS . ' as cms', 'cms.id = m.page_id', 'LEFT')
+            ->where('m.id', $parent_id)
+            ->where('m.position', $Mposition)
+            ->order_by('m.menu_position', 'ASC')
+            ->order_by('m.sort_order', 'ASC');
 
         $query = $this->db->get()->row_array();
 
-		if($query['id']==$menu_id){
+        if ($query['id'] == $menu_id) {
 
-			return 'Y';
+            return 'Y';
 
-		}elseif($query['id']!=$menu_id && $query['parent_id']==0){
+        } elseif ($query['id'] != $menu_id && $query['parent_id'] == 0) {
 
-			return 'N';
+            return 'N';
 
-		}else{
+        } else {
 
-			return $this->get_parent_selected_menu_id($query['parent_id'], $menu_id, $Mposition);	
+            return $this->get_parent_selected_menu_id($query['parent_id'], $menu_id, $Mposition);
 
-		}  
-
-    }
+        }
 
     }
+
+    public function contact_us_form()
+    {
+    	$fname = $_POST['fname'];
+    	$email_id = $_POST['email_id'];
+    	$phone_no = $_POST['phone_no'];
+    	$subject = $_POST['subject'];
+    	$message = $_POST['message'];
+    	$create_date = date('Y-m-d H:i:s');
+        $recaptcha = $_POST['g-recaptcha-response'];
+        $query = $this->db->get_where('aauth_users', ['id' => 1]);
+        $result   = $query->row();
+        $to_email = $result->email;
+        $message = '<table>
+			<tr>
+					<td>Name:</td>
+					<td>' . $fname . '</td>
+			</tr>
+			<tr>
+					<td>Email Id:</td>
+					<td>' . $email_id . '</td>
+			</tr>
+			<tr>
+					<td>Phone No:</td>
+					<td>' . $phone_no . '</td>
+			</tr>
+			<tr>
+					<td>Subject:</td>
+					<td>' . $subject . '</td>
+			</tr>
+			<tr>
+					<td>MESSAGE:</td>
+					<td>' . $message . '</td>
+			</tr>
+				</table>';
+
+        if(empty($recaptcha))
+        {
+            $this->session->set_flashdata('error', $this->lang->line('aauth_error_recaptcha_not_correct'));
+            return redirect("contact-us");
+        }
+        $data       = array(
+            'name'         => $fname,
+            'email'        => $email_id,
+            'phone_no'     => $phone,
+            'enquiry_type' => $subject,
+            'message'      => $message,
+            'create_date'  => $create_date,
+        );
+        
+
+        $this->db->insert(DB_CONTACT, $data);
+        send_mail_contact($email_id, $to_email, $subject, $message);
+
+        return redirect("thank-you");
+    }
+
+    public function quick_enquiry_form()
+    {
+    	$fname = $_POST['fname'];
+    	$email_id = $_POST['email_id'];
+    	$phone_no = $_POST['phone'];
+    	$message = $_POST['message'];
+    	$create_date = date('Y-m-d H:i:s');
+        $recaptcha = $_POST['g-recaptcha-response'];
+        $query = $this->db->get_where('aauth_users', ['id' => 1]);
+        $result   = $query->row();
+        $to_email = $result->email;
+
+        $message = '<table>
+			<tr>
+					<td>Name:</td>
+					<td>' . $fname . '</td>
+			</tr>
+			<tr>
+					<td>Email Id:</td>
+					<td>' . $email_id . '</td>
+			</tr>
+			<tr>
+					<td>Phone No:</td>
+					<td>' . $phone_no . '</td>
+			</tr>
+			<tr>
+					<td>MESSAGE:</td>
+					<td>' . $message . '</td>
+			</tr>
+				</table>';
+
+        if(empty($recaptcha))
+        {
+            $this->session->set_flashdata('error', $this->lang->line('aauth_error_recaptcha_not_correct'));
+            return redirect("contact-us");
+        }
+        $data       = array(
+            'name'         => $fname,
+            'email'        => $email_id,
+            'phone_no'     => $phone,
+            'message'      => $message,
+            'create_date'  => $create_date,
+        );
+    	
+	    $this->db->insert(DB_ENQUIRY, $data);
+	    send_mail_contact($email_id, $to_email, $subject, $message);
+
+        return redirect("thank-you");
+    }
+
+}

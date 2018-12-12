@@ -94,6 +94,26 @@ function enrollment_decision($class_id, $student_id)
     }
 }
 
+function get_enrollment_type_popup_content_update($student_id, $class_id)
+{
+    $ci         = &get_instance();
+    $query = $ci->db->get_where('student_enrollment', ['student_id'   =>  $student_id, 'class_id' =>  $class_id]);
+    $result = $query->row();
+    if($result)
+    {
+        $enrollment_date = date('Y-m-d', strtotime($result->enrollment_date));
+        $deposit = $result->deposit;
+        $deposit_collected = $result->deposit_collected;
+        $remarks_deposit = $result->remarks_deposit;
+        $credit_value = $result->credit_value;
+        $extra_charges = $result->extra_charges;
+        $remarks = $result->remarks;
+        ?>
+        <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="<?php echo $enrollment_date; ?>" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="<?php echo $deposit; ?>" ></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" <?php if($deposit_collected==1) {echo 'checked';} ?> />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" <?php if($deposit_collected==0) {echo 'checked';} ?> />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input  type="text" name="remarks_deposit" class="form-control" value="<?php echo $remarks_deposit; ?>"></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value="<?php echo $credit_value; ?>"></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges"  class="form-control" value="<?php echo $extra_charges; ?>"></div><div class="form-group"><label for="">Remarks</label><input type="text" name="remarks" class="form-control" value="<?php echo $remarks; ?>"></div>
+        <?php
+    }
+}
+
 function get_enrollment_type_popup_content($type)
 {
     $ci         = &get_instance();
@@ -126,7 +146,7 @@ function get_enrollment_type_popup_content($type)
         elseif($type=='enroll')
         {
             ?>
-            <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="" required="required"></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input required="required" type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Credit Value</label><input required="required" type="text" name="credit_value" class="form-control" value=""></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges" required="required" class="form-control" value=""></div><div class="form-group"><label for="">Remarks</label><input  required="required" type="text" name="remarks" class="form-control" value=""></div>
+            <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="" ></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" checked />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input  type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value="0"></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges"  class="form-control" value="0"></div><div class="form-group"><label for="">Remarks</label><input   type="text" name="remarks" class="form-control" value=""></div>
             <?php
         }
     }
@@ -420,7 +440,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         return false;
     }
 
-    function get_invoice_by_filename($filename = false)
+    function get_invoice_by_filename($filename)
     {
         $ci = &get_instance();
 
@@ -523,6 +543,17 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         $result = $query->row();
         if ($result) {
             return $result->class_code;
+        }
+    }
+
+    function get_class_id_by_class_code($class_code)
+    {
+        $ci = &get_instance();
+
+        $query  = $ci->db->get_where(DB_CLASSES, ['class_code' => $class_code]);
+        $result = $query->row();
+        if ($result) {
+            return $result->class_id;
         }
     }
 
@@ -1081,7 +1112,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     $result = $query->row();
                     if($result) 
                     {
-                        return $result->updated_at;
+                        return date('d M, Y H:i A', strtotime($result->updated_at));
                     }
                     return '-';
                 }
@@ -1131,11 +1162,21 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                 function get_view_all_contents($student_id, $class_id)
                 {
                     $ci = &get_instance();
-                    $query = $ci->db->get_where('student_enrollment', ['student_id'  =>  $student_id, 'class_id' =>  $class_id]);
+                    $ci->db->select('*');
+                    $ci->db->from('student_to_class');
+                    $ci->db->join('student_enrollment', 'student_to_class.student_id = student_enrollment.student_id');
+                    $ci->db->where(['student_enrollment.student_id'  =>  $student_id, 'student_enrollment.class_id' =>  $class_id]);
+                    $query = $ci->db->get();
                     $result = $query->row();
                     if($result)
                     {
                         ?>
+                        <div class="form-group">
+                            <label>Reservation Date : <?php echo date('d M, Y', strtotime($result->reservation_date)); ?></label>
+                        </div>
+                        <div class="form-group">
+                            <label>Enrollment Date : <?php echo date('d M, Y', strtotime($result->enrollment_date)); ?></label>
+                        </div>
                         <div class="form-group">
                             <label>Deposit : <?php echo $result->deposit; ?></label>
                         </div>
@@ -1373,11 +1414,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     function send_first_month_invoice($student_id, $class_id)
                     {
                         $ci = &get_instance();
-
+                        $type = 'first_month_invoice';
                         $invoice_id   = uniqid();
                         $date         = date('Y-m-d H:i:s');
                         $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
-
+                        $file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
                         $ci->db->select('*, student.id as sid');
                         $ci->db->from(DB_CLASSES);
                         $ci->db->join('student_enrollment', 'class.class_id = student_enrollment.class_id');
@@ -1399,10 +1440,6 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
 
-
-
-
-
                         $query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y %H:%i')  =  DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i')");
                         $result          = $query->row();
                         if(!$result) {
@@ -1415,7 +1452,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $counter         = [];
                         $i               = 0;
                         $subject         = 'Invoice #' . get_invoice_no();
-                        $message         = '';
+                        $message         = '<a href="'. $file_path .'">Click here </a> to view invoice.';
                         $invoice_content = [
                             'subject' => $subject,
                             'message' => $message,
@@ -1470,6 +1507,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                 'material_amount'           => $book_charges,
                                 'invoice_data'              => json_encode($invoice_data),
                                 'invoice_file'              => $invoice_file,
+                                'type'                      =>  $type,
                                 'created_at'                => $date,
                                 'updated_at'                => $date,
                             ];
@@ -1479,7 +1517,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
 
                                 foreach($emailto as $email) {
-                                    $mail = send_mail($email, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+                                    $mail = send_mail($email, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
                                 }
                                 $ci->load->library('M_pdf');
                                 $ci->m_pdf->download_my_mPDF($invoice_file);
@@ -1495,11 +1533,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     function send_rest_month_invoice($student_id, $class_id)
                     {
                         $ci = &get_instance();
-
+                        $type = 'rest_month_invoice';
                         $invoice_id   = uniqid();
                         $date         = date('Y-m-d H:i:s');
                         $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
-
+                        $file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
                         $ci->db->select('*, student.id as sid');
                         $ci->db->from(DB_CLASSES);
                         $ci->db->join('student_enrollment', 'class.class_id = student_enrollment.class_id');
@@ -1520,10 +1558,6 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $credit_value = $result1->credit_value;
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
-
-
-
-
                         $query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y %H:%i')  =  DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i')");
                         $result          = $query->row();
                         if(!$result) {
@@ -1535,7 +1569,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $billing_data    = json_decode($result->billing);
                         $i               = 0;
                         $subject         = 'Invoice #' . get_invoice_no();
-                        $message         = '';
+                        $message         = '<a href="'. $file_path .'">Click here </a> to view invoice.';
                         $invoice_content = [
                             'subject' => $subject,
                             'message' => $message,
@@ -1578,15 +1612,14 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                 'material_amount'           => $book_charges,
                                 'invoice_data'              => json_encode($invoice_data),
                                 'invoice_file'              => $invoice_file,
+                                'type'                      =>  $type,
                                 'created_at'                => $date,
                                 'updated_at'                => $date,
                             ];
                             $query = $ci->db->insert(DB_INVOICE, $data);
                             if ($query) {
-
-
                                 foreach($emailto as $email) {
-                                    $mail = send_mail($email, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+                                    $mail = send_mail($email, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
                                 }
                                 $ci->load->library('M_pdf');
                                 $ci->m_pdf->download_my_mPDF($invoice_file);
@@ -1607,7 +1640,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $ci->db->from(DB_STUDENT);
                         $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
                         $ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
-                        $ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
+                        $ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_STUDENT . '.student_id' => $student_id]);
                         $query  = $ci->db->get();
                         $result = $query->result();
                         foreach ($result as $row) {
@@ -1618,10 +1651,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     function send_archive_invoice_extend($student_id, $class_id)
                     {
                         $ci = &get_instance();
+                        $type = 'archive_invoice';
                         $invoice_id   = uniqid();
                         $date         = date('Y-m-d H:i:s');
                         $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
-
+                        $file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
                         $ci->db->select('*, student.id as sid');
                         $ci->db->from(DB_CLASSES);
                         $ci->db->join('student_enrollment', 'class.class_id = student_enrollment.class_id');
@@ -1681,7 +1715,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         }
 
                         $subject         = 'TSA - Invoice #' . get_invoice_no();
-                        $message         = '';
+                        $message         = '<a href="'. $file_path .'">Click here </a> to view invoice.';
                         $invoice_content = [
                             'subject' => $subject,
                             'message' => $message,
@@ -1722,7 +1756,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             'material_amount'           => $book_charges,
                             'invoice_data'              => json_encode($invoice_data),
                             'invoice_file'              => $invoice_file,
-                            'invoice_content'           => json_encode($invoice_content),
+                            'type'                      =>  $type,
                             'created_at'                => $date,
                             'updated_at'                => $date,
                         ];
@@ -1731,77 +1765,99 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         if ($query) {
                             $ci->load->library('M_pdf');
                             $ci->m_pdf->download_my_mPDF($invoice_file);
-                            $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+                            $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
                             if ($mail == true) {
         //die(print_r($query));
-                                return true;
+                                //return true;
                             }
                         }
                     }
 
                     function send_final_settlement_invoice($student_id)
                     {
-                        $ci           = &get_instance();
+                        $ci = &get_instance();
+
+                        
+                        $ci->db->select('*');
+                        $ci->db->from(DB_STUDENT);
+                        $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+                        $ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
+                        $ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_STUDENT . '.student_id' => $student_id]);
+                        $query  = $ci->db->get();
+                        $result = $query->result();
+                        foreach ($result as $row) {
+                            send_final_settlement_invoice_extend($student_id, $row->class_id);
+                        }
+                    }
+
+                    function send_final_settlement_invoice_extend($student_id, $class_id)
+                    {
+                        $ci = &get_instance();
+                        $type = 'final_settlement_invoice';
                         $invoice_id   = uniqid();
                         $date         = date('Y-m-d H:i:s');
                         $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
-
-    //$result2 = get_invoice_result2($student_id);
-                        $result = false;
-    //die(print_r($result2));
-                        $result4 = get_invoice_result4($student_id);
-
-                        $L = $M = $E = $X = $G = $H = [];
-                        foreach ($result4 as $row) {
-                            $status = json_decode($row->status);
-                            if ($status[0] == 1) {
-                                $L[] = $status[0];
-                            }
-                            if ($status[1] == 1) {
-                                $M[] = $status[1];
-                            }
-                            if ($status[2] == 1) {
-                                $E[] = $status[2];
-                            }
-                            if ($status[3] == 1) {
-                                $X[] = $status[3];
-                            }
-                            if ($status[4] == 1) {
-                                $G[] = $status[4];
-                            }
-                            if ($status[5] == 1) {
-                                $H[] = $status[5];
-                            }
-                        }
-
-                        if (!$result2) {
+                        $file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
+                        $ci->db->select('*, student.id as sid');
+                        $ci->db->from(DB_CLASSES);
+                        $ci->db->join('student_enrollment', 'class.class_id = student_enrollment.class_id');
+                        $ci->db->join(DB_STUDENT, 'student_enrollment.student_id = student.student_id');
+                        $ci->db->where(['student_enrollment.student_id'  =>  $student_id, 'student_enrollment.class_id'    =>  $class_id]);
+                        $ci->db->limit(1);
+                        $query1 = $ci->db->get();
+                        $result1 = $query1->row();
+                        if (!$result1) {
                             return false;
                         }
+                        $frequency = $result1->frequency;
+                        $class_code = $result1->class_code;
+                        $emailto = [$result1->email, $result1->parent_email];
+                        $fees = $result1->monthly_fees;
+                        $extra_charges = $result1->extra_charges;
+                        $deposit = $result1->deposit;
+                        $credit_value = $result1->credit_value;
+                        $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
-                        $result3 = get_invoice_result3($result2->sid);
+                        $result5 = get_invoice_result5();
+                        $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  => $result5[0]]);
+                        $result          = $query->row();
+                        $billing_data    = json_decode($result->billing);
+                        $book_price_amount = get_invoice_result2($result1->sid, $result5[0]);
+                        $book_charges   = $book_price_amount;
+                        $L = $M = $E = $X = $G = $H = [];
+                        
+                        $query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' =>  $student_id, 'class_code'   =>  $result1->class_code]);
+                        if($query->num_rows()>0) {
+                            foreach ($billing_data as $billing) {
+                                $dates = explode("-", $billing->date_range);
+                                foreach($query->result() as $row) {
+                                    $status = json_decode($row->status);
+                                    if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1])) {
+                                        if ($status[0] == 1) {
+                                            $L[] = $status[0];
+                                        }
+                                        if ($status[1] == 1) {
+                                            $M[] = $status[1];
+                                        }
+                                        if ($status[2] == 1) {
+                                            $E[] = $status[2];
+                                        }
+                                        if ($status[3] == 1) {
+                                            $X[] = $status[3];
+                                        }
+                                        if ($status[4] == 1) {
+                                            $G[] = $status[4];
+                                        }
+                                        if ($status[5] == 1) {
+                                            $H[] = $status[5];
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-                        $class_code = $result2->class_code;
-                        $class_id       = $result2->class_id;
-                        $emailto        = $result2->email;
-                        $fees           = isset($result2->monthly_fees) ? $result2->monthly_fees : 0;
-                        $extra_charges  = isset($result2->ex_charges) ? $result2->ex_charges : 0;
-                        $deposit   = isset($result2->deposit) ? $result2->deposit : 0;
-                        $credit_value   = isset($result2->credit_value) ? $result2->credit_value : 0;
-                        $frequency   = isset($result2->frequency) ? $result2->frequency : 0;
-                        $book_charges   = isset($result3->book_price_amount) ? $result3->book_price_amount : 0;
-                        $invoice_amount = $amount_excluding_material = 0;
-
-                        $invoice_data = [
-                            'class_code'    =>  $class_code,
-                            'fees_monthly'  => $fees,
-                            'deposit_amount'    =>  $deposit,
-                            'extra_charges' => $extra_charges,
-                            'credit_amount'  => $credit_value,
-                            'material_fees'  => $book_charges,
-                        ];
-
-                        $subject         = '';
-                        $message         = '';
+                        $subject         = 'TSA - Invoice #' . get_invoice_no();
+                        $message         = '<a href="'. base_url($file_path) .'">Click here </a> to view invoice.';
                         $invoice_content = [
                             'subject' => $subject,
                             'message' => $message,
@@ -1810,6 +1866,28 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
                         $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $deposit - $credit_value);
 
+                        if($credit_value>0) {
+
+                            if($invoice_amount<0) {
+                                $credit_amount = abs($invoice_amount);
+                                $invoice_amount = 0;
+                            }
+                            else {
+                                $credit_amount = 0;
+                            }
+                            $ci->db->where('student_id', $student_id);
+                            $ci->db->where('class_id', $class_id);
+                            $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
+
+                        }
+                        $invoice_data = [
+                            'class_code'    =>  $class_code,
+                            'fees_monthly'  => $fees,
+                            'deposit_amount'    =>  $deposit,
+                            'extra_charges' => $extra_charges,
+                            'credit_amount'  => $credit_value,
+                            'material_fees'  => $book_charges,
+                        ];
                         $data = [
                             'invoice_id'                => $invoice_id,
                             'invoice_no'                => get_invoice_no(),
@@ -1821,88 +1899,91 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             'material_amount'           => $book_charges,
                             'invoice_data'              => json_encode($invoice_data),
                             'invoice_file'              => $invoice_file,
-                            'invoice_content'           => json_encode($invoice_content),
+                            'type'                      => $type,
                             'created_at'                => $date,
                             'updated_at'                => $date,
                         ];
-                        $query = $ci->db->insert(DB_INVOICE, $data);
 
+                        $query = $ci->db->insert(DB_INVOICE, $data);
                         if ($query) {
                             $ci->load->library('M_pdf');
                             $ci->m_pdf->download_my_mPDF($invoice_file);
-                            $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+                            $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
                             if ($mail == true) {
-            //die(print_r($query));
-                                return true;
+        //die(print_r($query));
+                                //return true;
                             }
                         }
                     }
 
-                    function send_class_transfer_invoice($student_id)
+                    function send_class_transfer_invoice($student_id, $class_id)
                     {
                         $ci = &get_instance();
-
+                        $type = 'class_transfer_invoice';
                         $invoice_id   = uniqid();
                         $date         = date('Y-m-d H:i:s');
                         $invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
-
-    //$result2 = get_invoice_result2($student_id);
-                        $result = false;
-    //die(print_r($result2));
-                        $result4 = get_invoice_result4($student_id);
-
-                        $L = $M = $E = $X = $G = $H = [];
-                        foreach ($result4 as $row) {
-                            $status = json_decode($row->status);
-                            if ($status[0] == 1) {
-                                $L[] = $status[0];
-                            }
-                            if ($status[1] == 1) {
-                                $M[] = $status[1];
-                            }
-                            if ($status[2] == 1) {
-                                $E[] = $status[2];
-                            }
-                            if ($status[3] == 1) {
-                                $X[] = $status[3];
-                            }
-                            if ($status[4] == 1) {
-                                $G[] = $status[4];
-                            }
-                            if ($status[5] == 1) {
-                                $H[] = $status[5];
-                            }
-                        }
-
-                        if (!$result2) {
+                        $file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
+                        $ci->db->select('*, student.id as sid');
+                        $ci->db->from(DB_CLASSES);
+                        $ci->db->join('student_enrollment', 'class.class_id = student_enrollment.class_id');
+                        $ci->db->join(DB_STUDENT, 'student_enrollment.student_id = student.student_id');
+                        $ci->db->where(['student_enrollment.student_id'  =>  $student_id, 'student_enrollment.class_id'    =>  $class_id]);
+                        $ci->db->limit(1);
+                        $query1 = $ci->db->get();
+                        $result1 = $query1->row();
+                        if (!$result1) {
                             return false;
                         }
+                        $frequency = $result1->frequency;
+                        $class_code = $result1->class_code;
+                        $emailto = [$result1->email, $result1->parent_email];
+                        $fees = $result1->monthly_fees;
+                        $extra_charges = $result1->extra_charges;
+                        $deposit = $result1->deposit;
+                        $credit_value = $result1->credit_value;
+                        $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
-                        $result3 = get_invoice_result3($result2->sid);
+                        $result5 = get_invoice_result5();
+                        $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  => $result5[0]]);
+                        $result          = $query->row();
+                        $billing_data    = json_decode($result->billing);
+                        $book_price_amount = get_invoice_result2($result1->sid, $result5[0]);
+                        $book_charges   = $book_price_amount;
+                        $L = $M = $E = $X = $G = $H = [];
+                        
+                        $query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' =>  $student_id, 'class_code'   =>  $result1->class_code]);
+                        if($query->num_rows()>0) {
+                            foreach ($billing_data as $billing) {
+                                $dates = explode("-", $billing->date_range);
+                                foreach($query->result() as $row) {
+                                    $status = json_decode($row->status);
+                                    if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1])) {
+                                        if ($status[0] == 1) {
+                                            $L[] = $status[0];
+                                        }
+                                        if ($status[1] == 1) {
+                                            $M[] = $status[1];
+                                        }
+                                        if ($status[2] == 1) {
+                                            $E[] = $status[2];
+                                        }
+                                        if ($status[3] == 1) {
+                                            $X[] = $status[3];
+                                        }
+                                        if ($status[4] == 1) {
+                                            $G[] = $status[4];
+                                        }
+                                        if ($status[5] == 1) {
+                                            $H[] = $status[5];
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-                        $class_code = $result2->class_code;
-                        $class_id       = $result2->class_id;
-                        $emailto        = $result2->email;
-                        $fees           = isset($result2->monthly_fees) ? $result2->monthly_fees : 0;
-                        $extra_charges  = isset($result2->ex_charges) ? $result2->ex_charges : 0;
-                        $deposit   = isset($result2->deposit) ? $result2->deposit : 0;
-                        $frequency   = isset($result2->frequency) ? $result2->frequency : 0;
-                        $credit_value   = isset($result2->credit_value) ? $result2->credit_value : 0;
-                        $book_charges   = isset($result3->book_price_amount) ? $result3->book_price_amount : 0;
-
-                        $invoice_amount = $amount_excluding_material = 0;
-
-                        $invoice_data = [
-                            'class_code'    =>  $class_code,
-                            'fees_monthly'  => $fees,
-                            'deposit_amount'    =>  $deposit,
-                            'extra_charges' => $extra_charges,
-                            'credit_amount'  => $credit_value,
-                            'material_fees'  => $book_charges,
-                        ];
-
-                        $subject         = '';
-                        $message         = '';
+                        $subject         = 'TSA - Invoice #' . get_invoice_no();
+                        $message         = '<a href="'. base_url($file_path) .'">Click here </a> to view invoice.';
                         $invoice_content = [
                             'subject' => $subject,
                             'message' => $message,
@@ -1911,6 +1992,28 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
                         $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $deposit - $credit_value);
 
+                        if($credit_value>0) {
+
+                            if($invoice_amount<0) {
+                                $credit_amount = abs($invoice_amount);
+                                $invoice_amount = 0;
+                            }
+                            else {
+                                $credit_amount = 0;
+                            }
+                            $ci->db->where('student_id', $student_id);
+                            $ci->db->where('class_id', $class_id);
+                            $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
+
+                        }
+                        $invoice_data = [
+                            'class_code'    =>  $class_code,
+                            'fees_monthly'  => $fees,
+                            'deposit_amount'    =>  $deposit,
+                            'extra_charges' => $extra_charges,
+                            'credit_amount'  => $credit_value,
+                            'material_fees'  => $book_charges,
+                        ];
                         $data = [
                             'invoice_id'                => $invoice_id,
                             'invoice_no'                => get_invoice_no(),
@@ -1922,27 +2025,24 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             'material_amount'           => $book_charges,
                             'invoice_data'              => json_encode($invoice_data),
                             'invoice_file'              => $invoice_file,
-                            'invoice_content'           => json_encode($invoice_content),
+                            'type'                      => $type,
                             'created_at'                => $date,
                             'updated_at'                => $date,
                         ];
+
                         $query = $ci->db->insert(DB_INVOICE, $data);
                         if ($query) {
                             $ci->load->library('M_pdf');
                             $ci->m_pdf->download_my_mPDF($invoice_file);
-                            $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type = null, $subject, $message);
+                            $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
                             if ($mail == true) {
-            //die(print_r($query));
-                                return true;
+        //die(print_r($query));
+                                //return true;
                             }
                         }
                     }
 
                     /* RESULT FOR INVOICE */
-                    function get_invoice_result4($student_id, $class_code)
-                    {
-
-                    }
 
                     function get_invoice_result3($student_id)
                     {
@@ -2091,6 +2191,38 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                         $ci->email->initialize($config);
                         $ci->email->from($result->email, 'The Science Academy');
+                        $ci->email->to($emailto);
+
+                        $ci->email->subject($subject);
+                        $ci->email->message($message);
+
+                        if ($ci->email->send()) {
+                            return true;
+                        }
+                        return false;
+                    }
+
+                    function send_mail_contact($email_from, $emailto, $subject, $message)
+                    {
+                        $ci = &get_instance();
+                        $ci->load->library('email');
+
+                        $config['protocol']     = 'smtp';
+                        $config['smtp_host']    = 'smtp.gmail.com';
+                        $config['smtp_port']    = '587';
+                        $config['smtp_user']    = 'arvind.verz@gmail.com';
+                        $config['smtp_pass']    = '@rvVerz$123';
+                        $config['mailpath']     = '/usr/sbin/sendmail';
+                        $config['smtp_crypto']  = "tls";
+                        $config['smtp_timeout'] = "5";
+                        $config['charset']      = 'iso-8859-1';
+                        $config['wordwrap']     = true;
+                        $config['mailtype']     = 'html';
+                        $config['crlf']         = "\r\n";
+                        $config['newline']      = "\r\n";
+
+                        $ci->email->initialize($config);
+                        $ci->email->from($email_from, 'The Science Academy - Contact Us Form');
                         $ci->email->to($emailto);
 
                         $ci->email->subject($subject);
