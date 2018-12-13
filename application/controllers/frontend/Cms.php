@@ -140,7 +140,7 @@ class Cms extends CI_Controller
 
         } else if ($url == 'login') {
             $this->breadcrumbs2->push('Home', 'home');
-            $this->breadcrumbs2->push('Home', 'home');
+            $this->breadcrumbs2->push('Login', 'login');
             $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();
             $this->load->view('frontend/include/header', $data_msg);
             $this->load->view('frontend/accounts/login');

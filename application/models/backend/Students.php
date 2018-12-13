@@ -213,74 +213,157 @@ class Students extends CI_Model
 	{
 		//die(print_r($_POST));
 		$enrollment_type = !empty($_POST['enrollment_type']) ? $_POST['enrollment_type'] : '';
+		$old_status = !empty($_POST['enrollment_status']) ? $_POST['enrollment_status'] : '';
 		$student_id = !empty($_POST['student_id']) ? $_POST['student_id'] : '';
 		$class_id = !empty($_POST['class_code']) ? $_POST['class_code'] : '';
-		if(!($student_id && $class_id)) {
+		$old_class_id = !empty($_POST['old_class_id']) ? $_POST['old_class_id'] : '';
+		$store_type = $_POST['store_type'];
+		$class_code = get_class_code_by_class($class_id);
+
+		if(!($student_id)) {
 			$this->session->set_flashdata('error', MSG_ERROR);
 			return redirect('admin/students');
 		}
-		$this->db->trans_start();
-		if($enrollment_type==3)
+
+		if($store_type=='update')
 		{
-			$enrollment_date = !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '';
-			$deposit = !empty($_POST['deposit']) ? $_POST['deposit'] : '';
-			$deposit_collected = !empty($_POST['deposit_collected']) ? $_POST['deposit_collected'] : '';
-			$remarks_deposit = !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '';
-			$credit_value = !empty($_POST['credit_value']) ? $_POST['credit_value'] : '';
-			$extra_charges = !empty($_POST['extra_charges']) ? $_POST['extra_charges'] : '';
-			$remarks = !empty($_POST['remarks']) ? $_POST['remarks'] : '';
+			$this->db->trans_start();
+			if($enrollment_type==3)
+			{
+				$enrollment_date = !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '';
+				$deposit = !empty($_POST['deposit']) ? $_POST['deposit'] : '';
+				$deposit_collected = !empty($_POST['deposit_collected']) ? $_POST['deposit_collected'] : '';
+				$remarks_deposit = !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '';
+				$credit_value = !empty($_POST['credit_value']) ? $_POST['credit_value'] : '';
+				$extra_charges = !empty($_POST['extra_charges']) ? $_POST['extra_charges'] : '';
+				$remarks = !empty($_POST['remarks']) ? $_POST['remarks'] : '';
 
-			$data = [
-				'student_id'	=>	$student_id,
-				'class_id'	=>	$class_id,
-				'enrollment_date'	=>	$enrollment_date,
-				'deposit'	=>	$deposit,
-				'deposit_collected'	=>	$deposit_collected,
-				'remarks_deposit'	=>	$remarks_deposit,
-				'credit_value'	=>	$credit_value,
-				'extra_charges'	=>	$extra_charges,
-				'remarks'	=>	$remarks,
-				'created_at'	=>	$this->date,
-				'updated_at'	=>	$this->date,
-			];
+				$data = [
+					'student_id'	=>	$student_id,
+					'class_id'	=>	$class_id,
+					'enrollment_date'	=>	$enrollment_date,
+					'deposit'	=>	$deposit,
+					'deposit_collected'	=>	$deposit_collected,
+					'remarks_deposit'	=>	$remarks_deposit,
+					'credit_value'	=>	$credit_value,
+					'extra_charges'	=>	$extra_charges,
+					'remarks'	=>	$remarks,
+					'created_at'	=>	$this->date,
+					'updated_at'	=>	$this->date,
+				];
+				$this->db->insert('student_enrollment', $data);
+			}
 
-			$this->db->insert('student_enrollment', $data);
-		}
+			$reservation_date = !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '';
 
-		$reservation_date = !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '';
-
-		if($enrollment_type==1) {
+			if($enrollment_type==2) {
+				$data2 = [
+					'student_id'	=>	$student_id,
+					'status'	=>	$enrollment_type,
+					'created_at'	=>	$this->date,
+					'updated_at'	=>	$this->date,
+				];
+			}
+			else {
+				$data2 = [
+					'student_id'	=>	$student_id,
+					'class_id'	=>	$class_id,
+					'reservation_date'	=>	$reservation_date,
+					'status'	=>	$enrollment_type,
+					'created_at'	=>	$this->date,
+					'updated_at'	=>	$this->date,
+				];
+			}
+			if($old_status==2)
+			{
+				$this->db->where('student_id', $student_id);
+				$this->db->where('status', $old_status);
+				$this->db->update('student_to_class', $data2);
+				$this->db->trans_complete();
+			}
+			else {
+				$this->db->where('student_id', $student_id);
+				$this->db->where('class_id', $old_class_id);
+				$this->db->update('student_to_class', $data2);
+				$this->db->trans_complete();
+			}
 			
-			$data1 = [
-				'reservation_date'	=>	$reservation_date,
-				'status'	=>	$enrollment_type,
-				'updated_at'	=>	$this->date,
-			];
-		}
-		else {
-			$data1 = [
-				'status'	=>	$enrollment_type,
-				'updated_at'	=>	$this->date,
-			];
+
+			if ($this->db->trans_status() === false) {
+				$this->session->set_flashdata('error', MSG_ERROR);
+				return redirect('admin/students');
+			} else {
+				$this->session->set_flashdata('success', STUDENT . ' details has been updated successfully.');
+				return redirect('admin/students');
+			}
 		}
 
-		$data2 = [
-			'student_id'	=>	$student_id,
-			'class_id'	=>	$class_id,
-			'reservation_date'	=>	$reservation_date,
-			'status'	=>	$enrollment_type,
-			'created_at'	=>	$this->date,
-			'updated_at'	=>	$this->date,
-		];
-
-
-		$query = $this->db->get_where('student_to_class', ['student_id'	=>	$student_id, 'class_id'	=>	$class_id, 'status !='	=>	3]);
-		if($query->num_rows()>0) {
-			$this->db->where('student_id', $student_id);
-			$this->db->where('class_id', $class_id);
-			$this->db->update('student_to_class', $data1);
+		$student_id = explode(',', $student_id);
+		$student_exist_array = [];
+		foreach($student_id as $student)
+		{
+			$query = $this->db->get_where('student_to_class', ['student_id'	=>	$student, 'class_id'	=>	$class_id, 'status'	=>	3]);
+			if($query->num_rows()>0)
+			{
+				$student_exist_array[] = get_student_name_by_student_id($student);
+			}
 		}
-		else {
+		if(count($student_exist_array)>0)
+		{
+			$student_names = implode(',', $student_exist_array);
+			$this->session->set_flashdata('error', $student_names . ' already exist in class ' . $class_code);
+			return redirect('admin/students');
+		}
+		$this->db->trans_start();
+		foreach($student_id as $student) {
+			if($enrollment_type==3)
+			{
+				$enrollment_date = !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '';
+				$deposit = !empty($_POST['deposit']) ? $_POST['deposit'] : '';
+				$deposit_collected = !empty($_POST['deposit_collected']) ? $_POST['deposit_collected'] : '';
+				$remarks_deposit = !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '';
+				$credit_value = !empty($_POST['credit_value']) ? $_POST['credit_value'] : '';
+				$extra_charges = !empty($_POST['extra_charges']) ? $_POST['extra_charges'] : '';
+				$remarks = !empty($_POST['remarks']) ? $_POST['remarks'] : '';
+
+				$data = [
+					'student_id'	=>	$student,
+					'class_id'	=>	$class_id,
+					'enrollment_date'	=>	$enrollment_date,
+					'deposit'	=>	$deposit,
+					'deposit_collected'	=>	$deposit_collected,
+					'remarks_deposit'	=>	$remarks_deposit,
+					'credit_value'	=>	$credit_value,
+					'extra_charges'	=>	$extra_charges,
+					'remarks'	=>	$remarks,
+					'created_at'	=>	$this->date,
+					'updated_at'	=>	$this->date,
+				];
+
+				$this->db->insert('student_enrollment', $data);
+			}
+
+			$reservation_date = !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '';
+
+			if($enrollment_type==2) {
+				
+				$data2 = [
+					'student_id'	=>	$student,
+					'status'	=>	$enrollment_type,
+					'created_at'	=>	$this->date,
+					'updated_at'	=>	$this->date,
+				];
+			}
+			else {
+				$data2 = [
+					'student_id'	=>	$student,
+					'class_id'	=>	$class_id,
+					'reservation_date'	=>	$reservation_date,
+					'status'	=>	$enrollment_type,
+					'created_at'	=>	$this->date,
+					'updated_at'	=>	$this->date,
+				];
+			}
 			$this->db->insert('student_to_class', $data2);
 		}
 		$this->db->trans_complete();
@@ -299,10 +382,26 @@ class Students extends CI_Model
 
 	public function update($id)
 	{
+		$email = !empty($_POST['email']) ? $_POST['email'] : '';
+		$nric = !empty($_POST['nric']) ? $_POST['nric'] : '';
+		$username = !empty($_POST['username']) ? $_POST['username'] : null;
+
         $query = $this->db->get_where(DB_STUDENT, ['email'	=>	$email, 'student_id !='	=>	$id]);
         if($query->num_rows()>0)
         {
         	$this->session->set_flashdata('error', 'Email ID exists in our system.');
+			return redirect('admin/students/edit/'.$id);
+        }
+        $query = $this->db->get_where(DB_STUDENT, ['username'	=>	$username, 'student_id !='	=>	$id]);
+        if($query->num_rows()>0)
+        {
+        	$this->session->set_flashdata('error', 'Username exists in our system.');
+			return redirect('admin/students/edit/'.$id);
+        }
+        $query = $this->db->get_where(DB_STUDENT, ['nric'	=>	$nric, 'student_id !='	=>	$id]);
+        if($query->num_rows()>0)
+        {
+        	$this->session->set_flashdata('error', 'Nric exists in our system.');
 			return redirect('admin/students/edit/'.$id);
         }
 		if(isset($_POST['password']) && $_POST['password']!="")
@@ -372,11 +471,7 @@ class Students extends CI_Model
 		);
 
 		$this->db->trans_start();
-		if(send_archived_invoice($id)==false)
-		{
-			$this->session->set_flashdata('error', MSG_ERROR);
-			return redirect('admin/students');
-		}
+		send_archived_invoice($id);
 		$this->db->where('student_id', $id);
 		$this->db->update('student', $data);
 		
@@ -398,22 +493,10 @@ class Students extends CI_Model
 			'updated_at'   => date('Y-m-d H:i:s'),
 		);
 
-		$data1 = array(
-			'is_archive'   => 1,
-			'updated_at'   => date('Y-m-d H:i:s'),
-		);
-
 		$this->db->trans_start();
-		if(send_final_settlement_invoice($student_id)==false)
-		{
-			$this->session->set_flashdata('error', MSG_ERROR);
-			return redirect('admin/students');
-		}
+		send_final_settlement_invoice($student_id);
 		$this->db->where('student_id', $student_id);
 		$this->db->update('student_to_class', $data);
-
-		$this->db->where('student_id', $id);
-		$this->db->update('student', $data1);
 		
 		$this->db->trans_complete();
 

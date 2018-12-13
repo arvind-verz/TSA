@@ -70,6 +70,7 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+        $("select[name='class_code']").val('').trigger("change");$("select[name='class_month']").val('').trigger("change");
         $("body").on("click", "th.attendance", function() {
             var date = $(this).attr("data-date");
             var class_id = $("select[name='class_code'] option:selected").attr("data-id");
