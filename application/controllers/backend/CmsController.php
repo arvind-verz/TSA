@@ -32,7 +32,7 @@ class CmsController extends CI_Controller {
     	$file_name_placeholder = array_keys($_FILES);
         $image_file = $_FILES['logo']['name'];
         if($image_file) {
-        	$_POST['logo'] = upload_image_file($image_file, $file_name_placeholder[0], 250, 99, 'logo');
+        	$_POST['logo'] = upload_image_file($image_file, $file_name_placeholder[0], 250, 99);
         	$this->Cms_model->manage_logo_upload($_POST);
         }
         else
@@ -65,6 +65,7 @@ class CmsController extends CI_Controller {
         $data = array();
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(MENU, 'admin/manage-menu');
+        $this->breadcrumbs->push('Menu List', 'admin/manage-menu-list/' . $position);
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
         $data['page_title']  = MENU_MANAGE;
@@ -83,7 +84,9 @@ class CmsController extends CI_Controller {
 		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MENU', 'creates'); 
         $data_msg = array();
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(TUTOR, 'admin/tutors');
+        $this->breadcrumbs->push(MENU, 'admin/manage-menu');
+        $this->breadcrumbs->push('Menu List', 'admin/manage-menu-list/' . $position);
+        $this->breadcrumbs->push(CREATE, 'admin/add-menu-item/' . $position);
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
         $data_msg['page_title']  = MENU_MANAGE;
@@ -152,8 +155,8 @@ class CmsController extends CI_Controller {
 					'sort_order' => $req_sort_order
 				); 
 				$this->Cms_model->add_menu_item($data);
-                $this->session->set_flashdata('success_msg', 'Successfully added');
-				redirect(site_url("admin/manage-menu-list/".$position));
+                $this->session->set_flashdata('success', 'Menu ' . MSG_CREATED);
+				return redirect("admin/manage-menu-list/".$position);
             }
 		}else{
 
@@ -169,7 +172,7 @@ class CmsController extends CI_Controller {
 		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MENU', 'deletes'); 
         $data_msg = array();		
 		$this->Cms_model->del_menu_item($id);						
-		$this->session->set_flashdata('success_msg', 'Successfully Removed');
+		$this->session->set_flashdata('success', 'Menu ' . MSG_DELETED);
 		return redirect("admin/manage-menu-list/".$position);       
     }
 	
@@ -178,12 +181,15 @@ class CmsController extends CI_Controller {
         $data_msg = array();
 		
 		$error = FALSE;
-
+		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(MENU, 'admin/manage-menu');
+        $this->breadcrumbs->push('Menu List', 'admin/manage-menu-list/' . $position);
+        $this->breadcrumbs->push(EDIT, 'admin/edit-menu-item/' . $position);
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $get_result = $this->Cms_model->get_menu_item_details($id);
 		$details = $get_result->result_array();
         if (count($details) == 0) {
-			redirect(site_url("manage-menu-list/".$position));
-            exit;
+			return redirect("manage-menu-list/".$position);
         }
 
 		$data_msg['details'] = $details;
@@ -251,13 +257,11 @@ class CmsController extends CI_Controller {
 			);
 
 			$this->Cms_model->update_menu_item($data,  $id);
-			$this->session->set_flashdata('success_msg', 'Successfully updated.');		
-			redirect(site_url("admin/edit-menu-item/$position/$id"));
+			$this->session->set_flashdata('success', 'Menu ' . MSG_UPDATED);		
+			return redirect("admin/edit-menu-item/$position/" . $id);
         	}
 		}else{	
-  		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(MENU, 'admin/classes');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
+  		
         $data_msg['title']       = $this->title;
 		$data_msg['page_title']  = MENU_MANAGE;
 		$this->load->view('backend/include/header', $data_msg);
@@ -312,7 +316,8 @@ class CmsController extends CI_Controller {
 			{
 				$data_msg['error'] = $error = strip_tags(validation_errors());
 				$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-				$this->breadcrumbs->push(CMS_MANAGE, 'admin/classes');
+				$this->breadcrumbs->push(CMS_MANAGE, 'admin/manage-cms');
+				$this->breadcrumbs->push(CREATE, 'admin/add-manage');
 				$data_msg['breadcrumbs'] = $this->breadcrumbs->show();
 				$data_msg['title']       = $this->title;
 				$data_msg['page_title']  = CMS;
@@ -323,28 +328,17 @@ class CmsController extends CI_Controller {
 				$this->load->view('backend/include/footer');
 			}
 			else {
-              $post_data = $_POST; $error = '';
-			  if($_FILES['image_name']['tmp_name']!=''){				  
-				  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){
-					  $error = "Invalid Banner Image.";  
-				  }else{
-					   $config = array(
-						'source' => 'image_name', 
-						'temp' => 'temp',
-						'resize' => array(array('height' => '', 'width' => '', 'save' => 'assets/upload/cms'))
-						);						
-						$image_name_name = $this->resize_image($config);
-					}				  
-				  }else{
-					  $image_name_name = '';
-				  }
-				  
-				  
+			  $file_name_placeholder = array_keys($_FILES);
+		        $image_file = $_FILES['cms']['name'];
+		        if($image_file) {
+        		$_POST['cms'] = upload_image_file($image_file, $file_name_placeholder[0], 1500, 350);
+        	}
+				  $post_data = $_POST; $error = '';
 				  
 			  $data = array(
 						'url_name' => preg_replace("/^'|[^A-Za-z0-9\'-]|'$/", '',$post_data['url_name']),					
 						'template' => $post_data['template'],
-						'image_name' => $image_name_name,	
+						'image_name' => $post_data['cms'],	
 						'banner_heading' => isset($post_data['banner_heading']) ? $post_data['banner_heading'] : '',					
 						'page_heading' => $post_data['page_heading'],
 						'subject_id' => ($post_data['subject_id']!="") ? $post_data['subject_id'] : '',
@@ -358,12 +352,13 @@ class CmsController extends CI_Controller {
                     ); 
                     $page_id = $this->Cms_model->add_cms($data);
 					
-                $this->session->set_flashdata('success_msg', 'Successfully added');
-            	redirect(site_url("admin/manage-cms"));
+                $this->session->set_flashdata('success', 'Page ' . MSG_CREATED);
+            	return redirect("admin/manage-cms");
         	}
 		}else{		
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(CMS, 'admin/classes');
+        $this->breadcrumbs->push(CMS_MANAGE, 'admin/manage-cms');
+				$this->breadcrumbs->push(CREATE, 'admin/add-cms');
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
 		$data_msg['page_title']  = CMS;
@@ -389,8 +384,8 @@ class CmsController extends CI_Controller {
 		
 		$this->Cms_model->del_cms($id);			
 		$this->Cms_model->del_menu_item($id);						
-		$this->session->set_flashdata('success_msg', 'Successfully Removed');		
-		redirect(site_url("manage-cms"));
+		$this->session->set_flashdata('success', 'Page' . MSG_DELETED);		
+		return redirect("admin/manage-cms");
        
     }
 	
@@ -398,6 +393,10 @@ class CmsController extends CI_Controller {
 		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CMS', 'edits');
         $data_msg = array();
 $data_msg['subjects'] = $this->Cms_model->get_subjects();
+$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(CMS_MANAGE, 'admin/manage-cms');
+				$this->breadcrumbs->push(EDIT, 'admin/edit-cms');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['meta_title'] = EDIT.' '.CMS;
 		$data_msg['page_title']  = EDIT.' '.CMS;
 		$data_msg['cms_id']  =$id;
@@ -433,7 +432,7 @@ $data_msg['subjects'] = $this->Cms_model->get_subjects();
 		$get_result = $this->Cms_model->get_cms_details($id);
 		$details = $get_result->result_array();
         if (count($details) == 0) {			
-				redirect(site_url("admin/manage-cms"));
+				return redirect("admin/manage-cms");
         }
 		$data_msg['details'] = $details;
 		
@@ -448,35 +447,21 @@ $data_msg['subjects'] = $this->Cms_model->get_subjects();
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
 			}else {           
-             $post_data = $_POST;  
-			 if(isset($_FILES['image_name']['tmp_name']) && $_FILES['image_name']['tmp_name']!=''){
-				  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){
-					   $error = 'Invalid Banner Image.';
-				  }else{
-					  	$file = MAIN_SITE_AB_UPLOAD_PATH.'pagebanner/original/'.$details[0]['image_name'];
-						if(is_file($file)){unlink($file);}
-						$file = MAIN_SITE_AB_UPLOAD_PATH.'pagebanner/thumb/'.$details[0]['image_name'];
-						if(is_file($file)){unlink($file);}
-						list($width, $height) = getimagesize($_FILES['image_name']['tmp_name']);
-					    $config = array(
-						'source' => 'image_name', 
-						'temp' => 'temp',
-						'resize' => array(
-						array('height' => $height, 'width' => $width, 'save' => 'pagebanner/original/'),
-						array('height' => 45, 'width' => 200, 'save' => 'pagebanner/thumb/')
-						)
-						);						
-						$image_name_name = $this->resize_image($config);
-					}				  
-				  }else{
-					  $image_name_name = $details[0]['image_name'];
-				  }
+              
+			 $file_name_placeholder = array_keys($_FILES);
+            $image_file = $_FILES['cms']['name'];
+            if($image_file) {
+                $_POST['cms'] = upload_image_file($image_file, $file_name_placeholder[0], 200, 200);
+            }
+            else {
+            	$_POST['cms'] = $_POST['cms_exist'];
+            }
 				
-
+$post_data = $_POST; 
 				     
              $data = array(
 					'url_name' => preg_replace("/^'|[^A-Za-z0-9\'-]|'$/", '',$post_data['url_name']),
-					'image_name' => $image_name_name,
+					'image_name' => $post_data['cms'],
 					'template' => $post_data['template'],	
 					'banner_heading' => isset($post_data['banner_heading'])?$post_data['banner_heading']:'',								
 					'page_heading' => $post_data['page_heading'],
@@ -491,15 +476,10 @@ $data_msg['subjects'] = $this->Cms_model->get_subjects();
 				); 
 				
 				$this->Cms_model->update_cms($data,  $id);
-                $this->session->set_flashdata('success_msg', 'Successfully updated.');				
-				redirect(site_url("admin/edit-cms/$id"));
+                $this->session->set_flashdata('success', 'Page ' . MSG_UPDATED);				
+				return redirect("admin/edit-cms/" . $id);
         	}
 		}else{
-			
-		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(CMS, 'admin/cms');
-		
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
 		$data_msg['cms_id']       = $id;
 		$data_msg['page_title']  = CMS_MANAGE;

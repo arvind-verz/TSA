@@ -41,6 +41,7 @@ class GalleryController extends CI_Controller {
 	
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(GALLERY, 'admin/manage-gallery                              ');
+        $this->breadcrumbs->push(CREATE, 'admin/add-gallery');
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
         $data_msg['page_title']  = GALLERY;
@@ -127,7 +128,7 @@ class GalleryController extends CI_Controller {
 							'content' => $post_data['content']
 						); 
 					$this->Gallery->add_gallery($data);	
-					redirect(site_url("admin/manage-gallery"));
+					return redirect("admin/manage-gallery");
 				}
 			}
 		}else{
@@ -144,6 +145,7 @@ class GalleryController extends CI_Controller {
         $data_msg = array();
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(GALLERY, 'admin/manage-gallery                              ');
+        $this->breadcrumbs->push(EDIT, 'admin/edit-gallery');
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
         $data_msg['page_title']  = GALLERY;
@@ -151,7 +153,7 @@ class GalleryController extends CI_Controller {
         $get_result = $this->Gallery->get_gallery_details($id);
         $details = $get_result->result_array();
 		
-		if (count($details) == 0) { redirect(site_url('admin/manage-gallery'));}
+		if (count($details) == 0) { return redirect('admin/manage-gallery');}
 		
 		$data_msg['details'] = $details;        
 		$data_msg['meta_title'] = "Edit Gallery";
@@ -248,8 +250,8 @@ class GalleryController extends CI_Controller {
 						);
 						}
 					$this->Gallery->update_page_cms($data,  $id);	
-					$this->session->set_flashdata('success_msg', 'Successfully updated.');
-					redirect(site_url("admin/edit-gallery/".$id));
+					$this->session->set_flashdata('success', 'Gallery ' . MSG_UPDATED);
+					return redirect("admin/manage-gallery");
 				}
 			}
 		}else{
@@ -266,8 +268,8 @@ class GalleryController extends CI_Controller {
 		
         $data_msg = array();		
 		$this->Gallery->del_gallery($id);						
-		$this->session->set_flashdata('success_msg', 'Successfully Removed');
-		redirect(site_url("admin/manage-gallery"));
+		$this->session->set_flashdata('success', 'Gallery' . MSG_DELETED);
+		return redirect("admin/manage-gallery");
     }
 	
 	

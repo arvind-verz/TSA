@@ -7,10 +7,10 @@
    <?php  ?>
    <li <?php if($selectMenu1=='Y'){echo 'class="selected"';}elseif($url==$val['url_name']){echo 'class="selected"';}?>>
     <?php if($val['link_type']=='external'){?>
-      <a href="<?php if($val['external_url']=='#'){ echo 'javascript:void(0);';}else{ echo $val['external_url'];}?>" <?php if($val['link_target']=='new_tab'){echo 'target="_blank"';}?>><?php if($val['menu_title']=='My Account' && $this->session->has_userdata('student_credentials')) {echo $val['menu_title'];} elseif($val['menu_title']!='My Account') {echo $val['menu_title'];}?></a>
+      <a href="<?php if($val['external_url']=='#'){ echo 'javascript:void(0);';}else{ echo $val['external_url'];}?>" <?php if($val['link_target']=='new_tab'){echo 'target="_blank"';}?>><?php echo $val['menu_title'];?></a>
     <?php }elseif($val['link_type']=='internal'){?>
-      <a href="<?php if($val['url_name']=='login' && $this->session->has_userdata('student_credentials')) {echo site_url('logout');} else {echo site_url($val['url_name']);}?>" <?php if($val['link_target']=='new_tab'){echo 'target="_blank"';}?> 
-      <?php if($selectMenu1=='Y'){echo 'class="selected"';}elseif($url==$val['url_name']){echo 'class="selected"';}?>><?php if($val['menu_title']=='Login' && $this->session->has_userdata('student_credentials')) {echo 'Logout';}else {echo $val['menu_title'];}?></a>
+      <a href="<?php echo site_url($val['url_name']);?>" <?php if($val['link_target']=='new_tab'){echo 'target="_blank"';}?> 
+      <?php if($selectMenu1=='Y'){echo 'class="selected"';}elseif($url==$val['url_name']){echo 'class="selected"';}?>><?php echo $val['menu_title'];?></a>
     <?php }?>
     <?php if(count($MenuSub)>0){?>
       <ul>

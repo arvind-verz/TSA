@@ -16,7 +16,8 @@ class TestimonialController extends CI_Controller {
 		$data_msg = array();	        
         $data_msg['meta_title'] = "Banner Manager";		
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(TESTIMONIAL, 'admin/manage-testimonial                              ');
+        $this->breadcrumbs->push(TESTIMONIAL, 'admin/manage-testimonial');
+
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
         $data_msg['page_title']  = TESTIMONIAL;
@@ -40,7 +41,8 @@ class TestimonialController extends CI_Controller {
         $data_msg = array();
 	
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(TESTIMONIAL, 'admin/manage-testimonial                              ');
+        $this->breadcrumbs->push(TESTIMONIAL, 'admin/manage-testimonial');
+        $this->breadcrumbs->push(CREATE, 'admin/add-testimonial');
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
         $data_msg['page_title']  = TESTIMONIAL;
@@ -118,8 +120,9 @@ class TestimonialController extends CI_Controller {
 							'status' => $post_data['status'],
 							'content' => $post_data['content']
 						); 
-						$this->Testimonial->add_testimonial($data);	
-					redirect(site_url("admin/manage-testimonial"));
+						$this->Testimonial->add_testimonial($data);
+						$this->session->set_flashdata('success', 'Testimonial ' . MSG_CREATED);		
+					return redirect("admin/manage-testimonial");
 				}
 			}
 		}else{
@@ -135,7 +138,8 @@ class TestimonialController extends CI_Controller {
 		
         $data_msg = array();
 		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
-        $this->breadcrumbs->push(TESTIMONIAL, 'admin/manage-testimonial                              ');
+        $this->breadcrumbs->push(TESTIMONIAL, 'admin/manage-testimonial');
+        $this->breadcrumbs->push(EDIT, 'admin/edit-testimonial' . $id);
         $data_msg['breadcrumbs'] = $this->breadcrumbs->show();
         $data_msg['title']       = $this->title;
         $data_msg['page_title']  = TESTIMONIAL;
@@ -143,7 +147,7 @@ class TestimonialController extends CI_Controller {
         $get_result = $this->Testimonial->get_testimonial_details($id);
         $details = $get_result->result_array();
 		
-		if (count($details) == 0) { redirect(site_url('admin/manage-testimonial'));}
+		if (count($details) == 0) { return redirect('admin/manage-testimonial');}
 		
 		$data_msg['details'] = $details;        
 		$data_msg['meta_title'] = "Edit Testimonial";
@@ -241,8 +245,8 @@ class TestimonialController extends CI_Controller {
 						);
 						}
 					$this->Testimonial->update_page_cms($data,  $id);	
-					$this->session->set_flashdata('success_msg', 'Successfully updated.');
-					redirect(site_url("admin/edit-testimonial/".$id));
+					$this->session->set_flashdata('success', 'Testimonial ' . MSG_UPDATED);
+					return redirect("admin/manage-testimonial");
 				}
 			}
 		}else{
@@ -259,8 +263,8 @@ class TestimonialController extends CI_Controller {
 		
         $data_msg = array();		
 		$this->Testimonial->del_testimonial($id);						
-		$this->session->set_flashdata('success_msg', 'Successfully Removed');
-		redirect(site_url("admin/manage-testimonial"));
+		$this->session->set_flashdata('success', 'Testimonial' . MSG_DELETED);
+		return redirect("admin/manage-testimonial");
     }
 	
 	

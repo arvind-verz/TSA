@@ -4,6 +4,7 @@
         <h1>
         <?php print_r($page_title);?>
         </h1>
+        <?php print_r($breadcrumbs);?>
         <?php //echo '<pre>'; print_r($classes); echo '</pre>';?>
     </section>
     <?php 

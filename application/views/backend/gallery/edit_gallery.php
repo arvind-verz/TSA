@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-            <?php echo form_open_multipart('admin/edit-testimonial/'.$details[0]['id']); ?>
+            <?php echo form_open_multipart('admin/edit-gallery/'.$details[0]['id']); ?>
              <div class="box-body">
                 <div class="form-group">
                   <label for="name">Title : <span>*</span></label>
@@ -26,7 +26,7 @@
                   <textarea rows="4" class="form-control" cols="90" name="content" id="smallBody" ><?php echo $details[0]['content'];?></textarea>
                 </div>
                 <?php if($details[0]['image_name']!=""):?>
-                <p><img src="<?php echo base_url('assets/upload/gallery/thumb/').$details[0]['image_name']; ?>" /></p>
+                <p><img src="<?php echo base_url('assets/upload/gallery/thumb/').$details[0]['image_name']; ?>" width="100px" /></p>
                 <?php endif;?>
                 <div class="form-group">
                   <label for="location">Pics (1400 X 500) : <span>*</span></label>
