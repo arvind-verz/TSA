@@ -139,24 +139,32 @@ class Attendance extends CI_Model
         $old_class_code = $_GET['old_class_code'];
         $old_class_id = get_class_id_by_class_code($old_class_code);
         $class_id = get_class_id_by_class_code($class_code);
-
+        $student_exist_array = [];
         $this->db->trans_start();
         foreach($student_id as $id) {
-            $query = $this->db->get_where('student_to_class', ['class_id' => $class_id, 'student_id'    =>  $id]);
-            if($query->num_rows()<1) {
-                if(send_class_transfer_invoice($id, $old_class_id)==false)
-                {
-                    $this->session->set_flashdata('error', MSG_ERROR);
-                    return 'admin/attendance';
-                }
-                $data = [
-                    'class_id' =>   $class_id,
-                ];
-                $this->db->where('student_id', $id);
-                $this->db->where('class_id', $class_id);
-                $this->db->update('student_to_class', $data);
-                
+            $query = $this->db->get_where('student_to_class', ['class_id' => $old_class_id, 'student_id'    =>  $id, 'status'   =>  3]);
+            if($query->num_rows()>0) {
+                $student_exist_array[] = get_student_name_by_student_id($id);
             }
+        }
+        if(count($student_exist_array)>0)
+        {
+            $student_names = implode(',', $student_exist_array);
+            $this->session->set_flashdata('error', $student_names . ' already exist in class ' . $class_code);
+            return redirect('admin/students');
+        }
+        foreach($student_id as $id) {
+            send_class_transfer_invoice($id, $old_class_id);
+            $data = [
+                'class_id' =>   $class_id,
+            ];
+            $this->db->where('student_id', $id);
+            $this->db->where('class_id', $old_class_id);
+            $this->db->update('student_to_class', $data);
+
+            $this->db->where('student_id', $id);
+            $this->db->where('class_id', $old_class_id);
+            $this->db->update('student_enrollment', $data);
         }
         $this->db->trans_complete();
 

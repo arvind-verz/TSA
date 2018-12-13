@@ -8,19 +8,6 @@
 		</div><?php */?>
         
         <!-- Section -->
-		<div class="fullcontainer" id="HomeAbout">
-			<div class="container">
-				<div class="inner-container-lg pb40">
-					<div class="animatedParent" data-sequence="300">
-						<div class="title-holder text-center">
-							<h1 class="title2  txt-yellow animated growIn" data-id="1">About TSA</h1>
-							<h2 class="title1 txt-dark pcentered sm animated growIn" data-id="2"><span>Here</span> at TSA, <span>we</span> recognize the needs of <span>each</span> and every <span>student.</span></h2>
-						</div>
-						<p class="lead pcentered sm animated growIn" data-id="3">The study of science helps us understand the world around us, but at times, the simplest of questions may have the most complex answers.</p>
-					</div>
-				</div>
-			</div>
-		</div>
 		<!-- Section END --> 
 		<!-- Section -->
 		<div class="fullcontainer full-mx">

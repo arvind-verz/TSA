@@ -87,10 +87,22 @@ function get_class_size($class_id)
 function enrollment_decision($class_id, $student_id)
 {
     $ci         = &get_instance();
-    $query = $ci->db->get_where('student_enrollment', ['class_id'    =>  $class_id, 'student_id' =>  $student_id]);
+    $query = $ci->db->get_where('student_enrollment', ['class_id'    =>  $class_id, 'student_id' =>  $student_id, 'status'  =>  3]);
     
     if($query->num_rows()>0) {
         return true;
+    }
+}
+
+function get_student_name_by_student_id($student_id)
+{
+    $ci = &get_instance();
+
+    $query = $ci->db->get_where(DB_STUDENT, ['student_id'   =>  $student_id]);
+    $result = $query->row();
+    if($result)
+    {
+        return $result->name;
     }
 }
 
@@ -109,7 +121,7 @@ function get_enrollment_type_popup_content_update($student_id, $class_id)
         $extra_charges = $result->extra_charges;
         $remarks = $result->remarks;
         ?>
-        <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="<?php echo $enrollment_date; ?>" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="<?php echo $deposit; ?>" ></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" <?php if($deposit_collected==1) {echo 'checked';} ?> />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" <?php if($deposit_collected==0) {echo 'checked';} ?> />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input  type="text" name="remarks_deposit" class="form-control" value="<?php echo $remarks_deposit; ?>"></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value="<?php echo $credit_value; ?>"></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges"  class="form-control" value="<?php echo $extra_charges; ?>"></div><div class="form-group"><label for="">Remarks</label><input type="text" name="remarks" class="form-control" value="<?php echo $remarks; ?>"></div>
+        <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="<?php echo $enrollment_date; ?>" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="<?php echo $deposit; ?>" ></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected"  value="1" type="radio" <?php if($deposit_collected==1) {echo 'checked';} ?> />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" <?php if($deposit_collected==0) {echo 'checked';} ?> />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input  type="text" name="remarks_deposit" class="form-control" value="<?php echo $remarks_deposit; ?>"></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value="<?php echo $credit_value; ?>"></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges"  class="form-control" value="<?php echo $extra_charges; ?>"></div><div class="form-group"><label for="">Remarks</label><input type="text" name="remarks" class="form-control" value="<?php echo $remarks; ?>"></div>
         <?php
     }
 }
@@ -245,6 +257,22 @@ function get_logo()
     $query  = $ci->db->get('logo');
     $result = $query->row();
     return $result;
+}
+
+function get_student_remark($student_id, $class_id)
+{
+    $ci = &get_instance();
+
+    if($student_id && $class_id)
+    {
+        $query = $ci->db->get_where('student_enrollment', ['student_id' =>  $student_id, 'class_id' =>  $class_id]);
+        $result = $query->row();
+        if($result)
+        {
+            return $result->remarks;
+        }
+    }
+    return "-";
 }
 
 function miss_class_request($class_id, $reason, $date_of_absence)
@@ -437,6 +465,19 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             return $result;
         }
         return false;
+    }
+
+    function get_credit_value($student_id, $class_id)
+    {
+        $ci = &get_instance();
+
+        $query = $ci->db->get_where("student_enrollment", ['student_id' =>  $student_id, 'class_id' =>  $class_id]);
+        $result = $query->row();
+        if($result)
+        {
+            return $result->credit_value;
+        }
+        return 0;
     }
 
     function get_student_invoices()
@@ -1096,7 +1137,8 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     $ci = &get_instance();
 
                     if ($id) {
-                        $query = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0, 'is_active' => 1, 'id' => $id]);
+                        $query = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0, 'is_active' => 1, 'student_id' => $id]);
+                        $result = $query->row();
                     } else {
                         $ci->db->select('*, student.id as sid, student.student_id');
                         $ci->db->from(DB_STUDENT);
@@ -1104,10 +1146,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id', 'left');
                         $ci->db->where([DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
                         $query = $ci->db->get();
+                        $result = $query->result();
                     //return $ci->db->last_query();
                     }
-                    if ($query) {
-                        return $query->result();
+                    if ($result) {
+                        return $result;
                     }
                 }
 
@@ -1190,10 +1233,10 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     {
                         ?>
                         <div class="form-group">
-                            <label>Reservation Date : <?php echo date('d M, Y', strtotime($result->reservation_date)); ?></label>
+                            <label>Reservation Date : <?php if($result->reservation_date && strtotime($result->reservation_date)>1) {echo date('d M, Y', strtotime($result->reservation_date)); }else {echo '-';} ?></label>
                         </div>
                         <div class="form-group">
-                            <label>Enrollment Date : <?php echo date('d M, Y', strtotime($result->enrollment_date)); ?></label>
+                            <label>Enrollment Date : <?php if($result->enrollment_date && strtotime($result->enrollment_date)>1) {echo date('d M, Y', strtotime($result->enrollment_date)); }else {echo '-';} ?></label>
                         </div>
                         <div class="form-group">
                             <label>Deposit : <?php echo $result->deposit; ?></label>
@@ -1419,7 +1462,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         foreach ($result as $row) {
                             $ci->db->select('*, DATE(invoice_date) as invoice_date');
                             $ci->db->from(DB_INVOICE);
-                            $ci->db->where(['student_id'    => $row->student_id, 'class_id'    =>  $row->class_id]);
+                            $ci->db->where(['student_id'    => $row->student_id, 'class_id'    =>  $row->class_id, 'type'   =>  'first_month_invoice']);
                             $query = $ci->db->get();
                             if ($query->num_rows() > 0) {
                                 send_rest_month_invoice($row->student_id, $row->class_id);
@@ -1459,7 +1502,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
 
-                        $query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y')  =  DATE_FORMAT(NOW(), '%d-%m-%Y')");
+                        $query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y %H:%i')  =  DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i')");
                         $result          = $query->row();
                         if(!$result) {
                             return false;
@@ -1501,12 +1544,12 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         
                             if($credit_value>0) {
                                 if($invoice_amount<0) {
-                                    $credit_amount = abs($invoice_amount);
-                                    $invoice_amount = 0;
+                                    $credit_amount = $invoice_amount;
+                                    //$invoice_amount = 0;
                                 }
-                                else {
+                                /*else {
                                     $credit_amount = 0;
-                                }
+                                }*/
                                 $ci->db->where('student_id', $student_id);
                                 $ci->db->where('class_id', $class_id);
                                 $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
@@ -1605,11 +1648,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                                 if($invoice_amount<0) {
                                     $credit_amount = abs($invoice_amount);
-                                    $invoice_amount = 0;
+                                    //$invoice_amount = 0;
                                 }
-                                else {
+                                /*else {
                                     $credit_amount = 0;
-                                }
+                                }*/
                                 $ci->db->where('student_id', $student_id);
                                 $ci->db->where('class_id', $class_id);
                                 $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
@@ -1748,11 +1791,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                             if($invoice_amount<0) {
                                 $credit_amount = abs($invoice_amount);
-                                $invoice_amount = 0;
+                                //$invoice_amount = 0;
                             }
-                            else {
+                            /*else {
                                 $credit_amount = 0;
-                            }
+                            }*/
                             $ci->db->where('student_id', $student_id);
                             $ci->db->where('class_id', $class_id);
                             $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
@@ -1891,11 +1934,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                             if($invoice_amount<0) {
                                 $credit_amount = abs($invoice_amount);
-                                $invoice_amount = 0;
+                                //$invoice_amount = 0;
                             }
-                            else {
+                            /*else {
                                 $credit_amount = 0;
-                            }
+                            }*/
                             $ci->db->where('student_id', $student_id);
                             $ci->db->where('class_id', $class_id);
                             $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
@@ -2017,11 +2060,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                             if($invoice_amount<0) {
                                 $credit_amount = abs($invoice_amount);
-                                $invoice_amount = 0;
+                                //$invoice_amount = 0;
                             }
-                            else {
+                            /*else {
                                 $credit_amount = 0;
-                            }
+                            }*/
                             $ci->db->where('student_id', $student_id);
                             $ci->db->where('class_id', $class_id);
                             $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
@@ -2116,7 +2159,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $ci = &get_instance();
 
                         $invoice__generation_date = [];
-                        $date = date('Y-m-d H:i:s');
+                        $date = date('Y-m-d');
                         $query = $ci->db->get_where(DB_BILLING);
                         $result          = $query->result();
                         foreach($result as $row) {

@@ -89,7 +89,7 @@ class StudentController extends CI_Controller
             [
                 'field' => 'nric',
                 'label' => 'NRIC',
-                'rules' => 'required|is_unique[student.nric]',
+                'rules' => 'trim|required|is_unique[student.nric]|matches[username]',
             ],
             [
                 'field' => 'email',
@@ -99,7 +99,7 @@ class StudentController extends CI_Controller
             [
                 'field' => 'username',
                 'label' => 'Username',
-                'rules' => 'required|is_unique[student.username]',
+                'rules' => 'trim|required|is_unique[student.username]',
             ],
             [
                 'field' => 'parent_email',
@@ -116,7 +116,6 @@ class StudentController extends CI_Controller
         $this->form_validation->set_rules($config);
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('error', validation_errors());
             $this->create();
         } else {
             $file_name_placeholder = array_keys($_FILES);
@@ -154,7 +153,7 @@ class StudentController extends CI_Controller
         $data['title']       = $this->title;
         $data['page_title']  = STUDENT . " <small> " . EDIT . ' #' . $id . " </small>";
         $data['crud_id']     = $id;
-        $data['student']     = $this->students->get_student($id);
+        $data['student']     = get_student($id);
         $data['student_names'] = get_student_names_with_nric();
 
         $this->load->view('backend/include/header', $data);
@@ -178,7 +177,7 @@ class StudentController extends CI_Controller
             [
                 'field' => 'nric',
                 'label' => 'NRIC',
-                'rules' => 'required',
+                'rules' => 'trim|required|matches[username]',
             ],
             [
                 'field' => 'email',
@@ -188,7 +187,7 @@ class StudentController extends CI_Controller
             [
                 'field' => 'username',
                 'label' => 'Username',
-                'rules' => 'required',
+                'rules' => 'trim|required',
             ],
             [
                 'field' => 'parent_email',
@@ -204,7 +203,7 @@ class StudentController extends CI_Controller
 
         $this->form_validation->set_rules($config);
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('error', validation_errors());
+            //$this->session->set_flashdata('error', validation_errors());
             $this->edit($id);
         } else {
             

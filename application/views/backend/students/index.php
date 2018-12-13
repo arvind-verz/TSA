@@ -108,8 +108,10 @@
                                 <?php
                                 if(count($students)) {
                                 foreach($students as $student) {
+                                    $credit_value = 0;
+                                    if($student->status==3) {$credit_value = get_credit_value($student->student_id, $student->class_id);}
                                 ?>                                
-                                <tr class="<?php if(has_enrollment_content($student->student_id, $student->class_id, 'depo_collected')=='No') {echo 'bg-danger';} ?>">
+                                <tr class="<?php if(has_enrollment_content($student->student_id, $student->class_id, 'depo_collected')=='No' || $credit_value<0) {echo 'bg-danger';} ?>">
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
                                     <td><input type="hidden" name="student_id_ref" value="<?php echo $student->student_id; ?>">
                                 <input type="hidden" name="class_id_ref" value="<?php echo $student->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id" value="<?php echo $student->student_id;?>"/></td>
@@ -118,7 +120,7 @@
                                     <td><?php echo $student->email;?></td>
                                     <td><?php echo isset($student->username) ? $student->username : '-' ?></td>
                                     <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
-                                    <td><?php echo isset($student->class_code) ? $student->class_code : '-' ?></td>
+                                    <td><?php echo get_class_code_by_class($student->class_id); ?></td>
                                     <td><?php echo isset($student->gender) ? ($student->gender==0) ? 'Male' : 'Female' : '-' ?></td>
                                     <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
                                     <td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>
@@ -128,7 +130,7 @@
                                     <td><?php $siblings = json_decode($student->siblings);
                                     if($siblings) {foreach($siblings as $sibling) {echo $sibling . ', ';}} ?></td>
                                     <td><?php echo get_enrollment_status($student->status); ?></td>
-                                    <td><?php echo isset($student->remark) ? $student->remark : '-' ?></td>
+                                    <td><?php echo get_student_remark($student->student_id, $student->class_id); ?></td>
                                     <td>
                                         <div class="form-group">
                                             <select name="action" id="action" class="form-control select2 action" style="width: 200px;">
@@ -136,9 +138,9 @@
                                                 <option name="Edit" value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
                                                 <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
                                                 <option name="final_settlement" value="<?php echo base_url();?>index.php/admin/students/final_settlement/<?php echo $student->student_id;?>">Final Settlement</option>
-                                                <option value="view_all_details" name="view_all_details">View all details</option>
+                                                <option value="view_all_details" name="view_all_details" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">View all details</option>
                                                 <?php if($student->status!='') { ?>
-                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>">Edit Class</option>
+                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">Edit Class</option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -264,6 +266,9 @@
                     <div id="dis_content"></div>
                 </div>
                 <div class="modal-footer">
+                    <input type="hidden" name="store_type" id="store_type" value="" />
+                    <input type="hidden" name="old_class_id" id="class_id" value="" />
+                    <input type="hidden" name="enrollment_status" id="enrollment_status" value="" />
                     <input type="hidden" name="student_id" id="student_id" value="" />
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-default">Submit</button>
@@ -391,22 +396,28 @@ $(document).ready(function() {
     $(".add_class").click(function () {
         $("select[name='enrollment_type']").val('').trigger("change");
         $("#dis_content").html('');
-        if($('input.checkbox:checked').length==1){
-            var val = $("input.checkbox:checked").val();
-            $("#student_id").val(val);
+        if($('input.checkbox:checked')){
+            var student_id = [];
+
+            $("input.checkbox:checked").each(function() {
+                student_id.push($(this).val());
+            });
+            $("#student_id").val(student_id);
+            $("#store_type").val('insert');
             $("#myModal").modal();
-        }
-        else if($('input.checkbox:checked').length>1) {
-            alert("Select one student to proceed.");
         }
         else
         {
-            alert('Please make atleast one selection.');
+            alert('Please make selection.');
         }
     });
 
     $(".action").on('change', function(){
         var attrname=$(this).find('option:selected').attr("name");
+        var student_id = $(this).find("option:selected").attr("data-id");
+        var class_id = $(this).find("option:selected").attr("data-class");
+        var enrollment_status = $(this).find("option:selected").attr("data-status");
+            //alert(enrollment_status);
         if(attrname=='Archive')
         {
         var archive=confirm("Are you sure you want to archive this student?");
@@ -429,8 +440,7 @@ $(document).ready(function() {
         }
         else if(attrname=='view_all_details')
         {
-            var student_id = $(this).parents("tbody").find("input[name='student_id_ref']").val();
-            var class_id = $(this).parents("tbody").find("input[name='class_id_ref']").val();
+            
             $.ajax({
             type: 'GET',
             url: '<?php echo site_url('admin/students/get_view_all_contents'); ?>',
@@ -447,22 +457,27 @@ $(document).ready(function() {
         }
         else if(attrname=='edit_class')
         {
-            var student_id = $(this).parents("tbody").find("input[name='student_id_ref']").val();
-            var class_id = $(this).parents("tbody").find("input[name='class_id_ref']").val();
             $("input#student_id").val(student_id);
             $("input#class_id").val(class_id);
-            $("#myModalEditClass").modal('show');
-            $.ajax({
-                type: 'GET',
-                url: '<?php echo site_url('admin/students/get_enrollment_type_popup_content_update'); ?>',
-                data: 'class_id=' + class_id + '&student_id=' + student_id,
-                async: false,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    $("#dis_content1").html(data);
-                }
-            });
+            $("#store_type").val('update');
+
+            if(enrollment_status==3) {
+                $("#myModalEditClass").modal('show');
+                $.ajax({
+                    type: 'GET',
+                    url: '<?php echo site_url('admin/students/get_enrollment_type_popup_content_update'); ?>',
+                    data: 'class_id=' + class_id + '&student_id=' + student_id,
+                    async: false,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        $("#dis_content1").html(data);
+                    }
+                });
+            }
+            else {
+                $("#myModal").modal('show');
+            }
         }
         $(this).val('');
     });
