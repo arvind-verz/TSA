@@ -4,6 +4,7 @@
         <h1>
         <?php print_r($page_title);?>
         </h1>
+        <?php print_r($breadcrumbs);?>
         <?php //echo '<pre>'; print_r($classes); echo '</pre>';?>
     </section>
     <?php 
@@ -16,7 +17,7 @@
             <div class="col-lg-12">
                 <div class="box">
                     
-         <?php echo form_open('admin/add-cms'); ?>
+         <?php echo form_open_multipart('admin/add-cms'); ?>
             <div class="box-body">
               <div class="form-group">
                 <label for="page_heading" >Page Title  : <span>*</span></label>
@@ -64,7 +65,7 @@
               
               <div class="form-group">
                 <label for="location">Banner (1400 X 350) </label>
-                <input type="file" name="image_name" id="image_name" value="">
+                <input type="file" name="cms" id="image_name" value="">
               </div>
               <div class="form-group">
                 <label for="banner_heading" >Other Content</label>

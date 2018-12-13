@@ -4,6 +4,7 @@
     <h1>
     <?php print_r($page_title);?>
     </h1>
+    <?php print_r($breadcrumbs);?>
   <?php //echo '<pre>'; print_r($classes); echo '</pre>';?>
 </section>
 <?php
@@ -62,12 +63,13 @@ $this->load->view('backend/include/messages');  ?>
           </div>
           
           <?php if($details[0]['image_name']!=''){?>
-          <p><img src="<?php echo base_url().'assets/upload/pagebanner/thumb/'.$details[0]['image_name']; ?>" /></p>
+          <p><img src="<?php echo base_url('assets/files/cms/' . $details[0]['image_name']); ?>" width="100px" /></p>
           <?php }?>
           <?php //if($details[0]['id']!=1){?>
           <div class="form-group">
             <label for="location">Banner (1400 X 350) </label>
-            <input type="file" name="image_name" id="image_name" value="<?php echo $details[0]['image_name'];?>">
+            <input type="file" name="cms" id="image_name" value="">
+            <input type="hidden" name="cms_exist" value="<?php echo $details[0]['image_name']; ?>">
           </div>
           <?php //}?>
           <div class="form-group">
