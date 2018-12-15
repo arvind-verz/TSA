@@ -38,7 +38,9 @@
                             <thead>
                                 <tr>
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
-                                    <th class="no-sort">#</th>
+                                    <th class="no-sort">
+                                        <input type="checkbox" class="checkbox" name="select_all_students">
+                                    </th>
                                 <?php } ?>
                                     <th>
                                         Student <br/> Name
@@ -396,7 +398,7 @@ $(document).ready(function() {
     $(".add_class").click(function () {
         $("select[name='enrollment_type']").val('').trigger("change");
         $("#dis_content").html('');
-        if($('input.checkbox:checked')){
+        if($('input.checkbox:checked').length>0){
             var student_id = [];
 
             $("input.checkbox:checked").each(function() {
@@ -412,7 +414,8 @@ $(document).ready(function() {
         }
     });
 
-    $(".action").on('change', function(){
+    $("body").on('change', ".action", function(){
+
         var attrname=$(this).find('option:selected').attr("name");
         var student_id = $(this).find("option:selected").attr("data-id");
         var class_id = $(this).find("option:selected").attr("data-class");
@@ -482,6 +485,10 @@ $(document).ready(function() {
         $(this).val('');
     });
 
+    $("body").on("change", "input[name='select_all_students']", function() {
+        $('input.checkbox').not(this).prop('checked', this.checked);
+    });
+
     $("body").on("change", "select[name='class_code']",  function() {
         $("button[type='submit']").attr("disabled", false);
         var class_id = $(this).val();
@@ -495,6 +502,19 @@ $(document).ready(function() {
             success: function(data) {
                 $("p.class_size").html(data);
                 enrollment_decision();
+            }
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: '<?php echo site_url('admin/students/get_class_deposit_amount'); ?>',
+            data: 'class_id=' + class_id,
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                $("span.deposit").html(data);
+                //enrollment_decision();
             }
         });
     });

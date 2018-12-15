@@ -89,39 +89,14 @@ class GalleryController extends CI_Controller {
 			}else{
 				$post_data = $_POST;
 				$error = FALSE;	
-				if ($_FILES['image_name']['name'] == '') {$error = TRUE;}
-				elseif($_FILES['image_name']['tmp_name']!=''){					  
-					  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){						  
-						 $error = TRUE;  
-					  }else{
-						  list($width, $height) = getimagesize($_FILES['image_name']['tmp_name']);
-						  $config = array(
-							'source' => 'image_name', 
-							'temp' => 'temp',
-							'resize' => array(
-							array('height' => 322, 'width' => 561, 'save' => 'gallery/thumb/'),
-							array('height' => $height, 'width' => $width,'save' => 'gallery/original/')
-							)
-							);							
-							$image_name_name = $this->Allfunction->resize_image($config); // return the file anme
-						}					  
-					  }  
-				$error_msg = "";				
-				if ($error) {
-					$error_msg = "Invalid Image.";
-				}			   
-				if ($error_msg != '') {       
-					$data_msg['error_msg'] = $error_msg;
-					$this->load->view('backend/include/header', $data_msg);
-					$this->load->view('backend/include/sidebar');
-					$this->load->view('backend/gallery/add_gallery');
-					$this->load->view('backend/include/control-sidebar');
-					$this->load->view('backend/include/footer');
-				}
-				else { 						
+				$file_name_placeholder = array_keys($_FILES);
+            	$image_file = $_FILES['gallery']['name'];
+
+            	$_POST['gallery'] = upload_image_file($image_file, $file_name_placeholder[0], 340, 550);
+            	$post_data = $_POST;
 						$data = array(
 							'title' => $post_data['title'],
-							'image_name' => $image_name_name,
+							'image_name' => $post_data['gallery'],
 							'sort_order' => $post_data['sort_order'],
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
@@ -129,7 +104,7 @@ class GalleryController extends CI_Controller {
 						); 
 					$this->Gallery->add_gallery($data);	
 					return redirect("admin/manage-gallery");
-				}
+				
 			}
 		}else{
 		$this->load->view('backend/include/header', $data_msg);
@@ -197,62 +172,24 @@ class GalleryController extends CI_Controller {
 			}else{	
 				$post_data = $_POST;
 				$error = FALSE;
-				
-				if($_FILES['image_name']['tmp_name']!=''){
-					  if (check_image_valid($_FILES['image_name']['tmp_name'])!=1){						  
-						 $error = TRUE;  
-					  }else{
-						  list($width, $height) = getimagesize($_FILES['image_name']['tmp_name']);
-						  $config = array(
-							'source' => 'image_name', 
-							'temp' => 'temp',
-							'resize' => array(
-							array('height' => 322, 'width' => 561, 'save' => 'gallery/thumb/'),
-							array('height' => $height, 'width' => $width, 'save' => 'gallery/original/')
-							)
-							);
-							
-							$image_name_name = $this->Allfunction->resize_image($config); // return the file anme
-						}
-					  }      
-				$error_msg = "";
-				if ($error) {
-					$error_msg = "Invalid Image.";
-				}
-				if ($error_msg != '') {   
-					$data_msg['error_msg'] = $error_msg;
-					$this->load->view('backend/include/header', $data_msg);
-        $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/gallery/edit_gallery');
-        $this->load->view('backend/include/control-sidebar');
-        $this->load->view('backend/include/footer');
-				}else { 
-						 if ($_FILES['image_name']['name'] == '') {
-							$data = array(
-							'title' => $post_data['title'],
-							'sort_order' => $post_data['sort_order'],
-							'date' => date('Y-m-d'),
-							'status' => $post_data['status'],
-							'content' => $post_data['content']
-						);
-						}else{							
-					$file = MAIN_SITE_AB_UPLOAD_PATH.'gallery/original/'.$details[0]['image_name'];
-					if(is_file($file)){unlink($file); } 
-					$file = MAIN_SITE_AB_UPLOAD_PATH.'gallery/thumb/'.$details[0]['image_name'];
-					if(is_file($file)){unlink($file); } 					 
+				$file_name_placeholder = array_keys($_FILES);
+	            $image_file = $_FILES['gallery']['name'];
+	            if($image_file) {
+	                $_POST['gallery'] = upload_image_file($image_file, $file_name_placeholder[0], 340, 550);
+	            } 
+	            $post_data = $_POST;											 
 						$data = array(
 							'title' => $post_data['title'],
-							'image_name' => $image_name_name,
+							'image_name' => isset($post_data['gallery']) ? $post_data['gallery'] : $post_data['gallery_exist'],
 							'sort_order' => $post_data['sort_order'],
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
-							'content' => $post_data['content']
+							'content' => $post_data['content'],
 						);
-						}
 					$this->Gallery->update_page_cms($data,  $id);	
 					$this->session->set_flashdata('success', 'Gallery ' . MSG_UPDATED);
 					return redirect("admin/manage-gallery");
-				}
+				
 			}
 		}else{
 		

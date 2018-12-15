@@ -76,18 +76,16 @@ class Students extends CI_Model
 		$student_id = !empty($_POST['student_id']) ? $_POST['student_id'] : '';
 		$class_id = !empty($_POST['class_id']) ? $_POST['class_id'] : '';
 		$enrollment_date = !empty($_POST['enrollment_date']) ? $_POST['enrollment_date'] : '';
-		$deposit = !empty($_POST['deposit']) ? $_POST['deposit'] : '';
 		$deposit_collected = !empty($_POST['deposit_collected']) ? $_POST['deposit_collected'] : '';
 		$remarks_deposit = !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '';
-		$credit_value = !empty($_POST['credit_value']) ? $_POST['credit_value'] : '';
-		$extra_charges = !empty($_POST['extra_charges']) ? $_POST['extra_charges'] : '';
+		$credit_value = !empty($_POST['credit_value']) ? $_POST['credit_value'] : 0;
+		$extra_charges = !empty($_POST['extra_charges']) ? $_POST['extra_charges'] : 0;
 		$remarks = !empty($_POST['remarks']) ? $_POST['remarks'] : '';
 
 		if($student_id && $class_id && $enrollment_date)
 		{
 			$data = [
 				'enrollment_date'	=>	$enrollment_date,
-				'deposit'			=>	$deposit,
 				'deposit_collected'	=>	$deposit_collected,
 				'remarks_deposit'	=>	$remarks_deposit,
 				'credit_value'		=>	$credit_value,
@@ -165,8 +163,22 @@ class Students extends CI_Model
 	
 	public function store()
 	{
+		$nric = !empty($_POST['nric']) ? url_title($_POST['nric']) : '';
+		$username = !empty($_POST['username']) ? url_title($_POST['username']) : null;
+		$query = $this->db->get_where(DB_STUDENT, ['username'	=>	$username]);
+        if($query->num_rows()>0)
+        {
+        	$this->session->set_flashdata('error', 'Username exists in our system.');
+			return redirect('admin/students/create');
+        }
+        $query = $this->db->get_where(DB_STUDENT, ['nric'	=>	$nric]);
+        if($query->num_rows()>0)
+        {
+        	$this->session->set_flashdata('error', 'Nric exists in our system.');
+			return redirect('admin/students/create');
+        }
 		$name = !empty($_POST['name']) ? $_POST['name'] : '';
-		$username = !empty($_POST['username']) ? url_title($_POST['username']) : '';
+		$username = $username;
 		$email = !empty($_POST['email']) ? $_POST['email'] : '';
 		$parent_email = !empty($_POST['parent_email']) ? $_POST['parent_email'] : '';
 		$password = $_POST['password'];
@@ -178,8 +190,8 @@ class Students extends CI_Model
 			'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : null,
 			'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
 			'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
-			'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
-			'username'      => !empty($_POST['username']) ? url_title($_POST['username']) : '',
+			'nric'        => $nric,
+			'username'      => $username,
 			'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
 			'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 			'gender'   => $_POST['gender'],
@@ -220,7 +232,7 @@ class Students extends CI_Model
 		$store_type = $_POST['store_type'];
 		$class_code = get_class_code_by_class($class_id);
 
-		if(!($student_id)) {
+		if(!($student_id && $enrollment_type)) {
 			$this->session->set_flashdata('error', MSG_ERROR);
 			return redirect('admin/students');
 		}
@@ -310,6 +322,7 @@ class Students extends CI_Model
 		}
 		if(count($student_exist_array)>0)
 		{
+			$student_exist_array = array_unique($student_exist_array);
 			$student_names = implode(',', $student_exist_array);
 			$this->session->set_flashdata('error', $student_names . ' already exist in class ' . $class_code);
 			return redirect('admin/students');
@@ -383,8 +396,8 @@ class Students extends CI_Model
 	public function update($id)
 	{
 		$email = !empty($_POST['email']) ? $_POST['email'] : '';
-		$nric = !empty($_POST['nric']) ? $_POST['nric'] : '';
-		$username = !empty($_POST['username']) ? $_POST['username'] : null;
+		$nric = !empty($_POST['nric']) ? url_title($_POST['nric']) : '';
+		$username = !empty($_POST['username']) ? url_title($_POST['username']) : null;
 
         $query = $this->db->get_where(DB_STUDENT, ['email'	=>	$email, 'student_id !='	=>	$id]);
         if($query->num_rows()>0)
@@ -412,8 +425,8 @@ class Students extends CI_Model
 				'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : $_POST['profile_picture_exist'],
 				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
 				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
-				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
-				'username'      => !empty($_POST['username']) ? $_POST['username'] : '',
+				'nric'        => $nric,
+				'username'      => $username,
 				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
 				'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 				'gender'   => $_POST['gender'],
@@ -432,8 +445,8 @@ class Students extends CI_Model
 				'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : $_POST['profile_picture_exist'],
 				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
 				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
-				'nric'        => !empty($_POST['nric']) ? $_POST['nric'] : '',
-				'username'      => !empty($_POST['username']) ? $_POST['username'] : '',
+				'nric'        => $nric,
+				'username'      => $username,
 				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
 				'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 				'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : '',

@@ -47,7 +47,7 @@ class Tutors extends CI_Model
 		$this->db->join('aauth_users', 'tutor.user_id = aauth_users.id');
 		if($id) {
 			$this->db->join('aauth_perm_to_user', 'aauth_perm_to_user.user_id = aauth_users.id');
-			$this->db->where(['tutor.tutor_id'	=>	$id]);
+			$this->db->where(['tutor.user_id'	=>	$id]);
 		}
 		$this->db->where('tutor.is_archive', 0);
 		$query = $this->db->get();
@@ -213,7 +213,7 @@ class Tutors extends CI_Model
 		$this->db->select('*');
 		$this->db->from(DB_TUTOR);
 		$this->db->join('aauth_users', 'tutor.user_id = aauth_users.id');
-		$this->db->where(['aauth_users.email'	=>	$email, 'tutor.tutor_id !='	=>	$id]);
+		$this->db->where(['aauth_users.email'	=>	$email, 'tutor.user_id !='	=>	$id]);
 		$query = $this->db->get();
 		if($query->num_rows()>0)
 		{
@@ -238,13 +238,19 @@ class Tutors extends CI_Model
 			'subject'   => !empty($_POST['subject']) ? json_encode($_POST['subject']) : null,
 			'salary_scheme'    => !empty($_POST['salary_scheme']) ? $_POST['salary_scheme'] : null,
 			'remark'  => !empty($_POST['remarks']) ? $_POST['remarks'] : null,
-			'created_at'   => $this->date,
-			'updated_at'   => $this->date
+			'updated_at'   => $this->date,
 		);
 
 		$this->db->trans_start();
-		$this->db->where('tutor_id', $id);
+		$this->db->where('id', $id);
 		$this->db->update('tutor', $data);
+
+		$query = $this->db->get_where('tutor', ['user_id'	=>	$id]);
+		$result = $query->row();
+
+		$this->db->where('user_id', $result->user_id);
+		$this->db->update('aauth_perm_to_user', ['perm_id'	=>	$perm_id]);
+
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === false) {
@@ -262,7 +268,7 @@ class Tutors extends CI_Model
 
 
 		$this->db->trans_start();
-		$this->db->where('tutor_id', $id);
+		$this->db->where('user_id', $id);
 		$this->db->update('tutor', $data);
 		$this->db->trans_complete();
 

@@ -19,9 +19,9 @@ class Gallery extends CI_Controller {
 		$data_msg['menu_id'] = $page[0]['menu_id'];
 		$data_msg['url'] = $url;
 		$data_msg['gallery'] = $this->Gallery_model->get_gallery();
-		$this->breadcrumbs->push('Home', 'home');
-        $this->breadcrumbs->push($page[0]['page_heading'], '#');
-        $data_msg['breadcrumbs'] = $this->breadcrumbs->show();	
+		$this->breadcrumbs2->push('Home', 'home');
+        $this->breadcrumbs2->push($page[0]['page_heading'], '#');
+        $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();	
 	
 			$this->load->view('frontend/include/header', $data_msg);
 			$this->load->view('frontend/gallery');

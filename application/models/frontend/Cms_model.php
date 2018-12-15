@@ -270,7 +270,7 @@ class Cms_model extends CI_Model
     {
     	$fname = $_POST['fname'];
     	$email_id = $_POST['email_id'];
-    	$phone_no = $_POST['phone_no'];
+    	$phone_no = $_POST['phone'];
     	$subject = $_POST['subject'];
     	$message = $_POST['message'];
     	$create_date = date('Y-m-d H:i:s');
