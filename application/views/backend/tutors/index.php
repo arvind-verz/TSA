@@ -77,8 +77,8 @@
                                                         <td><a title="Archive" href="<?php echo site_url('admin/tutors/moveto_active_list/'.$tutor->tutor_id) ?>"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a> </td>
                                                     <?php }else { ?>
                                                         <td>
-                                                            <a title="Edit" href="<?php echo site_url('admin/tutors/edit/' . $tutor->tutor_id) ?>"><i aria-hidden="true" class="fa fa-pencil-square-o btn btn-warning"></i></a>
-                                                            <a title="Edit" href="<?php echo site_url('admin/tutors/archive/' . $tutor->tutor_id) ?>" onclick="return confirm('Are you sure you want to archive this tutor?');"><i aria-hidden="true" class="fa fa-archive btn btn-danger"></i></a>
+                                                            <a title="Edit" href="<?php echo site_url('admin/tutors/edit/' . $tutor->id) ?>"><i aria-hidden="true" class="fa fa-pencil-square-o btn btn-warning"></i></a>
+                                                            <a title="Archive" href="<?php echo site_url('admin/tutors/archive/' . $tutor->id) ?>" onclick="return confirm('Are you sure you want to archive this tutor?');"><i aria-hidden="true" class="fa fa-archive btn btn-danger"></i></a>
                                                         </td>
                                                     <?php } ?>
                                                 </tr>

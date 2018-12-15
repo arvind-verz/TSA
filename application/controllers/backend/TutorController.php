@@ -91,7 +91,7 @@ class TutorController extends CI_Controller
             [
                 'field' => 'email',
                 'label' => 'Email',
-                'rules' => 'trim|required|valid_email|is_unique[student.email]',
+                'rules' => 'trim|required|valid_email|is_unique[aauth_users.email]',
             ],
             [
                 'field' => 'tutor_permission',
@@ -108,7 +108,7 @@ class TutorController extends CI_Controller
         $this->form_validation->set_rules($config);
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('error', validation_errors());
+            //$this->session->set_flashdata('error', validation_errors());
             $this->create();
         } else {
             $result = $this->tutors->store($_POST);
@@ -182,7 +182,7 @@ class TutorController extends CI_Controller
         $this->form_validation->set_rules($config);
 
         if ($this->form_validation->run() == false) {
-            $this->session->set_flashdata('error', validation_errors());
+            //$this->session->set_flashdata('error', validation_errors());
             $this->edit($id);
         } else {
 

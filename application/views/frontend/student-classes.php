@@ -24,7 +24,7 @@
 					<div class="search-by fleft">
 						<label>Search By:</label>
 						<div class="tool-control fright">
-							<select class="selectpicker alt searchby" data-width="100%" data-style="" title="Class Name">
+							<select class="selectpicker alt searchby" data-width="100%" data-style="" title="Select">
 								<option value="classname">Class Name</option>
 								<option value="classcode">Class Code</option>
 								<option value="subject">Subject</option>
@@ -43,7 +43,7 @@
 					<div class="short-by fright">
 						<label>Sort By:</label>
 						<div class="tool-control fright">
-							<select class="selectpicker alt sortby" data-width="100%" data-style="" title="<i class='jcon-down-thin'></i> Name">
+							<select class="selectpicker alt sortby" data-width="100%" data-style="" title="<i class='jcon-down-thin'></i> Sort">
 								<option value="classname">Class Name</option>
 								<option value="classcode">Class Code</option>
 								<option value="subject">Subject</option>
@@ -104,7 +104,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title">Miss Class</h4>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -112,11 +112,11 @@
         	<div class="col-lg-12">
         		<div class="form-group">
         			<label>Reason</label>
-        			<textarea name="reason" rows="5" class="form-control" required="required"></textarea>
+        			<textarea name="reason" rows="5" class="form-control form-control alt" required="required"></textarea>
         		</div>
         		<div class="form-group">
         			<label>Date of Absence</label>
-        			<input type="date" name="date_of_absense" class="form-control" required="required">
+        			<input type="date" name="date_of_absense" class="form-control form-control alt" required="required">
         		</div>
         	</div>
         	<input type="hidden" name="class_id">

@@ -242,13 +242,21 @@ class StudentController extends CI_Controller
     public function get_enrollment_type_popup_content()
     {
         $type = !empty($_GET['type']) ? $_GET['type'] : '';
-        print_r(get_enrollment_type_popup_content($type));
+        $class_id = !empty($_GET['class_id']) ? $_GET['class_id'] : '';
+        $student_id = !empty($_GET['student_id']) ? $_GET['student_id'] : '';
+        print_r(get_enrollment_type_popup_content($type, $student_id, $class_id));
     }
 
     public function get_class_size()
     {
         $class_id = !empty($_GET['class_id']) ? $_GET['class_id'] : '';
         print_r(get_class_size($class_id));
+    }
+
+    public function get_class_deposit_amount()
+    {
+        $class_id = !empty($_GET['class_id']) ? $_GET['class_id'] : '';
+        print_r(get_deposit_value_of_class($class_id));
     }
 
     public function enrollment_decision()

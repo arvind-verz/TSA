@@ -20,14 +20,14 @@ function get_all_modules()
     return ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'REPORTING', 'SMS_TEMPLATE', 'SMS_HISTORY', 'SMS_REMINDER'];
 }
 
-function get_tutor_of_class($class_id)
+function get_tutor_of_class($tutor_id)
 {
     $ci = &get_instance();
 
-    $query  = $ci->db->get_where(DB_CLASSES, ['class_id' => $class_id]);
+    $query  = $ci->db->get_where(DB_TUTOR, ['tutor_id' => $tutor_id]);
     $result = $query->row();
     if ($result) {
-        return $result->tutor_id;
+        return $result->tutor_name;
     }
 }
 
@@ -106,6 +106,17 @@ function get_student_name_by_student_id($student_id)
     }
 }
 
+function get_deposit_value_of_class($class_id)
+{
+    $ci         = &get_instance();
+    $query = $ci->db->get_where(DB_CLASSES, ['class_id' =>  $class_id]);
+    $result = $query->row();
+    if($result)
+    {
+        return $result->deposit_fees;
+    }
+}
+
 function get_enrollment_type_popup_content_update($student_id, $class_id)
 {
     $ci         = &get_instance();
@@ -114,14 +125,14 @@ function get_enrollment_type_popup_content_update($student_id, $class_id)
     if($result)
     {
         $enrollment_date = date('Y-m-d', strtotime($result->enrollment_date));
-        $deposit = $result->deposit;
+        $deposit = get_deposit_value_of_class($class_id);
         $deposit_collected = $result->deposit_collected;
         $remarks_deposit = $result->remarks_deposit;
         $credit_value = $result->credit_value;
         $extra_charges = $result->extra_charges;
         $remarks = $result->remarks;
         ?>
-        <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="<?php echo $enrollment_date; ?>" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="<?php echo $deposit; ?>" ></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected"  value="1" type="radio" <?php if($deposit_collected==1) {echo 'checked';} ?> />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" <?php if($deposit_collected==0) {echo 'checked';} ?> />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input  type="text" name="remarks_deposit" class="form-control" value="<?php echo $remarks_deposit; ?>"></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value="<?php echo $credit_value; ?>"></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges"  class="form-control" value="<?php echo $extra_charges; ?>"></div><div class="form-group"><label for="">Remarks</label><input type="text" name="remarks" class="form-control" value="<?php echo $remarks; ?>"></div>
+        <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="<?php echo $enrollment_date; ?>" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit: </label><?php echo $deposit; ?></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected"  value="1" type="radio" <?php if($deposit_collected==1) {echo 'checked';} ?> />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" <?php if($deposit_collected==0) {echo 'checked';} ?> />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input  type="text" name="remarks_deposit" class="form-control" value="<?php echo $remarks_deposit; ?>"></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value="<?php echo $credit_value; ?>"></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges"  class="form-control" value="<?php echo $extra_charges; ?>"></div><div class="form-group"><label for="">Remarks</label><input type="text" name="remarks" class="form-control" value="<?php echo $remarks; ?>"></div>
         <?php
     }
 }
@@ -158,7 +169,7 @@ function get_enrollment_type_popup_content($type)
         elseif($type=='enroll')
         {
             ?>
-            <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit</label><input type="text" name="deposit" class="form-control" value="" ></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="depo_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" checked />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input  type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value="0"></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges"  class="form-control" value="0"></div><div class="form-group"><label for="">Remarks</label><input   type="text" name="remarks" class="form-control" value=""></div>
+            <div class="form-group"><label for="">Select Enrollment Date</label><input type="text" name="enrollment_date" class="form-control datepicker" value="" required="required" autocomplete="off"></div><div class="form-group"><label for="">Deposit: </label><span class="deposit"></span></div><div class="form-group"><div class="row"><div class="col-sm-1"><label for="">Deposit Collected</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected"  value="1" type="radio" />Yes</label></div><div class="col-sm-2"><label class="radio-inline"><input name="deposit_collected" value="0" type="radio" checked />No</label</div></div></div><div class="form-group"><label for="">Remarks Deposit</label><input  type="text" name="remarks_deposit" class="form-control" value=""></div><div class="form-group"><label for="">Credit Value</label><input type="text" name="credit_value" class="form-control" value="0"></div><div class="form-group"><label for="">Enter Extra Charges(if any)</label><input type="text" name="extra_charges"  class="form-control" value="0"></div><div class="form-group"><label for="">Remarks</label><input   type="text" name="remarks" class="form-control" value=""></div>
             <?php
         }
     }
@@ -325,24 +336,29 @@ function miss_class_request($class_id, $reason, $date_of_absence)
 function get_student_classes_search_data($searchby, $sortby, $searchfield)
 {
     $ci = &get_instance();
+    $login_id = $ci->session->userdata('student_credentials')['id'];
     $searchby_array = ['classname', 'classcode', 'day', 'time', 'level', 'fees'];
     $searchby_array_value = ['class_name', 'class_code', 'class_day', 'class_time', 'level', 'monthly_fees'];
-    if ($searchfield) {
-        if (empty($searchby)) {
-            $searchby = 'classname';
-        }
-        
+    //echo $searchby;
+    if ($searchfield) {        
         if (in_array($searchby, $searchby_array)) {
             $attr = array_search($searchby, $searchby_array);
             $attr = $searchby_array_value[$attr];
+            
             $ci->db->select('*');
             $ci->db->from(DB_CLASSES);
+            $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
+            $ci->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
+            $ci->db->where(['student_to_class.status'    => 3, 'student.id' =>  $login_id]);
             $ci->db->like($attr, $searchfield, 'both');
         }
         if ($searchby == 'tutor') {
             $ci->db->select('*, class.subject as subject');
             $ci->db->from(DB_CLASSES);
+            $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
+            $ci->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
             $ci->db->join(DB_TUTOR, 'class.tutor_id = tutor.tutor_id');
+            $ci->db->where(['student_to_class.status'    => 3, 'student.id' =>  $login_id]);
             $ci->db->like('tutor.tutor_name', $searchfield, 'both');
         }
         if ($searchby == 'subject') {
@@ -862,6 +878,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                 <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E" readonly>
                 <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X" readonly>
                 <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G" readonly>
+                <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="H" readonly>
             </td>
             <td></td>
         </tr>
@@ -879,7 +896,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="E">
                     <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="X">
                     <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="G">
-                    <input type="hidden" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="H">
+                    <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="H">
                 </td>
                 <td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
             </tr>
@@ -912,6 +929,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="E" readonly>
                     <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="X" readonly>
                     <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="G" readonly>
+                    <input type="text" class="form-control text-center w-50 d-inline border-0" value="" placeholder="H" readonly>
                 </td>
                 <td></td>
             </tr>
@@ -929,7 +947,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'E') ? 1 : 0; ?>" placeholder="E">
                         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'X') ? 1 : 0; ?>" placeholder="X">
                         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'G') ? 1 : 0; ?>" placeholder="G">
-                        <input type="hidden" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'H') ? 1 : 0; ?>" placeholder="H">
+                        <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'H') ? 1 : 0; ?>" placeholder="H">
                     </td>
                     <td><input type="text" name="attendance_remark[]" class="form-control" value="<?php echo isset($result->remark) ? $result->remark : ''; ?>" placeholder="Remark">
                         <p class="text-muted">Student Reason: <strong><?php echo isset($result->reason_for_absent) ? $result->reason_for_absent : '-'; ?></strong></p></td>
@@ -1497,7 +1515,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $emailto = [$result1->email, $result1->parent_email];
                         $fees = $result1->monthly_fees;
                         $extra_charges = $result1->extra_charges;
-                        $deposit = $result1->deposit;
+                        $deposit = get_deposit_value_of_class($class_id);
                         $credit_value = $result1->credit_value;
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
@@ -1545,7 +1563,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             if($credit_value>0) {
                                 if($invoice_amount<0) {
                                     $credit_amount = $invoice_amount;
-                                    //$invoice_amount = 0;
+                                    $invoice_amount = 0;
                                 }
                                 /*else {
                                     $credit_amount = 0;
@@ -1619,7 +1637,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $emailto = [$result1->email, $result1->parent_email];
                         $fees = $result1->monthly_fees;
                         $extra_charges = $result1->extra_charges;
-                        $deposit = $result1->deposit;
+                        $deposit = get_deposit_value_of_class($class_id);
                         $credit_value = $result1->credit_value;
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
@@ -1648,7 +1666,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                                 if($invoice_amount<0) {
                                     $credit_amount = abs($invoice_amount);
-                                    //$invoice_amount = 0;
+                                    $invoice_amount = 0;
                                 }
                                 /*else {
                                     $credit_amount = 0;
@@ -1699,7 +1717,6 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     {
                         $ci = &get_instance();
 
-                        
                         $ci->db->select('*');
                         $ci->db->from(DB_STUDENT);
                         $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
@@ -1714,6 +1731,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                     function send_archive_invoice_extend($student_id, $class_id)
                     {
+
                         $ci = &get_instance();
                         $type = 'archive_invoice';
                         $invoice_id   = uniqid();
@@ -1736,7 +1754,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $emailto = [$result1->email, $result1->parent_email];
                         $fees = $result1->monthly_fees;
                         $extra_charges = $result1->extra_charges;
-                        $deposit = $result1->deposit;
+                        $deposit = get_deposit_value_of_class($class_id);
                         $credit_value = $result1->credit_value;
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
@@ -1786,21 +1804,25 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         ];
 
                         $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+                        //die(print_r($invoice_amount));
                         $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $deposit - $credit_value);
+
                         if($credit_value>0) {
 
                             if($invoice_amount<0) {
                                 $credit_amount = abs($invoice_amount);
-                                //$invoice_amount = 0;
+                                $invoice_amount = 0;
                             }
                             /*else {
                                 $credit_amount = 0;
                             }*/
+
                             $ci->db->where('student_id', $student_id);
                             $ci->db->where('class_id', $class_id);
                             $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
 
                         }
+
                         $invoice_data = [
                             'class_code'    =>  $class_code,
                             'fees_monthly'  => $fees,
@@ -1878,7 +1900,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $emailto = [$result1->email, $result1->parent_email];
                         $fees = $result1->monthly_fees;
                         $extra_charges = $result1->extra_charges;
-                        $deposit = $result1->deposit;
+                        $deposit = get_deposit_value_of_class($class_id);
                         $credit_value = $result1->credit_value;
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
@@ -1934,7 +1956,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                             if($invoice_amount<0) {
                                 $credit_amount = abs($invoice_amount);
-                                //$invoice_amount = 0;
+                                $invoice_amount = 0;
                             }
                             /*else {
                                 $credit_amount = 0;
@@ -1980,7 +2002,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         }
                     }
 
-                    function send_class_transfer_invoice($student_id, $class_id)
+                    function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
                     {
                         $ci = &get_instance();
                         $type = 'class_transfer_invoice';
@@ -2004,7 +2026,8 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $emailto = [$result1->email, $result1->parent_email];
                         $fees = $result1->monthly_fees;
                         $extra_charges = $result1->extra_charges;
-                        $deposit = $result1->deposit;
+                        $deposit = get_deposit_value_of_class($class_id);
+                        $new_deposit = get_deposit_value_of_class($class_id_id);
                         $credit_value = $result1->credit_value;
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
@@ -2060,7 +2083,8 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
 
                             if($invoice_amount<0) {
                                 $credit_amount = abs($invoice_amount);
-                                //$invoice_amount = 0;
+                                $credit_amount = ($credit_amount - ($deposit-$new_deposit));
+                                $invoice_amount = 0;
                             }
                             /*else {
                                 $credit_amount = 0;
@@ -2181,13 +2205,13 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $ci = &get_instance();
 
                         $query  = $ci->db->get_where('sms_reminder', ['fee_reminder'    =>  date('Y-m-d')]);
-                        $result = $query->result();
+                        $result = $query->row();
                         $message = get_sms_template_content(2);
                         if ($result && $message) {
                             $query1  = $ci->db->get(DB_INVOICE);
                             $result1 = $query1->result();
-                            if ($result) {
-                                foreach ($result as $row) {
+                            if ($result1) {
+                                foreach ($result1 as $row) {
                                     if ($row->status == 2) {
                                         $student_details = get_student($row->student_id);
                                         $recipients      = [
@@ -2209,13 +2233,13 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $ci = &get_instance();
 
                         $query  = $ci->db->get_where('sms_reminder', ['late_fee_reminder'    =>  date('Y-m-d')]);
-                        $result = $query->result();
+                        $result = $query->row();
                         $message = get_sms_template_content(3);
                         if ($result && $message) {
                             $query1  = $ci->db->get(DB_INVOICE);
                             $result1 = $query1->result();
-                            if ($result) {
-                                foreach ($result as $row) {
+                            if ($result1) {
+                                foreach ($result1 as $row) {
                                     if ($row->status == 5) {
                                         $student_details = get_student($row->student_id);
                                         $recipients      = [
@@ -2298,7 +2322,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         return false;
                     }
 
-                    function send_sms($recipient, $message, $template_id = null, $class_code = null)
+                    function send_sms($recipient, $message, $template_id = false, $class_code = false)
                     {
                         $ci = &get_instance();
 
@@ -2361,11 +2385,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                 if(date('Y-m-d', strtotime('-1 day', strtotime($row->reservation_date)))==date('Y-m-d')) {
                                     $class_code = get_class_code_by_class($row->class_id);
 
-                                    $query = $ci->db->get_where(DB_STUDENT, ['student_id'   =>  $student_id]);
-                                    $result = $query->row();
                                     $recipients = [$row->phone, $row->parents_phone];
                                     foreach($recipients as $recipient) {
-                                        send_sms($recipient, $message, 5, $class_code);
+                                        if($recipient) {
+                                            send_sms($recipient, $message, 5, $class_code);
+                                        }
                                     }
                                 }
                             }
@@ -2380,6 +2404,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $ci->db->from(DB_STUDENT);
                         $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
                         $ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
+                        $ci->db->join('student_enrollment', 'student_enrollment.class_id = class.class_id');
                         $ci->db->where(['student_to_class.status' =>  3, 'student.is_active'  =>  1, 'student.is_archive' =>  0]);
                         $query = $ci->db->get();
                         $result = $query->result();
@@ -2389,16 +2414,14 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             {
                                 if(date('Y-m-d', strtotime('-1 day', strtotime($row->enrollment_date)))==date('Y-m-d')) {
                                     $class_code = get_class_code_by_class($row->class_id);
-
-
-                                    $query = $ci->db->get_where(DB_STUDENT, ['student_id'   =>  $student_id]);
                                     $result = $query->row();
                                     $recipients = [$row->phone, $row->parents_phone];
                                     foreach($recipients as $recipient) {
-                                        send_sms($recipient, $message, 6, $class_code);
+                                        if($recipient) {
+                                            send_sms($recipient, $message, 6, $class_code);
+                                        }
                                     }
                                 }
                             }
                         }
-
                     }

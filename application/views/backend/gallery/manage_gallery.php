@@ -45,7 +45,7 @@
               <tr>
 
                 <td class='priority'><?php echo $val['sort_order'];?></td>
-                <td><img src="<?php echo base_url('assets/upload/gallery/thumb/').$val['image_name']; ?>" height="50px" /></td>
+                <td><img src="<?php echo base_url('assets/files/gallery/').$val['image_name']; ?>" height="50px" /></td>
                 <td><?php echo $val['title'] ?></td>
                 <td><?php echo $val['content'] ?></td>
                 <!--<td><?php echo $val['url'] ?></td>-->

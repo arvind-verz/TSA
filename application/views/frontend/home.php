@@ -68,11 +68,11 @@
 		<!-- Section END --> 
 		<!-- Section -->
 		<div class="wave-holder">
-			<div class="wave wave1" style="background-image:url(<?php echo base_url('assets/images/ban1.png'); ?>wave1.png);" data-paroller-factor="0.8" data-paroller-direction="horizontal"></div>
-			<div class="wave wave2" style="background-image:url(<?php echo base_url('assets/images/ban1.png'); ?>wave2.png);" data-paroller-factor="-0.3" data-paroller-direction="horizontal"></div>
-			<div class="wave wave3" style="background-image:url(<?php echo base_url('assets/images/ban1.png'); ?>wave3.png);"data-paroller-factor="0.3" data-paroller-direction="horizontal"></div>
-			<div class="wave wave4" style="background-image:url(<?php echo base_url('assets/images/ban1.png'); ?>wave4.png);"data-paroller-factor="-0.5" data-paroller-direction="horizontal"></div>
-			<img src="images/bg-plain.png" class="responsive" alt=""> </div>
+			<div class="wave wave1" style="background-image:url(<?php echo base_url('assets/images/wave1.png'); ?>);" data-paroller-factor="0.8" data-paroller-direction="horizontal"></div>
+			<div class="wave wave2" style="background-image:url(<?php echo base_url('assets/images/wave2.png'); ?>);" data-paroller-factor="-0.3" data-paroller-direction="horizontal"></div>
+			<div class="wave wave3" style="background-image:url(<?php echo base_url('assets/images/wave3.png'); ?>);"data-paroller-factor="0.3" data-paroller-direction="horizontal"></div>
+			<div class="wave wave4" style="background-image:url(<?php echo base_url('assets/images/wave4.png'); ?>);"data-paroller-factor="-0.5" data-paroller-direction="horizontal"></div>
+			<img src="<?php echo base_url('assets/images/bg-plain.png'); ?>" class="responsive" alt=""> </div>
 		<!--<div class="bg"><img src="images/bg2.png" alt="" class="responsive"></div> -->
 		<div class="fullcontainer bg-color2">
 			<div class="container">
@@ -87,7 +87,7 @@
 						<div class="home-testimonial-slide">
 							<div class="htbox">
 								<div class="testi-img-holder">
-									<div class="testi-img"><img src="<?php echo base_url("assets/upload/testimonial/original/".$test['image_name']);?>" alt="" class="responsive"></div>
+									<div class="testi-img"><img src="<?php echo base_url("assets/files/testimonial/".$test['image_name']);?>" alt="" class="responsive"></div>
 								</div>
 								<div class="client-testi">
 									<p><?=substr($test['content'],0,100)?></p>
@@ -98,7 +98,7 @@
 						                        <div class="home-testimonial-slide">
 							<div class="htbox">
 								<div class="testi-img-holder">
-									<div class="testi-img"><img src="<?php echo base_url("assets/upload/testimonial/original/".$test['image_name']);?>" alt="" class="responsive"></div>
+									<div class="testi-img"><img src="<?php echo base_url("assets/files/testimonial/".$test['image_name']);?>" alt="" class="responsive"></div>
 								</div>
 								<div class="client-testi">
 									<p><?=substr($test['content'],0,100)?></p>

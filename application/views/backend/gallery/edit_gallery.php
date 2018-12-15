@@ -26,11 +26,12 @@
                   <textarea rows="4" class="form-control" cols="90" name="content" id="smallBody" ><?php echo $details[0]['content'];?></textarea>
                 </div>
                 <?php if($details[0]['image_name']!=""):?>
-                <p><img src="<?php echo base_url('assets/upload/gallery/thumb/').$details[0]['image_name']; ?>" width="100px" /></p>
+                <p><img src="<?php echo base_url('assets/files/gallery/').$details[0]['image_name']; ?>" width="100px" /></p>
                 <?php endif;?>
+                <input type="hidden" name="gallery_exist" value="<?php echo $details[0]['image_name']; ?>">
                 <div class="form-group">
-                  <label for="location">Pics (1400 X 500) : <span>*</span></label>
-                  <input type="file" name="image_name" id="image_name" value="<?php echo $details[0]['image_name'];?>">
+                  <label for="location">Pics (360 X 550) : <span>*</span></label>
+                  <input type="file" name="gallery" id="image_name" value="<?php echo $details[0]['image_name'];?>">
                 </div>
                 <div class="form-group">
                   <label for="name">Sort Order :</label>

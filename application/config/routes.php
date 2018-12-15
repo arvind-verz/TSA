@@ -32,6 +32,7 @@ $route['students/student-classes-search'] = 'frontend/Cms/student_classes_search
 //$route['admin/pdf/invoice/(:any)']         = 'backend/PdfController/my_mPDF/$1';
 
 $route['admin/cronjobs_PQWEas22'] = 'backend/CronController/index';
+$route['admin/cronjobs_SMS'] = 'backend/CronReservationController/index';
 $route['admin']                   = 'backend/AccountsController/index';
 $route['admin/login']             = 'backend/AccountsController/index';
 $route['admin/login/process']     = 'backend/AccountsController/process';
@@ -96,6 +97,7 @@ $route['admin/students/get_student_status']        = 'backend/StudentController/
 $route['admin/students/get_enrollment_type_popup_content']        = 'backend/StudentController/get_enrollment_type_popup_content';
 $route['admin/students/get_enrollment_type_popup_content_update']        = 'backend/StudentController/get_enrollment_type_popup_content_update';
 $route['admin/students/get_class_size']        = 'backend/StudentController/get_class_size';
+$route['admin/students/get_class_deposit_amount']        = 'backend/StudentController/get_class_deposit_amount';
 $route['admin/students/enrollment_decision']        = 'backend/StudentController/enrollment_decision';
 $route['admin/students/get_view_all_contents']        = 'backend/StudentController/get_view_all_contents';
 $route['admin/students/final_settlement/(:any)']            = 'backend/StudentController/final_settlement/$1';

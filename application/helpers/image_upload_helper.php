@@ -8,7 +8,7 @@ function upload_image_file($image_file, $image_placeholder, $width, $height)
     $config['file_name']     = uniqid() . '__' . $image_file;
     $config['upload_path']   = './assets/files/' . $image_placeholder . '/';
     $config['allowed_types'] = 'gif|jpg|png|jpeg';
-    $config['max_size']      = 5000;
+    $config['max_size']      = 10000;
 
     $ci->load->library('upload', $config);
     $ci->upload->initialize($config);

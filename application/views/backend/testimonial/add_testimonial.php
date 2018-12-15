@@ -26,8 +26,8 @@
                   <textarea rows="4" cols="60" class="form-control" name="content" id="smallBody" ><?php echo set_value('content'); ?></textarea>
                 </div>
                <div class="form-group">
-                  <label for="location">Banner (1400 X 500) : <span>*</span></label>
-                  <input type="file" name="image_name" class="form-control" required id="image_name">
+                  <label for="location">Banner (200 X 200) : <span>*</span></label>
+                  <input type="file" name="testimonial" class="form-control" required id="image_name">
                 </div>
                
                 <div class="form-group">

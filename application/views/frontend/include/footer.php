@@ -1,8 +1,10 @@
-</div>
-<!-- Content Containers END -->
 <div class="clear"></div>
 <div class="pushContainer"></div>
 <div class="clear"></div>
+</div>
+<!-- Content Containers END -->
+
+
 </div>
 <!-- Footer -->
 <footer class="footer-wrapper">
@@ -83,6 +85,13 @@
 <script type="text/javascript" src="<?php echo base_url('assets/js/map.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/js/jquery.fancybox.js?v=2.1.5'); ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/jquery.fancybox.css?v=2.1.5'); ?>" media="screen" />
+<script src="<?php echo base_url('assets/js/jquery.paroller.js'); ?>"></script> 
+<script>
+    $(document)
+        .ready(function () {
+            $('[data-paroller-factor]').paroller();
+        });
+</script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.fancybox').fancybox();

@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/tutors/update/' . $tutor->tutor_id); ?>
+                    <?php echo form_open('admin/tutors/update/' . $tutor->user_id); ?>
                     <div class="box-body">
                         <div class="form-group">
                           <label for="">Tutor ID</label>
@@ -62,7 +62,7 @@
                                 <?php if(count($subjects)>0){
                                     $subject_code_list = json_decode($tutor->subject);
 								      foreach($subjects as $subject):?>
-									  <option <?php if(in_array($subject->subject_code, $subject_code_list)) {echo 'selected';}?> value="<?php echo $subject->subject_code;?>"><?php echo $subject->subject_name;?></option>
+									  <option <?php if(count($subject_code_list)) {if(in_array($subject->subject_code, $subject_code_list) && count($subject_code_list)) {echo 'selected';}}?> value="<?php echo $subject->subject_code;?>"><?php echo $subject->subject_name;?></option>
 								<?php endforeach;}?>
                                
                             </select>

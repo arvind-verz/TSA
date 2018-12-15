@@ -73,7 +73,7 @@
                     <select name="siblings[]" class="form-control select2" multiple>
                         <?php if(student_names) {
                         foreach($student_names as $student_name) { ?>
-                        <option value="<?php echo $student_name->name ?>"><?php echo $student_name->name . ' - ' . $student_name->nric; ?></option>
+                        <option value="<?php echo $student_name->name ?>" <?php echo set_select('siblings', $student_name->name); ?>><?php echo $student_name->name . ' - ' . $student_name->nric; ?></option>
                         <?php }} ?>
                     </select>
                 </div>
