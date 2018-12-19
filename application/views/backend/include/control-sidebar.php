@@ -27,6 +27,11 @@
         'icon'  => '<i class="menu-icon fa fa-check"></i>',
         'url'   => 'admin/manage-gallery',
         ],
+        [
+        'title' => FOOTER,
+        'icon'  => '<i class="menu-icon fa fa-check"></i>',
+        'url'   => 'admin/manage-footer',
+        ],
         ];
     ?>
     <!-- Create the tabs -->

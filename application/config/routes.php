@@ -225,6 +225,9 @@ $route['admin/manage-gallery']      = "backend/GalleryController/manage_gallery"
 $route['admin/add-gallery']         = "backend/GalleryController/add_gallery";
 $route['admin/edit-gallery/(:any)'] = "backend/GalleryController/edit_gallery/$1";
 $route['admin/del-gallery/(:any)']  = "backend/GalleryController/del_gallery/$1";
+
+$route['admin/manage-footer']      = "backend/CmsController/manage_footer";
+$route['admin/manage-footer/update']      = "backend/CmsController/update_footer";
 /* CMS Admin */
 
 /* Tutor Admin */

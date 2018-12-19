@@ -15,6 +15,28 @@ function get_currency($currency_code = false)
     }
 }
 
+function get_footer() 
+{
+    $ci = &get_instance();
+
+    $query = $ci->db->get('footer');
+    $result = $query->row();
+    if($result)
+    {
+        return $result;
+    }
+}
+
+function get_salary_scheme($scheme_code)
+{
+    $salary_scheme = ['Fixed', 'Variable'];
+    if($scheme_code)
+    {
+        return $salary_scheme[($scheme_code-1)];
+    }
+    return '-';
+}
+
 function get_all_modules()
 {
     return ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'REPORTING', 'SMS_TEMPLATE', 'SMS_HISTORY', 'SMS_REMINDER'];
@@ -2347,7 +2369,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $app_id     = '2927';
                         $app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
 
-                        $url = "http://www.smsdome.com/api/http/sendsms.aspx?appid=" . urlencode($app_id) . "&appsecret=" . urlencode($app_secret) . "&receivers=" . urlencode($recipient) . "&content=" . urlencode($message) . "&responseformat=JSON";
+                        $url = "http://www.smsdome.com/api/http/sendsms.aspx?appid=" . urlencode($app_id) . "&appsecret=" . urlencode($app_secret) . "&receivers=" . urlencode('65'.$recipient) . "&content=" . urlencode($message) . "&responseformat=JSON";
 
                         $ch = curl_init($url);
 

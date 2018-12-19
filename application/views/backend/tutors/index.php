@@ -69,7 +69,7 @@
                                                     <td><?php echo get_class_code_by_tutor($tutor->tutor_id); ?></td>
                                                     <td><?php echo isset($tutor->subject) ? get_subject_by_subject_code(json_decode($tutor->subject)) : '-'; ?></td>
                                                     <td><?php echo isset($tutor->phone) ? $tutor->phone : '-' ?></td>
-                                                    <td><?php echo isset($tutor->phone) ? $tutor->phone : '-' ?></td>
+                                                    <td><?php echo get_salary_scheme($tutor->salary_scheme); ?></td>
                                                     <?php
                                                     if (current_url() == site_url('admin/tutors/archived')) {
                                                         ?>

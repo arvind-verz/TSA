@@ -203,6 +203,7 @@ class Tutors extends CI_Model
 
 	public function update($id)
 	{
+
 		$user_id = !empty($_POST['user_id']) ? $_POST['user_id'] : null;
 		
 		$name = !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null;
@@ -240,9 +241,9 @@ class Tutors extends CI_Model
 			'remark'  => !empty($_POST['remarks']) ? $_POST['remarks'] : null,
 			'updated_at'   => $this->date,
 		);
-
+//die(print_r($data));
 		$this->db->trans_start();
-		$this->db->where('id', $id);
+		$this->db->where('user_id', $id);
 		$this->db->update('tutor', $data);
 
 		$query = $this->db->get_where('tutor', ['user_id'	=>	$id]);

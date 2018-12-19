@@ -11,6 +11,7 @@ class Cms extends CI_Controller
         $this->load->model('frontend/Cms_model', '', true);
         $this->load->model('frontend/accounts', 'accounts');
         //$this->load->model('Banner_model', '', TRUE);
+        
     }
     public function index()
     {

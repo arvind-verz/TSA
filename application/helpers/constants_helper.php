@@ -62,6 +62,7 @@ define('MENU_MANAGE', 'Menu Management');
 define('CMS', 'Cms');
 define('CMS_MANAGE', 'Cms Management');
 define('PAGE', 'Page');
+define('FOOTER', 'Footer');
 
 define('ROLE', 'Role');
 

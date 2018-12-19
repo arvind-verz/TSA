@@ -10,6 +10,7 @@ class AccountsController extends CI_Controller
         $this->load->model('frontend/Cms_model', '', true);
         $this->load->model('frontend/accounts', 'accounts');
         $this->title = STUDENT . ' | ' . LOGIN;
+        $data_msg['footer']      = get_footer();
     }
 
     public function index()

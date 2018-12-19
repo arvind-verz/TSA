@@ -11,6 +11,28 @@ class CmsController extends CI_Controller {
 		$this->title = ADMINPANEL . ' | ' . CMS;
     }
 
+    public function manage_footer()
+	{
+    	$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(FOOTER, 'admin/manage-footer ');
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title']       = $this->title . ' - ' . FOOTER;
+        $data['page_title']  = FOOTER;
+		$data['meta_title'] = FOOTER;
+		$data['footer'] = get_footer();
+
+		$this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/cms/manage_footer');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
+	}
+
+	public function update_footer()
+	{
+		$this->Cms_model->update_footer($_POST);
+	}
+
     public function manage_logo() {
     	$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'LOGO', 'views');
     	$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
@@ -615,4 +637,5 @@ public function edit_unique($value, $params)
 		
 	}
 
+	
 }

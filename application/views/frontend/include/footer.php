@@ -7,17 +7,7 @@
 
 </div>
 <!-- Footer -->
-<footer class="footer-wrapper">
-	<div class="footer">
-		<div class="container">
-			<div class="inner-container-xs">
-				<div class="social-bar"><a href="https://www.instagram.com/tsathescienceacademy/" target="_blank"><i class="jcon-instagram"></i></a><a href="https://www.facebook.com/tsathescienceacademy" target="_blank"><i class="jcon-facebook"></i></a><!--<a href="#"><i class="jcon-linkedin"></i></a><a href="#"><i class="jcon-twitter"></i></a> --></div>
-				<div class="copyright">Copyright &copy; <script>document.write( new Date().getFullYear() );</script> The Science Academy Pte Ltd <br>All rights reserved.</div>
-				<div class="clear"></div>
-			</div>
-		</div>
-	</div>
-</footer>
+<?php $footer = get_footer();echo $footer->content; ?>
 <!-- Footer END -->
 <!-- Get In Touch -->
 <div class="get-in-touch">
