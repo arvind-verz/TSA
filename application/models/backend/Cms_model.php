@@ -479,5 +479,31 @@
                   $this->db->update(TBL_FINANCIAL_INFO , $data);
           }
 
+          public function update_footer()
+          {
+            $content = isset($_POST['footer_content']) ? $_POST['footer_content'] : '';
+            $date = date('Y-m-d H:i:s');
+            $data = [
+              'content' =>  $content,
+              'created_at'  =>  $date,
+            ];
+            $data1 = [
+              'content' =>  $content,
+              'updated_at'  =>  $date,
+            ];
 
+            $query = $this->db->get('footer');
+            if($query->num_rows()>0)
+            {
+              $this->db->update('footer', $data1);
+              $this->session->set_flashdata('success', FOOTER . ' ' . MSG_UPDATED);
+            }
+            else {
+
+            
+              $this->db->insert('footer', $data);
+              $this->session->set_flashdata('success', FOOTER . ' ' . MSG_CREATED);
+            }
+            return redirect('admin/manage-footer');
+          }
   }

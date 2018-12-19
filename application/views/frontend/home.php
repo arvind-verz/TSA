@@ -30,6 +30,7 @@
                     <?php 
 					$i=0;
 					foreach($gallery as $gal):
+						if($gal['id']==8 || $gal['id']==11) {
 					$i++;
 					?>
                      <div class="row animatedParent" data-sequence="300">
@@ -38,7 +39,7 @@
 								<div class="equalheight1 height960">
 									<div class="grid-tb">
 										<div class="grid-tc">
-											<div class="bdr-img img1"> <img src="<?php echo base_url('assets/upload/gallery/original/'.$gal['image_name']); ?>" alt="" class="responsive"> </div>
+											<div class="bdr-img img1"> <img src="<?php echo base_url('assets/files/gallery/'.$gal['image_name']); ?>" alt="" class="responsive"> </div>
 										</div>
 									</div>
 								</div>
@@ -58,7 +59,7 @@
 							</div>
 						</div>
 					</div>
-                    <?php endforeach;?>
+                    <?php }endforeach;?>
 					</div>
 					
 					<div class="text-center pt80"><a href="#" class="button">View All</a></div>
