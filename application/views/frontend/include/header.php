@@ -134,7 +134,7 @@
 						<div class="container">
 							<div class="bn-content">
 								<div>
-									<div class="student-dp"><img src="<?php echo isset($student_profile->profile_picture) ? base_url('assets/files/profile_picture/' . $student_profile->profile_picture) : base_url('assets/images/student10.jpg'); ?>" class="responsive" alt=""></div>
+									<div class="student-dp"><img src="<?php echo isset($student_profile->profile_picture) ? base_url('assets/files/profile_picture/' . $student_profile->profile_picture) : ''; ?>" class="responsive" alt=""></div>
 								</div>
 							</div>
 						</div>

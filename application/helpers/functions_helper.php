@@ -362,32 +362,46 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             $ci->db->like('tutor.tutor_name', $searchfield, 'both');
         }
         if ($searchby == 'subject') {
-            $query = $ci->db->query('SELECT * FROM `class` INNER join subject group BY class.id');
+            $ci->db->select('*, class.subject as subject');
+            $ci->db->from(DB_CLASSES);
+            $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
+            $ci->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
+            $ci->db->join(DB_TUTOR, 'class.tutor_id = tutor.tutor_id');
+            $ci->db->where(['student_to_class.status'    => 3, 'student.id' =>  $login_id]);
+            $ci->db->like('class.subject', $searchfield, 'both');
         }
     }
     if ($sortby) {
         if (in_array($sortby, $searchby_array)) {
             $attr = array_search($sortby, $searchby_array);
             $attr = $searchby_array_value[$attr];
-            $ci->db->select('*');
+            $ci->db->select('*, class.subject as subject');
             $ci->db->from(DB_CLASSES);
+            $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
+            $ci->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
+            $ci->db->join(DB_TUTOR, 'class.tutor_id = tutor.tutor_id');
+            $ci->db->where(['student_to_class.status'    => 3, 'student.id' =>  $login_id]);
             $ci->db->order_by($attr, 'ASC');
         }
         if ($sortby == 'tutor') {
             $ci->db->select('*, class.subject as subject');
             $ci->db->from(DB_CLASSES);
+            $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
+            $ci->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
             $ci->db->join(DB_TUTOR, 'class.tutor_id = tutor.tutor_id');
+            $ci->db->where(['student_to_class.status'    => 3, 'student.id' =>  $login_id]);
             $ci->db->order_by('tutor.tutor_name', 'asc');
         }
         if ($sortby == 'subject') {
-            $query = $ci->db->query('SELECT * FROM `class` INNER join subject group BY class.id order by asc');
+            //$query = $ci->db->query('SELECT * FROM `class` INNER join subject group BY class.id order by asc');
+            //$query = $ci->db->query('SELECT *, class.subject as subject FROM class JOIN student_to_class ON class.class_id = student_to_class.class_id JOIN student ON student.student_id = student_to_class.student_id JOIN tutor ON class.tutor_id = tutor.tutor_id INNER JOIN subject WHERE student_to_class.status = 3 AND student.id = "1" GROUP BY class.class_id ORDER BY class.subject ASC');
         }
     }
     if($searchby != 'subject' || $sortby != 'subject') {
         $query  = $ci->db->get();
     }
     $result = $query->result();
-
+    //echo $ci->db->last_query();
     if (count($result)) {
         foreach ($result as $class) {
             ?>
