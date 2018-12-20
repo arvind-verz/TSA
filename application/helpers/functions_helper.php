@@ -384,13 +384,19 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             $ci->db->like('tutor.tutor_name', $searchfield, 'both');
         }
         if ($searchby == 'subject') {
-            $ci->db->select('*, class.subject as subject');
-            $ci->db->from(DB_CLASSES);
-            $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
-            $ci->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
-            $ci->db->join(DB_TUTOR, 'class.tutor_id = tutor.tutor_id');
-            $ci->db->where(['student_to_class.status'    => 3, 'student.id' =>  $login_id]);
-            $ci->db->like('class.subject', $searchfield, 'both');
+            $subject_code_name = '';
+            $ci->db->select('*');
+            $ci->db->from('subject');
+            $ci->db->like('subject_name', $searchfield, 'both');
+            $query1 = $ci->db->get();
+            $result1 = $query1->result();
+            foreach($result1 as $row)
+            {
+                $subject_code_name = $row->subject_code;
+            }
+
+            $query = "SELECT *, class.subject as subject FROM class JOIN student_to_class ON class.class_id = student_to_class.class_id JOIN student ON student.student_id = student_to_class.student_id JOIN tutor ON class.tutor_id = tutor.tutor_id INNER JOIN subject WHERE student_to_class.status = ? AND subject.subject_name like ? AND student.id = ? AND tutor.subject like ? GROUP BY class.class_code";
+            $query  = $ci->db->query($query, [3, '%'.$searchfield.'%', $login_id, '%'.$subject_code_name.'%']);
         }
     }
     if ($sortby) {
@@ -415,11 +421,31 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             $ci->db->order_by('tutor.tutor_name', 'asc');
         }
         if ($sortby == 'subject') {
-            //$query = $ci->db->query('SELECT * FROM `class` INNER join subject group BY class.id order by asc');
-            //$query = $ci->db->query('SELECT *, class.subject as subject FROM class JOIN student_to_class ON class.class_id = student_to_class.class_id JOIN student ON student.student_id = student_to_class.student_id JOIN tutor ON class.tutor_id = tutor.tutor_id INNER JOIN subject WHERE student_to_class.status = 3 AND student.id = "1" GROUP BY class.class_id ORDER BY class.subject ASC');
+            $subject_code_array = [];
+            $ci->db->select('*, tutor.subject as subject');
+            $ci->db->from(DB_CLASSES);
+            $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
+            $ci->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
+            $ci->db->join(DB_TUTOR, 'class.tutor_id = tutor.tutor_id');
+            $ci->db->where(['student_to_class.status'    => 3, 'student.id' =>  $login_id]);
+            $query1 = $ci->db->get();
+            $result1 = $query1->result();
+            foreach($result1 as $row)
+            {
+                $subject_code_array1 = json_decode($row->subject);
+                foreach($subject_code_array1 as $value)
+                {
+                    $subject_code_array[] = $value;
+                }
+            }
+            
+            //$query = $ci->db->query('SELECT * FROM class');
+            //print_r($query->result());
+            $query = "SELECT *, class.subject as subject FROM class JOIN student_to_class ON class.class_id = student_to_class.class_id JOIN student ON student.student_id = student_to_class.student_id JOIN tutor ON class.tutor_id = tutor.tutor_id INNER JOIN subject WHERE student_to_class.status = ? AND subject.subject_code in ? AND student.id = ? GROUP BY class.class_code ORDER BY class.subject ASC";
+            $query  = $ci->db->query($query, [3, $subject_code_array, $login_id]);
         }
     }
-    if($searchby != 'subject' || $sortby != 'subject') {
+    if($searchby != 'subject' && $sortby != 'subject') {
         $query  = $ci->db->get();
     }
     $result = $query->result();
@@ -1795,6 +1821,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
                         $result5 = get_invoice_result5();
+                        //die(print_r($result5));
+                        if(!$result5)
+                        {
+                            return false;
+                        }
                         $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  => $result5[0]]);
                         $result          = $query->row();
                         $billing_data    = json_decode($result->billing);
@@ -1839,9 +1870,9 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             'message' => $message,
                         ];
 
-                        $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+                        $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
                         //die(print_r($invoice_amount));
-                        $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $deposit - $credit_value);
+                        $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $deposit - $credit_value);
 
                         if($credit_value>0) {
 
@@ -1941,6 +1972,10 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
                         $result5 = get_invoice_result5();
+                        if(!$result5)
+                        {
+                            return false;
+                        }
                         $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  => $result5[0]]);
                         $result          = $query->row();
                         $billing_data    = json_decode($result->billing);
@@ -1985,8 +2020,8 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             'message' => $message,
                         ];
 
-                        $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
-                        $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $deposit - $credit_value);
+                        $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
+                        $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $deposit - $credit_value);
 
                         if($credit_value>0) {
 
@@ -2068,6 +2103,10 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $invoice_amount = $amount_excluding_material = $credit_amount = 0;
 
                         $result5 = get_invoice_result5();
+                        if(!$result5)
+                        {
+                            return false;
+                        }
                         $query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date'  => $result5[0]]);
                         $result          = $query->row();
                         $billing_data    = json_decode($result->billing);
@@ -2112,8 +2151,8 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             'message' => $message,
                         ];
 
-                        $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $deposit - $credit_value);
-                        $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + count($E) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $deposit - $credit_value);
+                        $invoice_amount            = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $credit_value);
+                        $amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $credit_value);
 
                         if($credit_value>0) {
 
@@ -2218,17 +2257,22 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     {
                         $ci = &get_instance();
 
-                        $invoice__generation_date = [];
-                        $date = date('Y-m-d');
+                        $invoice_generation_date = [];
+                        $date = date('m/d/Y');
                         $query = $ci->db->get_where(DB_BILLING);
                         $result          = $query->result();
+                        $status_array = [];
                         foreach($result as $row) {
                             $billing_data = json_decode($row->billing);
                             foreach ($billing_data as $billing) {
                                 $dates = explode("-", $billing->date_range);
+                                //print_r(strtotime($date) .'|'. strtotime($dates[0]).' <br> ');
                                 if (strtotime($date) >= strtotime($dates[0]) && strtotime($date) <= strtotime($dates[1])) {
-                                    $invoice_generation_date[] = $row->invoice_generation_date;
+                                    $status_array[] = 1;
                                 }
+                            }
+                            if(count($status_array)>0) {
+                                $invoice_generation_date[] = $row->invoice_generation_date;
                             }
                         }
                         return $invoice_generation_date;

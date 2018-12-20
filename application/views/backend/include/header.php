@@ -79,6 +79,7 @@ tinymce.init({
    image_advtab: true ,   
    convert_urls: false,
    allow_script_urls: true,
+   valid_elements : '*[*]',
    external_filemanager_path:"<?php echo base_url();?>editor/filemanager/",
    filemanager_title:"Filemanager" ,
    filemanager_access_key:'',

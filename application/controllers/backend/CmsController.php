@@ -360,7 +360,7 @@ class CmsController extends CI_Controller {
 			  $data = array(
 						'url_name' => preg_replace("/^'|[^A-Za-z0-9\'-]|'$/", '',$post_data['url_name']),					
 						'template' => $post_data['template'],
-						'image_name' => $post_data['cms'],	
+						'image_name' => isset($post_data['cms']) ? $post_data['cms'] : '',	
 						'banner_heading' => isset($post_data['banner_heading']) ? $post_data['banner_heading'] : '',					
 						'page_heading' => $post_data['page_heading'],
 						'subject_id' => ($post_data['subject_id']!="") ? $post_data['subject_id'] : '',
