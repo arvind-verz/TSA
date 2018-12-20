@@ -62,7 +62,7 @@
                     <?php }endforeach;?>
 					</div>
 					
-					<div class="text-center pt80"><a href="#" class="button">View All</a></div>
+					<div class="text-center pt80"><a href="<?php echo site_url('gallery'); ?>" class="button">View All</a></div>
 				</div>
 			</div>
 		</div>
