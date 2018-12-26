@@ -40,10 +40,14 @@ class Attendance extends CI_Model
                     ];
 
                     $message = get_sms_template_content(1);
-
+                    $z = 0;
+                    $sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
                     foreach($recipients as $recipient) {
-                        send_sms($recipient, $message, 1, $class_code);
-                    }
+                        if($z==1) {
+                            $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_name . '\r\n';
+                        }
+                        send_sms($recipient, $sms_pre_content . $message, 1, $class_code);
+                    $z++;}
                 }
             }
             $this->db->insert(DB_ATTENDANCE, $data);

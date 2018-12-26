@@ -177,7 +177,8 @@ class Students extends CI_Model
         	$this->session->set_flashdata('error', 'Nric exists in our system.');
 			return redirect('admin/students/create');
         }
-		$name = !empty($_POST['name']) ? $_POST['name'] : '';
+		$firstname = !empty($_POST['firstname']) ? $_POST['firstname'] : '';
+		$lastname = !empty($_POST['lastname']) ? $_POST['lastname'] : '';
 		$username = $username;
 		$email = !empty($_POST['email']) ? $_POST['email'] : '';
 		$parent_email = !empty($_POST['parent_email']) ? $_POST['parent_email'] : '';
@@ -188,13 +189,15 @@ class Students extends CI_Model
 		$data = array(
 			'student_id'     => $this->uniq_id,
 			'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : null,
-			'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
+			'firstname'   => !empty($_POST['firstname']) ? $_POST['firstname'] : '',
+			'lastname'   => !empty($_POST['lastname']) ? $_POST['lastname'] : '',
 			'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
 			'nric'        => $nric,
 			'username'      => $username,
 			'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
 			'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 			'gender'   => $_POST['gender'],
+			'salutation'    => !empty($_POST['salutation']) ? $_POST['salutation'] : '',
 			'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
 			'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
 			'siblings' => !empty($_POST['siblings']) ? json_encode($_POST['siblings']) : '',
@@ -208,7 +211,7 @@ class Students extends CI_Model
 		$this->db->trans_start();
 		$this->db->insert('student', $data);
 		$subject = "Welcome to The Science Academy";
-		$message = student_registration_template($name, $username, $email, $password, $login_link);
+		$message = student_registration_template($firstname, $username, $email, $password, $login_link);
 		send_mail($email_to, false, false, false, false, $subject, $message);
 		$this->db->trans_complete();
 
@@ -271,6 +274,7 @@ class Students extends CI_Model
 			if($enrollment_type==2) {
 				$data2 = [
 					'student_id'	=>	$student_id,
+					'class_id'	=>	$class_id,
 					'status'	=>	$enrollment_type,
 					'created_at'	=>	$this->date,
 					'updated_at'	=>	$this->date,
@@ -314,7 +318,7 @@ class Students extends CI_Model
 		$student_exist_array = [];
 		foreach($student_id as $student)
 		{
-			$query = $this->db->get_where('student_to_class', ['student_id'	=>	$student, 'class_id'	=>	$class_id, 'status'	=>	3]);
+			$query = $this->db->get_where('student_to_class', ['student_id'	=>	$student, 'class_id'	=>	$class_id]);
 			if($query->num_rows()>0)
 			{
 				$student_exist_array[] = get_student_name_by_student_id($student);
@@ -362,6 +366,7 @@ class Students extends CI_Model
 				
 				$data2 = [
 					'student_id'	=>	$student,
+					'class_id'	=>	$class_id,
 					'status'	=>	$enrollment_type,
 					'created_at'	=>	$this->date,
 					'updated_at'	=>	$this->date,
@@ -423,13 +428,15 @@ class Students extends CI_Model
 			$password_h = password_hash($_POST['password'], PASSWORD_BCRYPT);
 			$data = array(
 				'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : $_POST['profile_picture_exist'],
-				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
+				'firstname'   => !empty($_POST['firstname']) ? $_POST['firstname'] : '',
+				'lastname'   => !empty($_POST['lastname']) ? $_POST['lastname'] : '',
 				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
 				'nric'        => $nric,
 				'username'      => $username,
 				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
 				'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 				'gender'   => $_POST['gender'],
+				'salutation'    => !empty($_POST['salutation']) ? $_POST['salutation'] : '',
 				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
 				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
 				'siblings' => !empty($_POST['siblings']) ? json_encode($_POST['siblings']) : '',
@@ -443,13 +450,15 @@ class Students extends CI_Model
 		{
 			$data = array(
 				'profile_picture'	=>	!empty($_POST['profile_picture']) ? $_POST['profile_picture'] : $_POST['profile_picture_exist'],
-				'name'   => !empty($_POST['name']) ? $_POST['name'] : '',
+				'firstname'   => !empty($_POST['firstname']) ? $_POST['firstname'] : '',
+				'lastname'   => !empty($_POST['lastname']) ? $_POST['lastname'] : '',
 				'email'     => !empty($_POST['email']) ? $_POST['email'] : '',
 				'nric'        => $nric,
 				'username'      => $username,
 				'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : '',
 				'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 				'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : '',
+				'salutation'    => !empty($_POST['salutation']) ? $_POST['salutation'] : '',
 				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
 				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
 				'siblings' => !empty($_POST['siblings']) ? json_encode($_POST['siblings']) : '',
@@ -553,5 +562,25 @@ class Students extends CI_Model
 			return redirect('admin/students');
 		}
 	}
+
+	public function delete_archive($student_id)
+    {
+    	$this->db->trans_start();
+    	$query = $this->db->get_where(DB_STUDENT, ['student_id'	=>	$student_id]);
+    	$result = $query->row();
+        $this->db->delete('student_enrollment', ['student_id' =>  $student_id]);
+        $this->db->delete('student_to_class', ['student_id' =>  $student_id]);
+        $this->db->delete(DB_STUDENT, ['student_id' =>  $student_id]);
+        $this->db->trans_complete();
+
+		if ($this->db->trans_status() === false) {
+			$this->session->set_flashdata('error', MSG_ERROR);
+			return redirect('admin/students/archived');
+		}
+		else {
+        	$this->session->set_flashdata('success', STUDENT . ' ' . MSG_DELETED);
+        	return redirect('admin/students');
+        }
+    }
 
 }

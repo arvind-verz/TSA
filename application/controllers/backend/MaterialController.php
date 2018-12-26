@@ -129,4 +129,9 @@ class MaterialController extends CI_Controller
         $subjects = isset($_GET['subject']) ? explode(',', $_GET['subject']) : '';
         print_r(get_books_by_subject($subjects));
     }
+
+    public function delete_archive($material_id)
+    {
+        $this->material->delete_archive($material_id);
+    }
 }

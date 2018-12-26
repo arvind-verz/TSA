@@ -22,9 +22,13 @@
                 <div class="box">
                     <?php echo form_open_multipart('admin/students/update/' . $student->student_id); ?>
                     <div class="box-body">
-                        <div class="form-group">
-                          <label for="">Student Name</label>
-                          <input type="text" name="name" class="form-control" value="<?php echo isset($student->name) ? $student->name : '' ?>">
+                      <div class="form-group">
+                          <label for="">Student First Name</label>
+                          <input type="text" name="firstname" class="form-control" value="<?php echo isset($student->firstname) ? $student->firstname : '' ?>">
+                      </div>
+                      <div class="form-group">
+                          <label for="">Student Last Name</label>
+                          <input type="text" name="lastname" class="form-control" value="<?php echo isset($student->lastname) ? $student->lastname : '' ?>">
                       </div>
                       <div class="form-group">
                           <label for="">Profile</label>
@@ -61,22 +65,44 @@
                         <option value="1" <?php echo $student->gender==1 ? 'checked="checked"' : '' ?>>Female</option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label for="">Parent Name</label>
-                    <input type="text" name="parent_name" class="form-control" value="<?php echo isset($student->parent_name) ? $student->parent_name : '' ?>">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <label for="">Salutation</label>
+                            <select name="salutation" class="form-control select2">
+                                <option value="Mr." <?php if($student->salutation=='Mr.') {echo 'selected';} ?>>Mr.</option>
+                                <option value="Ms." <?php if($student->salutation=='Ms.') {echo 'selected';} ?>>Ms.</option>
+                                <option value="Dr." <?php if($student->salutation=='Dr.') {echo 'selected';} ?>>Dr.</option>
+                                <option value="Mrs." <?php if($student->salutation=='Mrs.') {echo 'selected';} ?>>Mrs.</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-10">
+                            <label for="">Parent Name</label>
+                            <input type="text" name="parent_name" class="form-control" value="<?php echo isset($student->parent_name) ? $student->parent_name : '' ?>">
+                        </div>
                 </div>
                 <div class="form-group">
                     <label for="">Parent Email</label>
                     <input type="email" name="parent_email" class="form-control" value="<?php echo isset($student->parent_email) ? $student->parent_email : '' ?>">
                 </div>
                 <div class="form-group">
-                    <?php $siblings = json_decode($student->siblings); ?>
+                    <?php
+                    $siblings = isset($student->siblings) ? json_decode($student->siblings) : '';
+                    if(count($siblings)<1)
+                    {
+                        $query = $this->db->like('siblings', $student->nric, 'both')->group_by('nric')->get(DB_STUDENT);
+                        $result = $query->result();
+                        foreach($result as $row)
+                        {
+                            $siblings[] = $row->firstname . ' ' . $row->lastname . ' - ' . $row->nric;
+                        }
+                    }
+                    ?>
                     <label for="">Siblings</label>
                     <select name="siblings[]" class="form-control select2" multiple>
                         <?php if(student_names) {
                         foreach($student_names as $student_name) { ?>
-                        <option value="<?php echo $student_name->name; ?>" <?php if($siblings) {if(in_array($student_name->name, $siblings)) {echo 'selected';}} ?>><?php echo $student_name->name . ' - ' . $student_name->nric; ?></option>
+                        <option value="<?php echo $student_name->firstname . ' ' . $student_name->lastname . ' - ' . $student_name->nric; ?>" <?php if($siblings) {if(in_array($student_name->firstname . ' ' . $student_name->lastname . ' - ' . $student_name->nric, $siblings)) {echo 'selected';}} ?>><?php echo $student_name->firstname . ' ' . $student_name->lastname . ' - ' . $student_name->nric; ?></option>
                         <?php }} ?>
                     </select>
                 </div>

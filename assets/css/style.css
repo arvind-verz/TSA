@@ -688,3 +688,9 @@ transition: all 0.2s linear;
 @-ms-viewport {
  width:auto !important;
 }
+
+
+th.no-sort
+{
+	width: 100px !important;
+}

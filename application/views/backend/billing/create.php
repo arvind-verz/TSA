@@ -17,6 +17,14 @@
                     <?php echo form_open('admin/billing/store'); ?>
                     <div class="box-body">
                         <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Billing Title</label>
+                                        <input type="text" name="billing_title" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
                             <?php
                             for($i=0;$i<5;$i++) {
                             ?>
@@ -76,6 +84,6 @@
 </div>
 <script type="text/javascript">
         $(function () {
-            $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});
+            $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
         });
 </script>

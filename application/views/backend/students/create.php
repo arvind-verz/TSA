@@ -25,8 +25,12 @@
                     <?php echo form_open_multipart('admin/students/store'); ?>
                     <div class="box-body">
                         <div class="form-group">
-                          <label for="">Student Name</label>
-                          <input type="text" name="name" class="form-control" value="<?php echo set_value('name');?>">
+                          <label for="">Student First Name</label>
+                          <input type="text" name="firstname" class="form-control" value="<?php echo set_value('firstname');?>">
+                      </div>
+                      <div class="form-group">
+                          <label for="">Student Last Name</label>
+                          <input type="text" name="lastname" class="form-control" value="<?php echo set_value('lastname');?>">
                       </div>
                       <div class="form-group">
                           <label for="">Profile</label>
@@ -61,8 +65,20 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="">Parent Name</label>
-                    <input type="text" name="parent_name" class="form-control" value="<?php echo set_value('parent_name');?>">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <label for="">Salutation</label>
+                            <select name="salutation" class="form-control select2">
+                                <option value="Mr." <?php echo  set_select('salutation', 'Mr.'); ?>>Mr.</option>
+                                <option value="Ms." <?php echo  set_select('salutation', 'Ms.'); ?>>Ms.</option>
+                                <option value="Dr." <?php echo  set_select('salutation', 'Dr.'); ?>>Dr.</option>
+                                <option value="Mrs." <?php echo  set_select('salutation', 'Mrs.'); ?>>Mrs.</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-10">
+                            <label for="">Parent Name</label>
+                            <input type="text" name="parent_name" class="form-control" value="<?php echo set_value('parent_name');?>">
+                        </div>
                 </div>
                 <div class="form-group">
                     <label for="">Parent Email</label>
@@ -73,7 +89,7 @@
                     <select name="siblings[]" class="form-control select2" multiple>
                         <?php if(student_names) {
                         foreach($student_names as $student_name) { ?>
-                        <option value="<?php echo $student_name->name ?>" <?php echo set_select('siblings', $student_name->name); ?>><?php echo $student_name->name . ' - ' . $student_name->nric; ?></option>
+                        <option value="<?php echo $student_name->firstname . ' ' . $student_name->lastname . ' - ' . $student_name->nric ?>" <?php echo set_select('siblings', $student_name->firstname); ?>><?php echo $student_name->firstname . ' ' . $student_name->lastname . ' - ' . $student_name->nric; ?></option>
                         <?php }} ?>
                     </select>
                 </div>
@@ -99,7 +115,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("input[name='nric']").on("change", function() {
-            $("input[name='username']").val($(this).val());
+            $("input[name='username'], input[name='password']").val($(this).val());
         });
     });
 </script>

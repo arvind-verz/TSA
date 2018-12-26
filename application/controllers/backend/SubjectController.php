@@ -107,4 +107,9 @@ class SubjectController extends CI_Controller
     {
         $this->subject->moveto_active_list($id, $_POST);
     }
+
+    public function delete_archive($subject_id)
+    {
+        $this->subject->delete_archive($subject_id);
+    }
 }

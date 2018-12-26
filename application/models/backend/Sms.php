@@ -102,10 +102,21 @@ class Sms extends CI_Model
         $query = $this->db->get();
         $result = $query->result();
         if($result) {
+            
             foreach($result as $row) {
-                $recipient = $row->phone;
+                $recipients = [
+                    'phone' =>  $row->phone,
+                    'parents_phone' =>  $row->parents_phone,
+                ];
                 $class_code = $row->class_code;
-                send_sms($recipient, $message, 7, $class_code);
+                $z = 0;
+                $sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
+                foreach($recipients as $recipient) {
+                    if($z==1) {
+                        $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_name . '\r\n';
+                    }
+                    send_sms($recipient, $sms_pre_content . $message, 7, $class_code);
+                $z++;}
             }
             return "success";
         }
