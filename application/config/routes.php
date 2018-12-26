@@ -68,6 +68,7 @@ $route['admin/subject/edit/(:any)']               = 'backend/SubjectController/e
 $route['admin/subject/update/(:any)']             = 'backend/SubjectController/update/$1';
 $route['admin/subject/delete/(:any)']             = 'backend/SubjectController/delete/$1';
 $route['admin/subject/moveto_active_list/(:any)'] = 'backend/SubjectController/moveto_active_list/$1';
+$route['admin/subject/delete-archive/(:any)'] = 'backend/SubjectController/delete_archive/$1';
 
 /* CLASS */
 $route['admin/classes']                           = 'backend/ClassController/index';
@@ -101,6 +102,7 @@ $route['admin/students/get_class_deposit_amount']        = 'backend/StudentContr
 $route['admin/students/enrollment_decision']        = 'backend/StudentController/enrollment_decision';
 $route['admin/students/get_view_all_contents']        = 'backend/StudentController/get_view_all_contents';
 $route['admin/students/final_settlement/(:any)']            = 'backend/StudentController/final_settlement/$1';
+$route['admin/students/delete-archive/(:any)'] = 'backend/StudentController/delete_archive/$1';
 
 
 /* ORDER */
@@ -122,6 +124,7 @@ $route['admin/material/get_book_price_range'] = 'backend/MaterialController/get_
 $route['admin/material/get_books_by_subject'] = 'backend/MaterialController/get_books_by_subject';
 
 $route['admin/material/get_student_by_class_code'] = 'backend/MaterialController/get_student_by_class_code';
+$route['admin/material/delete-archive/(:any)'] = 'backend/MaterialController/delete_archive/$1';
 
 /* INVOICE */
 $route['admin/invoice']                       = 'backend/InvoiceController/index';
@@ -183,6 +186,7 @@ $route['admin/tutors/archived']                  = 'backend/TutorController/arch
 $route['admin/tutors/edit/(:any)']               = 'backend/TutorController/edit/$1';
 $route['admin/tutors/update/(:any)']             = 'backend/TutorController/update/$1';
 $route['admin/tutors/moveto_active_list/(:any)'] = 'backend/TutorController/moveto_active_list/$1';
+$route['admin/tutors/delete-archive/(:any)'] = 'backend/TutorController/delete_archive/$1';
 
 /* End Tutor Admin */
 

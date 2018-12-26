@@ -74,7 +74,9 @@
                                                     if (current_url() == site_url('admin/tutors/archived')) {
                                                         ?>
                                                         <td><?php echo isset($tutor->updated_at) ? date('Y-m-d H:i A', strtotime($tutor->updated_at)) : '-'; ?></td>
-                                                        <td><a title="Archive" href="<?php echo site_url('admin/tutors/moveto_active_list/'.$tutor->tutor_id) ?>"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a> </td>
+                                                        <td><a title="Archive" href="<?php echo site_url('admin/tutors/moveto_active_list/'.$tutor->tutor_id) ?>"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
+                                                        <a href="<?php echo site_url('admin/tutors/delete-archive/' . $tutor->tutor_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+                                                        </td>
                                                     <?php }else { ?>
                                                         <td>
                                                             <a title="Edit" href="<?php echo site_url('admin/tutors/edit/' . $tutor->id) ?>"><i aria-hidden="true" class="fa fa-pencil-square-o btn btn-warning"></i></a>

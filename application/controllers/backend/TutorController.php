@@ -210,4 +210,9 @@ class TutorController extends CI_Controller
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'deletes');
         $this->classes->delete($id, $_POST);
     }
+
+    public function delete_archive($tutor_id)
+    {
+        $this->tutors->delete_archive($tutor_id);
+    }
 }

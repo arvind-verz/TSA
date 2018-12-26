@@ -92,4 +92,11 @@ class Material extends CI_Model
             return redirect('admin/material');
         }
     }
+
+    public function delete_archive($material_id)
+    {
+        $this->db->delete(DB_MATERIAL, ['material_id' =>  $material_id]);
+        $this->session->set_flashdata('success', DB_MATERIAL . ' ' . MSG_DELETED);
+        return redirect('admin/subject');
+    }
 }

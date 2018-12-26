@@ -89,6 +89,7 @@
                                                         </td>
                                                         <td>
                                                             <a href="<?php echo site_url('admin/subject/moveto_active_list/' . $subject->subject_id) ?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
+                                                            <a href="<?php echo site_url('admin/subject/delete-archive/' . $subject->subject_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
                                                         </td>
                                                         <?php
                                                     }

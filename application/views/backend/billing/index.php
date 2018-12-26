@@ -24,6 +24,9 @@
                             <thead>
                                 <tr>
                                     <th>
+                                        Billing Title
+                                    </th>
+                                    <th>
                                         <?php echo INVOICE ?> Generation Date
                                     </th>
                                     <th>
@@ -38,7 +41,10 @@
                                 ?>
                                 <tr>
                                     <td>
-                                        <?php echo isset($billing->invoice_generation_date) ? date('d-m-Y H:i:s', strtotime($billing->invoice_generation_date)) : '-' ?>
+                                        <?php echo isset($billing->billing_title) ? $billing->billing_title : '-' ?>
+                                    </td>
+                                    <td>
+                                        <?php echo isset($billing->invoice_generation_date) ? date('d-m-Y H:i', strtotime($billing->invoice_generation_date)) : '-' ?>
                                     </td>
                                     <td>
                                         <a href="<?php echo site_url('admin/billing/edit/' . $billing->id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>

@@ -317,4 +317,24 @@ class Tutors extends CI_Model
 		}
 	}
 
+	public function delete_archive($tutor_id)
+    {
+    	$this->db->trans_start();
+    	$query = $this->db->get_where(DB_TUTOR, ['tutor_id'	=>	$tutor_id]);
+    	$result = $query->row();
+
+    	
+        $this->db->delete(DB_TUTOR, ['tutor_id' =>  $tutor_id]);
+        $this->aauth->delete_user($result->user_id);
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === false) {
+        	$this->session->set_flashdata('error', MSG_ERROR);
+			return redirect('admin/tutors/archived');
+        }
+        else {
+        	$this->session->set_flashdata('success', TUTOR . ' ' . MSG_DELETED);
+        	return redirect('admin/tutors');
+        }
+    }
+
 }

@@ -17,8 +17,17 @@
                     <?php echo form_open('admin/billing/update/' . $billing->id); ?>
                     <div class="box-body">
                         <div class="row">
+                            <?php $billing_group = json_decode($billing->billing); ?>
+                            <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Billing Title</label>
+                                        <input type="text" name="billing_title" class="form-control" value="<?php echo $billing->billing_title; ?>">
+                                    </div>
+                                </div>
+                            </div>
                             <?php
-                            $billing_group = json_decode($billing->billing);
+                            
                             //die(print_r($billing_group));
                             $i = 0;
                             if($billing_group) {
@@ -91,7 +100,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input type="text" class="form-control pull-right datetimepicker1" name="invoice_generation_date" value="<?php echo $billing->invoice_generation_date; ?>" autocomplete="off">
+                                            <input type="text" class="form-control pull-right datetimepicker1" name="invoice_generation_date" value="<?php echo date("Y-m-d H:i", strtotime($billing->invoice_generation_date)); ?>" autocomplete="off">
                                         </div>
                                         <!-- /.input group -->
                                     </div>
@@ -111,6 +120,6 @@
 </div>
 <script type="text/javascript">
         $(function () {
-            $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii:ss'});
+            $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
         });
 </script>

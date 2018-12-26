@@ -82,14 +82,19 @@ class StudentController extends CI_Controller
 
         $config = [
             [
-                'field' => 'name',
-                'label' => 'Name',
+                'field' => 'firstname',
+                'label' => 'Student First Name',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'lastname',
+                'label' => 'Student Last Name',
                 'rules' => 'required',
             ],
             [
                 'field' => 'nric',
                 'label' => 'NRIC',
-                'rules' => 'trim|required|is_unique[student.nric]|matches[username]',
+                'rules' => 'trim|required|is_unique[student.nric]|matches[username]|regex_match[/^[a-z][0-9]{7}[a-z]/]',
             ],
             [
                 'field' => 'email',
@@ -151,10 +156,10 @@ class StudentController extends CI_Controller
         $this->breadcrumbs->push(EDIT, 'admin/students/edit');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
-        $data['page_title']  = STUDENT . " <small> " . EDIT . ' #' . $id . " </small>";
+        $data['page_title']  = STUDENT . " <small> " . EDIT . " </small>";
         $data['crud_id']     = $id;
         $data['student']     = get_student($id);
-        $data['student_names'] = get_student_names_with_nric();
+        $data['student_names'] = get_student_names_with_nric($id);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -170,14 +175,19 @@ class StudentController extends CI_Controller
 
         $config = [
             [
-                'field' => 'name',
-                'label' => 'Name',
+                'field' => 'firstname',
+                'label' => 'Student First Name',
+                'rules' => 'required',
+            ],
+            [
+                'field' => 'lastname',
+                'label' => 'Student Last Name',
                 'rules' => 'required',
             ],
             [
                 'field' => 'nric',
                 'label' => 'NRIC',
-                'rules' => 'trim|required|matches[username]',
+                'rules' => 'trim|required|matches[username]|regex_match[/^[a-z][0-9]{7}[a-z]/]',
             ],
             [
                 'field' => 'email',
@@ -250,7 +260,8 @@ class StudentController extends CI_Controller
     public function get_class_size()
     {
         $class_id = !empty($_GET['class_id']) ? $_GET['class_id'] : '';
-        print_r(get_class_size($class_id));
+        $enrollment_type = !empty($_GET['enrollment_type']) ? $_GET['enrollment_type'] : '';
+        print_r(get_class_size($class_id, $enrollment_type));
     }
 
     public function get_class_deposit_amount()
@@ -288,5 +299,10 @@ class StudentController extends CI_Controller
     public function update_enrollment()
     {
         $this->students->update_enrollment($_POST);
+    }
+
+    public function delete_archive($student_id)
+    {
+        $this->students->delete_archive($student_id);
     }
 }

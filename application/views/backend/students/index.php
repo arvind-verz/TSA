@@ -100,9 +100,9 @@
                                     <th>
                                         Archive At
                                     </th>
-                                    <!-- <th>
+                                    <th>
                                         #
-                                    </th> -->
+                                    </th>
                                 <?php } ?>
                                 </tr>
                             </thead>
@@ -118,7 +118,7 @@
                                     <td><input type="hidden" name="student_id_ref" value="<?php echo $student->student_id; ?>">
                                 <input type="hidden" name="class_id_ref" value="<?php echo $student->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id" value="<?php echo $student->student_id;?>"/></td>
                                 <?php } ?>
-                                    <td><?php echo $student->name;?></td>
+                                    <td><?php echo $student->firstname . ' ' . $student->lastname;?></td>
                                     <td><?php echo $student->email;?></td>
                                     <td><?php echo isset($student->username) ? $student->username : '-' ?></td>
                                     <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
@@ -156,9 +156,10 @@
                                     <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'depo_collected'); ?></td>
                                     <?php if (current_url() == site_url('admin/students/archived')) { ?>
                                         <td><?php echo get_student_archive_at($student->student_id); ?></td>
-                                        <!-- <td>
-                                            <a href="<?php echo base_url();?>index.php/admin/students/moveto_active_list/<?php echo $student->student_id;?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
-                                        </td> -->
+                                        <td>
+                                            <!-- <a href="<?php echo base_url();?>index.php/admin/students/moveto_active_list/<?php echo $student->student_id;?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a> -->
+                                            <a href="<?php echo site_url('admin/students/delete-archive/' . $student->student_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+                                        </td>
                                     <?php } ?>
                                 </tr>
                                 <?php
@@ -342,7 +343,8 @@ $(document).ready(function() {
     var table = $('table').DataTable({
         columnDefs: [
           { targets: 'no-sort', orderable: false }
-        ]
+        ],
+        "autoWidth" : false,
     });
  
     // Apply the search
@@ -372,7 +374,7 @@ $(document).ready(function() {
         }
         else
         {
-            type = '';
+            type = 'waitlist';
         }
         if(type) {
             $.ajax({
@@ -491,11 +493,12 @@ $(document).ready(function() {
 
     $("body").on("change", "select[name='class_code']",  function() {
         $("button[type='submit']").attr("disabled", false);
+        var enrollment_type = $("select[name='enrollment_type']").val();
         var class_id = $(this).val();
         $.ajax({
             type: 'GET',
             url: '<?php echo site_url('admin/students/get_class_size'); ?>',
-            data: 'class_id=' + class_id,
+            data: 'class_id=' + class_id + '&enrollment_type=' + enrollment_type,
             async: false,
             processData: false,
             contentType: false,
@@ -521,8 +524,9 @@ $(document).ready(function() {
 
     function enrollment_decision()
     {
+        var enrollment_type = $("select[name='enrollment_type']").val();
         var class_size = ($("p.class_size").text()).split('/').map(Number);
-        if(class_size[0]==class_size[1])
+        if(class_size[0]==class_size[1] && enrollment_type==3)
         {
             $("select[name='enrollment_type']").val('').trigger("change");
             $("#dis_content").html('<p class="text-danger">Class is enrolled fully. Please select another class to proceed.</p>');

@@ -21,6 +21,7 @@ class Billing extends CI_Model
             ];
         }
         $data = array(
+            'billing_title' => !empty($_POST['billing_title']) ? $_POST['billing_title'] : null,
             'billing'                 => json_encode($billing),
             'invoice_generation_date' => !empty($_POST['invoice_generation_date']) ? $_POST['invoice_generation_date'] : null,
             'created_at'              => $this->date,
@@ -50,6 +51,7 @@ class Billing extends CI_Model
             ];
         }
         $data = array(
+            'billing_title' => !empty($_POST['billing_title']) ? $_POST['billing_title'] : null,
             'billing'                 => json_encode($billing),
             'invoice_generation_date' => !empty($_POST['invoice_generation_date']) ? $_POST['invoice_generation_date'] : null,
             'updated_at'              => $this->date,

@@ -95,12 +95,12 @@ function get_enrolled_classes($student_id)
     }
 }
 
-function get_class_size($class_id)
+function get_class_size($class_id, $enrollment_type)
 {
     $ci         = &get_instance();
     if($class_id) {
         $class = get_classes($class_id);
-        $class_size = get_students_enrolled($class_id);
+        $class_size = get_students_enrolled($class_id, $enrollment_type);
 
         return $class_size . '/' . $class->class_size;
     }
@@ -124,7 +124,7 @@ function get_student_name_by_student_id($student_id)
     $result = $query->row();
     if($result)
     {
-        return $result->name;
+        return $result->firstname . ' ' . $result->lastname;
     }
 }
 
@@ -197,10 +197,15 @@ function get_enrollment_type_popup_content($type)
     }
 }
 
-function get_student_names_with_nric()
+function get_student_names_with_nric($student_id = false)
 {
     $ci = &get_instance();
-    $query = $ci->db->get_where(DB_STUDENT);
+    if($student_id) {
+        $query = $ci->db->get_where(DB_STUDENT, ['student_id !='    =>  $student_id]);
+    }
+    else {
+        $query = $ci->db->get_where(DB_STUDENT);
+    }
     $result = $query->result();
     if($result)
     {
@@ -243,7 +248,7 @@ function get_books_by_subject($subjects /*Array*/)
             foreach($result as $row)
             {
                 ?>
-                <option value="<?php echo $row->id ?>" <?php echo set_select('book_id', $row->id); ?>><?php echo $row->material_id ?></option>
+                <option value="<?php echo $row->id ?>" <?php echo set_select('book_id', $row->id); ?>><?php echo $row->material_id . ' - ' . $row->book_name ?></option>
                 <?php
             }
         }
@@ -337,9 +342,14 @@ function miss_class_request($class_id, $reason, $date_of_absence)
             ];
 
             $message = get_sms_template_content(4);
+            $z = 0;
+            $sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
             foreach ($recipients as $recipient) {
-                send_sms($recipient, $message, 4, $result1->class_code);
-            }
+                if($z==1) {
+                    $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_name . '\r\n';
+                }
+                send_sms($recipient, $sms_pre_content . $message, 4, $result1->class_code);
+            $z++;}
 
             $data = [
                 'reason_for_absent'   =>  $reason,
@@ -524,7 +534,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             $query  = $ci->db->get_where(DB_STUDENT, ['student_id' => $student_id]);
             $result = $query->row();
             return [
-                'name'  => $result->name,
+                'name'  => $result->firstname . ' ' . $result->lastname,
                 'email' => $result->email,
                 'phone' => $result->phone,
             ];
@@ -711,7 +721,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             <?php
             foreach ($result as $row) {
                 ?>
-                <option value="<?php echo $row->student_id; ?>" <?php echo set_select('student[]', $row->student_id); ?>><?php echo $row->name ?></option>
+                <option value="<?php echo $row->student_id; ?>" <?php echo set_select('student[]', $row->student_id); ?>><?php echo $row->firstname . ' ' . $row->lastname; ?></option>
                 <?php
             }
         }
@@ -810,12 +820,12 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         foreach ($subject as $value) {
             $query          = $ci->db->get_where(DB_SUBJECT, ['id' => $value]);
             $result         = $query->row();
-            $subject_list[] = $result->subject_name;
+            $subject_list[] = isset($result->subject_name) ? $result->subject_name : '';
         }
         return implode(", ", $subject_list);
     }
 
-    function get_students_enrolled($class_id = false)
+    function get_students_enrolled($class_id = false, $enrollment_type)
     {
         $ci = &get_instance();
 
@@ -823,8 +833,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         $ci->db->from(DB_STUDENT);
         $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
         $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
-
-        $ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_id' => $class_id]);
+        $ci->db->where(['student_to_class.status'   =>  $enrollment_type, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_id' => $class_id]);
         $query  = $ci->db->get();
         $result = $query->row();
         return $result->total_students_enrolled;
@@ -950,7 +959,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             <tr>
                 <td><input type="checkbox" name="student_id_transfer" value="<?php echo $result->student_id; ?>"></td>
                 <td><?php echo $result->student_id; ?></td>
-                <td><?php echo $result->name; ?></td>
+                <td><?php echo $result->firstname . ' ' . $result->lastname; ?></td>
                 <td>
                     <input type="hidden" name="student_id[]" class="form-control" value="<?php echo $result->student_id; ?>">
                     <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="L">
@@ -1001,7 +1010,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                 <tr>
                     <td><input type="checkbox" name="student_id_transfer" value="<?php echo $result->student_id; ?>"></td>
                     <td><?php echo $result->student_id; ?></td>
-                    <td><?php echo $result->name; ?></td>
+                    <td><?php echo $result->firstname . ' ' . $result->lastname; ?></td>
                     <td>
                         <input type="hidden" name="student_id[]" class="form-control" value="<?php echo $result->student_id; ?>">
                         <input type="text" name="attendance_value<?php echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php echo (get_attendance_status($result->status) == 'L') ? 1 : 0; ?>" placeholder="L">
@@ -1184,7 +1193,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         foreach ($result as $value) {
                             $query     = $ci->db->get_where(DB_STUDENT, ['id' => $value->student_id]);
                             $result    = $query->row();
-                            $storage[] = $result->name;
+                            $storage[] = $result->firstname . ' ' . $result->lastname;
                         }
                         $storage = implode(", ", $storage);
                         return $storage;
@@ -1206,7 +1215,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     if ($result) {
                         foreach ($result as $value) {
                             ?>
-                            <option value="<?php echo $value->stud_id; ?>"><?php echo $value->name . ' - ' . get_class_code_by_class($value->class_id); ?></option>
+                            <option value="<?php echo $value->stud_id; ?>"><?php echo $value->firstname . ' ' . $value->lastname . ' - ' . get_class_code_by_class($value->class_id); ?></option>
                             <?php
                         }
                     }
@@ -1344,7 +1353,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     $query  = $ci->db->get_where(DB_STUDENT, ['is_archive' => 0, 'is_active' => 1, 'student_id' => $id]);
                     $result = $query->row();
                     if ($result) {
-                        return $result->name;
+                        return $result->firstname . ' ' . $result->lastname;
                     } else {
                         return '-';
                     }
@@ -1488,7 +1497,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             $result = $query->row();
                             if ($result) {
                                 return [
-                                    'student_name' => $result->name,
+                                    'student_name' => $result->firstname . ' ' . $result->lastname,
                                     'student_id'   => $result->student_id,
                                 ];
                             }
@@ -2287,6 +2296,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $query  = $ci->db->get_where('sms_reminder', ['fee_reminder'    =>  date('Y-m-d')]);
                         $result = $query->row();
                         $message = get_sms_template_content(2);
+                        
                         if ($result && $message) {
                             $query1  = $ci->db->get(DB_INVOICE);
                             $result1 = $query1->result();
@@ -2299,9 +2309,14 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                             'parents_phone' => $student_details->parents_phone,
                                         ];
                                         $class_code = get_class_code_by_class($row->class_id);
+                                        $z = 0;
+                                        $sms_pre_content = 'Hi ' . $student_details->firstname . ' ' . $student_details->lastname . '\r\n';
                                         foreach ($recipients as $recipient) {
-                                            send_sms($recipient, $message, 2, $class_code);
-                                        }
+                                            if($z==1) {
+                                                $sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_name . '\r\n';
+                                            }
+                                            send_sms($recipient, $sms_pre_content . $message, 2, $class_code);
+                                        $z++;}
                                     }
                                 }
                             }
@@ -2327,9 +2342,14 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                             'parents_phone' => $student_details->parents_phone,
                                         ];
                                         $class_code = get_class_code_by_class($row->class_id);
+                                        $z = 0;
+                                        $sms_pre_content = 'Hi ' . $student_details->firstname . ' ' . $student_details->lastname . '\r\n';
                                         foreach ($recipients as $recipient) {
-                                            send_sms($recipient, $message, 3, $class_code);
-                                        }
+                                            if($z==1) {
+                                                $sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_name . '\r\n';
+                                            }
+                                            send_sms($recipient, $sms_pre_content . $message, 3, $class_code);
+                                        $z++;}
                                     }
                                 }
                             }
@@ -2466,11 +2486,16 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                     $class_code = get_class_code_by_class($row->class_id);
 
                                     $recipients = [$row->phone, $row->parents_phone];
+                                    $z = 0;
+                                    $sms_pre_content = 'Hi ' . $row->firstname . ' ' . $row->lastname . '\r\n';
                                     foreach($recipients as $recipient) {
-                                        if($recipient) {
-                                            send_sms($recipient, $message, 5, $class_code);
+                                        if($z==1) {
+                                            $sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_name . '\r\n';
                                         }
-                                    }
+                                        if($recipient) {
+                                            send_sms($recipient, $sms_pre_content . $message, 5, $class_code);
+                                        }
+                                    $z++;}
                                 }
                             }
                         }
@@ -2496,11 +2521,16 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                     $class_code = get_class_code_by_class($row->class_id);
                                     $result = $query->row();
                                     $recipients = [$row->phone, $row->parents_phone];
+                                    $z = 0;
+                                    $sms_pre_content = 'Hi ' . $row->firstname . ' ' . $row->lastname . '\r\n';
                                     foreach($recipients as $recipient) {
-                                        if($recipient) {
-                                            send_sms($recipient, $message, 6, $class_code);
+                                        if($z==1) {
+                                            $sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_name . '\r\n';
                                         }
-                                    }
+                                        if($recipient) {
+                                            send_sms($recipient, $sms_pre_content . $message, 6, $class_code);
+                                        }
+                                    $z++;}
                                 }
                             }
                         }

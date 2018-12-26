@@ -50,7 +50,7 @@ $.widget.bridge('uibutton', $.ui.button);
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#datatable").DataTable({
-			"ordering": false
+			"ordering": false,
 		});
 		$('.select2').select2();
 		$('.datepicker').datepicker({
