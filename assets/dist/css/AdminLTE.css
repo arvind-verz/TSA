@@ -5279,3 +5279,9 @@ table.text-center th {
 .c-no-drop {
   cursor: no-drop;
 }
+
+tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }

@@ -38,7 +38,7 @@
                             <thead>
                                 <tr>
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
-                                    <th class="no-sort">
+                                    <th class="no-sort" width="20px">
                                         <input type="checkbox" class="checkbox" name="select_all_students">
                                     </th>
                                 <?php } ?>
@@ -169,7 +169,7 @@
                             <tfoot>
                                 <tr>
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
-                                    <th class="no-sort">#</th>
+                                    <th><button type="button" class="btn btn-default clearall">Clear All</button></th>
                                 <?php } ?>
                                     <th>
                                         Student <br/> Name
@@ -334,7 +334,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('table tfoot tr th').each( function () {
+    
+    $('table tfoot tr th:gt(0)').each( function () {
         var title = $(this).text().trim();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
     } );
@@ -343,8 +344,7 @@ $(document).ready(function() {
     var table = $('table').DataTable({
         columnDefs: [
           { targets: 'no-sort', orderable: false }
-        ],
-        "autoWidth" : false,
+        ]
     });
  
     // Apply the search
@@ -359,6 +359,13 @@ $(document).ready(function() {
             }
         } );
     } );
+
+    $("body").on("click", "button.clearall", function() {
+        $("tfoot input").val('');
+        table.search( '' )
+             .columns().search( '' )
+             .draw();
+    })
 
     $("body").on('change', "select[name='enrollment_type']", function(){
         var reservation = enrollment = type = "";

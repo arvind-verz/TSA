@@ -52,7 +52,7 @@
                                 foreach($subjects as $subject) {
                                 $subject_id = json_decode($classes->subject);
                                 ?>
-                                <option value="<?php echo $subject->id; ?>" <?php if(in_array($subject->id, $subject_id)) {echo 'selected';} ?>><?php echo $subject->subject_name; ?></option>
+                                <option value="<?php echo $subject->id; ?>" <?php if($classes->subject) {if(in_array($subject->id, $subject_id)) {echo 'selected';}} ?>><?php echo $subject->subject_name; ?></option>
                                 <?php
                                 }}
                                 ?>

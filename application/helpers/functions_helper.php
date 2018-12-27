@@ -42,13 +42,15 @@ function get_all_modules()
     return ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'REPORTING', 'SMS_TEMPLATE', 'SMS_HISTORY', 'SMS_REMINDER'];
 }
 
-function get_tutor_of_class($tutor_id)
+function get_tutor_of_class($class_id)
 {
     $ci = &get_instance();
 
-    $query  = $ci->db->get_where(DB_TUTOR, ['tutor_id' => $tutor_id]);
+    $query  = $ci->db->get_where(DB_CLASSES, ['class_id' => $class_id]);
     $result = $query->row();
     if ($result) {
+        $query  = $ci->db->get_where(DB_TUTOR, ['tutor_id' => $result->tutor_id]);
+        $result = $query->row();
         return $result->tutor_name;
     }
 }
@@ -815,20 +817,25 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
         $query   = $ci->db->get();
         $result  = $query->row();
+        if($result->subject) {
         $subject = json_decode($result->subject);
-
-        foreach ($subject as $value) {
-            $query          = $ci->db->get_where(DB_SUBJECT, ['id' => $value]);
-            $result         = $query->row();
-            $subject_list[] = isset($result->subject_name) ? $result->subject_name : '';
+        
+            foreach ($subject as $value) {
+                $query          = $ci->db->get_where(DB_SUBJECT, ['id' => $value]);
+                $result         = $query->row();
+                $subject_list[] = isset($result->subject_name) ? $result->subject_name : '';
+            }
+            return implode(", ", $subject_list);
         }
-        return implode(", ", $subject_list);
+        return "-";
     }
 
-    function get_students_enrolled($class_id = false, $enrollment_type)
+    function get_students_enrolled($class_id = false, $enrollment_type = false)
     {
         $ci = &get_instance();
-
+        if(!$enrollment_type){
+            $enrollment_type = 3;
+        }
         $ci->db->select('*, count(student.id) as total_students_enrolled');
         $ci->db->from(DB_STUDENT);
         $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
@@ -1628,22 +1635,24 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                 }
                             }
                             $counter = (count($L) + count($M));
-                            $invoice_amount            = (((($counter - $i) * $fees) / $frequency) + $book_charges + $extra_charges - $credit_value);
-                            $amount_excluding_material = (((($counter - $i) * $fees) / $frequency) + $extra_charges - $credit_value);
+                            $invoice_amount            = ((($counter * $fees) / $frequency) + $book_charges + $extra_charges - $credit_value);
+                            $amount_excluding_material = ((($counter * $fees) / $frequency) + $extra_charges - $credit_value);
         
                             if($credit_value>0) {
                                 if($invoice_amount<0) {
-                                    $credit_amount = $invoice_amount;
+                                    $credit_amount = abs($invoice_amount);
                                     $invoice_amount = 0;
                                 }
-                                /*else {
+                                else {
                                     $credit_amount = 0;
-                                }*/
+                                }
                                 $ci->db->where('student_id', $student_id);
                                 $ci->db->where('class_id', $class_id);
                                 $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
 
                             }
+                            $invoice_amount = abs($invoice_amount);
+                            $amount_excluding_material = abs($amount_excluding_material);
                             $invoice_data = [
                                 'class_code'    =>  $class_code,
                                 'fees_monthly'  => $fees,
@@ -1739,14 +1748,16 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                     $credit_amount = abs($invoice_amount);
                                     $invoice_amount = 0;
                                 }
-                                /*else {
+                                else {
                                     $credit_amount = 0;
-                                }*/
+                                }
                                 $ci->db->where('student_id', $student_id);
                                 $ci->db->where('class_id', $class_id);
                                 $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
 
                             }
+                            $invoice_amount = abs($invoice_amount);
+                            $amount_excluding_material = abs($amount_excluding_material);
                             $invoice_data = [
                                 'class_code'    =>  $class_code,
                                 'fees_monthly'  => $fees,
@@ -1889,16 +1900,17 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                 $credit_amount = abs($invoice_amount);
                                 $invoice_amount = 0;
                             }
-                            /*else {
+                            else {
                                 $credit_amount = 0;
-                            }*/
+                            }
 
                             $ci->db->where('student_id', $student_id);
                             $ci->db->where('class_id', $class_id);
                             $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
 
                         }
-
+                        $invoice_amount = abs($invoice_amount);
+                        $amount_excluding_material = abs($amount_excluding_material);
                         $invoice_data = [
                             'class_code'    =>  $class_code,
                             'fees_monthly'  => $fees,
@@ -2038,14 +2050,16 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                 $credit_amount = abs($invoice_amount);
                                 $invoice_amount = 0;
                             }
-                            /*else {
+                            else {
                                 $credit_amount = 0;
-                            }*/
+                            }
                             $ci->db->where('student_id', $student_id);
                             $ci->db->where('class_id', $class_id);
                             $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
 
                         }
+                        $invoice_amount = abs($invoice_amount);
+                        $amount_excluding_material = abs($amount_excluding_material);
                         $invoice_data = [
                             'class_code'    =>  $class_code,
                             'fees_monthly'  => $fees,
@@ -2170,14 +2184,16 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                                 $credit_amount = ($credit_amount - ($deposit-$new_deposit));
                                 $invoice_amount = 0;
                             }
-                            /*else {
+                            else {
                                 $credit_amount = 0;
-                            }*/
+                            }
                             $ci->db->where('student_id', $student_id);
                             $ci->db->where('class_id', $class_id);
                             $ci->db->update('student_enrollment', ['credit_value'   =>  $credit_amount]);
 
                         }
+                        $invoice_amount = abs($invoice_amount);
+                        $amount_excluding_material = abs($amount_excluding_material);
                         $invoice_data = [
                             'class_code'    =>  $class_code,
                             'fees_monthly'  => $fees,
