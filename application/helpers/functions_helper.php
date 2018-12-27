@@ -60,7 +60,7 @@ function get_tutor_of_class($class_id)
 
 function get_user_type($user_type)
 {
-    $user_type_arr = ['Admin', 'User', 'Tutor'];
+    $user_type_arr = ['Super Admin', 'Admin', 'Tutor'];
 
     return $user_type_arr[($user_type - 1)];
 }

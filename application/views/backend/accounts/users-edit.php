@@ -41,7 +41,7 @@
                                     if(count($permission_data)) {
                                     foreach($permission_data as $value) {
                                     ?>
-                                    <option value="<?php echo isset($value->id) ? $value->id : '' ?>" <?php if($users_data->perm_id==$value->id) {echo "selected";} ?>><?php echo isset($value->name) ? $value->name : ''; ?></option>
+                                    <option value="<?php echo isset($value->id) ? $value->id : '' ?>" <?php if($users_data->user_type==$value->id) {echo "selected";} ?>><?php echo isset($value->name) ? $value->name : ''; ?></option>
                                     <?php
                                     }}
                                     ?>
