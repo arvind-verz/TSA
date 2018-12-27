@@ -225,10 +225,10 @@ class Tutors extends CI_Model
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
 			$password = isset($_POST['password']) ? $_POST['password'] : '';
-			$result = $this->aauth->update_user($user_id, $email, $password, $name, $this->date, false);
+			$result = $this->aauth->update_user($user_id, $email, $password, $name, $this->date, null);
 		}
 		else {
-			$result = $this->aauth->update_user($user_id, $email, false, $name, $this->date, false);
+			$result = $this->aauth->update_user($user_id, $email, false, $name, $this->date, null);
 		}
 
 		$data = array(

@@ -86,7 +86,7 @@
                                     ?>
                                     <tr>
                                         <td><?php echo !empty($value->username) ? $value->username : '-'; ?></td>
-                                        <td><?php echo !empty($value->name) ? $value->name : '-'; ?></td>
+                                        <td><?php echo !empty($value->user_type) ? get_user_type($value->user_type) : '-'; ?></td>
                                         <td><?php echo !empty($value->date_created) ? date("d M, Y H:i A", strtotime($value->date_created)) : '-'; ?></td>
                                         <td><?php echo !empty($value->last_login) ? date("d M, Y H:i A", strtotime($value->last_login)) : '-'; ?></td>
                                         <td><?php echo !empty($value->updated_at) ? date("d M, Y H:i A", strtotime($value->updated_at)) : '-'; ?></td>

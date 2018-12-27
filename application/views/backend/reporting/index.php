@@ -68,11 +68,11 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $("table").dataTable({
-                        dom: 'Bfrtip',
-                        buttons: [
-                            'csv'
-                        ]
-                    });
+            dom: 'Bfrtip',
+            buttons: [
+                'csv'
+            ]
+        });
         $("input[name='date_from'], input[name='date_to']").on("change", function() {
             var date_from = $("input[name='date_from']").val();
             var date_to = $("input[name='date_to']").val();
@@ -85,14 +85,14 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    //alert(data);
+                    alert(data);
                     $(".display_data").html(data);
-                    $("table").dataTable({
+                    /*$("table").dataTable({
                         dom: 'Bfrtip',
-        buttons: [
-            'csv'
-        ]
-                    });
+                        buttons: [
+                            'csv'
+                        ]
+                    });*/
                 }
             })
         });

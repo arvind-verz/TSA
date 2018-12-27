@@ -51,8 +51,11 @@ function get_tutor_of_class($class_id)
     if ($result) {
         $query  = $ci->db->get_where(DB_TUTOR, ['tutor_id' => $result->tutor_id]);
         $result = $query->row();
-        return $result->tutor_name;
+        if ($result) {
+            return $result->tutor_name;
+        }
     }
+    return "-";
 }
 
 function get_user_type($user_type)
@@ -680,6 +683,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
             $query  = $ci->db->get();
             $result = $query->result();
         }
+        //die(print_r($ci->db->last_query()));
         return $result;
     }
 
@@ -1366,6 +1370,21 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     }
                 }
 
+                function get_class_code_and_tutor($class_id) {
+                    $ci = &get_instance();
+                    $storage = [];
+                    $query = $ci->db->get_where(DB_CLASSES, ['class_id'  =>  $class_id]);
+                    $result = $query->row();
+                    if($result)
+                    {
+                        $storage = [
+                            'class_code'    =>  $result->class_code,
+                            'tutor_id'      =>  $result->tutor_id,
+                        ];
+                        return $storage;
+                    }
+                }
+
                 function get_reporting_sheet($date_from = false, $date_to = false)
                 {
                     $ci = &get_instance();
@@ -1382,15 +1401,15 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     //die(print_r($ci->db->last_query()));
 
                     if ($date_from || $date_to) {
-                        if (count($result)) {
+                        if ($result) {
                             foreach ($result as $value) {
-                                $class_code = get_class_code($value->class_id);
+                                $class_code = get_class_code_and_tutor($value->class_id);
                                 ?>
                                 <tr>
                                     <td><?php echo $class_code['class_code']; ?></td>
                                     <td><?php echo get_subject_code($value->student_id); ?></td>
                                     <td><?php echo $class_code['tutor_id']; ?></td>
-                                    <td><?php echo get_students_enrolled($class_code['class_code']); ?></td>
+                                    <td><?php echo get_students_enrolled($value->class_id); ?></td>
                                     <td><?php get_currency('INR');
                                     echo isset($value->total_amount_excluding_material) ? $value->total_amount_excluding_material : '-';?></td>
                                     <td><?php get_currency('INR');

@@ -187,29 +187,29 @@
                             contentType: false,
                             success: function(data) {
                     //alert(data);
-                    $(".display_data").html(data);
-                    $('table tfoot th').each( function () {
-                        var title = $(this).text().trim();
-                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-                    } );
-                 
-                    // DataTable
-                    var table = $('table').DataTable();
-                 
-                    // Apply the search
-                    table.columns().every( function () {
-                        var that = this;
-                 
-                        $( 'input', this.footer() ).on( 'keyup change', function () {
-                            if ( that.search() !== this.value ) {
-                                that
-                                    .search( this.value )
-                                    .draw();
+                                $(".display_data").html(data);
+                                $('table tfoot th').each( function () {
+                                    var title = $(this).text().trim();
+                                    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                                } );
+                             
+                                // DataTable
+                                var table = $('table').DataTable();
+                             
+                                // Apply the search
+                                table.columns().every( function () {
+                                    var that = this;
+                             
+                                    $( 'input', this.footer() ).on( 'keyup change', function () {
+                                        if ( that.search() !== this.value ) {
+                                            that
+                                                .search( this.value )
+                                                .draw();
+                                        }
+                                    } );
+                                } );
                             }
-                        } );
-                    } );
-                }
-            })
+                        })
                     });
                 });
             </script>

@@ -93,7 +93,7 @@ class Accounts extends CI_Model
         $status = isset($_POST['status']) ? $_POST['status'] : '';
         $update_at = date('Y-m-d H:i:s');
         if($email && $username && $perm_id) {
-            $result = $this->aauth->update_user($id, $email, false, $username, $update_at);
+            $result = $this->aauth->update_user($id, $email, false, $username, $update_at, null);
             if($status==1) {
                     $this->aauth->ban_user($id);
                 }
