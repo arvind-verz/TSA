@@ -58,7 +58,7 @@
                                         <th>Invoice Date</th>
                                         <th>View/Download</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        <th>Method of Payment</th>
                                     </tr>
                                 </thead>
                                 <tbody class="display_data">

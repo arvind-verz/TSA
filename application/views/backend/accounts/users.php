@@ -23,10 +23,11 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
+                                        <th>Action</th>
                                         <th>Title</th>
                                         <th>Modules Access</th>
                                         <th>Role Access</th>
-                                        <th>Action</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -36,13 +37,14 @@
                                     foreach($permission_data as $value) {
                                     ?>
                                     <tr>
+                                        <td>
+                                            <a href="<?php echo site_url('admin/users/roles-and-permission/edit/' . $value->id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                                            <a href="<?php echo site_url('admin/users/roles-and-permission/delete/' . $value->id) ?>" title="Remove" onclick="return confirm('Are you sure you want to delete this?');"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+                                        </td>
                                         <td><?php echo $value->name; ?></td>
                                         <td><?php echo get_permission_access_module($value->id); ?></td>
                                         <td>View, Create, Edit, Delete</td>
-                                        <td>
-                                            <a href="<?php echo site_url('admin/users/roles-and-permission/edit/' . $value->id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
-                                            <a href="<?php echo site_url('admin/users/roles-and-permission/delete/' . $value->id) ?>" title="Edit" onclick="return confirm('Are you sure you want to delete this?');"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
-                                        </td>
+                                        
                                     </tr>
                                     <?php
                                     $i++;}}
@@ -70,12 +72,13 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
+                                        <th>Action</th>
                                         <th>Name</th>
                                         <th>Permission Type</th>
                                         <th>Date of Account Creation</th>
                                         <th>Last Login</th>
                                         <th>Last Updated</th>
-                                        <th>Action</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,15 +88,16 @@
                                     foreach($users_data as $value) {
                                     ?>
                                     <tr>
+                                        <td>
+                                            <a href="<?php echo site_url('admin/users/edit/' . $value->aauth_users_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                                            <a href="<?php echo site_url('admin/users/delete/' . $value->aauth_users_id) ?>" title="Remove" onclick="return confirm('Are you sure you want to delete this?');"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+                                        </td>
                                         <td><?php echo !empty($value->username) ? $value->username : '-'; ?></td>
-                                        <td><?php echo !empty($value->name) ? $value->name : '-'; ?></td>
+                                        <td><?php echo !empty($value->user_type) ? get_user_type($value->user_type) : '-'; ?></td>
                                         <td><?php echo !empty($value->date_created) ? date("d M, Y H:i A", strtotime($value->date_created)) : '-'; ?></td>
                                         <td><?php echo !empty($value->last_login) ? date("d M, Y H:i A", strtotime($value->last_login)) : '-'; ?></td>
                                         <td><?php echo !empty($value->updated_at) ? date("d M, Y H:i A", strtotime($value->updated_at)) : '-'; ?></td>
-                                        <td>
-                                            <a href="<?php echo site_url('admin/users/edit/' . $value->aauth_users_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
-                                            <a href="<?php echo site_url('admin/users/delete/' . $value->aauth_users_id) ?>" title="Edit" onclick="return confirm('Are you sure you want to delete this?');"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
-                                        </td>
+                                        
                                     </tr>
                                     <?php
                                     $i++;}}

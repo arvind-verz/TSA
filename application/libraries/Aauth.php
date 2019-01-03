@@ -840,9 +840,9 @@ class Aauth
             $data['pass'] = $this->hash_password($pass, $user_id);
         }
 
-        /*if ($user->username == $username) {
-            $username = false;
-        }*/
+        if ($username) {
+            $data['username'] = $username;
+        }
 
         /*if ($username != false) {
             if ($this->user_exist_by_username($username)) {
@@ -855,7 +855,7 @@ class Aauth
             }
             
         }*/
-        $data['username'] = $username;
+        
         $data['updated_at'] = $updated_at;
         $data['deleted_at'] = $deleted_at;
         if (!$valid || empty($data)) {

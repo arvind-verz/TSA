@@ -38,10 +38,18 @@
                             <thead>
                                 <tr>
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
-                                    <th class="no-sort">
+                                    <th class="no-sort" width="15px">
                                         <input type="checkbox" class="checkbox" name="select_all_students">
                                     </th>
                                 <?php } ?>
+                                <?php if (current_url() == site_url('admin/students/archived')) { ?>
+                                    <th>
+                                        #
+                                    </th>
+                                    <?php } ?>
+                                    <th>
+                                        Material <br /> Associated
+                                    </th>
                                     <th>
                                         Student <br/> Name
                                     </th>
@@ -87,9 +95,7 @@
                                     <th>
                                         Action
                                     </th>
-                                    <th>
-                                        Material <br /> Associated
-                                    </th>
+                                    
                                     <th>
                                         Extra <br /> Charges <br /> Applied
                                     </th>
@@ -100,9 +106,7 @@
                                     <th>
                                         Archive At
                                     </th>
-                                    <th>
-                                        #
-                                    </th>
+                                    
                                 <?php } ?>
                                 </tr>
                             </thead>
@@ -118,6 +122,16 @@
                                     <td><input type="hidden" name="student_id_ref" value="<?php echo $student->student_id; ?>">
                                 <input type="hidden" name="class_id_ref" value="<?php echo $student->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id" value="<?php echo $student->student_id;?>"/></td>
                                 <?php } ?>
+                                <?php if (current_url() == site_url('admin/students/archived')) { ?>
+                                        <td>
+                                            <a href="<?php echo site_url('admin/students/delete-archive/' . $student->student_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+                                        </td>
+                                    <?php } ?>
+                                    <td>
+                                        <select name="material" class="form-control select2">
+                                            <?php echo get_material_associated($student->sid, $student->class_code); ?>
+                                        </select>
+                                    </td>
                                     <td><?php echo $student->firstname . ' ' . $student->lastname;?></td>
                                     <td><?php echo $student->email;?></td>
                                     <td><?php echo isset($student->username) ? $student->username : '-' ?></td>
@@ -147,19 +161,11 @@
                                             </select>
                                         </div>
                                     </td>
-                                    <td>
-                                        <select name="material" class="form-control select2">
-                                            <?php echo get_material_associated($student->sid, $student->class_code); ?>
-                                        </select>
-                                    </td>
+                                    
                                     <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'extra_charges'); ?></td>
                                     <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'depo_collected'); ?></td>
                                     <?php if (current_url() == site_url('admin/students/archived')) { ?>
                                         <td><?php echo get_student_archive_at($student->student_id); ?></td>
-                                        <td>
-                                            <!-- <a href="<?php echo base_url();?>index.php/admin/students/moveto_active_list/<?php echo $student->student_id;?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a> -->
-                                            <a href="<?php echo site_url('admin/students/delete-archive/' . $student->student_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
-                                        </td>
                                     <?php } ?>
                                 </tr>
                                 <?php
@@ -168,9 +174,11 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
-                                    <th class="no-sort">#</th>
-                                <?php } ?>
+                                    
+                                    <th><button type="button" class="btn btn-default clearall">Clear All</button></th>
+                                    <th>
+                                        Material <br /> Associated
+                                    </th>
                                     <th>
                                         Student <br/> Name
                                     </th>
@@ -216,9 +224,7 @@
                                     <th>
                                         Action
                                     </th>
-                                    <th>
-                                        Material <br /> Associated
-                                    </th>
+                                    
                                     <th>
                                         Extra <br /> Charges <br /> Applied
                                     </th>
@@ -334,7 +340,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('table tfoot tr th').each( function () {
+    
+    $('table tfoot tr th:gt(0)').each( function () {
         var title = $(this).text().trim();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
     } );
@@ -343,8 +350,7 @@ $(document).ready(function() {
     var table = $('table').DataTable({
         columnDefs: [
           { targets: 'no-sort', orderable: false }
-        ],
-        "autoWidth" : false,
+        ]
     });
  
     // Apply the search
@@ -359,6 +365,13 @@ $(document).ready(function() {
             }
         } );
     } );
+
+    $("body").on("click", "button.clearall", function() {
+        $("tfoot input").val('');
+        table.search( '' )
+             .columns().search( '' )
+             .draw();
+    })
 
     $("body").on('change', "select[name='enrollment_type']", function(){
         var reservation = enrollment = type = "";
@@ -495,18 +508,20 @@ $(document).ready(function() {
         $("button[type='submit']").attr("disabled", false);
         var enrollment_type = $("select[name='enrollment_type']").val();
         var class_id = $(this).val();
-        $.ajax({
-            type: 'GET',
-            url: '<?php echo site_url('admin/students/get_class_size'); ?>',
-            data: 'class_id=' + class_id + '&enrollment_type=' + enrollment_type,
-            async: false,
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                $("p.class_size").html(data);
-                enrollment_decision();
-            }
-        });
+        if(enrollment_type!=2) {
+            $.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/students/get_class_size'); ?>',
+                data: 'class_id=' + class_id + '&enrollment_type=' + enrollment_type,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $("p.class_size").html(data);
+                    enrollment_decision();
+                }
+            });
+        }
 
         $.ajax({
             type: 'GET',

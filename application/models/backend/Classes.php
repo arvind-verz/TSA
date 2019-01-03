@@ -116,4 +116,11 @@ class Classes extends CI_Model
         }
     }
 
+    public function delete_archive($class_id)
+    {
+        $this->db->delete(DB_CLASSES, ['class_id' =>  $class_id]);
+        $this->session->set_flashdata('success', CLASSES . ' ' . MSG_DELETED);
+        return redirect('admin/classes');
+    }
+
 }

@@ -28,6 +28,9 @@
                             <thead>
                                 <tr>
                                     <th>
+                                        <?php echo ACTION ?>
+                                    </th>
+                                    <th>
                                         <?php echo CLASSES ?> Name
                                     </th>
                                     <th>
@@ -69,9 +72,7 @@
                                     <?php
                                     }
                                     ?>
-                                    <th>
-                                        <?php echo ACTION ?>
-                                    </th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,6 +81,21 @@
                                 foreach ($classes as $class) {
                                 ?>
                                 <tr>
+                                    <?php
+                                    if (current_url() == site_url('admin/classes/archived')) {
+                                    ?>
+                                    <td>
+                                        <a href="<?php echo site_url('admin/classes/moveto_active_list/' . $class->class_id) ?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
+                                        <a href="<?php echo site_url('admin/classes/delete-archive/' . $class->class_id); ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+                                    </td>
+                                    <?php
+                                    } else {
+                                    ?>
+                                    <td>
+                                        <a href="<?php echo site_url('admin/classes/edit/' . $class->class_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                                        <a href="<?php echo site_url('admin/classes/delete/' . $class->class_id) ?>" onclick="return confirm('Are you sure you want to archive this class?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
+                                    </td>
+                                    <?php }?>
                                     <td>
                                         <?php echo isset($class->class_name) ? $class->class_name : '-' ?>
                                     </td>
@@ -93,7 +109,7 @@
                                         <?php echo isset($class->subject) ? get_subject_classes($class->subject) : '-' ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($class->class_time) ? $class->class_time : '-' ?>
+                                        <?php echo isset($class->class_time) ? date("H:i", strtotime($class->class_time)) : '-' ?>
                                     </td>
                                     <td>
                                         <?php echo isset($class->frequency) ? $class->frequency : '-' ?>
@@ -111,7 +127,7 @@
                                         <?php echo isset($class->level) ? level($class->level) : '-'; ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($class->class_size) ? get_students_enrolled($class->class_id, 3) . '/' . $class->class_size : '-' ?>
+                                        <?php echo isset($class->class_size) ? get_students_enrolled($class->class_id) . '/' . $class->class_size : '-' ?>
                                     </td>
                                     <?php
                                     if (current_url() == site_url('admin/classes/archived')) {
@@ -119,17 +135,8 @@
                                     <td>
                                         <?php echo isset($class->archive_at) ? date('d-m-Y H:i A', strtotime($class->archive_at)) : '-' ?>
                                     </td>
-                                    <td>
-                                        <a href="<?php echo site_url('admin/classes/moveto_active_list/' . $class->class_id) ?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
-                                    </td>
                                     <?php
-                                    } else {
-                                    ?>
-                                    <td>
-                                        <a href="<?php echo site_url('admin/classes/edit/' . $class->class_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
-                                        <a href="<?php echo site_url('admin/classes/delete/' . $class->class_id) ?>" onclick="return confirm('Are you sure you want to archive this class?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
-                                    </td>
-                                    <?php }?>
+                                    } ?>
                                 </tr>
                                 <?php
                                 }}
@@ -137,6 +144,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
+                                    <th><button type="button" class="btn btn-default clearall">Clear All</button></th>
                                     <th>
                                         <?php echo CLASSES ?> Name
                                     </th>
@@ -179,9 +187,7 @@
                                     <?php
                                     }
                                     ?>
-                                    <th>
-                                        <?php echo ACTION ?>
-                                    </th>
+                                    
                                 </tr>
                             </tfoot>
                         </table>
@@ -194,7 +200,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     // Setup - add a text input to each footer cell
-    $('table tfoot th').each( function () {
+    $('table tfoot tr th:gt(0)').each( function () {
         var title = $(this).text().trim();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
     } );
@@ -218,5 +224,12 @@ $(document).ready(function() {
             }
         } );
     } );
+
+    $("body").on("click", "button.clearall", function() {
+        $("tfoot input").val('');
+        table.search( '' )
+             .columns().search( '' )
+             .draw();
+    })
 } );
 </script>

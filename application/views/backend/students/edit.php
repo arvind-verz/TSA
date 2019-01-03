@@ -112,7 +112,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Password</label>
-                    <input type="password" name="password" class="form-control" value="">
+                    <input type="text" name="password" class="form-control" value="">
                 </div>
             </div>
             <div class="box-footer">

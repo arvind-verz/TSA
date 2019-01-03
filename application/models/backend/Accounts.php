@@ -47,7 +47,7 @@ class Accounts extends CI_Model
                 $this->aauth->permission_access($result, $module['name'][0], $module['view'][0], $module['create'][0], $module['edit'][0], $module['delete'][0]);
             }
         }
-        $this->session->set_flashdata('success', ROLESANDPERMISSION . ' ' . MSG_CREATED);
+        $this->session->set_flashdata('success', PERMISSION . ' ' . MSG_CREATED);
         return redirect('admin/users');
     }
 
@@ -59,10 +59,17 @@ class Accounts extends CI_Model
         $result = $this->aauth->update_perm($id, $title);
         if($result) {
             foreach($modules as $module) {
-                $this->aauth->update_permission_access($id, $module['name'][0], $module['view'][0], $module['create'][0], $module['edit'][0], $module['delete'][0]);
+                $query = $this->db->get_where('aauth_permission_access', ['module'  => $module['name'][0], 'perm_id'   =>  $id]);
+                
+                if($query->num_rows()<1) {
+                    $this->aauth->permission_access($result, $module['name'][0], $module['view'][0], $module['create'][0], $module['edit'][0], $module['delete'][0]);
+                }
+                else {
+                    $this->aauth->update_permission_access($id, $module['name'][0], $module['view'][0], $module['create'][0], $module['edit'][0], $module['delete'][0]);
+                }
             }
         }
-        $this->session->set_flashdata('success', ROLESANDPERMISSION . ' ' . MSG_UPDATED);
+        $this->session->set_flashdata('success', PERMISSION . ' ' . MSG_UPDATED);
         return redirect('admin/users');
     }
 
@@ -87,19 +94,23 @@ class Accounts extends CI_Model
     }
 
     public function users_update($id) {
+
         $email = isset($_POST['email']) ? $_POST['email'] : '';
         $username = isset($_POST['username']) ? $_POST['username'] : '';
         $perm_id = isset($_POST['perm_id']) ? $_POST['perm_id'] : '';
         $status = isset($_POST['status']) ? $_POST['status'] : '';
         $update_at = date('Y-m-d H:i:s');
         if($email && $username && $perm_id) {
-            $result = $this->aauth->update_user($id, $email, false, $username, $update_at);
+            $this->db->where('id', $id);
+            $this->db->update('aauth_users', ['user_type'   => $perm_id]);
+            $result = $this->aauth->update_user($id, $email, false, $username, $update_at, null);
             if($status==1) {
                     $this->aauth->ban_user($id);
                 }
                 else {
                     $this->aauth->unban_user($id);
                 }
+                //die(print_r($id));
             $this->aauth->update_allow_user($id, $perm_id);
             $this->session->set_flashdata('success', USERS . ' ' . MSG_UPDATED);
             return redirect('admin/users');
@@ -177,9 +188,9 @@ class Accounts extends CI_Model
     public function users_delete($id)
     {
         $deleted_at = date('Y-m-d H:i:s');
-        $this->aauth->update_user($id, false, false, false, false, $deleted_at);
+        $this->aauth->update_user($id, false, false, false, $deleted_at, $deleted_at);
         $this->session->set_flashdata('success', 'Role ' . MSG_DELETED);
-        redirect('admin/users');
+        return redirect('admin/users');
     }
 
     public function permission_delete($id)
@@ -188,5 +199,7 @@ class Accounts extends CI_Model
         $this->db->delete('aauth_perms');
         $this->db->where('perm_id', $id);
         $this->db->delete('aauth_permission_access');
+        $this->session->set_flashdata('success', PERMISSION . ' ' . MSG_DELETED);
+        return redirect('admin/users');
     }
 }

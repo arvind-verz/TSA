@@ -52,6 +52,9 @@ $.widget.bridge('uibutton', $.ui.button);
 		$("#datatable").DataTable({
 			"ordering": false,
 		});
+		moment.updateLocale('en', {
+		  week: { dow: 1 }
+		});
 		$('.select2').select2();
 		$('.datepicker').datepicker({
 			autoclose: true,
