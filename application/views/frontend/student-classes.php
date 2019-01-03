@@ -75,7 +75,7 @@
 										<li><strong>Class Code</strong><span class="cinfo"><?php echo isset($class->class_code) ? $class->class_code : '-'; ?></span></li>
 										<li><strong>Subject</strong><span class="cinfo"><?php echo get_subject_classes($class->subject); ?></span></li>
 										<li><strong>Day</strong><span class="cinfo"><?php echo isset($class->class_day) ? $class->class_day : '-'; ?></span></li>
-										<li><strong>Time</strong><span class="cinfo"><?php echo isset($class->class_time) ? $class->class_time : '-'; ?></span></li>
+										<li><strong>Time</strong><span class="cinfo"><?php echo isset($class->class_time) ? date("H:i", strtotime($class->class_time)) : '-'; ?></span></li>
 										<li><strong>Level</strong><span class="cinfo"><?php echo isset($class->level) ? $class->level : '-'; ?></span></li>
 										<li><strong>Monthly Fees</strong><span class="cinfo"><?php echo isset($class->monthly_fees) ? $class->monthly_fees : '-'; ?></span></li>
 										<li><strong>Tutor Assigned</strong><span class="cinfo"><?php echo get_tutor_of_class($class->tutor_id); ?></span></li>

@@ -28,6 +28,9 @@
                                     <thead>
                                         <tr>
                                             <th>
+                                                <?php echo ACTION ?>
+                                            </th>
+                                            <th>
                                                 <?php echo SUBJECT ?> Code
                                             </th>
                                             <th>
@@ -51,9 +54,7 @@
                                                 <?php
                                             }
                                             ?>
-                                            <th>
-                                                <?php echo ACTION ?>
-                                            </th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -62,6 +63,23 @@
                                             foreach($subjects as $subject) {
                                                 ?>
                                                 <tr>
+                                                    <?php
+                                                    if (!(current_url() == site_url('admin/subject/archived'))) {
+                                                        ?>
+                                                        <td>
+                                                            <a href="<?php echo site_url('admin/subject/edit/' . $subject->subject_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                                                            <a href="<?php echo site_url('admin/subject/delete/' . $subject->subject_id) ?>" onclick="return confirm('Are you sure you want to archive this subject?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
+                                                        </td>
+                                                        <?php
+                                                    } else {
+                                                        ?>
+                                                        <td>
+                                                            <a href="<?php echo site_url('admin/subject/moveto_active_list/' . $subject->subject_id) ?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
+                                                            <a href="<?php echo site_url('admin/subject/delete-archive/' . $subject->subject_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+                                                        </td>
+                                                        <?php
+                                                    }
+                                                    ?>
                                                     <td>
                                                         <?php echo isset($subject->subject_code) ? $subject->subject_code : '-' ?>
                                                     </td>
@@ -77,19 +95,11 @@
                                                         <td>
                                                             <?php echo isset($subject->updated_at) ? date('Y-m-d H:i A', strtotime($subject->updated_at)) : '-' ?>
                                                         </td>
-                                                        <td>
-                                                            <a href="<?php echo site_url('admin/subject/edit/' . $subject->subject_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
-                                                            <a href="<?php echo site_url('admin/subject/delete/' . $subject->subject_id) ?>" onclick="return confirm('Are you sure you want to archive this subject?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
-                                                        </td>
                                                         <?php
                                                     } else {
                                                         ?>
                                                         <td>
                                                             <?php echo isset($subject->archive_at) ? date('Y-m-d H:i A', strtotime($subject->archive_at)) : '-' ?>
-                                                        </td>
-                                                        <td>
-                                                            <a href="<?php echo site_url('admin/subject/moveto_active_list/' . $subject->subject_id) ?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
-                                                            <a href="<?php echo site_url('admin/subject/delete-archive/' . $subject->subject_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
                                                         </td>
                                                         <?php
                                                     }

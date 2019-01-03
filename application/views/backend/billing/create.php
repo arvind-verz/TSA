@@ -50,7 +50,8 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[<?php echo $i; ?>]" value="<?php echo ($i+1); ?>"> Rest Week
+                                            <input type="checkbox" class="flat-green form-control" name="rest_week[<?php echo $i; ?>]" value="1"> Rest Week
+                                            &nbsp;&nbsp;<input type="checkbox" class="flat-green form-control" name="working_week[<?php echo $i; ?>]" value="1"> Enable
                                         </label>
                                     </div>
                                 </div>
@@ -84,6 +85,6 @@
 </div>
 <script type="text/javascript">
         $(function () {
-            $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+            $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii', weekStart: 1});
         });
 </script>

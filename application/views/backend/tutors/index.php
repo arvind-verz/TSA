@@ -30,6 +30,9 @@
 
                                     <thead>
                                         <tr>
+                                            <th>
+                                                Action
+                                            </th>
                                             <th>Tutor ID</th>
                                             <th>
                                                 Tutor Name
@@ -50,9 +53,7 @@
                                                 ?>
                                                 <th>Archived At</th>
                                             <?php } ?>
-                                            <th>
-                                                Action
-                                            </th>
+                                            
 
                                         </tr>
                                     </thead>
@@ -63,6 +64,18 @@
                                             foreach ($tutors as $tutor) {
                                                 ?>
                                                 <tr>
+                                                    <?php
+                                                    if (current_url() == site_url('admin/tutors/archived')) {
+                                                        ?>
+                                                        <td><a title="Move to active list" href="<?php echo site_url('admin/tutors/moveto_active_list/'.$tutor->tutor_id) ?>"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
+                                                        <a href="<?php echo site_url('admin/tutors/delete-archive/' . $tutor->tutor_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+                                                        </td>
+                                                    <?php }else { ?>
+                                                        <td>
+                                                            <a title="Edit" href="<?php echo site_url('admin/tutors/edit/' . $tutor->id) ?>"><i aria-hidden="true" class="fa fa-pencil-square-o btn btn-warning"></i></a>
+                                                            <a title="Archive" href="<?php echo site_url('admin/tutors/archive/' . $tutor->id) ?>" onclick="return confirm('Are you sure you want to archive this tutor?');"><i aria-hidden="true" class="fa fa-archive btn btn-danger"></i></a>
+                                                        </td>
+                                                    <?php } ?>
                                                     <td><?php echo isset($tutor->tutor_id) ? $tutor->tutor_id : '-'; ?></td>
                                                     <td><?php echo isset($tutor->tutor_name) ? $tutor->tutor_name : '-'; ?></td>
                                                     <td><?php echo isset($tutor->email) ? $tutor->email : '-'; ?></td>
@@ -74,14 +87,6 @@
                                                     if (current_url() == site_url('admin/tutors/archived')) {
                                                         ?>
                                                         <td><?php echo isset($tutor->updated_at) ? date('Y-m-d H:i A', strtotime($tutor->updated_at)) : '-'; ?></td>
-                                                        <td><a title="Archive" href="<?php echo site_url('admin/tutors/moveto_active_list/'.$tutor->tutor_id) ?>"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
-                                                        <a href="<?php echo site_url('admin/tutors/delete-archive/' . $tutor->tutor_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
-                                                        </td>
-                                                    <?php }else { ?>
-                                                        <td>
-                                                            <a title="Edit" href="<?php echo site_url('admin/tutors/edit/' . $tutor->id) ?>"><i aria-hidden="true" class="fa fa-pencil-square-o btn btn-warning"></i></a>
-                                                            <a title="Archive" href="<?php echo site_url('admin/tutors/archive/' . $tutor->id) ?>" onclick="return confirm('Are you sure you want to archive this tutor?');"><i aria-hidden="true" class="fa fa-archive btn btn-danger"></i></a>
-                                                        </td>
                                                     <?php } ?>
                                                 </tr>
                                                 <?php
@@ -90,6 +95,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
+                                                <th><button type="button" class="btn btn-default clearall">Clear All</button></th>
                                                 <th>Tutor ID</th>
                                                 <th>
                                                     Tutor Name
@@ -110,9 +116,7 @@
                                                     ?>
                                                     <th>Archived At</th>
                                                 <?php } ?>
-                                                <th>
-                                                    Action
-                                                </th>
+                                                
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -125,7 +129,7 @@
             <script type="text/javascript">
                 $(document).ready(function() {
                     // Setup - add a text input to each footer cell
-                    $('table tfoot th').each( function () {
+                    $('table tfoot tr th:gt(0)').each( function () {
                         var title = $(this).text();
                         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
                     } );
@@ -145,5 +149,14 @@
                             }
                         } );
                     } );
+
+                    $("body").on("click", "button.clearall", function() {
+                        $("tfoot input").val('');
+                        table.search( '' )
+                             .columns().search( '' )
+                             .draw();
+                    })
                 } );
+
+
             </script>

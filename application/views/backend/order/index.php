@@ -24,6 +24,9 @@
                             <thead>
                                 <tr>
                                     <th>
+                                        <?php echo ACTION ?>
+                                    </th>
+                                    <th>
                                         <?php echo ORDER ?> ID
                                     </th>
                                     <th>
@@ -38,9 +41,7 @@
                                     <th>
                                         Select <?php echo STUDENT ?>
                                     </th>
-                                    <th>
-                                        <?php echo ACTION ?>
-                                    </th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,6 +50,9 @@
                                 foreach($orders as $order) {
                                 ?>
                                 <tr>
+                                    <td>
+                                        <button type="button" class="btn btn-info btn-sm update_status">Submit</button>
+                                    </td>
                                     <td>
                                         <input type="hidden" name="order_id" class="form-control" value="<?php echo $order->order_id;  ?>">
                                         <?php echo isset($order->order_id) ? $order->order_id : '-' ?>
@@ -71,9 +75,7 @@
                                             <?php get_order_student_content($order->order_id, $order->class_code); ?>
                                         </select>
                                     </td>
-                                    <td>
-                                        <button type="button" class="btn btn-info btn-sm update_status">Submit</button>
-                                    </td>
+                                    
                                 </tr>
                                 <?php
                                 }}

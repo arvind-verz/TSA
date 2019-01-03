@@ -69,7 +69,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Time</label>
-                            <input type="text" name="class_time" class="form-control" value="">
+                            <input type="text" name="class_time" id="timepicker1" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Day</label>
@@ -86,21 +86,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Month</label>
-                            <select name="class_month" class="form-control select2">
-                                <option value="">-- Select One --</option>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </select>
+                            <input type="text" name="class_month" id="datepicker" class="form-control" value="">
                         </div>
                         <div class="form-group">
                             <label for="">Monthly Fees</label>
@@ -129,3 +115,15 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#timepicker1').timepicker({
+            showMeridian : false,
+        });
+
+        $('#datepicker').datepicker({
+            format: 'yyyy-mm',
+            minViewMode: 1
+        });
+    });
+</script>

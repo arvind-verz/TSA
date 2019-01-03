@@ -6,14 +6,27 @@
         </h1>
         <?php print_r($breadcrumbs); ?>
     </section>
+    <?php $this->load->view('backend/include/messages') ?>
+    <?php if (validation_errors()) {?>
+        <div class="col-lg-12">
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <?php echo validation_errors(); ?>
+            </div>
+        </div>
+    <?php }?>
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/material/update/' . $book->material_id); ?>
+                    <?php echo form_open('admin/material/update/' . $book->id); ?>
                     <div class="box-body">
+                        <div class="form-group">
+                            <label for=""><?php echo BOOK ?> ID</label>
+                            <input type="text" name="material_id" class="form-control" value="<?php echo isset($book->material_id) ? $book->material_id : '' ?>">
+                        </div>
                         <div class="form-group">
                             <label for=""><?php echo BOOK ?> Name</label>
                             <input type="text" name="book_name" class="form-control" value="<?php echo isset($book->book_name) ? $book->book_name : '' ?>">
@@ -43,7 +56,7 @@
                         </div>
                     </div>
                     <div class="box-footer">
-                        <a href="<?php echo site_url('admin/subject'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
+                        <a href="<?php echo site_url('admin/material'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                         <button type="submit" class="btn btn-info pull-right"><?php echo UPDATES ?></button>
                     </div>
                     <?php echo form_close(); ?>

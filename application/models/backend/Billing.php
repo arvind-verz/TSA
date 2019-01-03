@@ -17,7 +17,8 @@ class Billing extends CI_Model
             $billing[] = [
                 'billing_name' => $_POST['billing_name'][$i],
                 'date_range'   => $_POST['date_range'][$i],
-                'rest_week'    => $_POST['rest_week'][$i],
+                'rest_week'    => isset($_POST['rest_week'][$i]) ? $_POST['rest_week'][$i] : null,
+                'working_week'    => isset($_POST['working_week'][$i]) ? $_POST['working_week'][$i] : null,
             ];
         }
         $data = array(
@@ -42,12 +43,14 @@ class Billing extends CI_Model
 
     public function update($id)
     {
+        //die(print_r($_POST));
         $billing = [];
         for ($i = 0; $i < count($_POST['billing_name']); $i++) {
             $billing[] = [
                 'billing_name' => $_POST['billing_name'][$i],
                 'date_range'   => $_POST['date_range'][$i],
-                'rest_week'    => $_POST['rest_week'][$i],
+                'rest_week'    => isset($_POST['rest_week'][$i]) ? $_POST['rest_week'][$i] : null,
+                'working_week'    => isset($_POST['working_week'][$i]) ? $_POST['working_week'][$i] : null,
             ];
         }
         $data = array(

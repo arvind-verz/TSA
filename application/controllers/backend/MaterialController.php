@@ -71,7 +71,21 @@ class MaterialController extends CI_Controller
     {
         //die(print_r($_POST));
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'creates');
-        $this->material->store($_POST);
+        $config = [
+            [
+                'field' => 'material_id',
+                'label' => 'Book ID',
+                'rules' => 'required|is_unique[material.material_id]',
+            ],
+        ];
+
+        $this->form_validation->set_rules($config);
+
+        if ($this->form_validation->run() == false) {
+            $this->create();
+        } else {
+            $this->material->store($_POST);
+        }
     }
 
     public function edit($id)
@@ -97,7 +111,10 @@ class MaterialController extends CI_Controller
     public function update($id)
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'MATERIAL', 'edits');
-        $this->material->update($id, $_POST);
+        $result = $this->material->update($id, $_POST);
+        if($result == false) {
+            $this->edit($id);
+        }
     }
 
     public function delete($id)
@@ -133,5 +150,13 @@ class MaterialController extends CI_Controller
     public function delete_archive($material_id)
     {
         $this->material->delete_archive($material_id);
+    }
+
+    public function archive()
+    {
+        $result = $this->material->archive($_POST);
+        if($result == false) {
+            $this->index();
+        }
     }
 }

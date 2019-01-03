@@ -79,6 +79,7 @@ $route['admin/classes/edit/(:any)']               = 'backend/ClassController/edi
 $route['admin/classes/update/(:any)']             = 'backend/ClassController/update/$1';
 $route['admin/classes/delete/(:any)']             = 'backend/ClassController/delete/$1';
 $route['admin/classes/moveto_active_list/(:any)'] = 'backend/ClassController/moveto_active_list/$1';
+$route['admin/classes/delete-archive/(:any)'] = 'backend/ClassController/delete_archive/$1';
 
 /* Student Admin */
 
@@ -120,6 +121,7 @@ $route['admin/material/edit/(:any)']               = 'backend/MaterialController
 $route['admin/material/update/(:any)']             = 'backend/MaterialController/update/$1';
 $route['admin/material/delete/(:any)']             = 'backend/MaterialController/delete/$1';
 $route['admin/material/moveto_active_list/(:any)'] = 'backend/MaterialController/moveto_active_list/$1';
+$route['admin/material/archive']                  = 'backend/MaterialController/archive';
 $route['admin/material/get_book_price_range'] = 'backend/MaterialController/get_book_price_range';
 $route['admin/material/get_books_by_subject'] = 'backend/MaterialController/get_books_by_subject';
 

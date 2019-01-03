@@ -68,7 +68,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Time</label>
-                            <input type="text" name="class_time" class="form-control" value="<?php echo isset($classes->class_time) ? $classes->class_time : '' ?>">
+                            <input type="text" name="class_time" class="form-control" id="timepicker1" value="<?php echo isset($classes->class_time) ? date("H:i", strtotime($classes->class_time)) : '' ?>">
                         </div>
                         <div class="form-group">
                             <label for="">Day</label>
@@ -85,21 +85,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Month</label>
-                            <select name="class_month" class="form-control select2">
-                                <option value="">-- Select One --</option>
-                                <option value="January" <?php if($classes->class_month=="January") {echo 'selected';} ?>>January</option>
-                                <option value="February" <?php if($classes->class_month=="February") {echo 'selected';} ?>>February</option>
-                                <option value="March" <?php if($classes->class_month=="March") {echo 'selected';} ?>>March</option>
-                                <option value="April" <?php if($classes->class_month=="April") {echo 'selected';} ?>>April</option>
-                                <option value="May" <?php if($classes->class_month=="May") {echo 'selected';} ?>>May</option>
-                                <option value="June" <?php if($classes->class_month=="June") {echo 'selected';} ?>>June</option>
-                                <option value="July" <?php if($classes->class_month=="July") {echo 'selected';} ?>>July</option>
-                                <option value="August" <?php if($classes->class_month=="August") {echo 'selected';} ?>>August</option>
-                                <option value="September" <?php if($classes->class_month=="September") {echo 'selected';} ?>>September</option>
-                                <option value="October">October</option>
-                                <option value="November" <?php if($classes->class_month=="November") {echo 'selected';} ?>>November</option>
-                                <option value="December" <?php if($classes->class_month=="December") {echo 'selected';} ?>>December</option>
-                            </select>
+                            <input type="text" name="class_month" id="datepicker" class="form-control" value="<?php echo isset($classes->class_month) ? date('Y-m', strtotime($classes->class_month)) : ''; ?>">
                         </div>
                         <div class="form-group">
                             <label for="">Monthly Fees</label>
@@ -128,3 +114,15 @@
         </div>
     </section>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#timepicker1').timepicker({
+            showMeridian : false,
+        });
+
+        $('#datepicker').datepicker({
+            format: 'yyyy-mm',
+            minViewMode: 1
+        });
+    });
+</script>

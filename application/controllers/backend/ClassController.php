@@ -113,4 +113,9 @@ class ClassController extends CI_Controller
     {
         $this->classes->moveto_active_list($id, $_POST);
     }
+
+    public function delete_archive($class_id)
+    {
+        $this->classes->delete_archive($class_id);
+    }
 }
