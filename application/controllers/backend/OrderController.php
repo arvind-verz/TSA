@@ -93,4 +93,12 @@ class OrderController extends CI_Controller
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ORDER', 'edits');
         $this->order->update_order_status($_GET);
     }
+
+    public function order_status_change()
+    {
+        $order_id = $_GET['order_id'];
+        $class_code = $_GET['class_code'];
+        $status = $_GET['status'];
+        print_r(get_order_student_content($order_id, $class_code, $status));
+    }
 }

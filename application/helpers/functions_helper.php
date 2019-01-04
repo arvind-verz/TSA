@@ -243,7 +243,7 @@ function get_books_by_subject($subjects /*Array*/)
     }
     if($material_array)
     {
-        $query = $ci->db->where_in('id', $material_array)->get(DB_MATERIAL);
+        $query = $ci->db->where('is_archive', 0)->where_in('id', $material_array)->get(DB_MATERIAL);
         $result = $query->result();
         if($result)
         {
@@ -866,7 +866,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         if (in_array('1', $value)) {
             return $array_status[array_search(1, $value)];
         } else {
-            return 'H';
+            return '-';
         }
     }
 
@@ -942,19 +942,15 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         }
     }
 
-    function get_attendance_sheet($class_code = false, $attendance_date)
+    function get_attendance_sheet($class_code = false)
     {
         $i  = 1;
         $ci = &get_instance();
-        $query = $ci->db->get_where(DB_ATTENDANCE, ['class_code'    =>  $class_code, 'attendance_date'  =>  $attendance_date]);
-        if($query->num_rows()>0) {
-            return get_attendance_edit_sheet($class_code, $attendance_date);
-        }
+        
         $ci->db->select('*');
         $ci->db->from(DB_STUDENT);
         $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
         $ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
-
         $ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
         $query = $ci->db->get();
         $query = $query->result();
@@ -1220,7 +1216,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     }
                 }
 
-                function get_order_student_content($order_id, $class_code)
+                function get_order_student_content($order_id, $class_code, $status)
                 {
                     $ci = &get_instance();
 
@@ -1235,7 +1231,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     if ($result) {
                         foreach ($result as $value) {
                             ?>
-                            <option value="<?php echo $value->stud_id; ?>"><?php echo $value->firstname . ' ' . $value->lastname . ' - ' . get_class_code_by_class($value->class_id); ?></option>
+                            <option value="<?php echo $value->stud_id; ?>" <?php if($status==1) {if($value->status!=0) {echo "disabled";}} elseif($status==2) {if($value->status!=1) {echo "disabled";}} elseif($status==3) {if($value->status==2) {echo "disabled";}} ?>><?php echo $value->firstname . ' ' . $value->lastname . ' - ' . get_class_code_by_class($value->class_id); ?></option>
                             <?php
                         }
                     }
@@ -2288,7 +2284,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $ci->db->join('order_details', 'orders.order_id = order_details.order_id');
                         $ci->db->join(DB_MATERIAL, 'orders.book_id = material.id');
                         $ci->db->where('order_details.student_id', $sid);
-                        $ci->db->where('order_details.status', 1);
+                        $ci->db->where('order_details.status', 2);
                         $query = $ci->db->get();
                         $result1 = $query->row();
                         $book_charges = [];

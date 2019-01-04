@@ -14,7 +14,13 @@ class Attendance extends CI_Model
     {
         $query = $this->db->get_where(DB_ATTENDANCE, ['class_code' => $_POST['class_code'], 'attendance_date' => $_POST['attendance_date']]);
         if($query->num_rows()>0) {
-        	$this->update($_POST);
+            $this->session->set_flashdata('error', 'Attendance with date already exist within system.');
+        	return false;
+        }
+
+        if(empty($_POST['student_id'])) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return false;
         }
         
         for ($i = 0; $i < count($_POST['student_id']); $i++) {
@@ -68,10 +74,9 @@ class Attendance extends CI_Model
         $class_code = $_GET['class_code'];
         $class_month = $_GET['class_month'];
 
-        $query = $this->db->get_where(DB_CLASSES, ['class_code' => $class_code]);
+        $query = $this->db->group_by('attendance_date')->get_where(DB_ATTENDANCE, ['class_code' => $class_code]);
         $result = $query->row();
         if($result) {
-
             $this->db->select('*');
             $this->db->from(DB_CLASSES);
             $this->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
@@ -80,7 +85,14 @@ class Attendance extends CI_Model
             $query1 = $this->db->get();
             $result1 = $query1->result();
 
-            $date_collection = get_weekdays_of_month($class_month, $result->class_day);
+            $date_collection = [];
+            $query = "select * from attendance where class_code= ? and DATE_FORMAT('".$result->attendance_date."', '%M') = ? group by attendance_date";
+            $query = $this->db->query($query, [$class_code, $class_month]);
+            $result = $query->result();
+
+            foreach($result as $row) {
+                $date_collection[] = $row->attendance_date;
+            }
             ?>
             <thead>
                 <th><?php echo STUDENT ?> ID</th>
@@ -183,6 +195,10 @@ class Attendance extends CI_Model
 
     public function update()
     {
+        if(empty($_POST['student_id'])) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return false;
+        }
         for ($i = 0; $i < count($_POST['student_id']); $i++) {
             $data = array(
                 'class_code'      => !empty($_POST['class_code']) ? $_POST['class_code'] : null,

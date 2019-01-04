@@ -24,15 +24,33 @@
                                     if (count($classes)) {
                                     foreach ($classes as $class) {
                                     ?>
-                                    <option value="<?php echo $class->class_code; ?>" <?php if($class->class_code==$class_code) {echo 'selected';} ?>><?php echo $class->class_code ?></option>
+                                    <option value="<?php echo $class->class_code; ?>"><?php echo $class->class_code ?></option>
                                     <?php
                                     }}
                                     ?>
                                 </select>
                             </div>
+                            <!-- <div class="form-group">
+                                <label for="">Month</label>
+                                <select name="month" class="form-control select2">
+                                    <option value="">-- Select One --</option>
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div> -->
                             <div class="form-group">
-                                <label for="">Date : <?php echo $attendance_date; ?></label>
-                                <input type="hidden" name="attendance_date" class="form-control" value="<?php echo $attendance_date; ?>">
+                                <label for="">Date</label>
+                                <input type="text" name="attendance_date" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
                             </div>
                             <div class="form-group pull-right">
                                 <button type="button" class="btn btn-info copy_fist_line">Copy First Line</button>
@@ -92,7 +110,7 @@ $("body").on("change", "select[name='class_code']", function() {
         $.ajax({
             type: 'GET',
             url: '<?php echo site_url('admin/attendance/get_attendance_sheet'); ?>',
-            data: 'class_code=' + class_code + '&attendance_date=' + attendance_date,
+            data: 'class_code=' + class_code,
             async: false,
             processData: false,
             contentType: false,

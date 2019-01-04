@@ -70,13 +70,20 @@ class Order extends CI_Model
         $order_id = $_GET['order_id'];
 
         $this->db->trans_start();
-        foreach($student_id as $id) {
-            $data = array(
-                'status'    =>  $status,
-            );
-        
-            $this->db->where(['order_id' => $order_id, 'student_id' => $id]);
-            $this->db->update('order_details', $data);
+        if($status==3) {
+            foreach($student_id as $id) {
+                $this->db->delete('order_details', ['student_id'    =>  $id]);
+            }
+        }
+        else {
+            foreach($student_id as $id) {
+                $data = array(
+                    'status'    =>  $status,
+                );
+            
+                $this->db->where(['order_id' => $order_id, 'student_id' => $id]);
+                $this->db->update('order_details', $data);
+            }
         }
         $this->db->trans_complete();
 
