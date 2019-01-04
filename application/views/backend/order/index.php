@@ -64,15 +64,15 @@
                                         <?php echo isset($order->class_code) ? $order->class_code : '-' ?>
                                     </td>
                                     <td>
-                                        <select name="order_status" class="form-control select2">
-                                            <option value="0">Print</option>
-                                            <option value="1">Given</option>
-                                            <option value="2">Cancel</option>
+                                        <select name="order_status" class="form-control select2" data-order-id="<?php echo $order->order_id; ?>" data-class-code="<?php echo $order->class_code; ?>">
+                                            <option value="">-- Select One --</option>
+                                            <option value="1">Print</option>
+                                            <option value="2">Given</option>
+                                            <option value="3">Cancel</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="order_student_id" class="form-control select2" multiple="multiple">
-                                            <?php get_order_student_content($order->order_id, $order->class_code); ?>
+                                        <select name="order_student_id" class="form-control select2" multiple="multiple" style="width: 100%;">
                                         </select>
                                     </td>
                                     
@@ -89,17 +89,45 @@
     </section>
 </div>
 <script type="text/javascript">
-    $("button.update_status").on("click", function() {
-        var order_id = $(this).parents("tr").find("input[name='order_id']").val();
-        var status = $(this).parents("tr").find("select[name='order_status']").val();
-        var student_id = $(this).parents("tr").find("select[name='order_student_id']").val();
-        if(status != '' && student_id != '') {
-            $.get("<?php echo site_url('admin/order/update_order_status'); ?>", {status : status, student_id : student_id, order_id : order_id}, function(data) {
-                window.location.href = data.trim();
-            })
-        }
-        else {
-            alert("Please select appropriate option to proceed.");
-        }
-    })
+    $(document).ready(function() {
+        $("button.update_status").on("click", function() {
+            var order_id = $(this).parents("tr").find("input[name='order_id']").val();
+            var status = $(this).parents("tr").find("select[name='order_status']").val();
+            var student_id = $(this).parents("tr").find("select[name='order_student_id']").val();
+            if(status != '' && student_id != '') {
+                $.get("<?php echo site_url('admin/order/update_order_status'); ?>", {status : status, student_id : student_id, order_id : order_id}, function(data) {
+                    //alert(data);
+                    window.location.href = data.trim();
+                })
+            }
+            else {
+                alert("Please select appropriate option to proceed.");
+            }
+        });
+
+        $("body").on("change", "select[name='order_status']", function() {
+            var ref = $(this);
+            var order_id = $(this).attr("data-order-id");
+            var class_code = $(this).attr("data-class-code");
+            var status = $(this).val();
+            if(status!='') {
+                $.ajax({
+                    type: 'GET',
+                    url: '<?php echo site_url('admin/order/order_status_change'); ?>',
+                    data: 'order_id=' + order_id + '&class_code=' + class_code + '&status=' + status,
+                    async: false,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        $(ref).parents("tr").find("select[name='order_student_id']").html(data);
+                        $('.select2').select2();
+                    }
+                });
+            }
+            else {
+                $("select[name='order_student_id']").html('');
+            }
+        });
+    });
+    
 </script>

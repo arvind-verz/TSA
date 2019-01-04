@@ -14,11 +14,11 @@
             <div class="col-lg-12">
                 <div class="box">
                     <div class="box-header">
-                        <!-- <a class="btn btn-info" href="<?php echo site_url('admin/attendance/create') ?>">
+                        <a class="btn btn-info" href="<?php echo site_url('admin/attendance/create') ?>">
                             <i aria-hidden="true" class="fa fa-plus-circle">
                             </i> <?php echo CREATE . ' ' . ATTENDANCE ?>
                         </a>
-                        <a class="btn btn-warning" href="<?php echo site_url('admin/attendance/edit') ?>">
+                        <!-- <a class="btn btn-warning" href="<?php echo site_url('admin/attendance/edit') ?>">
                             <i aria-hidden="true" class="fa fa-pencil-square-o">
                             </i> <?php echo EDIT . ' ' . ATTENDANCE ?>
                         </a> -->

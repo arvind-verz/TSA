@@ -59,6 +59,7 @@ $.widget.bridge('uibutton', $.ui.button);
 		$('.datepicker').datepicker({
 			autoclose: true,
 			format: 'yyyy-mm-dd',
+			weekStart: 1
 		})
 
 		$('input[type="checkbox"].flat-green, input[type="radio"].flat-green').iCheck({
@@ -74,6 +75,8 @@ $.widget.bridge('uibutton', $.ui.button);
    return this;
 };
 	    });
+
+	    
 	});
 </script>
 </body>

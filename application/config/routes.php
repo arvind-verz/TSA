@@ -111,6 +111,7 @@ $route['admin/order']                     = 'backend/OrderController/index';
 $route['admin/order/create']              = 'backend/OrderController/create';
 $route['admin/order/store']               = 'backend/OrderController/store';
 $route['admin/order/update_order_status'] = 'backend/OrderController/update_order_status';
+$route['admin/order/order_status_change'] = 'backend/OrderController/order_status_change';
 
 /* MATERIAL */
 $route['admin/material']                           = 'backend/MaterialController/index';
@@ -157,10 +158,11 @@ $route['admin/billing/update/(:any)'] = 'backend/BillingController/update/$1';
 
 /* ATTENDANCE */
 $route['admin/attendance']                           = 'backend/AttendanceController/index';
+$route['admin/attendance/create']                           = 'backend/AttendanceController/create_attendance';
 $route['admin/attendance/create-edit/(:any)/(:any)']                    = 'backend/AttendanceController/create/$1/$2';
 $route['admin/attendance/store']                     = 'backend/AttendanceController/store';
 //$route['admin/attendance/edit']                      = 'backend/AttendanceController/edit';
-//$route['admin/attendance/update']                    = 'backend/AttendanceController/update';
+$route['admin/attendance/update']                    = 'backend/AttendanceController/update';
 $route['admin/attendance/get_attendance_sheet']      = 'backend/AttendanceController/get_attendance_sheet';
 $route['admin/attendance/get_attendance_summary']    = 'backend/AttendanceController/get_attendance_summary';
 $route['admin/attendance/transfer_student']          = 'backend/AttendanceController/transfer_student';

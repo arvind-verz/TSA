@@ -29,7 +29,7 @@
 
         <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/timepicker.css') ?>">
 
-        
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
         <link href="<?php echo base_url('assets/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css'); ?>" rel="stylesheet">
         <!-- Daterange picker -->
         <link href="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/daterangepicker.css'); ?>" rel="stylesheet">
@@ -56,6 +56,7 @@
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script> -->
         <script src="<?php echo base_url('assets/js/moment-with-locales.js'); ?>"></script>
         <script src="<?php echo base_url('assets/js/bootstrap-datetimepicker.min.js'); ?>"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
         <script src="<?php echo base_url('assets/js/bootstrap-timepicker.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url();?>editor/tinymce/tinymce.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>editor/fancybox/jquery.fancybox.css" media="screen" />

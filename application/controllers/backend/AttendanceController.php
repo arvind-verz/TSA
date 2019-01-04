@@ -52,7 +52,7 @@ class AttendanceController extends CI_Controller
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
-        $this->load->view('backend/attendance/create');
+        $this->load->view('backend/attendance/edit');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
@@ -60,8 +60,7 @@ class AttendanceController extends CI_Controller
     public function get_attendance_sheet()
     {
         $class_code = $_GET['class_code'];
-        $attendance_date = $_GET['attendance_date'];
-        print_r(get_attendance_sheet($class_code, $attendance_date));
+        print_r(get_attendance_sheet($class_code));
     }
 
     public function get_attendance_summary() {
@@ -81,7 +80,12 @@ class AttendanceController extends CI_Controller
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'creates');
         $result = $this->attendance->store($_POST);
-        print_r($result);
+        if($result==false) {
+            $this->create_attendance();
+        }
+        else {
+            print_r($result);
+        }
     }
 
     public function edit()
@@ -112,7 +116,12 @@ class AttendanceController extends CI_Controller
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'edits');
         $result = $this->attendance->update($_POST);
-        print_r($result);
+        if($result==false) {
+            $this->index();
+        }
+        else {
+            print_r($result);
+        }
     }
 
     public function delete($id)
@@ -124,5 +133,23 @@ class AttendanceController extends CI_Controller
     {
         $class_code = isset($_GET['class_code']) ? $_GET['class_code'] : '';
         print_r(get_attendance_date_by_class_code($class_code));
+    }
+
+    public function create_attendance()
+    {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'creates');
+        $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
+        $this->breadcrumbs->push(CREATE, 'admin/attendance/create');
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title']       = $this->title;
+        $data['page_title']  = ATTENDANCE . " <small> " . CREATE . " </small>";
+        $data['classes']     = get_classes();
+
+        $this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/attendance/create');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
     }
 }

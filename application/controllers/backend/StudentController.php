@@ -94,7 +94,7 @@ class StudentController extends CI_Controller
             [
                 'field' => 'nric',
                 'label' => 'NRIC',
-                'rules' => 'trim|required|is_unique[student.nric]|matches[username]|regex_match[/^[a-z][0-9]{7}[a-z]/]',
+                'rules' => 'trim|required|is_unique[student.nric]|matches[username]|regex_match[/^[a-z][0-9]{7}[a-z]/i]',
             ],
             [
                 'field' => 'email',
@@ -187,7 +187,7 @@ class StudentController extends CI_Controller
             [
                 'field' => 'nric',
                 'label' => 'NRIC',
-                'rules' => 'trim|required|matches[username]|regex_match[/^[a-z][0-9]{7}[a-z]/]',
+                'rules' => 'trim|required|matches[username]|regex_match[/^[a-z][0-9]{7}[a-z]/i]',
             ],
             [
                 'field' => 'email',
