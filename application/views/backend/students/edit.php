@@ -87,7 +87,7 @@
                 </div>
                 <div class="form-group">
                     <?php
-                    $siblings = isset($student->siblings) ? json_decode($student->siblings) : '';
+                    $siblings = isset($student->siblings) ? json_decode($student->siblings) : ''; 
                     if(count($siblings)<1)
                     {
                         $query = $this->db->like('siblings', $student->nric, 'both')->group_by('nric')->get(DB_STUDENT);

@@ -86,7 +86,7 @@ class Attendance extends CI_Model
             $result1 = $query1->result();
 
             $date_collection = [];
-            $query = "select * from attendance where class_code= ? and DATE_FORMAT('".$result->attendance_date."', '%M') = ? group by attendance_date";
+            $query = "select * from attendance where class_code= ? and DATE_FORMAT(attendance_date, '%M') = ? group by attendance_date";
             $query = $this->db->query($query, [$class_code, $class_month]);
             $result = $query->result();
 

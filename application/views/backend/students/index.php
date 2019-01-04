@@ -48,6 +48,9 @@
                                     </th>
                                     <?php } ?>
                                     <th>
+                                        Action
+                                    </th>
+                                    <th>
                                         Material <br /> Associated
                                     </th>
                                     <th>
@@ -92,10 +95,6 @@
                                     <th>
                                         Remark
                                     </th>
-                                    <th>
-                                        Action
-                                    </th>
-                                    
                                     <th>
                                         Extra <br /> Charges <br /> Applied
                                     </th>
@@ -128,6 +127,20 @@
                                         </td>
                                     <?php } ?>
                                     <td>
+                                        <div class="form-group">
+                                            <select name="action" id="action" class="form-control select2 action" style="width: 200px;">
+                                                <option value="">-- Select One --</option>
+                                                <option name="Edit" value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
+                                                <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
+                                                <option name="final_settlement" value="<?php echo base_url();?>index.php/admin/students/final_settlement/<?php echo $student->student_id;?>">Final Settlement</option>
+                                                <option value="view_all_details" name="view_all_details" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">View all details</option>
+                                                <?php if($student->status!='') { ?>
+                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">Edit Class</option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
                                         <select name="material" class="form-control select2">
                                             <?php echo get_material_associated($student->sid, $student->class_code); ?>
                                         </select>
@@ -147,21 +160,6 @@
                                     if($siblings) {foreach($siblings as $sibling) {echo $sibling . ', ';}} ?></td>
                                     <td><?php echo get_enrollment_status($student->status); ?></td>
                                     <td><?php echo get_student_remark($student->student_id, $student->class_id); ?></td>
-                                    <td>
-                                        <div class="form-group">
-                                            <select name="action" id="action" class="form-control select2 action" style="width: 200px;">
-                                                <option value="">-- Select One --</option>
-                                                <option name="Edit" value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
-                                                <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
-                                                <option name="final_settlement" value="<?php echo base_url();?>index.php/admin/students/final_settlement/<?php echo $student->student_id;?>">Final Settlement</option>
-                                                <option value="view_all_details" name="view_all_details" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">View all details</option>
-                                                <?php if($student->status!='') { ?>
-                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">Edit Class</option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    
                                     <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'extra_charges'); ?></td>
                                     <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'depo_collected'); ?></td>
                                     <?php if (current_url() == site_url('admin/students/archived')) { ?>
@@ -176,6 +174,9 @@
                                 <tr>
                                     
                                     <th><button type="button" class="btn btn-default clearall">Clear All</button></th>
+                                    <th>
+                                        Action
+                                    </th>
                                     <th>
                                         Material <br /> Associated
                                     </th>
@@ -221,10 +222,6 @@
                                     <th>
                                         Remark
                                     </th>
-                                    <th>
-                                        Action
-                                    </th>
-                                    
                                     <th>
                                         Extra <br /> Charges <br /> Applied
                                     </th>

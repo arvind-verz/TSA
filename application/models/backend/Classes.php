@@ -28,7 +28,7 @@ class Classes extends CI_Model
             'frequency'    => !empty($_POST['frequency']) ? $_POST['frequency'] : null,
             'class_time'   => !empty($_POST['class_time']) ? $_POST['class_time'] : null,
             'class_day'    => !empty($_POST['class_day']) ? $_POST['class_day'] : null,
-            'class_month'  => !empty($_POST['class_month']) ? $_POST['class_month'] : null,
+            'class_month'  => !empty($_POST['class_month']) ? $_POST['class_month'].'-'.date('d') : null,
             'monthly_fees' => !empty($_POST['monthly_fees']) ? $_POST['monthly_fees'] : 0,
             'deposit_fees' => !empty($_POST['deposit_fees']) ? $_POST['deposit_fees'] : 0,
             'class_size'   => !empty($_POST['class_size']) ? $_POST['class_size'] : 0,
@@ -52,7 +52,6 @@ class Classes extends CI_Model
 
     public function update($id)
     {
-        //die(print_r($_POST));
         $data = array(
             'class_name'   => !empty($_POST['class_name']) ? $_POST['class_name'] : null,
             'tutor_id'     => !empty($_POST['tutor_id']) ? $_POST['tutor_id'] : null,
@@ -62,7 +61,7 @@ class Classes extends CI_Model
             'frequency'    => !empty($_POST['frequency']) ? $_POST['frequency'] : null,
             'class_time'   => !empty($_POST['class_time']) ? $_POST['class_time'] : null,
             'class_day'    => !empty($_POST['class_day']) ? $_POST['class_day'] : null,
-            'class_month'  => !empty($_POST['class_month']) ? $_POST['class_month'] : null,
+            'class_month'  => !empty($_POST['class_month']) ? $_POST['class_month'].'-'.date('d') : null,
             'monthly_fees' => !empty($_POST['monthly_fees']) ? $_POST['monthly_fees'] : 0,
             'deposit_fees' => !empty($_POST['deposit_fees']) ? $_POST['deposit_fees'] : 0,
             'class_size'   => !empty($_POST['class_size']) ? $_POST['class_size'] : 0,
