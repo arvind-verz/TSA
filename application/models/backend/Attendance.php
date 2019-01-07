@@ -88,8 +88,8 @@ class Attendance extends CI_Model
             $result1 = $query1->result();
 
             $date_collection = [];
-            $query = "select * from create_attendance where class_code= ? and DATE_FORMAT(schedule_dates, '%M') = ?";
-            $query = $this->db->query($query, [$class_code, $class_month]);
+            $query = "select * from create_attendance where class_code= ? and DATE_FORMAT(schedule_dates, '%Y-%M') = ?";
+            $query = $this->db->query($query, [$class_code, date('Y').'-'.$class_month]);
             $result = $query->result();
 
             foreach($result as $row) {
