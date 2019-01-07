@@ -333,7 +333,7 @@ class Tutors extends CI_Model
         }
         else {
         	$this->session->set_flashdata('success', TUTOR . ' ' . MSG_DELETED);
-        	return redirect('admin/tutors');
+        	return redirect('admin/tutors/archived');
         }
     }
 

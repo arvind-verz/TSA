@@ -98,6 +98,6 @@ class Subject extends CI_Model
     {
         $this->db->delete(DB_SUBJECT, ['subject_id' =>  $subject_id]);
         $this->session->set_flashdata('success', SUBJECT . ' ' . MSG_DELETED);
-        return redirect('admin/subject');
+        return redirect('admin/subject/archived');
     }
 }

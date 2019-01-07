@@ -119,7 +119,7 @@ class Classes extends CI_Model
     {
         $this->db->delete(DB_CLASSES, ['class_id' =>  $class_id]);
         $this->session->set_flashdata('success', CLASSES . ' ' . MSG_DELETED);
-        return redirect('admin/classes');
+        return redirect('admin/classes/archived');
     }
 
 }

@@ -42,10 +42,10 @@ class AttendanceController extends CI_Controller
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ATTENDANCE', 'creates');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(ATTENDANCE, 'admin/attendance');
-        $this->breadcrumbs->push(CREATE, 'admin/attendance/create');
+        $this->breadcrumbs->push('Mark', 'admin/attendance/create');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title']       = $this->title;
-        $data['page_title']  = ATTENDANCE . " <small> " . CREATE . " </small>";
+        $data['page_title']  = ATTENDANCE . " <small> Mark </small>";
         $data['classes']     = get_classes();
         $data['attendance_date']    =   $date;
         $data['class_code']    =   get_class_code_by_class($class_id);
@@ -60,7 +60,8 @@ class AttendanceController extends CI_Controller
     public function get_attendance_sheet()
     {
         $class_code = $_GET['class_code'];
-        print_r(get_attendance_sheet($class_code));
+        $attendance_date = $_GET['attendance_date'];
+        print_r(get_attendance_sheet($class_code, $attendance_date));
     }
 
     public function get_attendance_summary() {
@@ -151,5 +152,10 @@ class AttendanceController extends CI_Controller
         $this->load->view('backend/attendance/create');
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
+    }
+
+    public function schedule_store()
+    {
+        $this->attendance->schedule_store($_POST);
     }
 }

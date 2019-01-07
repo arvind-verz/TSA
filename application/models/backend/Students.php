@@ -579,7 +579,7 @@ class Students extends CI_Model
 		}
 		else {
         	$this->session->set_flashdata('success', STUDENT . ' ' . MSG_DELETED);
-        	return redirect('admin/students');
+        	return redirect('admin/students/archived');
         }
     }
 

@@ -59,7 +59,7 @@
                                     <td><?php echo isset($pre_condition_template['template_name']) ? $pre_condition_template['template_name'] : '-'; ?></td>
                                     <td><?php echo isset($history->status) ? ($history->status==1) ? '<p class="text-success">Sent</p>' : '<p class="text-danger">Not Sent</p>' : '-'; ?></td>
                                     <td>
-                                        <a href="<?php echo site_url('admin/delete_sms_history/' . $history->id) ?>" onclick="return confirm('Are you sure you want to delete?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
+                                        <a href="<?php echo site_url('admin/delete_sms_history/' . $history->id) ?>" onclick="return confirm('Are you sure you want to delete this SMS Record?')" title="Remove Data"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
                                     </td>
                                 </tr>
                                 <?php

@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
-                    <?php echo form_open('admin/attendance/update'); ?>
+                    <?php echo form_open('admin/attendance/store'); ?>
                     <div class="box-body">
                         <div class="col-lg-12">
                             <div class="form-group">
@@ -91,7 +91,7 @@ $("body").on("change", "select[name='class_code']", function() {
     if (class_code != '') {
         $.ajax({
             type: 'GET',
-            url: '<?php echo site_url('admin/attendance/get_attendance_edit_sheet'); ?>',
+            url: '<?php echo site_url('admin/attendance/get_attendance_sheet'); ?>',
             data: 'class_code=' + class_code + '&attendance_date=' + attendance_date,
             async: false,
             processData: false,
