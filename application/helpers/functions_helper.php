@@ -42,6 +42,11 @@ function get_all_modules()
     return ['SUBJECT', 'TUTOR', 'CLASSES', 'ATTENDANCE', 'MATERIAL', 'ORDER', 'BILLING', 'INVOICE', 'STUDENT', 'MENU', 'CMS', 'USERS', 'REPORTING', 'SMS_TEMPLATE', 'SMS_HISTORY', 'SMS_REMINDER'];
 }
 
+function get_all_months()
+{
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+}
+
 function get_tutor_of_class($class_id)
 {
     $ci = &get_instance();
@@ -942,10 +947,15 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         }
     }
 
-    function get_attendance_sheet($class_code = false)
+    function get_attendance_sheet($class_code = false, $attendance_date)
     {
         $i  = 1;
         $ci = &get_instance();
+
+        $query = $ci->db->get_where(DB_ATTENDANCE, ['class_code'    =>  $class_code, 'attendance_date'  =>  $attendance_date]);
+        if($query->num_rows()>0) {
+            return get_attendance_edit_sheet($class_code, $attendance_date);
+        }
         
         $ci->db->select('*');
         $ci->db->from(DB_STUDENT);

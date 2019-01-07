@@ -33,7 +33,7 @@
                                     if (count($classes)) {
                                     foreach ($classes as $class) {
                                     ?>
-                                    <option value="<?php echo $class->class_code ?>" data-id="<?php echo $class->class_id; ?>"><?php echo $class->class_code ?></option>
+                                    <option value="<?php echo $class->class_code ?>" data-id="<?php echo $class->class_id; ?>" <?php if($this->session->flashdata('summary_content')) {if($this->session->flashdata('summary_content')['class_code']==$class->class_code) {echo 'selected';}} ?>><?php echo $class->class_code ?></option>
                                     <?php
                                     }}
                                     ?>
@@ -43,18 +43,13 @@
                                 <label for="">Month</label>
                                 <select name="class_month" class="form-control select2">
                                     <option value="">-- Select One --</option>
-                                    <option value="January">January</option>
-                                    <option value="February">February</option>
-                                    <option value="March">March</option>
-                                    <option value="April">April</option>
-                                    <option value="May">May</option>
-                                    <option value="June">June</option>
-                                    <option value="July">July</option>
-                                    <option value="August">August</option>
-                                    <option value="September">September</option>
-                                    <option value="October">October</option>
-                                    <option value="November">November</option>
-                                    <option value="December">December</option>
+                                    <?php
+                                    foreach(get_all_months() as $month) {
+                                    ?>
+                                    <option value="<?php echo $month ?>" <?php if($this->session->flashdata('summary_content')) {if($this->session->flashdata('summary_content')['class_month']==$month) {echo 'selected';}} ?>><?php echo $month ?></option>
+                                    <?php
+                                    }
+                                    ?>
                                 </select>
                             </div>
                             <table class="table table-striped table-bordered text-center display_data" style="width:100%">
@@ -70,7 +65,8 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-        $("select[name='class_code']").val('').trigger("change");$("select[name='class_month']").val('').trigger("change");
+        refresh_summary();
+        //$("select[name='class_code']").trigger("change.select2");//$("select[name='class_month']").val('').trigger("change");
         $("body").on("click", "th.attendance", function() {
             var date = $(this).attr("data-date");
             var class_id = $("select[name='class_code'] option:selected").attr("data-id");
@@ -79,6 +75,10 @@
         });
 
         $("select[name='class_code'], select[name='class_month']").on("change", function() {
+            refresh_summary();
+        });
+
+        function refresh_summary() {
             if ($.fn.DataTable.isDataTable(".display_data")) {
                 $('.display_data').DataTable().clear().destroy();
             }
@@ -102,6 +102,6 @@
                     }
                 })
             }
-        });
+        }
     });
 </script>
