@@ -100,4 +100,28 @@ class Subject extends CI_Model
         $this->session->set_flashdata('success', SUBJECT . ' ' . MSG_DELETED);
         return redirect('admin/subject/archived');
     }
+
+    public function archive()
+    {
+        $subject_id = isset($_POST['subject_id']) ? $_POST['subject_id'] : '';
+        if ($subject_id) {
+            $this->db->trans_start();
+            foreach ($subject_id as $id) {
+
+                $this->db->where('id', $id);
+                $this->db->update(DB_SUBJECT, ['is_archive' => 1, 'archive_at' => $this->date]);
+            }
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === false) {
+                $this->session->set_flashdata('error', MSG_ERROR);
+                return redirect('admin/subject');
+            } else {
+                $this->session->set_flashdata('success', SUBJECT . ' ' . MSG_ARCHIVED);
+                return redirect('admin/subject');
+            }
+        }
+        $this->session->set_flashdata('error', MSG_ERROR);
+        return false;
+    }
 }

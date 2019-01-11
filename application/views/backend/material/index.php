@@ -41,9 +41,9 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        
-                                            <button type="submit" class="btn btn-primary hide">Archive Selected <span class="badge">7</span></button>
-                                        
+
+                                            <button type="submit" class="btn btn-primary hide" disabled>Archive Selected <span class="badge"></span></button>
+
                                     </div>
                                 <?php } ?>
                             </div>
@@ -62,6 +62,9 @@
                                                 <?php echo ACTION ?>
                                             </th>
                                             <th>
+                                                <?php echo BOOK ?> ID
+                                            </th>
+                                            <th>
                                                 <?php echo BOOK ?> Name
                                             </th>
                                             <th>
@@ -70,11 +73,6 @@
                                             <th>
                                                 <?php echo BOOK ?> Price
                                             </th>
-                                            <th>
-                                                <?php echo BOOK ?> Version
-                                            </th>
-                                            
-                                            
                                             <?php
                                             if (current_url() == site_url('admin/material/archived')) {
                                                 ?>
@@ -84,7 +82,7 @@
                                                 <?php
                                             }
                                             ?>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody class="display_data">
@@ -112,16 +110,16 @@
                                                         </td>
                                                     <?php }?>
                                                     <td>
+                                                        <?php echo isset($book->material_id) ? $book->material_id : '-' ?>
+                                                    </td>
+                                                    <td>
                                                         <?php echo isset($book->book_name) ? $book->book_name : '-' ?>
                                                     </td>
                                                     <td>
                                                         <?php echo isset($book->subject) ? get_subject_classes($book->subject) : '-' ?>
                                                     </td>
                                                     <td>
-                                                        <?php echo isset($book->book_price) ? $book->book_price : '-' ?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo isset($book->book_version) ? $book->book_version : '-' ?>
+                                                        <?php echo isset($book->book_price) ? get_currency('SGD').$book->book_price : '-' ?>
                                                     </td>
                                                     <?php
                                                     if (current_url() == site_url('admin/material/archived')) {
@@ -145,6 +143,9 @@
                                             <th>Action</th>
                                             <?php } ?>
                                             <th>
+                                                <?php echo BOOK ?> ID
+                                            </th>
+                                            <th>
                                                 <?php echo BOOK ?> Name
                                             </th>
                                             <th>
@@ -153,11 +154,6 @@
                                             <th>
                                                 <?php echo BOOK ?> Price
                                             </th>
-                                            <th>
-                                                <?php echo BOOK ?> Version
-                                            </th>
-                                            
-                                            
                                             <?php
                                             if (current_url() == site_url('admin/material/archived')) {
                                                 ?>
@@ -167,7 +163,7 @@
                                                 <?php
                                             }
                                             ?>
-                                            
+
                                         </tr>
                                     </tfoot>
                                     </table>
@@ -179,19 +175,19 @@
                 </section>
             </div>
             <script type="text/javascript">
-                $(document).ready(function() {
+                $(document).ready(function(e) {
                     function is_checkbox_checked(count) {
                         $("button[type='submit']").find("span").text(count);
                         if(count>0) {
-                            $("button[type='submit']").removeClass('hide');
+                            $("button[type='submit']").removeClass('hide').attr("disabled", false);
                         }
                         else {
-                            $("button[type='submit']").addClass('hide');
+                            $("button[type='submit']").addClass('hide').attr("disabled", true);
                         }
                     }
 
                     $("input[name='select_all_material']").on("change", function() {
-                        
+
                         if($(this).is(":checked")) {
                             $(".checkbox").prop("checked", true);
                         }
@@ -218,18 +214,18 @@
                         var title = $(this).text().trim();
                         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
                     } );
-                 
+
                     // DataTable
                     var table = $('table').DataTable({
                         columnDefs: [
                           { targets: 'no-sort', orderable: false }
                         ]
                     });
-                 
+
                     // Apply the search
                     table.columns().every( function () {
                         var that = this;
-                 
+
                         $( 'input', this.footer() ).on( 'keyup change', function () {
                             if ( that.search() !== this.value ) {
                                 that
@@ -244,7 +240,7 @@
                              .columns().search( '' )
                              .draw();
                     })
-                    
+
                     $("input[name='price_from'], input[name='price_to']").on("change", function() {
                         var price_from = $("input[name='price_from']").val();
                         var price_to = $("input[name='price_to']").val();
@@ -258,23 +254,17 @@
                             contentType: false,
                             success: function(data) {
                     //alert(data);
-                                $(".display_data").html(data);
+                                $("tbody.display_data").html(data);
                                 $('table tfoot th').each( function () {
                                     var title = $(this).text().trim();
                                     $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
                                 } );
-                             
-                                // DataTable
-                                var table = $('table').DataTable({
-                                    columnDefs: [
-                                      { targets: 'no-sort', orderable: false }
-                                    ]
-                                });
-                             
+
+
                                 // Apply the search
                                 table.columns().every( function () {
                                     var that = this;
-                             
+
                                     $( 'input', this.footer() ).on( 'keyup change', function () {
                                         if ( that.search() !== this.value ) {
                                             that

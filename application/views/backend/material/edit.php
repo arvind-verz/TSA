@@ -35,10 +35,10 @@
                             <label for=""><?php echo BOOK ?> Price</label>
                             <input type="text" name="book_price" class="form-control" value="<?php echo isset($book->book_price) ? $book->book_price : '' ?>">
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for=""><?php echo BOOK ?> Version</label>
                             <input type="text" name="book_version" class="form-control" value="<?php echo isset($book->book_version) ? $book->book_version : '' ?>">
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="">Subject</label>
                             <select name="subject[]" class="form-control select2" multiple="multiple">

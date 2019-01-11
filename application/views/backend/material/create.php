@@ -16,7 +16,7 @@
             </div>
         </div>
     <?php }?>
-    
+
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
@@ -37,10 +37,10 @@
                             <label for=""><?php echo BOOK ?> Price</label>
                             <input type="text" name="book_price" class="form-control" value="<?php echo set_value('book_price'); ?>">
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for=""><?php echo BOOK ?> Version</label>
                             <input type="text" name="book_version" class="form-control" value="<?php echo set_value('book_version'); ?>">
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="">Subject</label>
                             <select name="subject[]" class="form-control select2" multiple="multiple">
