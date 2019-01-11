@@ -61,6 +61,7 @@ $route['admin/dashboard'] = 'backend/DashboardController/index';
 
 /* SUBJECT */
 $route['admin/subject']                           = 'backend/SubjectController/index';
+$route['admin/subject/archive']                  = 'backend/SubjectController/archive';
 $route['admin/subject/archived']                  = 'backend/SubjectController/archived';
 $route['admin/subject/create']                    = 'backend/SubjectController/create';
 $route['admin/subject/store']                     = 'backend/SubjectController/store';
@@ -186,7 +187,8 @@ $route['admin/reporting/get_reporting_sheet'] = 'backend/ReportingController/get
 $route['admin/tutors']                           = 'backend/TutorController/index';
 $route['admin/tutors/create']                    = 'backend/TutorController/create';
 $route['admin/tutors/store']                     = 'backend/TutorController/store';
-$route['admin/tutors/archive/(:any)']            = 'backend/TutorController/archive/$1';
+$route['admin/tutors/archive']                  = 'backend/TutorController/archive';
+//$route['admin/tutors/archive/(:any)']            = 'backend/TutorController/archive/$1';
 $route['admin/tutors/archived']                  = 'backend/TutorController/archived';
 $route['admin/tutors/edit/(:any)']               = 'backend/TutorController/edit/$1';
 $route['admin/tutors/update/(:any)']             = 'backend/TutorController/update/$1';

@@ -112,4 +112,12 @@ class SubjectController extends CI_Controller
     {
         $this->subject->delete_archive($subject_id);
     }
+
+    public function archive()
+    {
+        $result = $this->subject->archive($_POST);
+        if($result == false) {
+            $this->index();
+        }
+    }
 }

@@ -7,7 +7,7 @@
         <?php print_r($breadcrumbs);?>
     </section>
     <?php $this->load->view('backend/include/messages') ?>
-    
+
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
@@ -42,8 +42,8 @@
                                 <option value="2">S2</option>
                                 <option value="3">S3</option>
                                 <option value="4">S4</option>
-                                <option value="5">S5</option>
-                                <option value="6">S6</option>
+                                <option value="5">J1</option>
+                                <option value="6">J2</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -85,7 +85,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">Month</label>
+                            <label for="">Commencement Month</label>
                             <input type="text" name="class_month" id="datepicker" class="form-control" value="">
                         </div>
                         <div class="form-group">

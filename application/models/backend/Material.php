@@ -17,7 +17,7 @@ class Material extends CI_Model
             'material_id'  => !empty($_POST['material_id']) ? $_POST['material_id'] : null,
             'book_name'    => !empty($_POST['book_name']) ? $_POST['book_name'] : null,
             'book_price'   => !empty($_POST['book_price']) ? $_POST['book_price'] : null,
-            'book_version' => !empty($_POST['book_version']) ? $_POST['book_version'] : null,
+            //'book_version' => !empty($_POST['book_version']) ? $_POST['book_version'] : null,
             'subject'      => !empty($_POST['subject']) ? json_encode($_POST['subject']) : null,
             'created_at'   => $this->date,
             'updated_at'   => $this->date,
@@ -49,7 +49,7 @@ class Material extends CI_Model
             'material_id'  => $material_id,
             'book_name'    => !empty($_POST['book_name']) ? $_POST['book_name'] : null,
             'book_price'   => !empty($_POST['book_price']) ? $_POST['book_price'] : null,
-            'book_version' => !empty($_POST['book_version']) ? $_POST['book_version'] : null,
+            //'book_version' => !empty($_POST['book_version']) ? $_POST['book_version'] : null,
             'subject'      => !empty($_POST['subject']) ? json_encode($_POST['subject']) : null,
             'updated_at'   => $this->date,
         );

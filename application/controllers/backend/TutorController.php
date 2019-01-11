@@ -24,7 +24,7 @@ class TutorController extends CI_Controller
         $data['title']       = $this->title;
         $data['page_title']  = TUTOR;
         $data['tutors']     = $this->tutors->get_tutors();
-		
+
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -33,15 +33,15 @@ class TutorController extends CI_Controller
         $this->load->view('backend/include/footer');
     }
 
-    public function archive($id)
-    {
-     $cur_date = date('Y-m-d H:i:s');	
-	$data = array(
-            'is_archive'   => 1,
-			'updated_at'   => $cur_date
-        );
-	 $this->tutors->update_archive($id,$data);  
-    }
+  //   public function archive($id)
+  //   {
+  //    $cur_date = date('Y-m-d H:i:s');
+	// $data = array(
+  //           'is_archive'   => 1,
+	// 		'updated_at'   => $cur_date
+  //       );
+	//  $this->tutors->update_archive($id,$data);
+  //   }
 
     public function create()
     {
@@ -77,7 +77,7 @@ class TutorController extends CI_Controller
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
     }
-	
+
     public function store()
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'creates');
@@ -117,14 +117,14 @@ class TutorController extends CI_Controller
             }
         }
 
-        
+
     }
-	
+
 	public function enroll()
 	{
 		$this->tutors->store_2($_POST);
 	}
-	
+
 	public function search()
 	{
 		die(print_r($_POST));
@@ -155,7 +155,7 @@ class TutorController extends CI_Controller
     public function update($id)
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'TUTOR', 'edits');
-        
+
         $config = [
             [
                 'field' => 'tutor_id',
@@ -191,18 +191,18 @@ class TutorController extends CI_Controller
                 $this->edit($id);
             }
         }
-		
+
     }
 	public function moveto_active_list($id)
 	{
-		
-	$cur_date = date('Y-m-d H:i:s');	
+
+	$cur_date = date('Y-m-d H:i:s');
 	$data = array(
             'is_archive'   => 0,
 			'updated_at'   => $cur_date,
         );
-	$this->tutors->update_archive2($id,$data);	
-	
+	$this->tutors->update_archive2($id,$data);
+
 	}
 
     public function delete($id)
@@ -214,5 +214,13 @@ class TutorController extends CI_Controller
     public function delete_archive($tutor_id)
     {
         $this->tutors->delete_archive($tutor_id);
+    }
+
+    public function archive()
+    {
+        $result = $this->tutors->archive($_POST);
+        if($result == false) {
+            $this->index();
+        }
     }
 }

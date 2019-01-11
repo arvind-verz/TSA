@@ -9,23 +9,23 @@ class Tutors extends CI_Model
 		$this->uniq_id = uniqid();
 		$this->date    = date('Y-m-d H:i:s');
 	}
-	
+
 	public function get_enrollment($id)
 	{
 		$this->db->select('*')
 		->from('student_enrollment')
-		->where('student_id',$id);				 
-		$query = $this->db->get()->row_object();				
-		return $query;	
+		->where('student_id',$id);
+		$query = $this->db->get()->row_object();
+		return $query;
 	}
-	
+
 	public function get_class_name($id)
 	{
 		$this->db->select('*')
 		->from('class')
-		->where('class_id',$id);				 
-		$query = $this->db->get()->row_object();				
-		return $query;	
+		->where('class_id',$id);
+		$query = $this->db->get()->row_object();
+		return $query;
 	}
 
 	public function get_subjects()
@@ -36,9 +36,9 @@ class Tutors extends CI_Model
 		$result = $query->result();
 		if($result) {
 			return $query;
-		} 
+		}
 	}
-	
+
 	public function get_tutors($id = false)
 	{
 
@@ -57,36 +57,36 @@ class Tutors extends CI_Model
 		else {
 			$result =	$query->result();
 		}
-		return $result;	
+		return $result;
 	}
-	
+
 	public function get_archived_tutors()
 	{
 
 		$this->db->select('*, tutor.updated_at as updated_at');
 		$this->db->from('tutor');
 		$this->db->join('aauth_users', 'tutor.user_id = aauth_users.id');
-		$this->db->where('tutor.is_archive',1);				 
-		$query = $this->db->get()->result_object();	
-		return $query;	
+		$this->db->where('tutor.is_archive',1);
+		$query = $this->db->get()->result_object();
+		return $query;
 	}
-	
+
 	public function search()
 	{
 
 		$this->db->select('*')
 		->from('student')
-		->where('is_archive',1);				 
-		$query = $this->db->get()->result_object();				
-		return $query;	
+		->where('is_archive',1);
+		$query = $this->db->get()->result_object();
+		return $query;
 	}
 	public function store()
 	{
     	//die(print_r($_POST));
-		$name = !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null;
 		$email = isset($_POST['email']) ? $_POST['email'] : '';
 		$password = isset($_POST['password']) ? $_POST['password'] : '';
-		$tutor_name = isset($_POST['tutor_name']) ? $_POST['tutor_name'] : '';
+		$firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
+		$lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
 		$perm_id = isset($_POST['tutor_permission']) ? $_POST['tutor_permission'] : '';
 		$login_link = site_url('admin/login');
 		$this->db->trans_start();
@@ -99,7 +99,8 @@ class Tutors extends CI_Model
 		$data = array(
 			'user_id'	=>	$result,
 			'tutor_id'     => !empty($_POST['tutor_id']) ? $_POST['tutor_id'] : null,
-			'tutor_name'   => !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null,
+			'firstname'   => !empty($_POST['firstname']) ? $_POST['firstname'] : null,
+			'lastname'   => !empty($_POST['lastname']) ? $_POST['lastname'] : null,
 			'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
 			'address'    => !empty($_POST['address']) ? $_POST['address'] : null,
 			'subject'   => !empty($_POST['subject']) ? json_encode($_POST['subject']) : null,
@@ -111,7 +112,7 @@ class Tutors extends CI_Model
 
 		$this->db->insert('tutor', $data);
 		$subject = "Welcome to The Science Academy";
-		$message = tutor_registration_template($name, $email, $password, $login_link);
+		$message = tutor_registration_template($firstname.' '.$lastname, $email, $password, $login_link);
 		send_mail($email, false, false, false, false, $subject, $message);
 		$this->db->trans_complete();
 
@@ -123,7 +124,7 @@ class Tutors extends CI_Model
 			return redirect('admin/tutors');
 		}
 	}
-	
+
 	public function store_2()
 	{
         //die(print_r($_POST));
@@ -171,7 +172,7 @@ class Tutors extends CI_Model
 					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : null,
 					'class_id'   => $_POST['class_code']!="" ? $_POST['class_code'] : null
 				);
-				
+
 				$this->db->trans_start();
 				$this->db->where('student_id', $student);
 				$this->db->update('student', $data2);
@@ -185,7 +186,7 @@ class Tutors extends CI_Model
 				$data2 = array(
 					'status'   => $_POST['student_status']!="" ? $_POST['student_status'] : null
 				);
-				
+
 				$this->db->trans_start();
 				$this->db->where('student_id', $student);
 				$this->db->update('student', $data2);
@@ -205,10 +206,10 @@ class Tutors extends CI_Model
 	{
 
 		$user_id = !empty($_POST['user_id']) ? $_POST['user_id'] : null;
-		
-		$name = !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null;
+
 		$email = isset($_POST['email']) ? $_POST['email'] : '';
-		$tutor_name = isset($_POST['tutor_name']) ? $_POST['tutor_name'] : '';
+		$firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
+		$lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
 		$perm_id = isset($_POST['tutor_permission']) ? $_POST['tutor_permission'] : '';
 
 		$this->db->select('*');
@@ -225,7 +226,7 @@ class Tutors extends CI_Model
 		if(isset($_POST['password']) && $_POST['password']!="")
 		{
 			$password = isset($_POST['password']) ? $_POST['password'] : '';
-			$result = $this->aauth->update_user($user_id, $email, $password, $name, $this->date, null);
+			$result = $this->aauth->update_user($user_id, $email, $password, $firstname, $this->date, null);
 		}
 		else {
 			$result = $this->aauth->update_user($user_id, $email, false, $name, $this->date, null);
@@ -233,7 +234,8 @@ class Tutors extends CI_Model
 
 		$data = array(
 			'tutor_id'   => !empty($_POST['tutor_id']) ? $_POST['tutor_id'] : null,
-			'tutor_name'   => !empty($_POST['tutor_name']) ? $_POST['tutor_name'] : null,
+			'firstname'   => !empty($_POST['firstname']) ? $_POST['firstname'] : null,
+			'lastname'   => !empty($_POST['lastname']) ? $_POST['lastname'] : null,
 			'phone'   => !empty($_POST['phone']) ? $_POST['phone'] : null,
 			'address'    => !empty($_POST['address']) ? $_POST['address'] : null,
 			'subject'   => !empty($_POST['subject']) ? json_encode($_POST['subject']) : null,
@@ -259,7 +261,7 @@ class Tutors extends CI_Model
 			return redirect('admin/tutors/edit/'.$id);
 		} else {
 			$this->session->set_flashdata('success', TUTOR . ' ' . MSG_UPDATED);
-			return redirect('admin/tutors/edit/'.$id);
+			return redirect('admin/tutors');
 		}
 	}
 
@@ -323,7 +325,7 @@ class Tutors extends CI_Model
     	$query = $this->db->get_where(DB_TUTOR, ['tutor_id'	=>	$tutor_id]);
     	$result = $query->row();
 
-    	
+
         $this->db->delete(DB_TUTOR, ['tutor_id' =>  $tutor_id]);
         $this->aauth->delete_user($result->user_id);
         $this->db->trans_complete();
@@ -335,6 +337,30 @@ class Tutors extends CI_Model
         	$this->session->set_flashdata('success', TUTOR . ' ' . MSG_DELETED);
         	return redirect('admin/tutors/archived');
         }
+    }
+
+		public function archive()
+    {
+        $tutor_id = isset($_POST['tutor_id']) ? $_POST['tutor_id'] : '';
+        if ($tutor_id) {
+            $this->db->trans_start();
+            foreach ($tutor_id as $id) {
+
+                $this->db->where('user_id', $id);
+                $this->db->update(DB_TUTOR, ['is_archive' => 1, 'updated_at' => $this->date]);
+            }
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === false) {
+                $this->session->set_flashdata('error', MSG_ERROR);
+                return redirect('admin/tutors');
+            } else {
+                $this->session->set_flashdata('success', TUTOR . ' ' . MSG_ARCHIVED);
+                return redirect('admin/tutors');
+            }
+        }
+        $this->session->set_flashdata('error', MSG_ERROR);
+        return false;
     }
 
 }

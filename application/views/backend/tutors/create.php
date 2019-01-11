@@ -17,7 +17,7 @@
         </div>
     <?php }
     ?>
-    
+
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
@@ -31,10 +31,13 @@
                           <input type="text" name="tutor_id" class="form-control" value="<?php echo set_value('tutor_id');?>">
                       </div>
                         <div class="form-group">
-                          <label for="">Tutor Name</label>
-                          <input type="text" name="tutor_name" class="form-control" value="<?php echo set_value('tutor_name');?>">
+                          <label for="">First Name</label>
+                          <input type="text" name="firstname" class="form-control" value="<?php echo set_value('firstname');?>">
                       </div>
-
+                      <div class="form-group">
+                        <label for="">Last Name</label>
+                        <input type="text" name="lastname" class="form-control" value="<?php echo set_value('lastname');?>">
+                    </div>
                       <div class="form-group">
                         <label for="">Email</label>
                         <input type="email" name="email" class="form-control" value="<?php echo set_value('email');?>">
@@ -46,7 +49,7 @@
                     <div class="form-group">
                         <label for="">Address</label>
                         <textarea name="address" class="form-control"><?php echo set_value('address');?></textarea>
-                    </div> 
+                    </div>
                     <div class="form-group">
                         <label for="">Salary Scheme</label>
                         <select name="salary_scheme" id="salary_scheme" class="form-control select2">
@@ -54,7 +57,7 @@
                             <option value="1" <?php echo  set_select('salary_scheme', '1'); ?>>Fixed</option>
                             <option value="2" <?php echo  set_select('salary_scheme', '2'); ?>>Variable</option>
                         </select>
-                    </div>                       
+                    </div>
                     <div class="form-group">
                         <label for="">Remarks </label>
                         <input type="text" name="remarks" class="form-control" value="<?php echo set_value('remarks');?>">
@@ -69,7 +72,7 @@
                              <?php endforeach;}?>
 
                          </select>
-                     </div>  
+                     </div>
 
                      <div class="form-group">
                         <label>Tutor Permission</label>
@@ -84,7 +87,7 @@
                                 }}
                                 ?>
                             </select>
-                        </div> 
+                        </div>
                         <div class="form-group">
                             <label for="">Password</label>
                             <input type="password" name="password" class="form-control" value="">
@@ -100,3 +103,10 @@
         </div>
     </section>
 </div>
+<script>
+  $(document).ready(function() {
+    $("input[name='phone']").on("change", function() {
+      $("input[name='password']").val($(this).val());
+    });
+  });
+</script>

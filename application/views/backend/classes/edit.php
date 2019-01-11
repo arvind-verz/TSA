@@ -40,8 +40,8 @@
                                 <option value="2" <?php if($classes->level==2) {echo 'selected';} ?>>S2</option>
                                 <option value="3" <?php if($classes->level==3) {echo 'selected';} ?>>S3</option>
                                 <option value="4" <?php if($classes->level==4) {echo 'selected';} ?>>S4</option>
-                                <option value="5" <?php if($classes->level==5) {echo 'selected';} ?>>S5</option>
-                                <option value="6" <?php if($classes->level==6) {echo 'selected';} ?>>S6</option>
+                                <option value="5" <?php if($classes->level==5) {echo 'selected';} ?>>J1</option>
+                                <option value="6" <?php if($classes->level==6) {echo 'selected';} ?>>J2</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -84,7 +84,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="">Month</label>
+                            <label for="">Commencement Month</label>
                             <input type="text" name="class_month" id="datepicker" class="form-control" value="<?php echo isset($classes->class_month) ? date('Y-m', strtotime($classes->class_month)) : ''; ?>">
                         </div>
                         <div class="form-group">

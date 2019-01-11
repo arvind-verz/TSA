@@ -5,7 +5,7 @@ function get_currency($currency_code = false)
 {
     $currency_array = [
         'INR' => '<i class="fa fa-inr" aria-hidden="true"></i>',
-        'SGD' => 'S$',
+        'SGD' => '$',
     ];
 
     foreach ($currency_array as $key => $value) {
@@ -15,7 +15,7 @@ function get_currency($currency_code = false)
     }
 }
 
-function get_footer() 
+function get_footer()
 {
     $ci = &get_instance();
 
@@ -120,7 +120,7 @@ function enrollment_decision($class_id, $student_id)
 {
     $ci         = &get_instance();
     $query = $ci->db->get_where('student_enrollment', ['class_id'    =>  $class_id, 'student_id' =>  $student_id, 'status'  =>  3]);
-    
+
     if($query->num_rows()>0) {
         return true;
     }
@@ -269,13 +269,28 @@ function get_book_price_range($price_from, $price_to)
 {
     $ci = &get_instance();
 
-    $query = $ci->db->get_where(DB_MATERIAL, ['book_price >='   =>  $price_from, 'book_price <='    =>  $price_to]);
+    $query = $ci->db->get(DB_MATERIAL);
+    if(!empty($price_from) || !empty($price_to))
+    {
+      $query = $ci->db->get_where(DB_MATERIAL, ['book_price >='   =>  $price_from, 'book_price <='    =>  $price_to]);
+
+    }
     $result = $query->result();
     if($result)
     {
         foreach($result as $book) {
             ?>
             <tr>
+                <th>
+                    <input type="checkbox" class="checkbox" name="material_id[]" value="<?php echo $book->id;?>"/>
+                </th>
+                <td>
+                    <a href="<?php echo site_url('admin/material/edit/' . $book->material_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
+                    <!-- <a href="<?php echo site_url('admin/material/delete/' . $book->material_id) ?>" onclick="return confirm('Are you sure you want to archive this book?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a> -->
+                </td>
+                <td>
+                    <?php echo isset($book->material_id) ? $book->material_id : '-' ?>
+                </td>
                 <td>
                     <?php echo isset($book->book_name) ? $book->book_name : '-' ?>
                 </td>
@@ -283,14 +298,7 @@ function get_book_price_range($price_from, $price_to)
                     <?php echo isset($book->subject) ? get_subject_classes($book->subject) : '-' ?>
                 </td>
                 <td>
-                    <?php echo isset($book->book_price) ? $book->book_price : '-' ?>
-                </td>
-                <td>
-                    <?php echo isset($book->book_version) ? $book->book_version : '-' ?>
-                </td>
-                <td>
-                    <a href="<?php echo site_url('admin/material/edit/' . $book->material_id) ?>" title="Edit"><i class="fa fa-pencil-square-o btn btn-warning" aria-hidden="true"></i></a>
-                    <a href="<?php echo site_url('admin/material/delete/' . $book->material_id) ?>" onclick="return confirm('Are you sure you want to archive this book?')" title="Archive"><i class="fa fa-archive btn btn-danger" aria-hidden="true"></i></a>
+                    <?php echo isset($book->book_price) ? get_currency('SGD').$book->book_price : '-' ?>
                 </td>
             </tr>
             <?php
@@ -382,11 +390,11 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
     $searchby_array = ['classname', 'classcode', 'day', 'time', 'level', 'fees'];
     $searchby_array_value = ['class_name', 'class_code', 'class_day', 'class_time', 'level', 'monthly_fees'];
     //echo $searchby;
-    if ($searchfield) {        
+    if ($searchfield) {
         if (in_array($searchby, $searchby_array)) {
             $attr = array_search($searchby, $searchby_array);
             $attr = $searchby_array_value[$attr];
-            
+
             $ci->db->select('*');
             $ci->db->from(DB_CLASSES);
             $ci->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
@@ -458,7 +466,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     $subject_code_array[] = $value;
                 }
             }
-            
+
             //$query = $ci->db->query('SELECT * FROM class');
             //print_r($query->result());
             $query = "SELECT *, class.subject as subject FROM class JOIN student_to_class ON class.class_id = student_to_class.class_id JOIN student ON student.student_id = student_to_class.student_id JOIN tutor ON class.tutor_id = tutor.tutor_id INNER JOIN subject WHERE student_to_class.status = ? AND subject.subject_code in ? AND student.id = ? GROUP BY class.class_code ORDER BY class.subject ASC";
@@ -828,7 +836,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         $result  = $query->row();
         if($result->subject) {
         $subject = json_decode($result->subject);
-        
+
             foreach ($subject as $value) {
                 $query          = $ci->db->get_where(DB_SUBJECT, ['id' => $value]);
                 $result         = $query->row();
@@ -956,7 +964,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
         if($query->num_rows()>0) {
             return get_attendance_edit_sheet($class_code, $attendance_date);
         }
-        
+
         $ci->db->select('*');
         $ci->db->from(DB_STUDENT);
         $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
@@ -1286,7 +1294,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     $ci = &get_instance();
                     $query = $ci->db->get_where(DB_STUDENT, ['student_id'   =>  $student_id]);
                     $result = $query->row();
-                    if($result) 
+                    if($result)
                     {
                         return date('d M, Y H:i A', strtotime($result->updated_at));
                     }
@@ -1368,7 +1376,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         <div class="form-group">
                             <label>Remark : <?php echo isset($result->remarks) ? $result->remarks : '-'; ?></label>
                         </div>
-                        <?php 
+                        <?php
                     }
                 }
 
@@ -1673,7 +1681,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             $counter = (count($L) + count($M));
                             $invoice_amount            = ((($counter * $fees) / $frequency) + $book_charges + $extra_charges - $credit_value);
                             $amount_excluding_material = ((($counter * $fees) / $frequency) + $extra_charges - $credit_value);
-        
+
                             if($credit_value>0) {
                                 if($invoice_amount<0) {
                                     $credit_amount = abs($invoice_amount);
@@ -1717,7 +1725,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             $query = $ci->db->insert(DB_INVOICE, $data);
                             if ($query) {
                                 $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
-                                
+
                                 $ci->load->library('M_pdf');
                                 $ci->m_pdf->download_my_mPDF($invoice_file);
 
@@ -1820,7 +1828,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                             $query = $ci->db->insert(DB_INVOICE, $data);
                             if ($query) {
                                 $mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
-                                
+
                                 $ci->load->library('M_pdf');
                                 $ci->m_pdf->download_my_mPDF($invoice_file);
 
@@ -1888,7 +1896,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $book_price_amount = get_invoice_result2($result1->sid, $result5[0]);
                         $book_charges   = $book_price_amount;
                         $L = $M = $E = $X = $G = $H = [];
-                        
+
                         $query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' =>  $student_id, 'class_code'   =>  $result1->class_code]);
                         if($query->num_rows()>0) {
                             foreach ($billing_data as $billing) {
@@ -1987,7 +1995,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                     {
                         $ci = &get_instance();
 
-                        
+
                         $ci->db->select('*');
                         $ci->db->from(DB_STUDENT);
                         $ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
@@ -2039,7 +2047,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $book_price_amount = get_invoice_result2($result1->sid, $result5[0]);
                         $book_charges   = $book_price_amount;
                         $L = $M = $E = $X = $G = $H = [];
-                        
+
                         $query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' =>  $student_id, 'class_code'   =>  $result1->class_code]);
                         if($query->num_rows()>0) {
                             foreach ($billing_data as $billing) {
@@ -2172,7 +2180,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $book_price_amount = get_invoice_result2($result1->sid, $result5[0]);
                         $book_charges   = $book_price_amount;
                         $L = $M = $E = $X = $G = $H = [];
-                        
+
                         $query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' =>  $student_id, 'class_code'   =>  $result1->class_code]);
                         if($query->num_rows()>0) {
                             foreach ($billing_data as $billing) {
@@ -2348,7 +2356,7 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $query  = $ci->db->get_where('sms_reminder', ['fee_reminder'    =>  date('Y-m-d')]);
                         $result = $query->row();
                         $message = get_sms_template_content(2);
-                        
+
                         if ($result && $message) {
                             $query1  = $ci->db->get(DB_INVOICE);
                             $result1 = $query1->result();
