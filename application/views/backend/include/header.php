@@ -29,7 +29,7 @@
 
         <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/timepicker.css') ?>">
 
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+        <link href="<?php echo base_url('assets/css/bootstrap-multiselect.css'); ?>" rel="stylesheet">
         <link href="<?php echo base_url('assets/plugins/datatables.net-bs/css/dataTables.bootstrap.min.css'); ?>" rel="stylesheet">
         <!-- Daterange picker -->
         <link href="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/daterangepicker.css'); ?>" rel="stylesheet">
@@ -37,7 +37,7 @@
         <link href="<?php echo base_url('assets/plugins/iCheck/all.css'); ?>" rel="stylesheet">
         <!-- bootstrap wysihtml5 - text editor -->
         <link href="<?php echo base_url('assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'); ?>" rel="stylesheet">
-        
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -51,12 +51,12 @@
         <script src="<?php echo base_url('assets/plugins/jquery/dist/jquery.min.js'); ?>"></script>
         <!-- jQuery UI 1.11.4 -->
         <script src="<?php echo base_url('assets/plugins/jquery-ui/jquery-ui.min.js'); ?>"></script>
-        
+
         <script src="<?php echo base_url('assets/plugins/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script> -->
         <script src="<?php echo base_url('assets/js/moment-with-locales.js'); ?>"></script>
         <script src="<?php echo base_url('assets/js/bootstrap-datetimepicker.min.js'); ?>"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+        <script src="<?php echo base_url('assets/js/bootstrap-multiselect.js'); ?>"></script>
         <script src="<?php echo base_url('assets/js/bootstrap-timepicker.js'); ?>"></script>
         <script type="text/javascript" src="<?php echo base_url();?>editor/tinymce/tinymce.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>editor/fancybox/jquery.fancybox.css" media="screen" />
@@ -72,8 +72,8 @@ tinymce.init({
          "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
          "save table contextmenu directionality emoticons template paste textcolor responsivefilemanager,emoticons"
    ],
-   content_css: "css/content.css",  
-   extended_valid_elements: 'span[style|id|nam|class|lang]', 
+   content_css: "css/content.css",
+   extended_valid_elements: 'span[style|id|nam|class|lang]',
    relative_urls: false,
    remove_script_host: false,
    document_base_url: '<?php echo base_url();?>',
@@ -81,7 +81,7 @@ tinymce.init({
    toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code | edit  tools, emoticons",
    browser_spellcheck: true,
    contextmenu: false,
-   image_advtab: true ,   
+   image_advtab: true ,
    convert_urls: false,
    allow_script_urls: true,
    valid_elements : '*[*]',
@@ -89,7 +89,7 @@ tinymce.init({
    filemanager_title:"Filemanager" ,
    filemanager_access_key:'',
    external_plugins: { "filemanager" : "<?php echo  base_url();?>editor/filemanager/plugin.min.js"}
- }); 
+ });
 
 </script>
 <script>
@@ -97,15 +97,15 @@ jQuery(document).ready(function(){
     //*******************************************************************//
 	$('input:radio[name=link_type]').click(function(){
 		radio_val = $(this).val();
-		
+
 		link_target_str = '';
-		
+
 		link_target_str += '<label for="link_target">Page Target: </label>';
 		link_target_str += '<select name="link_target" class="form-control">';
 		link_target_str += '<option value="self">Same Tab</option>';
 		link_target_str += '<option value="new_tab">New Tab</option>';
 		link_target_str += '</select>';
-		
+
 		if(radio_val=='external'){
 			$('#select_page_box').html('<label for="external_box">External URL</label> <input type="text" placeholder="http://" name="external_url"  id="external_url" required class="sf" />').show('slow');
 			$('#link_target').html(link_target_str).show('slow');
@@ -115,7 +115,7 @@ jQuery(document).ready(function(){
 				type: "GET",
 				dataType: "text",
 				url: "<?php echo site_url('admin/generate-page-list');?>",
-				success: function(data) { 
+				success: function(data) {
 					$('#select_page_box').html(data).show('slow');
 					$('#link_target').html(link_target_str).show('slow');
 				}
@@ -125,7 +125,7 @@ jQuery(document).ready(function(){
 			$('#select_page_box').hide('slow');
 			$('#link_target').hide('slow');
 		}
-	});	
+	});
 	//*******************************************************************//
 });
 </script>

@@ -36,7 +36,7 @@
 											</tr>
 											<tr>
 												<td><strong>Full Name</strong></td>
-												<td><?php echo isset($student_profile->name) ? $student_profile->name : '-'; ?></td>
+												<td><?php echo isset($student_profile->firstname) ? $student_profile->firstname.' '.$student_profile->lastname : '-'; ?></td>
 											</tr>
 											<tr>
 												<td><strong>Email Address</strong></td>
@@ -104,7 +104,7 @@
 													else {
 													echo isset($student_profile->siblings) ? $student_profile->siblings : '-';
 													}
-													
+
 													?>
 												</td>
 											</tr>

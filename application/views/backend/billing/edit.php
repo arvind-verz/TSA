@@ -7,7 +7,7 @@
         <?php print_r($breadcrumbs);?>
     </section>
     <?php $this->load->view('backend/include/messages') ?>
-    
+
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
@@ -27,18 +27,18 @@
                                 </div>
                             </div>
                             <?php
-                            
+
                             //die(print_r($billing_group));
                             $i = 0;
                             if($billing_group) {
                             foreach($billing_group as $billings) {
                             ?>
                             <div class="col-lg-12">
-                                
+
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for=""><?php echo BILLING ?> Name</label>
-                                        <input type="text" name="billing_name[]" class="form-control" value="<?php echo $billing_group[$i]->billing_name; ?>">
+                                        <input type="text" name="billing_name[]" class="form-control billing_name" value="<?php echo $billing_group[$i]->billing_name; ?>">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -57,7 +57,7 @@
                                     <div class="form-group mt-5">
                                         <label>
                                             <input type="checkbox" class="flat-green form-control" name="rest_week[<?php echo $i ?>]" value="1" <?php if(isset($billing_group[$i]->rest_week)) {if($billing_group[$i]->rest_week==1) {echo 'checked';}} ?>> Rest Week
-                                            &nbsp;&nbsp;<input type="checkbox" class="flat-green form-control" name="working_week[<?php echo $i; ?>]" value="1" <?php if(isset($billing_group[$i]->working_week)) {if($billing_group[$i]->working_week==1) {echo 'checked';}} ?>> Enable
+                                            &nbsp;&nbsp;<input type="checkbox" class="flat-green form-control disable_checkbox" name="working_week[<?php echo $i; ?>]" value="1" <?php if(isset($billing_group[$i]->working_week)) {if($billing_group[$i]->working_week==1) {echo 'checked';}} ?>> Disable
                                         </label>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label for=""><?php echo BILLING ?> Name</label>
-                                        <input type="text" name="billing_name[]" class="form-control" value="">
+                                        <input type="text" name="billing_name[]" class="form-control billing_name" value="">
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -87,8 +87,8 @@
                                 <div class="col-lg-4">
                                     <div class="form-group mt-5">
                                         <label>
-                                            <input type="checkbox" class="flat-green form-control" name="rest_week[<?php echo $i; ?>]" value="<?php echo ($i+1); ?>"> Rest Week
-                                            &nbsp;&nbsp;<input type="checkbox" class="flat-green form-control" name="working_week[<?php echo $i; ?>]" value="1"> Enable
+                                            <input type="checkbox" class="flat-green form-control " name="rest_week[<?php echo $i; ?>]" value="<?php echo ($i+1); ?>"> Rest Week
+                                            &nbsp;&nbsp;<input type="checkbox" class="flat-green form-control disable_checkbox" name="working_week[<?php echo $i; ?>]" value="1"> Disable
                                         </label>
                                     </div>
                                 </div>
@@ -123,5 +123,21 @@
 <script type="text/javascript">
         $(function () {
             $(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii', weekStart: 1});
+        });
+
+        $(document).ready(function() {
+          if($("input.disable_checkbox").is(":checked"))
+          {
+            $("input.disable_checkbox:checked").closest(".col-lg-12").find(".date_range, .billing_name").attr("readonly", true);
+          }
+          $("input.disable_checkbox").on("ifChanged", function() {
+            if($(this).is(":checked"))
+            {
+              $(this).closest(".col-lg-12").find(".date_range, .billing_name").attr("readonly", true);
+            }
+            else {
+              $(this).closest(".col-lg-12").find(".date_range, .billing_name").attr("readonly", false);
+            }
+          });
         });
 </script>

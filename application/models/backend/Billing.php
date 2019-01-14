@@ -11,7 +11,7 @@ class Billing extends CI_Model
     }
 
     public function store()
-    {        
+    {
         $billing = [];
         for ($i = 0; $i < count($_POST['billing_name']); $i++) {
             $billing[] = [
@@ -71,5 +71,52 @@ class Billing extends CI_Model
             $this->session->set_flashdata('success', BILLING . ' ' . MSG_UPDATED);
             return redirect('admin/billing');
         }
+    }
+
+    public function moveto_active_list($id)
+    {
+        $this->db->trans_start();
+        $this->db->where('id', $id);
+        $this->db->update(DB_BILLING, ['is_archive' => 0, 'updated_at' => $this->date]);
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === false) {
+            $this->session->set_flashdata('error', MSG_ERROR);
+            return redirect('admin/billing/archived');
+        } else {
+            $this->session->set_flashdata('success', BILLING . ' ' . MSG_MOVED);
+            return redirect('admin/billing');
+        }
+    }
+
+    public function delete_archive($billing_id)
+    {
+        $this->db->delete(DB_BILLING, ['id' =>  $billing_id]);
+        $this->session->set_flashdata('success', BILLING . ' ' . MSG_DELETED);
+        return redirect('admin/billing/archived');
+    }
+
+    public function archive()
+    {
+        $billing_id = isset($_POST['billing_id']) ? $_POST['billing_id'] : '';
+        if ($billing_id) {
+            $this->db->trans_start();
+            foreach ($billing_id as $id) {
+
+                $this->db->where('id', $id);
+                $this->db->update(DB_BILLING, ['is_archive' => 1, 'updated_at' => $this->date]);
+            }
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === false) {
+                $this->session->set_flashdata('error', MSG_ERROR);
+                return redirect('admin/billing');
+            } else {
+                $this->session->set_flashdata('success', BILLING . ' ' . MSG_ARCHIVED);
+                return redirect('admin/billing');
+            }
+        }
+        $this->session->set_flashdata('error', MSG_ERROR);
+        return false;
     }
 }

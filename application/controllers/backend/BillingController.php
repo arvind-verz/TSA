@@ -17,13 +17,31 @@ class BillingController extends CI_Controller
 
     public function index()
     {
-        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'BILLING', 'views'); 
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'BILLING', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(BILLING, 'admin/billing');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
         $data['title'] = $this->title;
         $data['page_title'] = BILLING;
         $data['billings'] = get_billing();
+
+        $this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/billing/index');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
+    }
+
+    public function archived()
+    {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'BILLING', 'views');
+        $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(BILLING, 'admin/billing');
+        $this->breadcrumbs->push(ARCHIVED, 'admin/archived');
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title']       = $this->title;
+        $data['page_title']  = SUBJECT . " <small> " . ARCHIVED . " </small>";
+        $data['billings']    = get_archived(DB_BILLING);
 
         $this->load->view('backend/include/header', $data);
         $this->load->view('backend/include/sidebar');
@@ -77,5 +95,23 @@ class BillingController extends CI_Controller
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'BILLING', 'edits');
         $this->billing->update($id, $_POST);
+    }
+
+    public function moveto_active_list($id)
+    {
+        $this->billing->moveto_active_list($id, $_POST);
+    }
+
+    public function delete_archive($billing_id)
+    {
+        $this->billing->delete_archive($billing_id);
+    }
+
+    public function archive()
+    {
+        $result = $this->billing->archive($_POST);
+        if($result == false) {
+            $this->index();
+        }
     }
 }
