@@ -8,6 +8,9 @@
     </section>
     <?php $this->load->view('backend/include/messages')?>
     <!-- Main content -->
+    <style>
+      .form-inline .multiselect-container li.disabled label.checkbox {background: #262626; color: #fff;}
+    </style>
     <section class="content">
         <!-- Small boxes (Stat box) -->
         <div class="row">
@@ -41,7 +44,7 @@
                                     <th>
                                         Select <?php echo STUDENT ?>
                                     </th>
-                                    
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,7 +67,7 @@
                                         <?php echo isset($order->class_code) ? $order->class_code : '-' ?>
                                     </td>
                                     <td>
-                                        <select name="order_status" class="form-control select2" data-order-id="<?php echo $order->order_id; ?>" data-class-code="<?php echo $order->class_code; ?>">
+                                        <select name="order_status" class="form-control" data-order-id="<?php echo $order->order_id; ?>" data-class-code="<?php echo $order->class_code; ?>">
                                             <option value="">-- Select One --</option>
                                             <option value="1">Print</option>
                                             <option value="2">Given</option>
@@ -72,10 +75,10 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="order_student_id" class="form-control select2" multiple="multiple" style="width: 100%;">
+                                        <select name="order_student_id" class="form-control selectpicker" multiple="multiple">
                                         </select>
                                     </td>
-                                    
+
                                 </tr>
                                 <?php
                                 }}
@@ -104,7 +107,7 @@
                 alert("Please select appropriate option to proceed.");
             }
         });
-
+        //$('.selectpicker').multiselect();
         $("body").on("change", "select[name='order_status']", function() {
             var ref = $(this);
             var order_id = $(this).attr("data-order-id");
@@ -120,7 +123,7 @@
                     contentType: false,
                     success: function(data) {
                         $(ref).parents("tr").find("select[name='order_student_id']").html(data);
-                        $('.select2').select2();
+                        $(ref).parents("tr").find('.selectpicker').multiselect('refresh');
                     }
                 });
             }
@@ -129,5 +132,5 @@
             }
         });
     });
-    
+
 </script>

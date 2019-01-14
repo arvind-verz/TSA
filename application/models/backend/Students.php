@@ -9,38 +9,38 @@ class Students extends CI_Model
 		$this->uniq_id = uniqid();
 		$this->date    = date('Y-m-d H:i:s');
 	}
-	
+
 	public function get_enrollment($id)
 	{
 		$this->db->select('*')
 		->from('student_enrollment')
-		->where('student_id',$id);				 
-		$query = $this->db->get()->row_object();				
-		return $query;	
+		->where('student_id',$id);
+		$query = $this->db->get()->row_object();
+		return $query;
 	}
-	
+
 	public function get_class_name($id)
 	{
 		$this->db->select('*')
 		->from('class')
-		->where('class_id',$id);				 
-		$query = $this->db->get()->row_object();				
-		return $query;	
+		->where('class_id',$id);
+		$query = $this->db->get()->row_object();
+		return $query;
 	}
-	
+
 	public function get_students()
 	{
 
 		$this->db->select('*');
 		$this->db->from('student');
-		$this->db->where('is_archive!=',1);	
+		$this->db->where('is_archive!=',1);
 		if(isset($_POST['search']) && $_POST['search']==1)
 		{
 			if(isset($_POST['s_name']) && $_POST['s_name']!="")
-				$this->db->like('name',$_POST['s_name']);	
+				$this->db->like('name',$_POST['s_name']);
 
 			if(isset($_POST['s_email']) && $_POST['s_email']!="")
-				$this->db->like('email',$_POST['s_email']);	
+				$this->db->like('email',$_POST['s_email']);
 
 			if(isset($_POST['s_phone']) && $_POST['s_phone']!="")
 				$this->db->like('phone',$_POST['s_phone']);
@@ -53,22 +53,22 @@ class Students extends CI_Model
 
 			if(isset($_POST['p_phone']) && $_POST['p_phone']!="")
 				$this->db->like('parents_phone',$_POST['p_phone']);
-		}			 
-		$query = $this->db->get()->result_object();			
-				//echo $this->db->last_query();	
-		return $query;	
+		}
+		$query = $this->db->get()->result_object();
+				//echo $this->db->last_query();
+		return $query;
 	}
-	
+
 	public function get_student($id)
 	{
 
 		$this->db->select('*')
 		->from('student')
 		->join('student_to_class', 'student.student_id=student_to_class.student_id')
-		->where('student.student_id',$id);			 
+		->where('student.student_id',$id);
 		$query = $this->db->get()->row_object();
-				//echo $this->db->last_query();				
-		return $query;	
+				//echo $this->db->last_query();
+		return $query;
 	}
 
 	public function update_enrollment()
@@ -109,7 +109,7 @@ class Students extends CI_Model
 		$this->session->set_flashdata('error', MSG_ERROR);
 		return redirect('admin/students/create');
 	}
-	
+
 	public function get_archived_classes()
 	{
 
@@ -119,10 +119,10 @@ class Students extends CI_Model
 		if(isset($_POST['search']) && $_POST['search']==1)
 		{
 			if(isset($_POST['s_name']) && $_POST['s_name']!="")
-				$this->db->like('name',$_POST['s_name']);	
+				$this->db->like('name',$_POST['s_name']);
 
 			if(isset($_POST['s_email']) && $_POST['s_email']!="")
-				$this->db->like('email',$_POST['s_email']);	
+				$this->db->like('email',$_POST['s_email']);
 
 			if(isset($_POST['s_phone']) && $_POST['s_phone']!="")
 				$this->db->like('phone',$_POST['s_phone']);
@@ -135,32 +135,32 @@ class Students extends CI_Model
 
 			if(isset($_POST['p_phone']) && $_POST['p_phone']!="")
 				$this->db->like('parents_phone',$_POST['p_phone']);
-		}	
-		$this->db->where('is_archive',1);				 
-		$query = $this->db->get()->result_object();				
-		return $query;	
+		}
+		$this->db->where('is_archive',1);
+		$query = $this->db->get()->result_object();
+		return $query;
 	}
-	
+
 	public function search()
 	{
 
 		$this->db->select('*')
 		->from('student')
-		->where('is_archive',1);				 
-		$query = $this->db->get()->result_object();				
-		return $query;	
+		->where('is_archive',1);
+		$query = $this->db->get()->result_object();
+		return $query;
 	}
-	
+
 	public function get_classes($id)
 	{
 
 		$this->db->select('*')
 		->from(DB_STUDENT_CLASS)
-		->where('student_id',$id);				 
-		$query = $this->db->get()->result_array();				
-		return $query;	
+		->where('student_id',$id);
+		$query = $this->db->get()->result_array();
+		return $query;
 	}
-	
+
 	public function store()
 	{
 		$nric = !empty($_POST['nric']) ? url_title($_POST['nric']) : '';
@@ -223,7 +223,7 @@ class Students extends CI_Model
 			return redirect('admin/students');
 		}
 	}
-	
+
 	public function enroll()
 	{
 		//die(print_r($_POST));
@@ -303,7 +303,7 @@ class Students extends CI_Model
 				$this->db->update('student_to_class', $data2);
 				$this->db->trans_complete();
 			}
-			
+
 
 			if ($this->db->trans_status() === false) {
 				$this->session->set_flashdata('error', MSG_ERROR);
@@ -363,7 +363,7 @@ class Students extends CI_Model
 			$reservation_date = !empty($_POST['reservation_date']) ? $_POST['reservation_date'] : '';
 
 			if($enrollment_type==2) {
-				
+
 				$data2 = [
 					'student_id'	=>	$student,
 					'class_id'	=>	$class_id,
@@ -465,7 +465,7 @@ class Students extends CI_Model
 				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
 				'created_at'   => $this->date,
 				'updated_at'   => $this->date
-			);	
+			);
 
 
 		}
@@ -480,7 +480,7 @@ class Students extends CI_Model
 			return redirect('admin/students/edit/'.$id);
 		} else {
 			$this->session->set_flashdata('success', STUDENT . ' ' . MSG_UPDATED);
-			return redirect('admin/students/edit/'.$id);
+			return redirect('admin/students');
 		}
 	}
 
@@ -496,7 +496,7 @@ class Students extends CI_Model
 		send_archived_invoice($id);
 		$this->db->where('student_id', $id);
 		$this->db->update('student', $data);
-		
+
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === false) {
@@ -519,7 +519,7 @@ class Students extends CI_Model
 		send_final_settlement_invoice($student_id);
 		$this->db->where('student_id', $student_id);
 		$this->db->update('student_to_class', $data);
-		
+
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === false) {

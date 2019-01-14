@@ -349,36 +349,43 @@ function miss_class_request($class_id, $reason, $date_of_absence)
 
         $query2  = $ci->db->get_where(DB_ATTENDANCE, ['class_code' => $class_code, 'student_id' => $student_id, 'attendance_date' => $date_of_absence]);
         $result2 = $query2->row();
-        if ($result2) {
-            //$attendance_date = date("Y-m-d", strtotime($result2->attendance_date));
-            if ($result2->status == '["0","1","0","0","0","0"]') {
-                return "updated";
+        $recipients = [
+            'phone'         => $result->phone,
+            'parents_phone' => $result->parents_phone,
+        ];
+
+        $message = get_sms_template_content(4);
+        $z = 0;
+        $sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
+        foreach ($recipients as $recipient) {
+            if($z==1) {
+                $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_name . '\r\n';
             }
-            $recipients = [
-                'phone'         => $result->phone,
-                'parents_phone' => $result->parents_phone,
-            ];
-
-            $message = get_sms_template_content(4);
-            $z = 0;
-            $sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
-            foreach ($recipients as $recipient) {
-                if($z==1) {
-                    $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_name . '\r\n';
-                }
-                send_sms($recipient, $sms_pre_content . $message, 4, $result1->class_code);
-            $z++;}
-
-            $data = [
-                'reason_for_absent'   =>  $reason,
-                'status'        => json_encode(["0", "1", "0", "0", "0", "0"]),
-                'missed_update' => date('Y-m-d H:i:s'),
-            ];
-            $ci->db->where(['class_code' => $class_code, 'student_id' => $student_id, 'attendance_date' => $date_of_absence]);
-            $ci->db->update(DB_ATTENDANCE, $data);
-            return "success";
+            send_sms($recipient, $sms_pre_content . $message, 4, $result1->class_code);
+        $z++;}
+        if ($result2) {
+              $data = [
+                  'reason_for_absent'   =>  $reason,
+                  'status'        => json_encode(["0", "1", "0", "0", "0", "0"]),
+                  'missed_update' => date('Y-m-d H:i:s'),
+              ];
+              $ci->db->where(['class_code' => $class_code, 'student_id' => $student_id, 'attendance_date' => $date_of_absence]);
+              $ci->db->update(DB_ATTENDANCE, $data);
+              return "success";
         }
-        return "pending";
+        else {
+              $data = [
+                  'class_code'  =>  $class_code,
+                  'student_id'  =>  $student_id,
+                  'attendance_date' =>  $date_of_absence,
+                  'reason_for_absent'   =>  $reason,
+                  'status'        => json_encode(["0", "1", "0", "0", "0", "0"]),
+                  'missed_update' => date('Y-m-d H:i:s'),
+              ];
+              //$ci->db->where(['class_code' => $class_code, 'student_id' => $student_id, 'attendance_date' => $date_of_absence]);
+              $ci->db->insert(DB_ATTENDANCE, $data);
+              return "success";
+        }
     }
     return "failed";
 }
@@ -1575,10 +1582,10 @@ function get_student_classes_search_data($searchby, $sortby, $searchfield)
                         $ci = &get_instance();
 
                         if ($id) {
-                            $query  = $ci->db->get_where(DB_BILLING, ['id' => $id]);
+                            $query  = $ci->db->get_where(DB_BILLING, ['id' => $id, 'is_archive' =>  0]);
                             $result = $query->row();
                         } else {
-                            $query  = $ci->db->get(DB_BILLING);
+                            $query  = $ci->db->get_where(DB_BILLING, ['is_archive'  =>  0]);
                             $result = $query->result();
                         }
                         if ($query) {
