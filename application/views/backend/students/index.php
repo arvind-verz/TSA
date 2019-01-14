@@ -10,11 +10,12 @@
     $this->load->view('backend/include/messages');  ?>
     <!-- Main content -->
     <section class="content">
-        
+
         <!-- Small boxes (Stat box) -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="box">
+                  <?php echo form_open('admin/students/archive'); ?>
                     <div class="box-header">
                         <a class="btn btn-info" href="<?php echo site_url('admin/students/create') ?>">
                             <i aria-hidden="true" class="fa fa-plus-circle">
@@ -22,10 +23,11 @@
                         </a>
                         <p class="text-right">
                             <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
+                              <button type="submit" class="btn btn-primary hide">Archive Selected <span class="badge"></span></button> |
                         <a href="javascript:void(0);" class="add_class">
                             <i aria-hidden="true" class="fa fa-plus-circle">
                             </i> Add <?php echo CLASSES ?>
-                        </a> | 
+                        </a> |
                         <?php } ?>
                         <a class="" href="<?php echo site_url('admin/students/archived') ?>">
                             <i aria-hidden="true" class="fa fa-archive">
@@ -39,7 +41,7 @@
                                 <tr>
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
                                     <th class="no-sort" width="15px">
-                                        <input type="checkbox" class="checkbox" name="select_all_students">
+                                        <input type="checkbox" name="select_all_students">
                                     </th>
                                 <?php } ?>
                                 <?php if (current_url() == site_url('admin/students/archived')) { ?>
@@ -105,7 +107,7 @@
                                     <th>
                                         Archive At
                                     </th>
-                                    
+
                                 <?php } ?>
                                 </tr>
                             </thead>
@@ -115,7 +117,7 @@
                                 foreach($students as $student) {
                                     $credit_value = 0;
                                     if($student->status==3) {$credit_value = get_credit_value($student->student_id, $student->class_id);}
-                                ?>                                
+                                ?>
                                 <tr class="<?php if(has_enrollment_content($student->student_id, $student->class_id, 'depo_collected')=='No' || $credit_value<0) {echo 'bg-danger';} ?>">
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
                                     <td><input type="hidden" name="student_id_ref" value="<?php echo $student->student_id; ?>">
@@ -172,7 +174,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    
+
                                     <th><button type="button" class="btn btn-default clearall">Clear All</button></th>
                                     <th>
                                         Action
@@ -237,6 +239,7 @@
                             </tfoot>
                         </table>
                     </div>
+                    <?php echo form_close(); ?>
                 </div>
             </div>
         </div>
@@ -258,7 +261,7 @@
                         <label for="">Select Status: </label>
                         <select name="enrollment_type" class="form-control select2" style="width: 100%;">
                             <option value="">-- Select One --</option>
-                            <?php                                
+                            <?php
                                 foreach ($enrollment_type as $key => $enroll) {
                                 ?>
                                 <option value="<?php echo ($key+1); ?>">
@@ -337,23 +340,56 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    
+  function is_checkbox_checked(count) {
+      $("button[type='submit']").find("span").text(count);
+      if(count>0) {
+          $("button[type='submit']").removeClass('hide');
+      }
+      else {
+          $("button[type='submit']").addClass('hide');
+      }
+  }
+
+  $("input[name='select_all_students']").on("change", function() {
+
+      if($(this).is(":checked")) {
+          $(".checkbox").prop("checked", true);
+      }
+      else {
+          $(".checkbox").prop("checked", false);
+      }
+      var count = $(".checkbox:checked").length;
+      is_checkbox_checked(count);
+  });
+
+  $(".checkbox").on("change", function() {
+      var count = $(".checkbox:checked").length;
+      if($(".checkbox").length!=count)
+      {
+          $("input[name='select_all_students']").prop("checked", false);
+      }
+      else {
+          $("input[name='select_all_students']").prop("checked", true);
+      }
+      is_checkbox_checked(count);
+  });
+
     $('table tfoot tr th:gt(0)').each( function () {
         var title = $(this).text().trim();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
     } );
- 
+
     // DataTable
     var table = $('table').DataTable({
         columnDefs: [
           { targets: 'no-sort', orderable: false }
         ]
     });
- 
+
     // Apply the search
     table.columns().every( function () {
         var that = this;
- 
+
         $( 'input', this.footer() ).on( 'keyup change', function () {
             if ( that.search() !== this.value ) {
                 that
@@ -376,7 +412,7 @@ $(document).ready(function() {
         if($(this).val()==1)
         {
             type = 'reservation';
-            
+
         }
         else if($(this).val()==3)
         {
@@ -402,9 +438,9 @@ $(document).ready(function() {
         else {
             $("#dis_content").html('');
         }
-        
+
         $(".datepicker").datepicker({format: 'yyyy-mm-dd'});
-        
+
     });
 
     $(".add_class").click(function () {
@@ -438,24 +474,24 @@ $(document).ready(function() {
         var archive=confirm("Are you sure you want to archive this student?");
             if (archive==true){
             window.location=$(this).val();
-            }   
+            }
         }
         if(attrname=='final_settlement')
         {
         var archive=confirm("Are you sure you want to Final Settlement this student?");
             if (archive==true){
             window.location=$(this).val();
-            }   
+            }
         }
         else if(attrname=='Edit')
         {
-        
+
             window.location=$(this).val();
-            
+
         }
         else if(attrname=='view_all_details')
         {
-            
+
             $.ajax({
             type: 'GET',
             url: '<?php echo site_url('admin/students/get_view_all_contents'); ?>',
@@ -468,7 +504,7 @@ $(document).ready(function() {
                 $("#ViewAllDetails").modal('show');
             }
         });
-            
+
         }
         else if(attrname=='edit_class')
         {
@@ -598,6 +634,6 @@ $(document).ready(function() {
         //
 
     }*/
-    
+
 });
 </script>

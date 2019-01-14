@@ -73,6 +73,7 @@
                                 <option value="Ms." <?php echo  set_select('salutation', 'Ms.'); ?>>Ms.</option>
                                 <option value="Dr." <?php echo  set_select('salutation', 'Dr.'); ?>>Dr.</option>
                                 <option value="Mrs." <?php echo  set_select('salutation', 'Mrs.'); ?>>Mrs.</option>
+                                <option value="Mdm." <?php echo  set_select('salutation', 'Mdm.'); ?>>Mdm.</option>
                             </select>
                         </div>
                         <div class="col-lg-10">

@@ -70,7 +70,7 @@
 			<div class="pd-img p1"><img src="<?php echo base_url('assets/images/ban1.png'); ?>" alt="" class="responsive"></div>
 			<div class="pd-img p2"><img src="<?php echo base_url('assets/images/ban2.png'); ?>" alt="" class="responsive"></div>
 		<?php }else{?>
-			<div id="wrapper"> 
+			<div id="wrapper">
 			<?php }?>
 			<!-- Header -->
 			<header id="header" class="header">
@@ -106,7 +106,7 @@
 					<div class="clear"></div>
 				</div>
 			</header>
-			<!-- Header END --> 
+			<!-- Header END -->
 
 
 			<?php if($url=='home'){?>
@@ -134,14 +134,14 @@
 						<div class="container">
 							<div class="bn-content">
 								<div>
-									<div class="student-dp"><img src="<?php echo isset($student_profile->profile_picture) ? base_url('assets/files/profile_picture/' . $student_profile->profile_picture) : ''; ?>" class="responsive" alt=""></div>
+									<!-- <div class="student-dp"><img src="<?php echo isset($student_profile->profile_picture) ? base_url('assets/files/profile_picture/' . $student_profile->profile_picture) : ''; ?>" class="responsive" alt=""></div> -->
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="clear"></div>
 				</div>
-				<!-- Banner END --> 
+				<!-- Banner END -->
 			<?php }
 			else if($url=='404 Page'){?>
 				<!-- Banner -->
@@ -160,7 +160,7 @@
 					</div>
 					<div class="clear"></div>
 				</div>
-				<!-- Banner END --> 
+				<!-- Banner END -->
 			<?php }
 			else if($url!='thank-you'){?>
 				<!-- Banner -->
@@ -179,5 +179,5 @@
 					</div>
 					<div class="clear"></div>
 				</div>
-				<!-- Banner END --> 
+				<!-- Banner END -->
 				<?php }?>

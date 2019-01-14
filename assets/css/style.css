@@ -466,7 +466,7 @@ body, #wrapper, .footer-wrapper { opacity: 0; }
 .bann-scroll{ position:absolute; color:#ffffff; z-index:5; bottom:50px; left:50%;transform: translate(-50%, 0%); }
 .bann-scroll a{ display:block; padding-top:48px; font-size:9px; font-weight:700; color:#ffffff; text-transform:uppercase; background:url(../images/mouse.png) no-repeat top center;}
 /* Nav */
-.topRightContainer { position: relative; float: right; display: block; margin-top: 52px; z-index:5;transition: all 0.2s linear; margin-right:110px;}
+.topRightContainer { position: relative; float: right; display: block; margin-top: 52px; z-index:5;transition: all 0.2s linear; margin-right:155px;}
 .header.sticky .topRightContainer{margin-top: 24px;}
 .mean-container a.meanmenu-reveal { }
 .nav-wrapper { position: relative; display: block; float: left; margin: 0px 0px; padding: 0px 0px;}
@@ -688,5 +688,3 @@ transition: all 0.2s linear;
 @-ms-viewport {
  width:auto !important;
 }
-
-
