@@ -3,7 +3,7 @@
     <section class="content-header">
         <h1><?php print_r($page_title); ?></h1>
         <?php print_r($breadcrumbs); ?>
-    </section> 
+    </section>
     <?php $this->load->view('backend/include/messages') ?>
     <?php if (validation_errors()) {?>
         <div class="col-lg-12">
@@ -74,6 +74,7 @@
                                 <option value="Ms." <?php if($student->salutation=='Ms.') {echo 'selected';} ?>>Ms.</option>
                                 <option value="Dr." <?php if($student->salutation=='Dr.') {echo 'selected';} ?>>Dr.</option>
                                 <option value="Mrs." <?php if($student->salutation=='Mrs.') {echo 'selected';} ?>>Mrs.</option>
+                                <option value="Mdm." <?php if($student->salutation=='Mdm.') {echo 'selected';} ?>>Mdm.</option>
                             </select>
                         </div>
                         <div class="col-lg-10">
@@ -87,7 +88,7 @@
                 </div>
                 <div class="form-group">
                     <?php
-                    $siblings = isset($student->siblings) ? json_decode($student->siblings) : ''; 
+                    $siblings = isset($student->siblings) ? json_decode($student->siblings) : '';
                     if(count($siblings)<1)
                     {
                         $query = $this->db->like('siblings', $student->nric, 'both')->group_by('nric')->get(DB_STUDENT);

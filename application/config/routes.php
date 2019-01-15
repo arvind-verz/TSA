@@ -105,6 +105,7 @@ $route['admin/students/enrollment_decision']        = 'backend/StudentController
 $route['admin/students/get_view_all_contents']        = 'backend/StudentController/get_view_all_contents';
 $route['admin/students/final_settlement/(:any)']            = 'backend/StudentController/final_settlement/$1';
 $route['admin/students/delete-archive/(:any)'] = 'backend/StudentController/delete_archive/$1';
+$route['admin/students/get_p_content'] = 'backend/StudentController/get_p_content';
 
 
 /* ORDER */
@@ -153,9 +154,13 @@ $route['admin/sms_announcement'] = 'backend/SmsController/sms_announcement';
 /* BILLING */
 $route['admin/billing']               = 'backend/BillingController/index';
 $route['admin/billing/create']        = 'backend/BillingController/create';
+$route['admin/billing/archived']                  = 'backend/BillingController/archived';
 $route['admin/billing/store']         = 'backend/BillingController/store';
 $route['admin/billing/edit/(:any)']   = 'backend/BillingController/edit/$1';
 $route['admin/billing/update/(:any)'] = 'backend/BillingController/update/$1';
+$route['admin/billing/archive']                  = 'backend/BillingController/archive';
+$route['admin/billing/moveto_active_list/(:any)'] = 'backend/BillingController/moveto_active_list/$1';
+$route['admin/billing/delete-archive/(:any)'] = 'backend/BillingController/delete_archive/$1';
 
 /* ATTENDANCE */
 $route['admin/attendance']                           = 'backend/AttendanceController/index';

@@ -98,11 +98,10 @@ class Sms extends CI_Model
         $this->db->join("student_to_class", 'student.student_id = student_to_class.student_id');
         $this->db->join(DB_CLASSES, 'class.class_id = student_to_class.class_id');
         $this->db->where(['student_to_class.status' =>  3, 'student.is_active'  =>  1, 'student.is_archive' =>  0]);
-        $this->db->group_by('student.phone');
         $query = $this->db->get();
         $result = $query->result();
         if($result) {
-            
+
             foreach($result as $row) {
                 $recipients = [
                     'phone' =>  $row->phone,
@@ -110,10 +109,10 @@ class Sms extends CI_Model
                 ];
                 $class_code = $row->class_code;
                 $z = 0;
-                $sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
+                $sms_pre_content = 'Hi ' . $row->firstname . ' ' . $row->lastname . '\r\n';
                 foreach($recipients as $recipient) {
                     if($z==1) {
-                        $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_name . '\r\n';
+                        $sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_name . '\r\n';
                     }
                     send_sms($recipient, $sms_pre_content . $message, 7, $class_code);
                 $z++;}

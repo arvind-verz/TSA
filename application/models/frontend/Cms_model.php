@@ -27,6 +27,7 @@ class Cms_model extends CI_Model
         $this->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
         $this->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
         $this->db->where('student.id', $student_id['id']);
+        $this->db->where('student_to_class.status', 3);
         $this->db->order_by(DB_CLASSES . '.created_at', 'DESC');
         $query  = $this->db->get();
         $result = $query->result();
@@ -314,7 +315,7 @@ class Cms_model extends CI_Model
             'message'      => $message,
             'create_date'  => $create_date,
         );
-        
+
 
         $this->db->insert(DB_CONTACT, $data);
         send_mail_contact($email_id, $to_email, $subject, $message);
@@ -365,7 +366,7 @@ class Cms_model extends CI_Model
             'message'      => $message,
             'create_date'  => $create_date,
         );
-    	
+
 	    $this->db->insert(DB_ENQUIRY, $data);
 	    send_mail_contact($email_id, $to_email, $subject, $message);
 
