@@ -105,6 +105,7 @@ $route['admin/students/enrollment_decision']        = 'backend/StudentController
 $route['admin/students/get_view_all_contents']        = 'backend/StudentController/get_view_all_contents';
 $route['admin/students/final_settlement/(:any)']            = 'backend/StudentController/final_settlement/$1';
 $route['admin/students/delete-archive/(:any)'] = 'backend/StudentController/delete_archive/$1';
+$route['admin/students/get_p_content'] = 'backend/StudentController/get_p_content';
 
 
 /* ORDER */

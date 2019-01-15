@@ -127,8 +127,8 @@ class StudentController extends CI_Controller
             $image_file = $_FILES['profile_picture']['name'];
 
             $_POST['profile_picture'] = upload_image_file($image_file, $file_name_placeholder[0], 200, 200);
-            
-            
+
+
             $this->students->store($_POST);
 
         }
@@ -138,7 +138,7 @@ class StudentController extends CI_Controller
 
     public function enroll()
     {
-        
+
         $this->students->enroll($_POST);
     }
 
@@ -216,7 +216,7 @@ class StudentController extends CI_Controller
             //$this->session->set_flashdata('error', validation_errors());
             $this->edit($id);
         } else {
-            
+
             $file_name_placeholder = array_keys($_FILES);
             $image_file = $_FILES['profile_picture']['name'];
             if($image_file) {
@@ -304,5 +304,10 @@ class StudentController extends CI_Controller
     public function delete_archive($student_id)
     {
         $this->students->delete_archive($student_id);
+    }
+
+    public function get_p_content()
+    {
+      print_r(get_p_content());
     }
 }

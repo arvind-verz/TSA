@@ -22,7 +22,7 @@
                             <a class="pull-right" href="<?php echo site_url('admin/material/archived') ?>">
                                 <i aria-hidden="true" class="fa fa-archive">
                                     </i> <?php echo ARCHIVED . ' ' . MATERIAL ?>
-                                </a>
+                                </a> <button type="submit" class="btn btn-primary hide pull-right" disabled>Archive Selected <span class="badge"></span></button>
                                 <?php
                                 if (!(current_url() == site_url('admin/material/archived'))) {
                                     ?>
@@ -40,14 +40,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
-
-                                            <button type="submit" class="btn btn-primary hide" disabled>Archive Selected <span class="badge"></span></button>
-
-                                    </div>
                                 <?php } ?>
                             </div>
-                            <div class="box-body">
+                            <div class="box-body table-responsive">
                                 <table class="table table-striped table-bordered text-center" style="width:100%">
                                     <thead>
                                         <tr>
@@ -255,24 +250,7 @@
                             success: function(data) {
                     //alert(data);
                                 $("tbody.display_data").html(data);
-                                $('table tfoot th').each( function () {
-                                    var title = $(this).text().trim();
-                                    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-                                } );
-
-
-                                // Apply the search
-                                table.columns().every( function () {
-                                    var that = this;
-
-                                    $( 'input', this.footer() ).on( 'keyup change', function () {
-                                        if ( that.search() !== this.value ) {
-                                            that
-                                                .search( this.value )
-                                                .draw();
-                                        }
-                                    } );
-                                } );
+                                
                             }
                         })
                     });

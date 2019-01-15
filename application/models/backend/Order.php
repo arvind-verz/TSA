@@ -12,7 +12,7 @@ class Order extends CI_Model
 
     public function store()
     {
-        
+
         $data = array(
             'order_date' => $this->date,
             'class_code' => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
@@ -80,7 +80,7 @@ class Order extends CI_Model
                 $data = array(
                     'status'    =>  $status,
                 );
-            
+
                 $this->db->where(['order_id' => $order_id, 'student_id' => $id]);
                 $this->db->update('order_details', $data);
             }

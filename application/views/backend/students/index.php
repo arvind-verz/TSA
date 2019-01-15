@@ -115,10 +115,10 @@
                                 <?php
                                 if(count($students)) {
                                 foreach($students as $student) {
-                                    $credit_value = 0;
-                                    if($student->status==3) {$credit_value = get_credit_value($student->student_id, $student->class_id);}
+                                    $previous_month_balance = 0;
+                                    if($student->status==3) {$previous_month_balance = get_previous_month_balance($student->student_id, $student->class_id);}
                                 ?>
-                                <tr class="<?php if(has_enrollment_content($student->student_id, $student->class_id, 'depo_collected')=='No' || $credit_value<0) {echo 'bg-danger';} ?>">
+                                <tr class="<?php if(has_enrollment_content($student->student_id, $student->class_id, 'depo_collected')=='No' || $previous_month_balance<0) {echo 'bg-danger';} ?>">
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
                                     <td><input type="hidden" name="student_id_ref" value="<?php echo $student->student_id; ?>">
                                 <input type="hidden" name="class_id_ref" value="<?php echo $student->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id" value="<?php echo $student->student_id;?>"/></td>
@@ -247,7 +247,7 @@
 </div>
 
 <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -288,7 +288,7 @@
 </div>
 
 <div class="modal fade" id="myModalEditClass" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -316,7 +316,7 @@
 </div>
 
 <div class="modal fade" id="ViewAllDetails" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -634,6 +634,39 @@ $(document).ready(function() {
         //
 
     }*/
+    $("body").on("click", ".ec_add_input", function() {
+      $(".ec_content").append('<div class="col-md-12 mt-2"> <div class="col-md-4"> <input type="text" name="ec_amount[]" class="form-control" value="" placeholder="Amount"> </div><div class="col-md-4"> <input type="text" name="ec_item_discount[]" class="form-control" value="" placeholder="Item Discount"> </div><div class="col-md-4"> <input type="text" name="ec_remarks[]" class="form-control" value="" placeholder="Remark"> </div></div>');
+    });
 
+    $("body").on("click", ".ec_remove_input", function() {
+      if($(".ec_content .col-md-12").length>1) {
+        $(".ec_content .col-md-12").last().remove();
+      }
+    });
+
+    $("body").on("click", ".p_add_input", function() {
+      $.ajax({
+          type: 'GET',
+          url: '<?php echo site_url('admin/students/get_p_content'); ?>',
+          data: '',
+          async: false,
+          processData: false,
+          contentType: false,
+          success: function(data) {
+              $(".p_content").append(data);
+              $('.datepicker').datepicker({
+          			autoclose: true,
+          			format: 'yyyy-mm-dd',
+          			weekStart: 1
+          		})
+          }
+      });
+    });
+
+    $("body").on("click", ".p_remove_input", function() {
+      if($(".p_content .col-md-12").length>1) {
+        $(".p_content .col-md-12").last().remove();
+      }
+    });
 });
 </script>

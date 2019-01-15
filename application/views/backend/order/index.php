@@ -128,7 +128,7 @@
                 });
             }
             else {
-                $("select[name='order_student_id']").html('');
+                $(ref).parents("tr").find('.selectpicker').multiselect('refresh');
             }
         });
     });

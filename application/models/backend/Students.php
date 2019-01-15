@@ -249,10 +249,33 @@ class Students extends CI_Model
 				$deposit = !empty($_POST['deposit']) ? $_POST['deposit'] : '';
 				$deposit_collected = !empty($_POST['deposit_collected']) ? $_POST['deposit_collected'] : '';
 				$remarks_deposit = !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '';
-				$credit_value = !empty($_POST['credit_value']) ? $_POST['credit_value'] : '';
-				$extra_charges = !empty($_POST['extra_charges']) ? $_POST['extra_charges'] : '';
+				$previous_month_balance = !empty($_POST['previous_month_balance']) ? $_POST['previous_month_balance'] : '';
+				$extra_charges = $payment_month_payment = [];
 				$remarks = !empty($_POST['remarks']) ? $_POST['remarks'] : '';
 
+				for($i=0;$i<count($_POST['ec_amount']);$i++)
+				{
+					$extra_charges[] = [
+						'amount'	=>	$_POST['ec_amount'][$i],
+						'item_deposit'	=>	$_POST['ec_item_discount'][$i],
+						'remark'	=>	$_POST['ec_remarks'][$i],
+						'date_updated'	=>	$this->date,
+					];
+				}
+
+				for($i=0;$i<count($_POST['ec_amount']);$i++)
+				{
+					$payment_month_payment[] = [
+						'amount'	=>	$_POST['p_amount'][$i],
+						'payment_terms'	=>	$_POST['p_payment_terms'][$i],
+						'reference_number'	=>	$_POST['p_reference_number'][$i],
+						'date'	=>	$_POST['p_date'][$i],
+						'remark'	=>	$_POST['p_remark'][$i],
+						'billing_cycle'	=>	$_POST['p_billing_cycle'][$i],
+						'date_updated'	=>	$this->date,
+					];
+				}
+//die(print_r($extra_charges));
 				$data = [
 					'student_id'	=>	$student_id,
 					'class_id'	=>	$class_id,
@@ -260,8 +283,9 @@ class Students extends CI_Model
 					'deposit'	=>	$deposit,
 					'deposit_collected'	=>	$deposit_collected,
 					'remarks_deposit'	=>	$remarks_deposit,
-					'credit_value'	=>	$credit_value,
-					'extra_charges'	=>	$extra_charges,
+					'previous_month_balance'	=>	$previous_month_balance,
+					'extra_charges'	=>	json_encode($extra_charges),
+					'payment'	=>	json_encode($payment_month_payment),
 					'remarks'	=>	$remarks,
 					'created_at'	=>	$this->date,
 					'updated_at'	=>	$this->date,
@@ -339,9 +363,32 @@ class Students extends CI_Model
 				$deposit = !empty($_POST['deposit']) ? $_POST['deposit'] : '';
 				$deposit_collected = !empty($_POST['deposit_collected']) ? $_POST['deposit_collected'] : '';
 				$remarks_deposit = !empty($_POST['remarks_deposit']) ? $_POST['remarks_deposit'] : '';
-				$credit_value = !empty($_POST['credit_value']) ? $_POST['credit_value'] : '';
-				$extra_charges = !empty($_POST['extra_charges']) ? $_POST['extra_charges'] : '';
+				$previous_month_balance = !empty($_POST['previous_month_balance']) ? $_POST['previous_month_balance'] : '';
+				$extra_charges = $payment_month_payment = [];
 				$remarks = !empty($_POST['remarks']) ? $_POST['remarks'] : '';
+
+				for($i=0;$i<count($_POST['ec_amount']);$i++)
+				{
+					$extra_charges[] = [
+						'amount'	=>	$_POST['ec_amount'][$i],
+						'item_deposit'	=>	$_POST['ec_item_discount'][$i],
+						'remark'	=>	$_POST['ec_remarks'][$i],
+						'date_updated'	=>	$this->date,
+					];
+				}
+
+				for($i=0;$i<count($_POST['ec_amount']);$i++)
+				{
+					$payment_month_payment[] = [
+						'amount'	=>	$_POST['p_amount'][$i],
+						'payment_terms'	=>	$_POST['p_payment_terms'][$i],
+						'reference_number'	=>	$_POST['p_reference_number'][$i],
+						'date'	=>	$_POST['p_date'][$i],
+						'remark'	=>	$_POST['p_remark'][$i],
+						'billing_cycle'	=>	$_POST['p_billing_cycle'][$i],
+						'date_updated'	=>	$this->date,
+					];
+				}
 
 				$data = [
 					'student_id'	=>	$student,
@@ -350,8 +397,9 @@ class Students extends CI_Model
 					'deposit'	=>	$deposit,
 					'deposit_collected'	=>	$deposit_collected,
 					'remarks_deposit'	=>	$remarks_deposit,
-					'credit_value'	=>	$credit_value,
-					'extra_charges'	=>	$extra_charges,
+					'previous_month_balance'	=>	$previous_month_balance,
+					'extra_charges'	=>	json_encode($extra_charges),
+					'payment'	=>	json_encode($payment_month_payment),
 					'remarks'	=>	$remarks,
 					'created_at'	=>	$this->date,
 					'updated_at'	=>	$this->date,
