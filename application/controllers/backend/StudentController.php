@@ -17,7 +17,7 @@ class StudentController extends CI_Controller
 
     public function index()
     {
-        //die(print_r(get_student()));
+        //die(print_r(get_invoice_result2('1','2019-01-17 10:27')));
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'STUDENT', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(STUDENT, 'admin/students');

@@ -634,39 +634,39 @@ $(document).ready(function() {
         //
 
     }*/
-    $("body").on("click", ".ec_add_input", function() {
-      $(".ec_content").append('<div class="col-md-12 mt-2"> <div class="col-md-4"> <input type="text" name="ec_amount[]" class="form-control" value="" placeholder="Amount"> </div><div class="col-md-4"> <input type="text" name="ec_item_discount[]" class="form-control" value="" placeholder="Item Discount"> </div><div class="col-md-4"> <input type="text" name="ec_remarks[]" class="form-control" value="" placeholder="Remark"> </div></div>');
-    });
-
-    $("body").on("click", ".ec_remove_input", function() {
-      if($(".ec_content .col-md-12").length>1) {
-        $(".ec_content .col-md-12").last().remove();
-      }
-    });
-
-    $("body").on("click", ".p_add_input", function() {
-      $.ajax({
-          type: 'GET',
-          url: '<?php echo site_url('admin/students/get_p_content'); ?>',
-          data: '',
-          async: false,
-          processData: false,
-          contentType: false,
-          success: function(data) {
-              $(".p_content").append(data);
-              $('.datepicker').datepicker({
-          			autoclose: true,
-          			format: 'yyyy-mm-dd',
-          			weekStart: 1
-          		})
-          }
-      });
-    });
-
-    $("body").on("click", ".p_remove_input", function() {
-      if($(".p_content .col-md-12").length>1) {
-        $(".p_content .col-md-12").last().remove();
-      }
-    });
+    // $("body").on("click", ".ec_add_input", function() {
+    //   $(".ec_content").append('<div class="col-md-12 mt-2"> <div class="col-md-4"> <input type="text" name="ec_amount[]" class="form-control" value="" placeholder="Amount"> </div><div class="col-md-4"> <input type="text" name="ec_item_discount[]" class="form-control" value="" placeholder="Item Discount"> </div><div class="col-md-4"> <input type="text" name="ec_remarks[]" class="form-control" value="" placeholder="Remark"> </div></div>');
+    // });
+    //
+    // $("body").on("click", ".ec_remove_input", function() {
+    //   if($(".ec_content .col-md-12").length>1) {
+    //     $(".ec_content .col-md-12").last().remove();
+    //   }
+    // });
+    //
+    // $("body").on("click", ".p_add_input", function() {
+    //   $.ajax({
+    //       type: 'GET',
+    //       url: '<?php //echo site_url('admin/students/get_p_content'); ?>',
+    //       data: '',
+    //       async: false,
+    //       processData: false,
+    //       contentType: false,
+    //       success: function(data) {
+    //           $(".p_content").append(data);
+    //           $('.datepicker').datepicker({
+    //       			autoclose: true,
+    //       			format: 'yyyy-mm-dd',
+    //       			weekStart: 1
+    //       		})
+    //       }
+    //   });
+    // });
+    //
+    // $("body").on("click", ".p_remove_input", function() {
+    //   if($(".p_content .col-md-12").length>1) {
+    //     $(".p_content .col-md-12").last().remove();
+    //   }
+    // });
 });
 </script>
