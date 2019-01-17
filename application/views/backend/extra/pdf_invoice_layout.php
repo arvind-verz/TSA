@@ -69,7 +69,7 @@
         display: block;
         text-align: center;
     }
-    
+
     .invoice-box table tr.information table td {
         width: 100%;
         display: block;
@@ -104,7 +104,7 @@ $item_details = json_decode($invoice_data->invoice_data);
                         <td class="title">
                             <img src="<?php echo base_url('assets/images/img3.png'); ?>" style="width:100%; max-width:300px;">
                         </td>
-                        
+
                         <td>
                             Invoice #: <?php echo $invoice_data->invoice_no; ?><br>
                             Created: <?php echo date('M d, Y', strtotime($invoice_data->created_at)); ?>
@@ -113,7 +113,7 @@ $item_details = json_decode($invoice_data->invoice_data);
                 </table>
             </td>
         </tr>
-        
+
         <tr class="information">
             <td colspan="2">
                 <table>
@@ -123,7 +123,7 @@ $item_details = json_decode($invoice_data->invoice_data);
                             12345 Sunny Road<br>
                             Sunnyville, SG 12345
                         </td>
-                        
+
                         <td>
                             <?php echo $result['name']; ?><br>
                             <?php echo $result['email']; ?><br>
@@ -133,22 +133,22 @@ $item_details = json_decode($invoice_data->invoice_data);
                 </table>
             </td>
         </tr>
-        
+
         <!-- <tr class="heading">
             <td>
                 Payment Method
             </td>
-            
+
             <td>
-                
+
             </td>
         </tr>
-        
+
         <tr class="details">
             <td>
                 Check
             </td>
-            
+
             <td>
                 1000
             </td>
@@ -158,32 +158,33 @@ $item_details = json_decode($invoice_data->invoice_data);
             <td>
                 Item
             </td>
-            
+
             <td>
                 Price
             </td>
         </tr>
         <?php
+        $i = 0;
         foreach($item_details as $key => $value) {
         ?>
         <tr class="item last">
             <td>
                 <?php echo ucwords(str_replace("_", " ", $key)); ?>
             </td>
-            
+
             <td>
-                $<?php echo $value; ?>
+                <?php if($i!=0) {echo '$';}echo $value; ?>
             </td>
         </tr>
         <?php
-        }
+        $i++;}
         ?>
-        
+
         <tr class="total">
             <td></td>
-            
+
             <td>
-               Total Paid: $<?php echo $invoice_data->invoice_amount; ?>
+               Total Paid: <?php echo '$'.$invoice_data->invoice_amount; ?>
             </td>
         </tr>
     </table>

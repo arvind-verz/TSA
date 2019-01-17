@@ -31,7 +31,7 @@ $route['students/student-classes-search'] = 'frontend/Cms/student_classes_search
 /* PDF */
 //$route['admin/pdf/invoice/(:any)']         = 'backend/PdfController/my_mPDF/$1';
 
-$route['admin/cronjobs_PQWEas22'] = 'backend/CronController/index';
+$route['admin/testing_cron_invoice'] = 'backend/CronInvoiceController/index';
 $route['admin/cronjobs_SMS'] = 'backend/CronReservationController/index';
 $route['admin']                   = 'backend/AccountsController/index';
 $route['admin/login']             = 'backend/AccountsController/index';
