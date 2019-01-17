@@ -283,7 +283,7 @@ function get_enrollment_type_popup_content($type)
                     <input type="text" name="remarks_deposit" class="form-control" value="">
                 </div>
                 <div class="form-group">
-                    <label for="">Previous Monthâ€™s Balance (PMB)</label>
+                    <label for="">Previous Month's Balance (PMB)</label>
                     <input type="text" name="previous_month_balance" class="form-control" value="0" readonly>
                 </div>
                 <div class="form-group">
@@ -1744,15 +1744,15 @@ function get_view_all_contents($student_id, $class_id)
                         </div>
                         <div class="form-group">
                             <label>Previous Month Balance : <?php
-		echo get_previous_month_balance($student_id, $class_id); ?></label>
+		echo get_currency('SGD').get_previous_month_balance($student_id, $class_id); ?></label>
                         </div>
                         <div class="form-group">
                             <label>Extra Charges : <?php
-		echo $result->extra_charges; ?></label>
+		echo get_currency('SGD').$result->extra_charges; ?></label>
                         </div>
                         <div class="form-group">
                             <label>Previous Month Payment : <?php
-		echo $result->previous_month_payment; ?></label>
+		echo get_currency('SGD').$result->previous_month_payment; ?></label>
                         </div>
                         <div class="form-group">
                             <label>Remark : <?php
