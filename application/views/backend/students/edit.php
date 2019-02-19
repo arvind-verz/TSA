@@ -77,9 +77,13 @@
                                 <option value="Mdm." <?php if($student->salutation=='Mdm.') {echo 'selected';} ?>>Mdm.</option>
                             </select>
                         </div>
-                        <div class="col-lg-10">
+                        <div class="col-lg-5">
                             <label for="">Parent Name</label>
-                            <input type="text" name="parent_name" class="form-control" value="<?php echo isset($student->parent_name) ? $student->parent_name : '' ?>">
+                            <input type="text" name="parent_first_name" class="form-control" value="<?php echo isset($student->parent_first_name) ? $student->parent_first_name : '' ?>">
+                        </div>
+                        <div class="col-lg-5">
+                            <label for="">Parent Name</label>
+                            <input type="text" name="parent_last_name" class="form-control" value="<?php echo isset($student->parent_last_name) ? $student->parent_last_name : '' ?>">
                         </div>
                 </div>
                 <div class="form-group">

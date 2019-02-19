@@ -85,7 +85,7 @@ $route['admin/classes/delete-archive/(:any)'] = 'backend/ClassController/delete_
 /* Student Admin */
 
 $route['admin/students']                           = 'backend/StudentController/index';
-$route['admin/students/archive/(:any)']            = 'backend/StudentController/archive/$1';
+$route['admin/students/archive']            = 'backend/StudentController/archive';
 $route['admin/students/archived']                  = 'backend/StudentController/archived';
 $route['admin/students/create']                    = 'backend/StudentController/create';
 $route['admin/students/store']                     = 'backend/StudentController/store';
@@ -110,10 +110,14 @@ $route['admin/students/get_p_content'] = 'backend/StudentController/get_p_conten
 
 /* ORDER */
 $route['admin/order']                     = 'backend/OrderController/index';
+$route['admin/order/archive']            = 'backend/OrderController/archive';
+$route['admin/order/archived']                  = 'backend/OrderController/archived';
 $route['admin/order/create']              = 'backend/OrderController/create';
 $route['admin/order/store']               = 'backend/OrderController/store';
 $route['admin/order/update_order_status'] = 'backend/OrderController/update_order_status';
 $route['admin/order/order_status_change'] = 'backend/OrderController/order_status_change';
+$route['admin/order/moveto_active_list/(:any)'] = 'backend/OrderController/moveto_active_list/$1';
+$route['admin/order/delete-archive/(:any)'] = 'backend/OrderController/delete_archive/$1';
 
 /* MATERIAL */
 $route['admin/material']                           = 'backend/MaterialController/index';

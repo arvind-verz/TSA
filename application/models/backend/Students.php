@@ -46,7 +46,8 @@ class Students extends CI_Model
 				$this->db->like('phone',$_POST['s_phone']);
 
 			if(isset($_POST['p_name']) && $_POST['p_name']!="")
-				$this->db->like('parent_name',$_POST['p_name']);
+				$this->db->like('parent_first_name',$_POST['p_name']);
+				$this->db->like('parent_last_name',$_POST['p_name']);
 
 			if(isset($_POST['p_email']) && $_POST['p_email']!="")
 				$this->db->like('parent_email',$_POST['p_email']);
@@ -128,7 +129,8 @@ class Students extends CI_Model
 				$this->db->like('phone',$_POST['s_phone']);
 
 			if(isset($_POST['p_name']) && $_POST['p_name']!="")
-				$this->db->like('parent_name',$_POST['p_name']);
+			$this->db->like('parent_first_name',$_POST['p_name']);
+			$this->db->like('parent_last_name',$_POST['p_name']);
 
 			if(isset($_POST['p_email']) && $_POST['p_email']!="")
 				$this->db->like('parent_email',$_POST['p_email']);
@@ -198,7 +200,8 @@ class Students extends CI_Model
 			'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 			'gender'   => $_POST['gender'],
 			'salutation'    => !empty($_POST['salutation']) ? $_POST['salutation'] : '',
-			'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
+			'parent_first_name'    => !empty($_POST['parent_first_name']) ? $_POST['parent_first_name'] : '',
+			'parent_last_name'    => !empty($_POST['parent_last_name']) ? $_POST['parent_last_name'] : '',
 			'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
 			'siblings' => !empty($_POST['siblings']) ? json_encode($_POST['siblings']) : '',
 			'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
@@ -405,12 +408,12 @@ class Students extends CI_Model
 		$nric = !empty($_POST['nric']) ? url_title($_POST['nric']) : '';
 		$username = !empty($_POST['username']) ? url_title($_POST['username']) : null;
 
-        $query = $this->db->get_where(DB_STUDENT, ['email'	=>	$email, 'student_id !='	=>	$id]);
-        if($query->num_rows()>0)
-        {
-        	$this->session->set_flashdata('error', 'Email ID exists in our system.');
-			return redirect('admin/students/edit/'.$id);
-        }
+        // $query = $this->db->get_where(DB_STUDENT, ['email'	=>	$email, 'student_id !='	=>	$id]);
+        // if($query->num_rows()>0)
+        // {
+        // 	$this->session->set_flashdata('error', 'Email ID exists in our system.');
+		// 	return redirect('admin/students/edit/'.$id);
+        // }
         $query = $this->db->get_where(DB_STUDENT, ['username'	=>	$username, 'student_id !='	=>	$id]);
         if($query->num_rows()>0)
         {
@@ -438,7 +441,8 @@ class Students extends CI_Model
 				'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 				'gender'   => $_POST['gender'],
 				'salutation'    => !empty($_POST['salutation']) ? $_POST['salutation'] : '',
-				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
+				'parent_first_name'    => !empty($_POST['parent_first_name']) ? $_POST['parent_first_name'] : '',
+				'parent_last_name'    => !empty($_POST['parent_last_name']) ? $_POST['parent_last_name'] : '',
 				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
 				'siblings' => !empty($_POST['siblings']) ? json_encode($_POST['siblings']) : '',
 				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
@@ -460,7 +464,8 @@ class Students extends CI_Model
 				'age'    => !empty($_POST['age']) ? $_POST['age'] : '',
 				'gender'   => !empty($_POST['gender']) ? $_POST['gender'] : '',
 				'salutation'    => !empty($_POST['salutation']) ? $_POST['salutation'] : '',
-				'parent_name'    => !empty($_POST['parent_name']) ? $_POST['parent_name'] : '',
+				'parent_first_name'    => !empty($_POST['parent_first_name']) ? $_POST['parent_first_name'] : '',
+				'parent_last_name'    => !empty($_POST['parent_last_name']) ? $_POST['parent_last_name'] : '',
 				'parent_email'  => !empty($_POST['parent_email']) ? $_POST['parent_email'] : '',
 				'siblings' => !empty($_POST['siblings']) ? json_encode($_POST['siblings']) : '',
 				'parents_phone' => !empty($_POST['parents_phone']) ? $_POST['parents_phone'] : '',
@@ -582,6 +587,32 @@ class Students extends CI_Model
         	$this->session->set_flashdata('success', STUDENT . ' ' . MSG_DELETED);
         	return redirect('admin/students/archived');
         }
+    }
+
+
+	public function archive()
+    {
+		//die(print_r($_POST));
+        $student_id = isset($_POST['student_id']) ? $_POST['student_id'] : '';
+        if ($student_id) {
+            $this->db->trans_start();
+            foreach ($student_id as $id) {
+
+                $this->db->where('student_id', $id);
+                $this->db->update(DB_STUDENT, ['is_archive' => 1, 'updated_at' => $this->date]);
+            }
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === false) {
+                $this->session->set_flashdata('error', MSG_ERROR);
+                return redirect('admin/students');
+            } else {
+                $this->session->set_flashdata('success', STUDENT . ' ' . MSG_ARCHIVED);
+                return redirect('admin/students');
+            }
+        }
+        $this->session->set_flashdata('error', MSG_ERROR);
+        return false;
     }
 
 }

@@ -76,9 +76,13 @@
                                 <option value="Mdm." <?php echo  set_select('salutation', 'Mdm.'); ?>>Mdm.</option>
                             </select>
                         </div>
-                        <div class="col-lg-10">
-                            <label for="">Parent Name</label>
-                            <input type="text" name="parent_name" class="form-control" value="<?php echo set_value('parent_name');?>">
+                        <div class="col-lg-5">
+                            <label for="">Parent First Name</label>
+                            <input type="text" name="parent_first_name" class="form-control" value="<?php echo set_value('parent_first_name');?>">
+                        </div>
+                        <div class="col-lg-5">
+                            <label for="">Parent Last Name</label>
+                            <input type="text" name="parent_last_name" class="form-control" value="<?php echo set_value('parent_last_name');?>">
                         </div>
                 </div>
                 <div class="form-group">

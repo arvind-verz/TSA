@@ -32,6 +32,32 @@ class OrderController extends CI_Controller
         $this->load->view('backend/include/footer');
     }
 
+    public function archive()
+    {
+        $result = $this->order->archive($_POST);
+        if($result == false) {
+            $this->index();
+        }
+    }
+
+    public function archived()
+    {
+        $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ORDER', 'views');
+        $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(ORDER, 'admin/order');
+        $this->breadcrumbs->push(ARCHIVED, 'admin/order/archived');
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title']       = $this->title;
+        $data['page_title']  = ORDER;
+        $data['orders']    = get_archived_order();
+
+        $this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/order/index');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
+    }
+
     public function create()
     {
         $this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'ORDER', 'creates');
@@ -100,5 +126,17 @@ class OrderController extends CI_Controller
         $class_code = $_GET['class_code'];
         $status = $_GET['status'];
         print_r(get_order_student_content($order_id, $class_code, $status));
+    }
+
+    public function moveto_active_list($id)
+	{
+
+	       $this->order->moveto_active_list($id);
+
+	}
+
+    public function delete_archive($order_id)
+    {
+        $this->order->delete_archive($order_id);
     }
 }

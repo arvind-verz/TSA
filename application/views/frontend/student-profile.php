@@ -81,7 +81,7 @@
 										<tbody>
 											<tr>
 												<td><strong>Full Name</strong></td>
-												<td><?php echo isset($student_profile->parent_name) ? $student_profile->parent_name : '-'; ?></td>
+												<td><?php echo isset($student_profile->parent_first_name) ? $student_profile->parent_first_name . ' ' . $student_profile->parent_last_name : '-'; ?></td>
 											</tr>
 											<tr>
 												<td><strong>Email Address</strong></td>
