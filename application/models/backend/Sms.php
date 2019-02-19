@@ -112,7 +112,7 @@ class Sms extends CI_Model
                 $sms_pre_content = 'Hi ' . $row->firstname . ' ' . $row->lastname . '\r\n';
                 foreach($recipients as $recipient) {
                     if($z==1) {
-                        $sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_name . '\r\n';
+                        $sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_first_name . ' ' . $row->parent_last_name . '\r\n';
                     }
                     send_sms($recipient, $sms_pre_content . $message, 7, $class_code);
                 $z++;}

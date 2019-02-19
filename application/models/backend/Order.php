@@ -95,4 +95,60 @@ class Order extends CI_Model
             return 'admin/order';
         }
     }
+
+    public function archive()
+    {
+        $order_id = isset($_POST['order_ids']) ? $_POST['order_ids'] : '';
+        if ($order_id) {
+            $this->db->trans_start();
+            foreach ($order_id as $id) {
+
+                $this->db->where('order_id', $id);
+                $this->db->update(DB_ORDER . 's', ['is_archive' => 1, 'updated_at' => $this->date]);
+            }
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === false) {
+                $this->session->set_flashdata('error', MSG_ERROR);
+                return redirect('admin/order');
+            } else {
+                $this->session->set_flashdata('success', DB_ORDER . 's' . ' ' . MSG_ARCHIVED);
+                return redirect('admin/order');
+            }
+        }
+        $this->session->set_flashdata('error', MSG_ERROR);
+        return false;
+    }
+
+    public function moveto_active_list($id)
+    {
+        $this->db->trans_start();
+		$this->db->where('order_id', $id);
+		$this->db->update(DB_ORDER.'s', array('is_archive' => 0, 'updated_at' => $this->date));
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === false) {
+			$this->session->set_flashdata('error', MSG_ERROR);
+			return redirect('admin/order/archived');
+		} else {
+			$this->session->set_flashdata('success', DB_ORDER.'s' . ' ' . MSG_MOVED);
+			return redirect('admin/order');
+		}
+    }
+
+    public function delete_archive($order_id)
+    {
+    	$this->db->trans_start();
+        $this->db->delete('orders', ['order_id' =>  $order_id]);
+        $this->db->delete('order_details', ['order_id' =>  $order_id]);
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === false) {
+        	$this->session->set_flashdata('error', MSG_ERROR);
+			return redirect('admin/order/archived');
+        }
+        else {
+        	$this->session->set_flashdata('success', 'Order ' . MSG_DELETED);
+        	return redirect('admin/order/archived');
+        }
+    }
 }

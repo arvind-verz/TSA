@@ -232,6 +232,13 @@ class Tutors extends CI_Model
 			$result = $this->aauth->update_user($user_id, $email, false, $name, $this->date, null);
 		}
 
+		$query = $this->db->get_where(DB_TUTOR, ['tutor_id'	=>	$_POST['tutor_id'], 'user_id!='	=>	$id]);
+		if($query->num_rows()>0)
+		{
+			$this->session->set_flashdata('error', 'Tutor ID exists in our system.');
+			return redirect('admin/tutors/edit/'.$id);
+		}
+
 		$data = array(
 			'tutor_id'   => !empty($_POST['tutor_id']) ? $_POST['tutor_id'] : null,
 			'firstname'   => !empty($_POST['firstname']) ? $_POST['firstname'] : null,
@@ -251,9 +258,9 @@ class Tutors extends CI_Model
 		$query = $this->db->get_where('tutor', ['user_id'	=>	$id]);
 		$result = $query->row();
 
-		$this->db->where('user_id', $result->user_id);
-		$this->db->update('aauth_perm_to_user', ['perm_id'	=>	$perm_id]);
-
+		//$this->db->where('user_id', $result->user_id);
+		//$this->db->update('aauth_perm_to_user', ['perm_id'	=>	$perm_id]);
+		$this->aauth->update_allow_user($id, $perm_id);
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === false) {

@@ -283,7 +283,7 @@ function get_enrollment_type_popup_content($type)
                     <input type="text" name="remarks_deposit" class="form-control" value="">
                 </div>
                 <div class="form-group">
-                    <label for="">Previous Monthâ€™s Balance (PMB)</label>
+                    <label for="">Previous Month's Balance (PMB)</label>
                     <input type="text" name="previous_month_balance" class="form-control" value="0" readonly>
                 </div>
                 <div class="form-group">
@@ -426,7 +426,7 @@ function get_book_price_range($price_from, $price_to)
 	$query = $ci->db->get(DB_MATERIAL);
 	if (!empty($price_from) || !empty($price_to))
 		{
-		$query = $ci->db->get_where(DB_MATERIAL, ['book_price >=' => $price_from, 'book_price <=' => $price_to]);
+		$query = $ci->db->get_where(DB_MATERIAL, ['book_price >=' => $price_from, 'book_price <=' => $price_to, 'is_archive'	=>	0]);
 		}
 
 	$result = $query->result();
@@ -517,7 +517,7 @@ function miss_class_request($class_id, $reason, $date_of_absence)
 			{
 			if ($z == 1)
 				{
-				$sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_name . 'rn';
+				$sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_first_name . ' ' . $result->parent_last_name . 'rn';
 				}
 
 			send_sms($recipient, $sms_pre_content . $message, 4, $result1->class_code);
@@ -1252,7 +1252,7 @@ function get_attendance_sheet($class_code = false, $attendance_date)
                 <td><input type="checkbox" name="student_id_transfer" value="<?php
 		echo $result->student_id; ?>"></td>
                 <td><?php
-		echo $result->student_id; ?></td>
+		echo $result->nric; ?></td>
                 <td><?php
 		echo $result->firstname . ' ' . $result->lastname; ?></td>
                 <td>
@@ -1312,7 +1312,7 @@ function get_attendance_edit_sheet($class_code, $attendance_date)
                     <td><input type="checkbox" name="student_id_transfer" value="<?php
 		echo $result->student_id; ?>"></td>
                     <td><?php
-		echo $result->student_id; ?></td>
+		echo $result->nric; ?></td>
                     <td><?php
 		echo $result->firstname . ' ' . $result->lastname; ?></td>
                     <td>
@@ -1744,15 +1744,15 @@ function get_view_all_contents($student_id, $class_id)
                         </div>
                         <div class="form-group">
                             <label>Previous Month Balance : <?php
-		echo get_previous_month_balance($student_id, $class_id); ?></label>
+		echo get_currency('SGD').get_previous_month_balance($student_id, $class_id); ?></label>
                         </div>
                         <div class="form-group">
                             <label>Extra Charges : <?php
-		echo $result->extra_charges; ?></label>
+		echo get_currency('SGD').$result->extra_charges; ?></label>
                         </div>
                         <div class="form-group">
                             <label>Previous Month Payment : <?php
-		echo $result->previous_month_payment; ?></label>
+		echo get_currency('SGD').$result->previous_month_payment; ?></label>
                         </div>
                         <div class="form-group">
                             <label>Remark : <?php
@@ -1866,6 +1866,7 @@ function get_order($id = false)
 	$ci->db->select('*');
 	$ci->db->from(DB_ORDER . 's');
 	$ci->db->join('order_details', 'orders.order_id = order_details.order_id');
+	$ci->db->where('orders.is_archive', 0);
 	$ci->db->group_by('orders.order_id');
 	$query = $ci->db->get();
 	if ($query)
@@ -1873,6 +1874,21 @@ function get_order($id = false)
 		return $query->result();
 		}
 	}
+
+	function get_archived_order()
+	{
+		$ci = & get_instance();
+		$ci->db->select('*');
+		$ci->db->from(DB_ORDER . 's');
+		$ci->db->join('order_details', 'orders.order_id = order_details.order_id');
+		$ci->db->where('orders.is_archive', 1);
+		$ci->db->group_by('orders.order_id');
+		$query = $ci->db->get();
+		if ($query)
+			{
+			return $query->result();
+			}
+		}
 
 function get_class_code_transfer($class_code = false)
 	{
@@ -2776,7 +2792,7 @@ function fee_reminder()
 						{
 						if ($z == 1)
 							{
-							$sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_name . 'rn';
+							$sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_first_name . ' ' . $student_details->parent_last_name . 'rn';
 							}
 
 						send_sms($recipient, $sms_pre_content . $message, 2, $class_code);
@@ -2813,7 +2829,7 @@ function late_fee_reminder()
 						{
 						if ($z == 1)
 							{
-							$sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_name . 'rn';
+							$sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_first_name . ' ' . $student_details->parent_last_name . 'rn';
 							}
 
 						send_sms($recipient, $sms_pre_content . $message, 3, $class_code);
@@ -2950,7 +2966,7 @@ function send_student_reservation_sms()
 					{
 					if ($z == 1)
 						{
-						$sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_name . 'rn';
+						$sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_first_name . ' ' . $row->parent_last_name . 'rn';
 						}
 
 					if ($recipient)
@@ -2992,7 +3008,7 @@ function send_student_confirmation_sms()
 					{
 					if ($z == 1)
 						{
-						$sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_name . 'rn';
+						$sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_first_name . ' ' . $row->parent_last_name . 'rn';
 						}
 
 					if ($recipient)

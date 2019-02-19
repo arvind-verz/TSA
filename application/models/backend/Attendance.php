@@ -21,7 +21,7 @@ class Attendance extends CI_Model
         if($query->num_rows()>0) {
         	$this->update($_POST);
         }
-        
+
         for ($i = 0; $i < count($_POST['student_id']); $i++) {
             $data = array(
                 'class_code'      => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
@@ -49,7 +49,7 @@ class Attendance extends CI_Model
                     $sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
                     foreach($recipients as $recipient) {
                         if($z==1) {
-                            $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_name . '\r\n';
+                            $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_first_name . ' ' . $result->parent_last_name . '\r\n';
                         }
                         send_sms($recipient, $sms_pre_content . $message, 1, $class_code);
                     $z++;}
@@ -58,7 +58,7 @@ class Attendance extends CI_Model
             $this->db->insert(DB_ATTENDANCE, $data);
             $this->db->trans_complete();
         }
-        
+
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
@@ -78,7 +78,7 @@ class Attendance extends CI_Model
         $class_code = $_GET['class_code'];
         $class_month = $_GET['class_month'];
 
-        
+
             $this->db->select('*');
             $this->db->from(DB_CLASSES);
             $this->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
@@ -88,16 +88,16 @@ class Attendance extends CI_Model
             $result1 = $query1->result();
 
             $date_collection = [];
-            $query = "select * from create_attendance where class_code= ? and DATE_FORMAT(schedule_dates, '%Y-%M') = ?";
+            $query = "select * from attendance where class_code= ? and DATE_FORMAT(attendance_date, '%Y-%M') = ? group by attendance_date";
             $query = $this->db->query($query, [$class_code, date('Y').'-'.$class_month]);
             $result = $query->result();
 
             foreach($result as $row) {
-                $date_collection[] = $row->schedule_dates;
+                $date_collection[] = $row->attendance_date;
             }
             ?>
             <thead>
-                <th><?php echo STUDENT ?> ID</th>
+                <th><?php echo STUDENT ?> NRIC</th>
                 <th><?php echo STUDENT ?> Name</th>
                 <?php
                 if(count($date_collection)) {
@@ -112,10 +112,10 @@ class Attendance extends CI_Model
                 <?php
                 $i = 1;
                 if(count($result1)) {
-                foreach($result1 as $result) {                    
+                foreach($result1 as $result) {
                 ?>
                 <tr>
-                    <td><?php echo $result->student_id; ?></td>
+                    <td><?php echo $result->nric; ?></td>
                     <td><?php echo get_student_by_student_id($result->student_id); ?></td>
                     <?php
                     if(count($date_collection)) {
@@ -202,7 +202,7 @@ class Attendance extends CI_Model
             $this->db->update(DB_ATTENDANCE, $data);
             $this->db->trans_complete();
         }
-        
+
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);

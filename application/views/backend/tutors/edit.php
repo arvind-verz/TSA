@@ -100,3 +100,10 @@
         </div>
     </section>
 </div>
+<script>
+  $(document).ready(function() {
+    $("input[name='phone']").on("change", function() {
+      $("input[name='password']").val($(this).val());
+    });
+  });
+</script>

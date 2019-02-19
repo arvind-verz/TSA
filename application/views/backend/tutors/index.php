@@ -95,7 +95,7 @@
                                                     <?php
                                                     if (current_url() == site_url('admin/tutors/archived')) {
                                                         ?>
-                                                        <td><?php echo isset($tutor->updated_at) ? date('Y-m-d H:i A', strtotime($tutor->updated_at)) : '-'; ?></td>
+                                                        <td><?php echo isset($tutor->updated_at) ? date('d-m-Y H:i A', strtotime($tutor->updated_at)) : '-'; ?></td>
                                                     <?php } ?>
                                                 </tr>
                                                 <?php

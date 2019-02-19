@@ -31,7 +31,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="">Date : <?php echo $attendance_date; ?></label>
+                                <label for="">Date : <?php echo date('d-m-Y', strtotime($attendance_date)); ?></label>
                                 <input type="hidden" name="attendance_date" class="form-control" value="<?php echo $attendance_date; ?>">
                             </div>
                             <div class="form-group pull-right">
@@ -45,7 +45,7 @@
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" name="student_id_transfer_all" value=""></th>
-                                        <th>Student ID</th>
+                                        <th>Student NRIC</th>
                                         <th>Student Name</th>
                                         <th>Attendance Status</th>
                                         <th>Remark</th>
@@ -53,7 +53,7 @@
                                 </thead>
                                 <tbody class="display_data">
                                     <tr>
-                                        <td></td>
+                                        <!-- <td></td> -->
                                         <td></td>
                                         <td></td>
                                         <td>

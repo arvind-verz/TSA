@@ -35,9 +35,12 @@ class StudentController extends CI_Controller
         $this->load->view('backend/include/footer');
     }
 
-    public function archive($id)
+    public function archive()
     {
-        $this->students->update_archive($id);
+        $result = $this->students->archive($_POST);
+        if($result == false) {
+            $this->index();
+        }
     }
 
     public function create()
@@ -99,7 +102,7 @@ class StudentController extends CI_Controller
             [
                 'field' => 'email',
                 'label' => 'Email',
-                'rules' => 'trim|required|valid_email|is_unique[student.email]',
+                'rules' => 'trim|required|valid_email',
             ],
             [
                 'field' => 'username',

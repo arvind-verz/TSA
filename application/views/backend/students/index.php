@@ -121,7 +121,7 @@
                                 <tr class="<?php if(has_enrollment_content($student->student_id, $student->class_id, 'depo_collected')=='No' || $previous_month_balance<0) {echo 'bg-danger';} ?>">
                                     <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
                                     <td><input type="hidden" name="student_id_ref" value="<?php echo $student->student_id; ?>">
-                                <input type="hidden" name="class_id_ref" value="<?php echo $student->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id" value="<?php echo $student->student_id;?>"/></td>
+                                <input type="hidden" name="class_id_ref" value="<?php echo $student->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id[]" value="<?php echo $student->student_id;?>"/></td>
                                 <?php } ?>
                                 <?php if (current_url() == site_url('admin/students/archived')) { ?>
                                         <td>
@@ -155,7 +155,7 @@
                                     <td><?php echo isset($student->gender) ? ($student->gender==0) ? 'Male' : 'Female' : '-' ?></td>
                                     <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
                                     <td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>
-                                    <td><?php echo isset($student->parent_name ) ? $student->parent_name  : '-' ?></td>
+                                    <td><?php echo isset($student->parent_first_name ) ? $student->parent_first_name . ' ' . $student->parent_last_name  : '-' ?></td>
                                     <td><?php echo isset($student->parent_email ) ? $student->parent_email  : '-' ?></td>
                                     <td><?php echo isset($student->parents_phone ) ? $student->parents_phone  : '-' ?></td>
                                     <td><?php $siblings = json_decode($student->siblings);
