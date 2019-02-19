@@ -67,7 +67,11 @@ $.widget.bridge('uibutton', $.ui.button);
 		    radioClass: 'iradio_flat-green'
 		})
 
-		$('.date_range').daterangepicker();
+		$('.date_range').daterangepicker({
+			locale: {
+	            format: 'DD/MM/YYYY'
+	        }
+		});
 
         $(function () {
 	        $.fn.datepicker.noConflict = function(){
@@ -76,7 +80,7 @@ $.widget.bridge('uibutton', $.ui.button);
 };
 	    });
 
-	    
+
 	});
 </script>
 </body>
