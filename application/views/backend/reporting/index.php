@@ -18,13 +18,13 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Date From</label>
-                                    <input type="text" name="date_from" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
+                                    <input type="text" name="date_from" class="form-control datepicker" value="<?php echo date('d-m-Y'); ?>">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Date To</label>
-                                    <input type="text" name="date_to" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
+                                    <input type="text" name="date_to" class="form-control datepicker" value="<?php echo date('d-m-Y'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -67,6 +67,12 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+
+        $('.datepicker').datepicker({
+			autoclose: true,
+			format: 'dd-mm-yyyy',
+			weekStart: 1
+		})
         $("table").dataTable({
             dom: 'Bfrtip',
             buttons: [
@@ -85,7 +91,7 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    alert(data);
+                    //alert(data);
                     $(".display_data").html(data);
                     /*$("table").dataTable({
                         dom: 'Bfrtip',

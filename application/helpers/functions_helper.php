@@ -50,13 +50,14 @@ function get_tutor_of_class($class_id)
 	$ci = & get_instance();
 	$query = $ci->db->get_where(DB_CLASSES, ['class_id' => $class_id]);
 	$result = $query->row();
+
 	if ($result)
 		{
 		$query = $ci->db->get_where(DB_TUTOR, ['tutor_id' => $result->tutor_id]);
 		$result = $query->row();
 		if ($result)
 			{
-			return $result->tutor_name;
+			return $result->firstname.' '.$result->lastname;
 			}
 		}
 
@@ -1286,9 +1287,9 @@ function get_attendance_edit_sheet($class_code, $attendance_date)
 	$ci->db->from(DB_STUDENT);
 	$ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
 	$ci->db->join(DB_CLASSES, 'student_to_class.class_id = ' . DB_CLASSES . '.class_id');
-	$ci->db->join(DB_ATTENDANCE, 'student.student_id = attendance.student_id');
-	$ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code, 'DATE(attendance.attendance_date)' => $attendance_date]);
+	$ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_CLASSES . '.class_code' => $class_code]);
 	$query = $ci->db->get();
+
 	$query = $query->result(); ?>
             <tr>
                 <td></td>
@@ -1307,6 +1308,8 @@ function get_attendance_edit_sheet($class_code, $attendance_date)
             <?php
 	foreach($query as $result)
 		{
+			$query1 = $ci->db->get_where(DB_ATTENDANCE, ['DATE(attendance.attendance_date)' => $attendance_date, 'student_id'	=>	$result->student_id, 'class_code'	=>	$result->class_code]);
+			$result1 = $query1->row();
 ?>
                 <tr>
                     <td><input type="checkbox" name="student_id_transfer" value="<?php
@@ -1320,22 +1323,22 @@ function get_attendance_edit_sheet($class_code, $attendance_date)
 		echo $result->student_id; ?>">
                         <input type="text" name="attendance_value<?php
 		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		echo (get_attendance_status($result->status) == 'L') ? 1 : 0; ?>" placeholder="L">
+		if($result1) {echo (get_attendance_status($result1->status) == 'L') ? 1 : 0;}else {echo "0";} ?>" placeholder="L">
                         <input type="text" name="attendance_value<?php
 		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		echo (get_attendance_status($result->status) == 'M') ? 1 : 0; ?>" placeholder="M">
+		if($result1) {echo (get_attendance_status($result1->status) == 'M') ? 1 : 0;}else {echo "0";} ?>" placeholder="M">
                         <input type="text" name="attendance_value<?php
 		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		echo (get_attendance_status($result->status) == 'E') ? 1 : 0; ?>" placeholder="E">
+		if($result1) {echo (get_attendance_status($result1->status) == 'E' && $result1->attendance_date==$attendance_date) ? 1 : 0;}else {echo "0";} ?>" placeholder="E">
                         <input type="text" name="attendance_value<?php
 		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		echo (get_attendance_status($result->status) == 'X') ? 1 : 0; ?>" placeholder="X">
+		if($result1) {echo (get_attendance_status($result1->status) == 'X' && $result1->attendance_date==$attendance_date) ? 1 : 0;}else {echo "0";} ?>" placeholder="X">
                         <input type="text" name="attendance_value<?php
 		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		echo (get_attendance_status($result->status) == 'G') ? 1 : 0; ?>" placeholder="G">
+		if($result1) {echo (get_attendance_status($result1->status) == 'G' && $result1->attendance_date==$attendance_date) ? 1 : 0;}else {echo "0";} ?>" placeholder="G">
                         <input type="text" name="attendance_value<?php
 		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		echo (get_attendance_status($result->status) == 'H') ? 1 : 0; ?>" placeholder="H">
+		if($result1) {echo (get_attendance_status($result1->status) == 'H' && $attendance_date==$result1->attendance_date) ? 1 : 0;}else {echo "0";} ?>" placeholder="H">
                     </td>
                     <td><input type="text" name="attendance_remark[]" class="form-control" value="<?php
 		echo isset($result->remark) ? $result->remark : ''; ?>" placeholder="Remark">
@@ -1632,9 +1635,10 @@ function get_student($id = false)
 function get_student_archived()
 	{
 	$ci = & get_instance();
-	$ci->db->select('*');
+	$ci->db->select('*, student.id as sid, student.student_id');
 	$ci->db->from(DB_STUDENT);
 	$ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+	$ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id', 'left');
 	$ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 1, DB_STUDENT . '.is_active' => 1]);
 	$query = $ci->db->get();
 	if ($query)
@@ -1659,7 +1663,6 @@ function get_student_archive_at($student_id)
 function get_material_associated($sid, $class_code)
 	{
 	$ci = & get_instance();
-
 	$ci->db->select('*, SUM(book_price) as book_price_amount, count(*) as books_count');
 	$ci->db->from(DB_ORDER . 's');
 	$ci->db->join('order_details', 'orders.order_id = order_details.order_id');
@@ -1670,6 +1673,7 @@ function get_material_associated($sid, $class_code)
 	$ci->db->group_by('material.id');
 	$query = $ci->db->get();
 	$result = $query->result();
+
 	foreach($result as $row) {
 		$query1 = $ci->db->get_where(DB_ORDER.'s', ['book_id'	=> $row->book_id]);
 		$result1 = $query1->num_rows();
@@ -1797,8 +1801,8 @@ function get_reporting_sheet($date_from = false, $date_to = false)
 	$ci->db->from(DB_INVOICE);
 	if ($date_from || $date_to)
 		{
-		$ci->db->where('DATE(invoice_date) >=', $date_from);
-		$ci->db->where('DATE(invoice_date) <=', $date_to);
+		$ci->db->where('DATE(invoice_date) >=', date('Y-m-d', strtotime($date_from)));
+		$ci->db->where('DATE(invoice_date) <=', date('Y-m-d', strtotime($date_to)));
 		}
 
 	$ci->db->group_by('class_id');
@@ -1820,14 +1824,14 @@ function get_reporting_sheet($date_from = false, $date_to = false)
                                     <td><?php
 				echo get_subject_code($value->student_id); ?></td>
                                     <td><?php
-				echo $class_code['tutor_id']; ?></td>
+				echo get_tutor_of_class($value->class_id); ?></td>
                                     <td><?php
 				echo get_students_enrolled($value->class_id); ?></td>
                                     <td><?php
-				get_currency('INR');
+				get_currency('SGD');
 				echo isset($value->total_amount_excluding_material) ? $value->total_amount_excluding_material : '-'; ?></td>
                                     <td><?php
-				get_currency('INR');
+				get_currency('SGD');
 				echo isset($value->total_material_amount) ? $value->total_material_amount : '-'; ?></td>
                                 </tr>
                                 <?php
@@ -2073,7 +2077,7 @@ function send_first_month_invoice($student_id, $class_id)
 	$extra_charges = $result1->extra_charges;
 	$deposit = get_deposit_value_of_class($class_id);
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-	$previous_month_payment = isset($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
+	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y %H:%i')  =  DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i')");
 	$result = $query->row();
@@ -2188,7 +2192,7 @@ function send_rest_month_invoice($student_id, $class_id)
 	$extra_charges = $result1->extra_charges;
 	$deposit = get_deposit_value_of_class($class_id);
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-	$previous_month_payment = isset($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
+	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 
 	$invoice_amount = $amount_excluding_material = 0;
 	$query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y %H:%i')  =  DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i')");
@@ -2246,6 +2250,7 @@ function send_rest_month_invoice($student_id, $class_id)
 
 function send_archived_invoice($student_id)
 	{
+
 	$ci = & get_instance();
 	$ci->db->select('*');
 	$ci->db->from(DB_STUDENT);
@@ -2266,6 +2271,7 @@ function send_archived_invoice($student_id)
 
 function send_archive_invoice_extend($student_id, $class_id)
 	{
+
 	$ci = & get_instance();
 	$type = 'archive_invoice';
 	$invoice_id = uniqid();
@@ -2291,17 +2297,13 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$fees = $result1->monthly_fees;
 	$extra_charges = $result1->extra_charges;
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-	$previous_month_payment = isset($result1->previous_month_payment) ? $result1->previous_month_payment : 0;
+	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$result5 = get_invoice_result5();
-
-	// die(print_r($result5));
-
 	if (!$result5)
 		{
 		return false;
 		}
-
 	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5[0]]);
 	$result = $query->row();
 	$billing_data = json_decode($result->billing);
@@ -2354,11 +2356,9 @@ function send_archive_invoice_extend($student_id, $class_id)
 		}
 
 	$subject = 'TSA - Invoice #' . get_invoice_no();
-	$message = '<a href="' . $file_path . '">Click here </a> to view invoice.';
+	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
 	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
-
-	// die(print_r($invoice_amount));
 
 	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment);
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees);
@@ -2400,23 +2400,23 @@ function send_archive_invoice_extend($student_id, $class_id)
 		}
 	}
 
-function send_final_settlement_invoice($student_id)
-	{
-	$ci = & get_instance();
-	$ci->db->select('*');
-	$ci->db->from(DB_STUDENT);
-	$ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
-	$ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
-	$ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_STUDENT . '.student_id' => $student_id]);
-	$query = $ci->db->get();
-	$result = $query->result();
-	foreach($result as $row)
-		{
-		send_final_settlement_invoice_extend($student_id, $row->class_id);
-		}
-	}
+// function send_final_settlement_invoice($student_id)
+// 	{
+// 	$ci = & get_instance();
+// 	$ci->db->select('*');
+// 	$ci->db->from(DB_STUDENT);
+// 	$ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+// 	$ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
+// 	$ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1, DB_STUDENT . '.student_id' => $student_id]);
+// 	$query = $ci->db->get();
+// 	$result = $query->result();
+// 	foreach($result as $row)
+// 		{
+// 		send_final_settlement_invoice_extend($student_id, $row->class_id);
+// 		}
+// 	}
 
-function send_final_settlement_invoice_extend($student_id, $class_id)
+function send_final_settlement_invoice($student_id, $class_id)
 	{
 	$ci = & get_instance();
 	$type = 'final_settlement_invoice';
@@ -2443,7 +2443,7 @@ function send_final_settlement_invoice_extend($student_id, $class_id)
 	$fees = $result1->monthly_fees;
 	$extra_charges = $result1->extra_charges;
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-	$previous_month_payment = isset($result1->previous_month_payment) ? $result1->previous_month_payment : 0;
+	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$result5 = get_invoice_result5();
 	if (!$result5)
@@ -2573,7 +2573,7 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$fees = $result1->monthly_fees;
 	$extra_charges = $result1->extra_charges;
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-	$previous_month_payment = isset($result1->previous_month_payment) ? $result1->previous_month_payment : 0;
+	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$result5 = get_invoice_result5();
 	if (!$result5)
@@ -2905,27 +2905,34 @@ function send_mail_contact($email_from, $emailto, $subject, $message)
 
 function send_sms($recipient, $message, $template_id = false, $class_code = false)
 	{
+
 	$ci = & get_instance();
 	if (empty($recipient))
 		{
 		return false;
 		}
-
-	$status = 0;
-	$app_id = '2927';
-	$app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
-	$url = "http://www.smsdome.com/api/http/sendsms.aspx?appid=" . urlencode($app_id) . "&appsecret=" . urlencode($app_secret) . "&receivers=" . urlencode('65' . $recipient) . "&content=" . urlencode($message) . "&responseformat=JSON";
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$result = curl_exec($ch);
-	$response = json_decode($result);
-	curl_close($ch);
-	if ($response->result->status == 'OK')
-		{
-		$status = 1;
+	$recipient = '65' . $recipient;
+	if(strlen($recipient)!=10)
+	{
+		$status = 0;
+	}
+	else
+	{
+		$status = 0;
+		$app_id = '2927';
+		$app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
+		$url = "http://www.smsdome.com/api/http/sendsms.aspx?appid=" . urlencode($app_id) . "&appsecret=" . urlencode($app_secret) . "&receivers=" . urlencode($recipient) . "&content=" . urlencode($message) . "&responseformat=JSON";
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$result = curl_exec($ch);
+		$response = json_decode($result);
+		curl_close($ch);
+		if ($response->result->status == 'OK')
+			{
+			$status = 1;
+			}
 		}
-
 	$data = ['template_id' => $template_id, 'class_code' => $class_code, 'recipient' => $recipient, 'message' => $message, 'status' => $status, 'created_at' => date('Y-m-d H:i:s') , ];
 	$ci->db->insert('sent_sms', $data);
 	}
