@@ -103,7 +103,7 @@ $route['admin/students/get_class_size']        = 'backend/StudentController/get_
 $route['admin/students/get_class_deposit_amount']        = 'backend/StudentController/get_class_deposit_amount';
 $route['admin/students/enrollment_decision']        = 'backend/StudentController/enrollment_decision';
 $route['admin/students/get_view_all_contents']        = 'backend/StudentController/get_view_all_contents';
-$route['admin/students/final_settlement/(:any)']            = 'backend/StudentController/final_settlement/$1';
+$route['admin/students/final_settlement/(:any)/(:any)']            = 'backend/StudentController/final_settlement/$1/$2';
 $route['admin/students/delete-archive/(:any)'] = 'backend/StudentController/delete_archive/$1';
 $route['admin/students/get_p_content'] = 'backend/StudentController/get_p_content';
 

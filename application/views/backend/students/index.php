@@ -133,8 +133,8 @@
                                             <select name="action" id="action" class="form-control select2 action" style="width: 200px;">
                                                 <option value="">-- Select One --</option>
                                                 <option name="Edit" value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
-                                                <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option>
-                                                <option name="final_settlement" value="<?php echo base_url();?>index.php/admin/students/final_settlement/<?php echo $student->student_id;?>">Final Settlement</option>
+                                                <!-- <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option> -->
+                                                <option name="final_settlement" value="<?php echo base_url();?>index.php/admin/students/final_settlement/<?php echo $student->student_id.'/'.$student->class_id;?>">Final Settlement</option>
                                                 <option value="view_all_details" name="view_all_details" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">View all details</option>
                                                 <?php if($student->status!='') { ?>
                                                 <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">Edit Class</option>

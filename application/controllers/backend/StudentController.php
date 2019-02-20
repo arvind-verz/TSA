@@ -287,9 +287,9 @@ class StudentController extends CI_Controller
         print_r(get_view_all_contents($student_id, $class_id));
     }
 
-    public function final_settlement($student_id)
+    public function final_settlement($student_id, $class_id)
     {
-        $this->students->final_settlement($student_id);
+        $this->students->final_settlement($student_id, $class_id);
     }
 
     public function get_enrollment_type_popup_content_update()

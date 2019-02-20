@@ -98,6 +98,7 @@ class Sms extends CI_Model
         $this->db->join("student_to_class", 'student.student_id = student_to_class.student_id');
         $this->db->join(DB_CLASSES, 'class.class_id = student_to_class.class_id');
         $this->db->where(['student_to_class.status' =>  3, 'student.is_active'  =>  1, 'student.is_archive' =>  0]);
+        $this->db->group_by('student.phone');
         $query = $this->db->get();
         $result = $query->result();
         if($result) {

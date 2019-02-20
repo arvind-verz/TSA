@@ -11,7 +11,7 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<!-- Sub Nav Section END -->
 	<!-- Section -->
 	<div class="fullcontainer">
@@ -78,7 +78,7 @@
 										<li><strong>Time</strong><span class="cinfo"><?php echo isset($class->class_time) ? date("H:i", strtotime($class->class_time)) : '-'; ?></span></li>
 										<li><strong>Level</strong><span class="cinfo"><?php echo isset($class->level) ? $class->level : '-'; ?></span></li>
 										<li><strong>Monthly Fees</strong><span class="cinfo"><?php echo isset($class->monthly_fees) ? $class->monthly_fees : '-'; ?></span></li>
-										<li><strong>Tutor Assigned</strong><span class="cinfo"><?php echo get_tutor_of_class($class->tutor_id); ?></span></li>
+										<li><strong>Tutor Assigned</strong><span class="cinfo"><?php echo get_tutor_of_class($class->class_id); ?></span></li>
 										<li><strong>Materials</strong><span class="cinfo"><?php echo get_material_of_student($class->class_code, $this->session->userdata('student_credentials')['id']); ?></span></li>
 									</ul>
 									<a href="javascript:void(0);" data-name="<?php echo isset($class->class_id) ? $class->class_id : ''; ?>" class="button btn-light miss_class_request">Miss Class Request</a>
@@ -141,10 +141,10 @@
 			var class_id = $("input[name='class_id']").val();
 			var date_of_absence = $("input[name='date_of_absense']").val();
 			var reason = $("textarea[name='reason']").val();
-			
+
 			var r = confirm("Are you sure?");
-			
-			if(r==true) {
+
+			if(r==true && class_id && date_of_absence) {
 				$.ajax({
 					type: 'GET',
 	                url: '<?php echo site_url('attendance/miss_class_request'); ?>',
@@ -170,6 +170,10 @@
 	                    }
 	                }
 				});
+			}
+			else {
+				alert("Fields cannot be empty.");
+				$(ref1).attr("disabled", false).text('Submit');
 			}
 		});
 

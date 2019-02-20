@@ -514,7 +514,7 @@ class Students extends CI_Model
 		}
 	}
 
-	public function final_settlement($student_id)
+	public function final_settlement($student_id, $class_id)
 	{
 		$data = array(
 			'status'   => 4,
@@ -522,8 +522,9 @@ class Students extends CI_Model
 		);
 
 		$this->db->trans_start();
-		send_final_settlement_invoice($student_id);
+		send_final_settlement_invoice($student_id, $class_id);
 		$this->db->where('student_id', $student_id);
+		$this->db->where('class_id', $class_id);
 		$this->db->update('student_to_class', $data);
 
 		$this->db->trans_complete();
@@ -597,9 +598,10 @@ class Students extends CI_Model
         if ($student_id) {
             $this->db->trans_start();
             foreach ($student_id as $id) {
-
+				send_archived_invoice($id);
                 $this->db->where('student_id', $id);
                 $this->db->update(DB_STUDENT, ['is_archive' => 1, 'updated_at' => $this->date]);
+
             }
             $this->db->trans_complete();
 

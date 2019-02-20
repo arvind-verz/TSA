@@ -197,9 +197,52 @@ class Attendance extends CI_Model
                 'remark'          => !empty($_POST['attendance_remark'][$i]) ? $_POST['attendance_remark'][$i] : null,
                 'updated_at'      => $this->date,
             );
+
             $this->db->trans_start();
-            $this->db->where(['class_code'  =>  $_POST['class_code'], 'student_id'  =>  $_POST['student_id'][$i], 'attendance_date' =>  $_POST['attendance_date']]);
-            $this->db->update(DB_ATTENDANCE, $data);
+            $query = $this->db->get_where(DB_ATTENDANCE, ['class_code'  =>  $_POST['class_code'], 'student_id'  =>  $_POST['student_id'][$i], 'attendance_date' =>  $_POST['attendance_date']]);
+            if($query->num_rows()>0)
+            {
+                $this->db->where(['class_code'  =>  $_POST['class_code'], 'student_id'  =>  $_POST['student_id'][$i], 'attendance_date' =>  $_POST['attendance_date']]);
+                $this->db->update(DB_ATTENDANCE, $data);
+            }
+            else
+            {
+                $data = array(
+                    'class_code'      => !empty($_POST['class_code']) ? $_POST['class_code'] : null,
+                    'student_id'      => !empty($_POST['student_id'][$i]) ? $_POST['student_id'][$i] : null,
+                    'attendance_date' => !empty($_POST['attendance_date']) ? $_POST['attendance_date'] : null,
+                    'status'          => !empty($_POST['attendance_value' . ($i+1)]) ? json_encode($_POST['attendance_value' . ($i+1)]) : null,
+                    'remark'          => !empty($_POST['attendance_remark'][$i]) ? $_POST['attendance_remark'][$i] : null,
+                    'created_at'      => $this->date,
+                    'updated_at'      => $this->date,
+                );
+                $missed_class = $_POST['attendance_value' . ($i+1)][1];
+                $class_code = $_POST['class_code'];
+                $this->db->trans_start();
+                if($missed_class==1) {
+                    $query = $this->db->get_where(DB_STUDENT, ['student_id'  =>  $_POST['student_id'][$i]]);
+                    $result = $query->row();
+                    if($result) {
+                        $recipients = [
+                            'phone' =>  $result->phone,
+                            'parents_phone' =>  $result->parents_phone,
+                        ];
+
+                        $message = get_sms_template_content(1);
+                        $z = 0;
+                        $sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
+                        foreach($recipients as $recipient) {
+                            if($z==1) {
+                                $sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_first_name . ' ' . $result->parent_last_name . '\r\n';
+                            }
+                            send_sms($recipient, $sms_pre_content . $message, 1, $class_code);
+                        $z++;}
+                    }
+                }
+                $this->db->insert(DB_ATTENDANCE, $data);
+                $this->db->trans_complete();
+            }
+
             $this->db->trans_complete();
         }
 
