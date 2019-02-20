@@ -2905,25 +2905,33 @@ function send_mail_contact($email_from, $emailto, $subject, $message)
 
 function send_sms($recipient, $message, $template_id = false, $class_code = false)
 	{
+
 	$ci = & get_instance();
 	if (empty($recipient))
 		{
 		return false;
 		}
-
-	$status = 0;
-	$app_id = '2927';
-	$app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
-	$url = "http://www.smsdome.com/api/http/sendsms.aspx?appid=" . urlencode($app_id) . "&appsecret=" . urlencode($app_secret) . "&receivers=" . urlencode('65' . $recipient) . "&content=" . urlencode($message) . "&responseformat=JSON";
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$result = curl_exec($ch);
-	$response = json_decode($result);
-	curl_close($ch);
-	if ($response->result->status == 'OK')
-		{
-		$status = 1;
+	$recipient = '65' . $recipient;
+	if(strlen($recipient)!=10)
+	{
+		$status = 0;
+	}
+	else
+	{
+		$status = 0;
+		$app_id = '2927';
+		$app_secret = '0f42dc3b-29c2-4824-b51f-4fa3cca4ca5f';
+		$url = "http://www.smsdome.com/api/http/sendsms.aspx?appid=" . urlencode($app_id) . "&appsecret=" . urlencode($app_secret) . "&receivers=" . urlencode($recipient) . "&content=" . urlencode($message) . "&responseformat=JSON";
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$result = curl_exec($ch);
+		$response = json_decode($result);
+		curl_close($ch);
+		if ($response->result->status == 'OK')
+			{
+			$status = 1;
+			}
 		}
 	$data = ['template_id' => $template_id, 'class_code' => $class_code, 'recipient' => $recipient, 'message' => $message, 'status' => $status, 'created_at' => date('Y-m-d H:i:s') , ];
 	$ci->db->insert('sent_sms', $data);

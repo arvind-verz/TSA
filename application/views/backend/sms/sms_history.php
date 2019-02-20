@@ -47,7 +47,7 @@
                                 <?php
                                 if($sms_history) {
                                 foreach($sms_history as $history) {
-                                $student_details = get_student_details_by_sms_history($history->recipient);
+                                $student_details = get_student_details_by_sms_history(ltrim($history->recipient, '65'));
                                 $pre_condition_template = get_pre_condition_template($history->template_id);
                                 ?>
                                 <tr>
