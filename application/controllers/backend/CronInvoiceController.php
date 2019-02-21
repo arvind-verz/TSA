@@ -11,6 +11,12 @@ class CronInvoiceController extends CI_Controller
 
     public function index()
     {
-        send_cron_invoice();
+		$to = "purohitarvind777@gmail.com";
+$subject = "My subject";
+$txt = "Hello world!";
+$headers = "From: arvind.verz@gmail.com";
+
+mail($to,$subject,$txt,$headers);
+        //send_cron_invoice();
     }
 }
