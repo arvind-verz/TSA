@@ -83,7 +83,8 @@ class Attendance extends CI_Model
             $this->db->from(DB_CLASSES);
             $this->db->join('student_to_class', 'class.class_id = student_to_class.class_id');
             $this->db->join(DB_STUDENT, 'student.student_id = student_to_class.student_id');
-            $this->db->where(['class.class_code' => $class_code, 'student_to_class.status' =>  3, 'student.is_active'   =>  1, 'student.is_archive' =>  0]);
+            $this->db->where(['class.class_code' => $class_code, 'student.is_active'   =>  1, 'student.is_archive' =>  0]);
+            $this->db->where_in('student_to_class.status', [3, 5]);
             $query1 = $this->db->get();
             $result1 = $query1->result();
 
@@ -166,11 +167,24 @@ class Attendance extends CI_Model
         foreach($student_id as $id) {
             send_class_transfer_invoice($id, $old_class_id, $class_id);
             $data = [
+                'student_id'    =>  $id,
                 'class_id' =>   $class_id,
+                'status'    =>  3,
+                'created_at'    =>  $this->date,
+                'updated_at'    =>  $this->date,
             ];
             $this->db->where('student_id', $id);
             $this->db->where('class_id', $old_class_id);
-            $this->db->update('student_to_class', $data);
+            $this->db->update('student_to_class', ['status' =>  5]);
+            $query = $this->db->get_where('student_to_class', ['class_id' => $class_id, 'student_id'    =>  $id, 'status'   =>  3]);
+            if($query->num_rows()>0) {
+                $this->db->where('student_id', $id);
+                $this->db->where('class_id', $class_id);
+                $this->db->update('student_to_class', ['status' =>  3]);
+            }
+            else {
+                $this->db->insert('student_to_class', $data);
+            }
 
             $this->db->where('student_id', $id);
             $this->db->where('class_id', $old_class_id);
