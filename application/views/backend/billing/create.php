@@ -51,7 +51,9 @@
                                     <div class="form-group mt-5">
                                         <label>
                                             <input type="checkbox" class="flat-green form-control" name="rest_week[<?php echo $i; ?>]" value="1"> Rest Week
-                                            &nbsp;&nbsp;<input type="checkbox" class="flat-green form-control disable_checkbox" name="working_week[<?php echo $i; ?>]" value="1"> Disable
+                                        </label>
+                                        <label>
+                                            <input type="checkbox" class="flat-green form-control disable_checkbox" name="working_week[<?php echo $i; ?>]" value="1"> Disable
                                         </label>
                                     </div>
                                 </div>
