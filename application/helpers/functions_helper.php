@@ -72,10 +72,10 @@ function get_user_type($user_type)
 
 function get_enrollment_status($status)
 	{
-	$enrollment_type_arr = ['Reserved', 'Waitlist', 'Enrolled', 'Final Settlement'];
+	$enrollment_type_arr = ['Reserved', 'Waitlist', 'Enrolled', 'Final Settlement', 'Transfer'];
 	if ($status)
 		{
-		return $enrollment_type_arr[($status - 1) ];
+		return $enrollment_type_arr[($status - 1)];
 		}
 	}
 
@@ -2079,10 +2079,11 @@ function send_first_month_invoice($student_id, $class_id)
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
-	$query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y %H:%i')  =  DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i')");
+	$query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y')  =  DATE_FORMAT(NOW(), '%d-%m-%Y')");
 	$result = $query->row();
 	if (!$result)
 		{
+			echo "<br> Invoice cannot be generated, set invoice date and try again!";
 		return false;
 		}
 
@@ -2156,7 +2157,7 @@ function send_first_month_invoice($student_id, $class_id)
 			$ci->m_pdf->download_my_mPDF($invoice_file);
 			if ($mail == true)
 				{
-
+					echo "<br> Invoice has been generated.";
 				// die(print_r($query));
 
 				}
@@ -2182,6 +2183,7 @@ function send_rest_month_invoice($student_id, $class_id)
 	$result1 = $query1->row();
 	if (!$result1)
 		{
+			echo "<br> Invoice cannot be generated, set invoice date and try again!";
 		return false;
 		}
 
@@ -2195,7 +2197,7 @@ function send_rest_month_invoice($student_id, $class_id)
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 
 	$invoice_amount = $amount_excluding_material = 0;
-	$query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y %H:%i')  =  DATE_FORMAT(NOW(), '%d-%m-%Y %H:%i')");
+	$query = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y')  =  DATE_FORMAT(NOW(), '%d-%m-%Y')");
 	$result = $query->row();
 	if (!$result)
 		{
@@ -2241,6 +2243,7 @@ function send_rest_month_invoice($student_id, $class_id)
 			$ci->m_pdf->download_my_mPDF($invoice_file);
 
 			if ($mail == true) {
+				echo "<br> Invoice has been generated.";
 			    //die(print_r($query));
 			}
 
@@ -2721,7 +2724,7 @@ function get_invoice_result2($sid, $invoice_generation_date)
 					if ($billing->rest_week != 1)
 						{
 							$dates = explode("-", $billing->date_range);
-							if (strtotime(date('m/d/Y', strtotime($row->order_date))) >= strtotime($dates[0]) && strtotime(date('m/d/Y', strtotime($row->order_date))) <= strtotime($dates[1]))
+							if (strtotime(date('d/m/Y', strtotime($row->order_date))) >= strtotime($dates[0]) && strtotime(date('d/m/Y', strtotime($row->order_date))) <= strtotime($dates[1]))
 								{
 								$book_charges[] = $row->book_price;
 								}
@@ -2737,7 +2740,7 @@ function get_invoice_result5()
 	{
 	$ci = & get_instance();
 	$invoice_generation_date = [];
-	$date = date('m/d/Y');
+	$date = date('d/m/Y');
 	$query = $ci->db->get_where(DB_BILLING);
 	$result = $query->result();
 	$status_array = [];
