@@ -2264,6 +2264,7 @@ function send_archived_invoice($student_id)
 	$result = $query->result();
 	foreach($result as $row)
 		{
+
 		send_archive_invoice_extend($student_id, $row->class_id);
 		}
 
@@ -2303,10 +2304,12 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$result5 = get_invoice_result5();
+	//die(print_r($result5));
 	if (!$result5)
 		{
 		return false;
 		}
+
 	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5[0]]);
 	$result = $query->row();
 	$billing_data = json_decode($result->billing);
@@ -2749,9 +2752,9 @@ function get_invoice_result5()
 		$billing_data = json_decode($row->billing);
 		foreach($billing_data as $billing)
 			{
-			$dates = explode("-", $billing->date_range);
+			$dates = str_replace('/', '-', explode("-", $billing->date_range));
 
-			// print_r(strtotime($date) .'|'. strtotime($dates[0]).' <br /> ');
+			//rint_r(strtotime($date) .'|'. $dates[0].' <br /> ');
 
 			if (strtotime($date) >= strtotime($dates[0]) && strtotime($date) <= strtotime($dates[1]))
 				{

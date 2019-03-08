@@ -104,7 +104,7 @@ class Attendance extends CI_Model
                 if(count($date_collection)) {
                 foreach($date_collection as $dates) {
                 ?>
-                <th class="no-sort attendance" data-date="<?php echo $dates; ?>" style="cursor: pointer;"><?php echo date('d M', strtotime($dates)); ?></th>
+                <th class="no-sort " ><span class="attendance" data-date="<?php echo $dates; ?>" style="cursor: pointer;"><?php echo date('d M', strtotime($dates)); ?></span> <i class="fa fa-trash raw_delete"  style="cursor: pointer;" aria-hidden="true" data-value="<?php echo $dates; ?>"></i></th>
                 <?php
                 }}
                 ?>
@@ -164,8 +164,10 @@ class Attendance extends CI_Model
             $this->session->set_flashdata('error', $student_names . ' already exist in class ' . $class_code);
             return 'admin/students';
         }
+
         foreach($student_id as $id) {
             send_class_transfer_invoice($id, $old_class_id, $class_id);
+
             $data = [
                 'student_id'    =>  $id,
                 'class_id' =>   $class_id,
@@ -173,11 +175,18 @@ class Attendance extends CI_Model
                 'created_at'    =>  $this->date,
                 'updated_at'    =>  $this->date,
             ];
+            $data1 = [
+                'student_id'    =>  $id,
+                'class_id' =>   $class_id,
+                'updated_at'    =>  $this->date,
+            ];
             $this->db->where('student_id', $id);
             $this->db->where('class_id', $old_class_id);
             $this->db->update('student_to_class', ['status' =>  5]);
+
             $query = $this->db->get_where('student_to_class', ['class_id' => $class_id, 'student_id'    =>  $id, 'status'   =>  3]);
             if($query->num_rows()>0) {
+                //return print_r($this->db->last_query());
                 $this->db->where('student_id', $id);
                 $this->db->where('class_id', $class_id);
                 $this->db->update('student_to_class', ['status' =>  3]);
@@ -188,7 +197,7 @@ class Attendance extends CI_Model
 
             $this->db->where('student_id', $id);
             $this->db->where('class_id', $old_class_id);
-            $this->db->update('student_enrollment', $data);
+            $this->db->update('student_enrollment', $data1);
         }
         $this->db->trans_complete();
 
@@ -309,5 +318,16 @@ class Attendance extends CI_Model
             $this->session->set_flashdata('success', ATTENDANCE . ' ' . MSG_CREATED);
             return redirect('admin/attendance');
         }
+    }
+
+    public function raw_delete()
+    {
+        $class_code = $_GET['class_code'];
+        $class_month = $_GET['class_month'];
+        $class_date = $_GET['class_date'];
+
+        $this->db->where(['class_code'  => $class_code, 'attendance_date'    =>  $class_date]);
+        $this->db->delete('attendance');
+        echo "success";
     }
 }

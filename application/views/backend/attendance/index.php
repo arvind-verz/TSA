@@ -53,7 +53,7 @@
                                 </select>
                             </div>
                             <table class="table table-striped table-bordered text-center display_data" style="width:100%">
-                            
+
                             </table>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
     $(document).ready(function() {
         refresh_summary();
         //$("select[name='class_code']").trigger("change.select2");//$("select[name='class_month']").val('').trigger("change");
-        $("body").on("click", "th.attendance", function() {
+        $("body").on("click", "span.attendance", function() {
             var date = $(this).attr("data-date");
             var class_id = $("select[name='class_code'] option:selected").attr("data-id");
             //alert(class_id);
@@ -103,5 +103,32 @@
                 })
             }
         }
+
+        $("body").on("click", ".raw_delete", function() {
+            var r = confirm("Are you sure you want to delete?");
+            var class_code = $("select[name='class_code']").val();
+            var class_month = $("select[name='class_month']").val();
+            var class_date = $(this).attr("data-value");
+            if(r==true && class_code && class_month && class_date)
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '<?php echo site_url('admin/attendance/raw-delete'); ?>',
+                    data: 'class_code=' + class_code + '&class_month=' + class_month + '&class_date=' + class_date,
+                    async: false,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        if(data.trim()=='success')
+                        {
+                            refresh_summary();
+                        }
+                    }
+                });
+            }
+            else {
+                alert("Select correct input to delete");
+            }
+        });
     });
 </script>
