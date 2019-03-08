@@ -104,7 +104,7 @@ class Attendance extends CI_Model
                 if(count($date_collection)) {
                 foreach($date_collection as $dates) {
                 ?>
-                <th class="no-sort " ><span class="attendance" data-date="<?php echo $dates; ?>" style="cursor: pointer;"><?php echo date('d M', strtotime($dates)); ?></span> <i class="fa fa-trash raw_delete"  style="cursor: pointer;" aria-hidden="true" data-value="<?php echo $dates; ?>"></i></th>
+                <th class="no-sort " ><span class="attendance" data-date="<?php echo $dates; ?>" style="cursor: pointer;"><?php echo date('d M', strtotime($dates)); ?></span> <i class="fa fa-trash text-danger raw_delete"  style="cursor: pointer;" aria-hidden="true" data-value="<?php echo $dates; ?>"></i></th>
                 <?php
                 }}
                 ?>
