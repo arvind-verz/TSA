@@ -34,7 +34,7 @@ class AttendanceController extends CI_Controller
 
     public function archived()
     {
-        
+
     }
 
     public function create($class_id, $date)
@@ -75,7 +75,7 @@ class AttendanceController extends CI_Controller
     public function get_class_code_transfer() {
         $class_code = $_GET['class_code'];
         print_r(get_class_code_transfer($class_code));
-    }    
+    }
 
     public function store()
     {
@@ -127,7 +127,7 @@ class AttendanceController extends CI_Controller
 
     public function delete($id)
     {
-       
+
     }
 
     public function get_attendance_date_by_class_code()
@@ -157,5 +157,10 @@ class AttendanceController extends CI_Controller
     public function schedule_store()
     {
         $this->attendance->schedule_store($_POST);
+    }
+
+    public function raw_delete()
+    {
+        return $this->attendance->raw_delete($_GET);
     }
 }

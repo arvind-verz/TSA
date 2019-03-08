@@ -27,10 +27,10 @@ define('DB_GALLERY', 'gallery');
 
 
 define('TBL_MENU_POSITION' , 'menu_position');
-define('TBL_MENU' , 'menu'); 
-define('TBL_CMS' ,'pages'); 
-define('DB_MODULES' ,'modules'); 
-define('DB_ADMIN_USER' ,'admin'); 
+define('TBL_MENU' , 'menu');
+define('TBL_CMS' ,'pages');
+define('DB_MODULES' ,'modules');
+define('DB_ADMIN_USER' ,'admin');
 define('DB_TESTIMONIAL' ,'testimonial');
 
 /* MODULES */
@@ -101,10 +101,6 @@ define('MSG_TRANSFERRED', ' has been transferred successfully.');
 define('MSG_UPD_FAILED', ' update has been failed.');
 
 
-define('MAIN_SITE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/TSA/');	 
+define('MAIN_SITE_PATH', 'http://localhost/TSA/');
 define('MAIN_SITE_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload');
 define('MAIN_SITE_AB_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload/');;
-
-
-
-

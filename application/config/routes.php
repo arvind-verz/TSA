@@ -180,6 +180,7 @@ $route['admin/attendance/get_class_code_transfer']   = 'backend/AttendanceContro
 $route['admin/attendance/get_attendance_edit_sheet'] = 'backend/AttendanceController/get_attendance_edit_sheet';
 $route['admin/attendance/get_attendance_date_by_class_code'] = 'backend/AttendanceController/get_attendance_date_by_class_code';
 $route['admin/attendance/schedule_store'] = 'backend/AttendanceController/schedule_store';
+$route['admin/attendance/raw-delete'] = 'backend/AttendanceController/raw_delete';
 
 
 /* ORDER */
