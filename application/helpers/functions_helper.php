@@ -513,12 +513,12 @@ function miss_class_request($class_id, $reason, $date_of_absence)
 		$recipients = ['phone' => $result->phone, 'parents_phone' => $result->parents_phone, ];
 		$message = get_sms_template_content(4);
 		$z = 0;
-		$sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . 'rn';
+		$sms_pre_content = 'Hi ' . $result->firstname . ' ' . $result->lastname . '\r\n';
 		foreach($recipients as $recipient)
 			{
 			if ($z == 1)
 				{
-				$sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_first_name . ' ' . $result->parent_last_name . 'rn';
+				$sms_pre_content = 'Hi ' . $result->salutation . ' ' . $result->parent_first_name . ' ' . $result->parent_last_name . '\r\n';
 				}
 
 			send_sms($recipient, $sms_pre_content . $message, 4, $result1->class_code);
@@ -751,7 +751,7 @@ function get_student_details($student_id = false)
 		{
 		$query = $ci->db->get_where(DB_STUDENT, ['student_id' => $student_id]);
 		$result = $query->row();
-		return ['name' => $result->firstname . ' ' . $result->lastname, 'email' => $result->email, 'phone' => $result->phone, ];
+		return ['name' => $result->firstname . ' ' . $result->lastname, 'email' => $result->email, 'phone' => $result->phone, 'nric'	=>	$result->nric];
 		}
 	}
 
@@ -2064,6 +2064,7 @@ function send_first_month_invoice($student_id, $class_id)
 	$ci->db->where(['student_enrollment.student_id' => $student_id, 'student_enrollment.class_id' => $class_id]);
 	$ci->db->limit(1);
 	$query1 = $ci->db->get();
+	//return print_r($ci->db->last_query());
 	$result1 = $query1->row();
 	if (!$result1)
 		{
@@ -2087,7 +2088,7 @@ function send_first_month_invoice($student_id, $class_id)
 		return false;
 		}
 
-	$book_price_amount = get_invoice_result2($result1->sid, $result->invoice_generation_date);
+	$book_price_amount = get_invoice_result2($result1->sid, $result->invoice_generation_date, $class_code);
 	$book_charges = $book_price_amount;
 	$billing_data = json_decode($result->billing);
 	$counter = 0;
@@ -2204,7 +2205,7 @@ function send_rest_month_invoice($student_id, $class_id)
 		return false;
 		}
 
-	$book_price_amount = get_invoice_result2($result1->sid, $result->invoice_generation_date);
+	$book_price_amount = get_invoice_result2($result1->sid, $result->invoice_generation_date, $class_code);
 	//echo $book_price_amount;
 	$book_charges = $book_price_amount;
 	$billing_data = json_decode($result->billing);
@@ -2313,7 +2314,7 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5[0]]);
 	$result = $query->row();
 	$billing_data = json_decode($result->billing);
-	$book_price_amount = get_invoice_result2($result1->sid, $result5[0]);
+	$book_price_amount = get_invoice_result2($result1->sid, $result5[0], $class_code);
 	$book_charges = $book_price_amount;
 	$L = $M = $E = $X = $G = $H = [];
 	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
@@ -2428,6 +2429,7 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$type = 'final_settlement_invoice';
 	$invoice_id = uniqid();
 	$date = date('Y-m-d H:i:s');
+
 	$invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
 	$file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
 	$ci->db->select('*, student.id as sid');
@@ -2438,6 +2440,7 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$ci->db->limit(1);
 	$query1 = $ci->db->get();
 	$result1 = $query1->row();
+
 	if (!$result1)
 		{
 		return false;
@@ -2452,6 +2455,7 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$result5 = get_invoice_result5();
+	//return print_r($result5);
 	if (!$result5)
 		{
 		return false;
@@ -2460,7 +2464,7 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5[0]]);
 	$result = $query->row();
 	$billing_data = json_decode($result->billing);
-	$book_price_amount = get_invoice_result2($result1->sid, $result5[0]);
+	$book_price_amount = get_invoice_result2($result1->sid, $result5[0], $class_code);
 	$book_charges = $book_price_amount;
 	$L = $M = $E = $X = $G = $H = [];
 	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
@@ -2590,7 +2594,7 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5[0]]);
 	$result = $query->row();
 	$billing_data = json_decode($result->billing);
-	$book_price_amount = get_invoice_result2($result1->sid, $result5[0]);
+	$book_price_amount = get_invoice_result2($result1->sid, $result5[0], $class_code);
 	$book_charges = $book_price_amount;
 	$L = $M = $E = $X = $G = $H = [];
 	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
@@ -2701,7 +2705,7 @@ function get_invoice_result3($student_id)
 		}
 	}
 
-function get_invoice_result2($sid, $invoice_generation_date)
+function get_invoice_result2($sid, $invoice_generation_date, $class_code)
 	{
 	$ci = & get_instance();
 	$ci->db->select('*');
@@ -2710,7 +2714,9 @@ function get_invoice_result2($sid, $invoice_generation_date)
 	$ci->db->join(DB_MATERIAL, 'orders.book_id = material.id');
 	$ci->db->where('order_details.student_id', $sid);
 	$ci->db->where('order_details.status', 2);
+	$ci->db->where('orders.class_code', $class_code);
 	$query = $ci->db->get();
+	//return print_r($ci->db->last_query());
 	$result = $query->result();
 	$book_charges = [];
 	foreach($result as $row)
@@ -2722,20 +2728,15 @@ function get_invoice_result2($sid, $invoice_generation_date)
 			{
 			foreach($billing_data as $billing)
 				{
-				if ($billing->working_week != 1)
-					{
-					if ($billing->rest_week != 1)
+					$dates = explode("-", $billing->date_range);
+					if (strtotime(date('d/m/Y', strtotime($row->order_date))) >= strtotime($dates[0]) && strtotime(date('d/m/Y', strtotime($row->order_date))) <= strtotime($dates[1]))
 						{
-							$dates = explode("-", $billing->date_range);
-							if (strtotime(date('d/m/Y', strtotime($row->order_date))) >= strtotime($dates[0]) && strtotime(date('d/m/Y', strtotime($row->order_date))) <= strtotime($dates[1]))
-								{
-								$book_charges[] = $row->book_price;
-								}
-							}
+						$book_charges[] = $row->book_price;
 						}
 					}
 			}
 		}
+		//return $book_charges;
 		return array_sum($book_charges);
 	}
 
@@ -2752,9 +2753,9 @@ function get_invoice_result5()
 		$billing_data = json_decode($row->billing);
 		foreach($billing_data as $billing)
 			{
-			$dates = str_replace('/', '-', explode("-", $billing->date_range));
+			$dates = explode("-", $billing->date_range);
 
-			//rint_r(strtotime($date) .'|'. $dates[0].' <br /> ');
+			//print_r(($date) .'|'. $dates[0].' <br /> ');
 
 			if (strtotime($date) >= strtotime($dates[0]) && strtotime($date) <= strtotime($dates[1]))
 				{
@@ -2781,31 +2782,37 @@ function fee_reminder()
 	$message = get_sms_template_content(2);
 	if ($result && $message)
 		{
-		$query1 = $ci->db->get(DB_INVOICE);
+		$ci->db->select('*');
+		$ci->db->from(DB_STUDENT);
+		$ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+		$ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
+		$ci->db->where(['student_to_class.status' => 3, 'student.is_active' => 1, 'student.is_archive' => 0]);
+		$ci->db->group_by('student.phone');
+		$query1 = $ci->db->get();
 		$result1 = $query1->result();
 		if ($result1)
 			{
 			foreach($result1 as $row)
 				{
-				if ($row->status == 2)
-					{
+				/*if ($row->status == 2)
+					{*/
 					$student_details = get_student($row->student_id);
 					$recipients = ['phone' => $student_details->phone, 'parents_phone' => $student_details->parents_phone, ];
 					$class_code = get_class_code_by_class($row->class_id);
 					$z = 0;
-					$sms_pre_content = 'Hi ' . $student_details->firstname . ' ' . $student_details->lastname . 'rn';
+					$sms_pre_content = 'Hi ' . $student_details->firstname . ' ' . $student_details->lastname . '\r\n';
 					foreach($recipients as $recipient)
 						{
 						if ($z == 1)
 							{
-							$sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_first_name . ' ' . $student_details->parent_last_name . 'rn';
+							$sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_first_name . ' ' . $student_details->parent_last_name . '\r\n';
 							}
 
 						send_sms($recipient, $sms_pre_content . $message, 2, $class_code);
 						$z++;
 						}
 					}
-				}
+				//}
 			}
 		}
 	}
@@ -2818,31 +2825,37 @@ function late_fee_reminder()
 	$message = get_sms_template_content(3);
 	if ($result && $message)
 		{
-		$query1 = $ci->db->get(DB_INVOICE);
+		$ci->db->select('*');
+		$ci->db->from(DB_STUDENT);
+		$ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
+		$ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
+		$ci->db->where(['student_to_class.status' => 3, 'student.is_active' => 1, 'student.is_archive' => 0]);
+		$ci->db->group_by('student.phone');
+		$query1 = $ci->db->get();
 		$result1 = $query1->result();
 		if ($result1)
 			{
 			foreach($result1 as $row)
 				{
-				if ($row->status == 5)
-					{
+				//if ($row->status == 5)
+					//{
 					$student_details = get_student($row->student_id);
 					$recipients = ['phone' => $student_details->phone, 'parents_phone' => $student_details->parents_phone, ];
 					$class_code = get_class_code_by_class($row->class_id);
 					$z = 0;
-					$sms_pre_content = 'Hi ' . $student_details->firstname . ' ' . $student_details->lastname . 'rn';
+					$sms_pre_content = 'Hi ' . $student_details->firstname . ' ' . $student_details->lastname . '\r\n';
 					foreach($recipients as $recipient)
 						{
 						if ($z == 1)
 							{
-							$sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_first_name . ' ' . $student_details->parent_last_name . 'rn';
+							$sms_pre_content = 'Hi ' . $student_details->salutation . ' ' . $student_details->parent_first_name . ' ' . $student_details->parent_last_name . '\r\n';
 							}
 
 						send_sms($recipient, $sms_pre_content . $message, 3, $class_code);
 						$z++;
 						}
 					}
-				}
+				//}
 			}
 		}
 	}
@@ -2864,8 +2877,8 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
 	$config['charset'] = 'iso-8859-1';
 	$config['wordwrap'] = true;
 	$config['mailtype'] = 'html';
-	$config['crlf'] = "rn";
-	$config['newline'] = "rn";
+	$config['crlf'] = "\r\n";
+	$config['newline'] = "\r\n";
 	$ci->email->initialize($config);
 	$ci->email->from($result->email, 'The Science Academy');
 	$ci->email->to($emailto);
@@ -2894,8 +2907,8 @@ function send_mail_contact($email_from, $emailto, $subject, $message)
 	$config['charset'] = 'iso-8859-1';
 	$config['wordwrap'] = true;
 	$config['mailtype'] = 'html';
-	$config['crlf'] = "rn";
-	$config['newline'] = "rn";
+	$config['crlf'] = "\r\n";
+	$config['newline'] = "\r\n";
 	$ci->email->initialize($config);
 	$ci->email->from($email_from, 'The Science Academy - Contact Us Form');
 	$ci->email->to($emailto);
@@ -2963,23 +2976,30 @@ function send_student_reservation_sms()
 	$ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
 	$ci->db->where(['student_to_class.status' => 3, 'student.is_active' => 1, 'student.is_archive' => 0]);
 	$query = $ci->db->get();
+	//echo $ci->db->last_query();
 	$result = $query->result();
 	$message = get_sms_template_content(5);
+
 	if ($result && $message)
 		{
+
 		foreach($result as $row)
 			{
+				//echo $row->student_id.'<br/>';
 			if (date('Y-m-d', strtotime('-1 day', strtotime($row->reservation_date))) == date('Y-m-d'))
 				{
+
 				$class_code = get_class_code_by_class($row->class_id);
 				$recipients = [$row->phone, $row->parents_phone];
 				$z = 0;
-				$sms_pre_content = 'Hi ' . $row->firstname . ' ' . $row->lastname . 'rn';
+				$sms_pre_content = 'Hi ' . $row->firstname . ' ' . $row->lastname . '\r\n';
 				foreach($recipients as $recipient)
 					{
+						//return print_r("Hello");
+
 					if ($z == 1)
 						{
-						$sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_first_name . ' ' . $row->parent_last_name . 'rn';
+						$sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_first_name . ' ' . $row->parent_last_name . '\r\n';
 						}
 
 					if ($recipient)
@@ -3016,12 +3036,12 @@ function send_student_confirmation_sms()
 				$result = $query->row();
 				$recipients = [$row->phone, $row->parents_phone];
 				$z = 0;
-				$sms_pre_content = 'Hi ' . $row->firstname . ' ' . $row->lastname . 'rn';
+				$sms_pre_content = 'Hi ' . $row->firstname . ' ' . $row->lastname . '\r\n';
 				foreach($recipients as $recipient)
 					{
 					if ($z == 1)
 						{
-						$sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_first_name . ' ' . $row->parent_last_name . 'rn';
+						$sms_pre_content = 'Hi ' . $row->salutation . ' ' . $row->parent_first_name . ' ' . $row->parent_last_name . '\r\n';
 						}
 
 					if ($recipient)
