@@ -516,13 +516,16 @@ class Students extends CI_Model
 
 	public function final_settlement($student_id, $class_id)
 	{
+
+		//return "Hello";
 		$data = array(
 			'status'   => 4,
 			'updated_at'   => date('Y-m-d H:i:s'),
 		);
-
-		$this->db->trans_start();
 		send_final_settlement_invoice($student_id, $class_id);
+		//return "hello";
+		$this->db->trans_start();
+
 		$this->db->where('student_id', $student_id);
 		$this->db->where('class_id', $class_id);
 		$this->db->update('student_to_class', $data);

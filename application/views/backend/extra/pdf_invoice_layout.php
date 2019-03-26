@@ -126,7 +126,7 @@ $item_details = json_decode($invoice_data->invoice_data);
 
                         <td>
                             <?php echo $result['name']; ?><br>
-                            <?php echo $result['email']; ?><br>
+                            <?php echo $result['nric']; ?><br>
                             <?php echo $result['phone']; ?>
                         </td>
                     </tr>
