@@ -2023,15 +2023,18 @@ function send_cron_invoice()
 	$ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
 	$ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
 	$query = $ci->db->get();
+	//return print_r($ci->db->last_query());
 	$result = $query->result();
 	if ($result)
 		{
 		foreach($result as $row)
 			{
+
 			$ci->db->select('*, DATE(invoice_date) as invoice_date');
 			$ci->db->from(DB_INVOICE);
 			$ci->db->where(['student_id' => $row->student_id, 'class_id' => $row->class_id, 'type' => 'first_month_invoice']);
 			$query = $ci->db->get();
+
 
 			if ($query->num_rows() > 0)
 				{
@@ -2039,6 +2042,7 @@ function send_cron_invoice()
 				}
 			  else
 				{
+
 				send_first_month_invoice($row->student_id, $row->class_id);
 				}
 			}
@@ -2051,6 +2055,7 @@ function send_cron_invoice()
 
 function send_first_month_invoice($student_id, $class_id)
 	{
+		echo $student_id;
 	$ci = & get_instance();
 	$type = 'first_month_invoice';
 	$invoice_id = uniqid();
@@ -2064,13 +2069,14 @@ function send_first_month_invoice($student_id, $class_id)
 	$ci->db->where(['student_enrollment.student_id' => $student_id, 'student_enrollment.class_id' => $class_id]);
 	$ci->db->limit(1);
 	$query1 = $ci->db->get();
-	//return print_r($ci->db->last_query());
+
 	$result1 = $query1->row();
 	if (!$result1)
 		{
 		return false;
 		}
-
+		//print_r($result1).'<br/>';
+//return print_r($result1);
 	$frequency = $result1->frequency;
 	$class_code = $result1->class_code;
 	$emailto = [$result1->email, $result1->parent_email];
@@ -2729,7 +2735,7 @@ function get_invoice_result2($sid, $invoice_generation_date, $class_code)
 			foreach($billing_data as $billing)
 				{
 					$dates = explode("-", $billing->date_range);
-					if (strtotime(date('d/m/Y', strtotime($row->order_date))) >= strtotime($dates[0]) && strtotime(date('d/m/Y', strtotime($row->order_date))) <= strtotime($dates[1]))
+					if (strtotime(date('Y/m/d', strtotime($row->order_date))) >= strtotime($dates[0]) && strtotime(date('Y/m/d', strtotime($row->order_date))) <= strtotime($dates[1]))
 						{
 						$book_charges[] = $row->book_price;
 						}
@@ -2744,7 +2750,7 @@ function get_invoice_result5()
 	{
 	$ci = & get_instance();
 	$invoice_generation_date = [];
-	$date = date('d/m/Y');
+	$date = date('Y/m/d');
 	$query = $ci->db->get_where(DB_BILLING);
 	$result = $query->result();
 	$status_array = [];
