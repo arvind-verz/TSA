@@ -69,7 +69,7 @@ $.widget.bridge('uibutton', $.ui.button);
 
 		$('.date_range').daterangepicker({
 			locale: {
-	            format: 'DD/MM/YYYY'
+	            format: 'YYYY/MM/DD'
 	        }
 		});
 
