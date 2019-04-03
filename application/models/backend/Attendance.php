@@ -153,7 +153,7 @@ class Attendance extends CI_Model
         $student_exist_array = [];
         $this->db->trans_start();
         foreach($student_id as $id) {
-            $query = $this->db->get_where('student_to_class', ['class_id' => $class_id, 'student_id'    =>  $id, 'status'   =>  3]);
+            $query = $this->db->get_where('student_to_class', ['class_id' => $class_id, 'student_id'    =>  $id]);
             if($query->num_rows()>0) {
                 $student_exist_array[] = get_student_name_by_student_id($id);
             }

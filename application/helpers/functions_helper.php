@@ -1673,6 +1673,7 @@ function get_material_associated($sid, $class_code)
 	$ci->db->group_by('material.id');
 	$query = $ci->db->get();
 	$result = $query->result();
+	//return $ci->db->last_query();
 
 	foreach($result as $row) {
 		$query1 = $ci->db->get_where(DB_ORDER.'s', ['book_id'	=> $row->book_id]);
@@ -2134,8 +2135,8 @@ function send_first_month_invoice($student_id, $class_id)
 			}
 
 		$counter = (count($L) + count($M));
-		$invoice_amount = ((($counter * $fees) / $frequency) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
-		$amount_excluding_material = ((($counter * $fees) / $frequency) + $extra_charges + $previous_month_balance - $previous_month_payment);
+		$invoice_amount = ((($counter * $fees) / $frequency) + $book_charges + $extra_charges);
+		$amount_excluding_material = ((($counter * $fees) / $frequency) + $extra_charges);
 		$lesson_fees = (($counter * $fees) / $frequency);
 		/*if ($previous_month_balance>0) {
 		if ($invoice_amount<0) {
@@ -2328,40 +2329,46 @@ function send_archive_invoice_extend($student_id, $class_id)
 		{
 		foreach($billing_data as $billing)
 			{
-			$dates = explode("-", $billing->date_range);
-			foreach($query->result() as $row)
+				if ($billing->working_week != 1)
 				{
-				$status = json_decode($row->status);
-				if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+				if ($billing->rest_week != 1)
 					{
-					if ($status[0] == 1)
+						$dates = explode("-", $billing->date_range);
+						foreach($query->result() as $row)
 						{
-						$L[] = $status[0];
-						}
+							$status = json_decode($row->status);
+							if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+							{
+								if ($status[0] == 1)
+									{
+									$L[] = $status[0];
+									}
 
-					if ($status[1] == 1)
-						{
-						$M[] = $status[1];
-						}
+								if ($status[1] == 1)
+									{
+									$M[] = $status[1];
+									}
 
-					if ($status[2] == 1)
-						{
-						$E[] = $status[2];
-						}
+								if ($status[2] == 1)
+									{
+									$E[] = $status[2];
+									}
 
-					if ($status[3] == 1)
-						{
-						$X[] = $status[3];
-						}
+								if ($status[3] == 1)
+									{
+									$X[] = $status[3];
+									}
 
-					if ($status[4] == 1)
-						{
-						$G[] = $status[4];
-						}
+								if ($status[4] == 1)
+									{
+									$G[] = $status[4];
+									}
 
-					if ($status[5] == 1)
-						{
-						$H[] = $status[5];
+								if ($status[5] == 1)
+									{
+									$H[] = $status[5];
+									}
+							}
 						}
 					}
 				}
@@ -2371,9 +2378,9 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$subject = 'TSA - Invoice #' . get_invoice_no();
 	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
-	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
+	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment);
 
-	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment);
+	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $previous_month_balance - $previous_month_payment);
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees);
 	/*if ($previous_month_balance > 0)
 		{
@@ -2446,7 +2453,7 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$ci->db->limit(1);
 	$query1 = $ci->db->get();
 	$result1 = $query1->row();
-
+//die(print_r($ci->db->last_query()));
 	if (!$result1)
 		{
 		return false;
@@ -2459,6 +2466,7 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$extra_charges = $result1->extra_charges;
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
+	$deposit = !empty($result1->deposit) ? eval('return '.$result1->deposit.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$result5 = get_invoice_result5();
 	//return print_r($result5);
@@ -2478,51 +2486,57 @@ function send_final_settlement_invoice($student_id, $class_id)
 		{
 		foreach($billing_data as $billing)
 			{
-			$dates = explode("-", $billing->date_range);
-			foreach($query->result() as $row)
+				if ($billing->working_week != 1)
 				{
-				$status = json_decode($row->status);
-				if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+				if ($billing->rest_week != 1)
 					{
-					if ($status[0] == 1)
-						{
-						$L[] = $status[0];
-						}
+						$dates = explode("-", $billing->date_range);
+						foreach($query->result() as $row)
+							{
+							$status = json_decode($row->status);
+							if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+								{
+								if ($status[0] == 1)
+									{
+									$L[] = $status[0];
+									}
 
-					if ($status[1] == 1)
-						{
-						$M[] = $status[1];
-						}
+								if ($status[1] == 1)
+									{
+									$M[] = $status[1];
+									}
 
-					if ($status[2] == 1)
-						{
-						$E[] = $status[2];
-						}
+								if ($status[2] == 1)
+									{
+									$E[] = $status[2];
+									}
 
-					if ($status[3] == 1)
-						{
-						$X[] = $status[3];
-						}
+								if ($status[3] == 1)
+									{
+									$X[] = $status[3];
+									}
 
-					if ($status[4] == 1)
-						{
-						$G[] = $status[4];
-						}
+								if ($status[4] == 1)
+									{
+									$G[] = $status[4];
+									}
 
-					if ($status[5] == 1)
-						{
-						$H[] = $status[5];
+								if ($status[5] == 1)
+									{
+									$H[] = $status[5];
+									}
+								}
+							}
 						}
 					}
-				}
 			}
 		}
 
 	$subject = 'TSA - Invoice #' . get_invoice_no();
 	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
-	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
-	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment);
+	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment - $deposit);
+	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $previous_month_balance - $previous_month_payment - $deposit);
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees);
 	/*if ($previous_month_balance > 0)
 		{
@@ -2608,40 +2622,46 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 		{
 		foreach($billing_data as $billing)
 			{
-			$dates = explode("-", $billing->date_range);
-			foreach($query->result() as $row)
+				if ($billing->working_week != 1)
 				{
-				$status = json_decode($row->status);
-				if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+				if ($billing->rest_week != 1)
 					{
-					if ($status[0] == 1)
+					$dates = explode("-", $billing->date_range);
+					foreach($query->result() as $row)
 						{
-						$L[] = $status[0];
-						}
+						$status = json_decode($row->status);
+						if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+							{
+							if ($status[0] == 1)
+								{
+								$L[] = $status[0];
+								}
 
-					if ($status[1] == 1)
-						{
-						$M[] = $status[1];
-						}
+							if ($status[1] == 1)
+								{
+								$M[] = $status[1];
+								}
 
-					if ($status[2] == 1)
-						{
-						$E[] = $status[2];
-						}
+							if ($status[2] == 1)
+								{
+								$E[] = $status[2];
+								}
 
-					if ($status[3] == 1)
-						{
-						$X[] = $status[3];
-						}
+							if ($status[3] == 1)
+								{
+								$X[] = $status[3];
+								}
 
-					if ($status[4] == 1)
-						{
-						$G[] = $status[4];
-						}
+							if ($status[4] == 1)
+								{
+								$G[] = $status[4];
+								}
 
-					if ($status[5] == 1)
-						{
-						$H[] = $status[5];
+							if ($status[5] == 1)
+								{
+								$H[] = $status[5];
+								}
+							}
 						}
 					}
 				}
@@ -2651,8 +2671,8 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$subject = 'TSA - Invoice #' . get_invoice_no();
 	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
-	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
-	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment);
+	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment);
+	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $previous_month_balance - $previous_month_payment);
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees);
 	/*if ($previous_month_balance > 0)
 		{
@@ -2734,15 +2754,22 @@ function get_invoice_result2($sid, $invoice_generation_date, $class_code)
 			{
 			foreach($billing_data as $billing)
 				{
-					$dates = explode("-", $billing->date_range);
-					if (strtotime(date('Y/m/d', strtotime($row->order_date))) >= strtotime($dates[0]) && strtotime(date('Y/m/d', strtotime($row->order_date))) <= strtotime($dates[1]))
-						{
-						$book_charges[] = $row->book_price;
+					if ($billing->working_week != 1)
+					{
+					if ($billing->rest_week != 1)
+					{
+							$dates = explode("-", $billing->date_range);
+							//echo date('Y/m/d', strtotime($row->order_date)) .' | '. $dates[0]. ' | ' .$dates[1].'<br/>';
+							if (strtotime(date('Y/m/d', strtotime($row->order_date))) >= strtotime($dates[0]) && strtotime(date('Y/m/d', strtotime($row->order_date))) <= strtotime($dates[1]))
+								{
+								$book_charges[] = $row->book_price;
+								}
+							}
 						}
 					}
 			}
 		}
-		//return $book_charges;
+		//return print_r($book_charges);
 		return array_sum($book_charges);
 	}
 
@@ -2920,12 +2947,13 @@ function send_mail_contact($email_from, $emailto, $subject, $message)
 	$ci->email->to($emailto);
 	$ci->email->subject($subject);
 	$ci->email->message($message);
-	if ($ci->email->send())
+	/*if ($ci->email->send())
 		{
 		return true;
 		}
 
-	return false;
+	return false;*/
+	return true;
 	}
 
 function send_sms($recipient, $message, $template_id = false, $class_code = false)
