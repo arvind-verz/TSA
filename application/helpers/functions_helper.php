@@ -2099,14 +2099,22 @@ function send_first_month_invoice($student_id, $class_id)
 	$book_charges = $book_price_amount;
 	$billing_data = json_decode($result->billing);
 	$counter = 0;
+	$counter1 = 0;
 	$i = 0;
 	$subject = 'Invoice #' . get_invoice_no();
 	$message = '<a href="' . $file_path . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
 	$L = $M = [];
-	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
+	$ci->db->select('*');
+	$ci->db->from(DB_ATTENDANCE);
+	$ci->db->where(['student_id' => $student_id, 'class_code' => $result1->class_code]);
+	$ci->db->order_by('id', 'asc');
+	$ci->db->limit(1);
+	$query = $ci->db->get();
+	
 	if ($query->num_rows() > 0)
 		{
+			$row = $query->row();
 		foreach($billing_data as $billing)
 			{
 			if ($billing->working_week != 1)
@@ -2114,12 +2122,15 @@ function send_first_month_invoice($student_id, $class_id)
 				if ($billing->rest_week != 1)
 					{
 					$dates = explode("-", $billing->date_range);
-					foreach($query->result() as $row)
-						{
-						$status = json_decode($row->status);
-						if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+					
+					//foreach($query->result() as $row)
+						//{
+						//$status = json_decode($row->status);
+						if (strtotime($row->attendance_date) <= strtotime($dates[1]))
 							{
-							if ($status[0] == 1)
+								//echo '<br/>';
+								$counter1+=1;
+							/*if ($status[0] == 1)
 								{
 								$L[] = $status[0];
 								}
@@ -2127,14 +2138,15 @@ function send_first_month_invoice($student_id, $class_id)
 							if ($status[1] == 1)
 								{
 								$M[] = $status[1];
-								}
+								}*/
 							}
-						}
+						//}
 					}
 				}
 			}
-
-		$counter = (count($L) + count($M));
+		//echo $counter1;
+		//die();
+		$counter = counter1;
 		$invoice_amount = ((($counter * $fees) / $frequency) + $book_charges + $extra_charges);
 		$amount_excluding_material = ((($counter * $fees) / $frequency) + $extra_charges);
 		$lesson_fees = (($counter * $fees) / $frequency);
@@ -2786,21 +2798,27 @@ function get_invoice_result5()
 		$billing_data = json_decode($row->billing);
 		foreach($billing_data as $billing)
 			{
-			$dates = explode("-", $billing->date_range);
+				if ($billing->working_week != 1)
+					{
+					if ($billing->rest_week != 1)
+					{
+						$dates = explode("-", $billing->date_range);
 
 			//print_r(($date) .'|'. $dates[0].' <br /> ');
 
-			if (strtotime($date) >= strtotime($dates[0]) && strtotime($date) <= strtotime($dates[1]))
-				{
-				$status_array[] = 1;
+						if (strtotime($date) >= strtotime($dates[0]) && strtotime($date) <= strtotime($dates[1]))
+							{
+							$status_array[] = 1;
+							}
+						}
+					}
 				}
-			}
 
-		if (count($status_array) > 0)
-			{
-			$invoice_generation_date[] = $row->invoice_generation_date;
-			}
-		}
+					if (count($status_array) > 0)
+						{
+						$invoice_generation_date[] = $row->invoice_generation_date;
+						}
+					}
 
 	return $invoice_generation_date;
 	}
