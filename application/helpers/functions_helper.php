@@ -2146,7 +2146,7 @@ function send_first_month_invoice($student_id, $class_id)
 			}
 		//echo $counter1;
 		//die();
-		$counter = counter1;
+		$counter = $counter1;
 		$invoice_amount = ((($counter * $fees) / $frequency) + $book_charges + $extra_charges);
 		$amount_excluding_material = ((($counter * $fees) / $frequency) + $extra_charges);
 		$lesson_fees = (($counter * $fees) / $frequency);
