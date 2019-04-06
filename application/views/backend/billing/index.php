@@ -77,7 +77,7 @@
                                         <?php echo isset($billing->billing_title) ? $billing->billing_title : '-' ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($billing->invoice_generation_date) ? date('d-m-Y H:i', strtotime($billing->invoice_generation_date)) : '-' ?>
+                                        <?php echo isset($billing->invoice_generation_date) ? date('Y-m-d H:i A', strtotime($billing->invoice_generation_date)) : '-' ?>
                                     </td>
 
                                 </tr>

@@ -151,7 +151,7 @@
                                     <td><?php echo $student->email;?></td>
                                     <td><?php echo isset($student->username) ? $student->username : '-' ?></td>
                                     <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
-                                    <td><?php echo get_material_associated($student->sid, $student->class_code); ?></td>
+                                    <td><?php echo get_class_code_by_class($student->class_id); ?></td>
                                     <td><?php echo isset($student->gender) ? ($student->gender==0) ? 'Male' : 'Female' : '-' ?></td>
                                     <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
                                     <td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>

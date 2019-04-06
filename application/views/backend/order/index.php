@@ -50,6 +50,9 @@
                                     <th>
                                         <?php echo ORDER ?> Date
                                     </th>
+									<th>
+                                        Book Title
+                                    </th>
                                     <th>
                                         <?php echo CLASSES ?> Code
                                     </th>
@@ -91,6 +94,7 @@
                                     <td>
                                         <?php echo isset($order->order_date) ? date('d-m-Y H:i A', strtotime($order->order_date)) : '-' ?>
                                     </td>
+									<td><?php echo isset($order->book_id) ? get_book($order->book_id)->book_name : '-'; ?></td>
                                     <td>
                                         <?php echo isset($order->class_code) ? $order->class_code : '-' ?>
                                     </td>

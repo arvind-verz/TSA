@@ -89,7 +89,7 @@ class Attendance extends CI_Model
             $result1 = $query1->result();
 
             $date_collection = [];
-            $query = "select * from attendance where class_code= ? and DATE_FORMAT(attendance_date, '%Y-%M') = ? group by attendance_date";
+            $query = "select * from create_attendance where class_code= ? and DATE_FORMAT(attendance_date, '%Y-%M') = ?";
             $query = $this->db->query($query, [$class_code, date('Y').'-'.$class_month]);
             $result = $query->result();
 
@@ -286,37 +286,31 @@ class Attendance extends CI_Model
 
     public function schedule_store()
     {
-        $attendance_date = explode(',', $_POST['attendance_date']);
+        $attendance_date = $_POST['attendance_date'];
         $class_code = $_POST['class_code'];
-        $attendance_date_exist = [];
-        foreach($attendance_date as $dates) {
-            $query = $this->db->get_where('create_attendance', ['schedule_dates' =>  $dates, 'class_code'   =>  $class_code]);
-            if($query->num_rows()>0) {
-                $attendance_date_exist[] = $dates;
-            }
-        }
-        if(count($attendance_date_exist)>0) {
-            $this->session->set_flashdata('error', implode(', ', $attendance_date_exist) .' dates already exist within system.');
-            return redirect('admin/attendance/create');
-        }
+		
+		$query = $this->db->get_where('create_attendance', ['attendance_date' =>  $attendance_date, 'class_code'   =>  $class_code]);
+		if($query->num_rows()>0) {
+			$this->session->set_flashdata('error', $attendance_date .' dates already exist within system.');
+			return redirect('admin/attendance/create');
+		}
+
         $this->db->trans_start();
-        foreach($attendance_date as $dates) {
-            $data = [
-                'class_code'    =>  $class_code,
-                'schedule_dates'   =>  $dates,
-                'created_at'    =>  $this->date,
-                'updated_at'    =>  $this->date,
-            ];
-            $this->db->insert('create_attendance', $data);
-        }
+		$data = [
+			'class_code'    =>  $class_code,
+			'attendance_date'   =>  $attendance_date,
+			'created_at'    =>  $this->date,
+			'updated_at'    =>  $this->date,
+		];
+		$this->db->insert('create_attendance', $data);
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === false) {
             $this->session->set_flashdata('error', MSG_ERROR);
-            return redirect('admin/attendance');
+            return redirect('admin/attendance/create');
         } else {
             $this->session->set_flashdata('success', ATTENDANCE . ' ' . MSG_CREATED);
-            return redirect('admin/attendance');
+            return redirect('admin/attendance/create-edit/'.get_class_id_by_class_code($class_code).'/'.$attendance_date);
         }
     }
 

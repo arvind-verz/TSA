@@ -1372,7 +1372,7 @@ function get_invoice_sheet($class_code = false)
                             <td><?php
 		echo isset($row->invoice_no) ? $row->invoice_no : '-'; ?></td>
                             <td><?php
-		echo isset($row->invoice_date) ? date("d/m/Y", strtotime($row->invoice_date)) : '-'; ?></td>
+		echo isset($row->invoice_date) ? date("Y-m-d", strtotime($row->invoice_date)) : '-'; ?></td>
                             <td><a href="<?php
 		echo base_url('assets/files/pdf/invoice/' . $row->invoice_file) ?>" target="_blank">View</a><br/><a href="<?php
 		echo base_url('assets/files/pdf/invoice/' . $row->invoice_file) ?>" target="_blank" download>Download Invoice</a></td>
@@ -2106,7 +2106,7 @@ function send_first_month_invoice($student_id, $class_id)
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
 	$L = $M = [];
 	$ci->db->select('*');
-	$ci->db->from(DB_ATTENDANCE);
+	$ci->db->from('create_attendance');
 	$ci->db->where(['student_id' => $student_id, 'class_code' => $result1->class_code]);
 	$ci->db->order_by('id', 'asc');
 	$ci->db->limit(1);

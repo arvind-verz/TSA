@@ -31,7 +31,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="">Date : <?php echo date('d-m-Y', strtotime($attendance_date)); ?></label>
+                                <label for="">Date : <?php echo $attendance_date; ?></label>
                                 <input type="hidden" name="attendance_date" class="form-control" value="<?php echo $attendance_date; ?>">
                             </div>
                             <div class="form-group pull-right">
