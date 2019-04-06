@@ -1802,8 +1802,8 @@ function get_reporting_sheet($date_from = false, $date_to = false)
 	$ci->db->from(DB_INVOICE);
 	if ($date_from || $date_to)
 		{
-		$ci->db->where('DATE(invoice_date) >=', date('Y-m-d', strtotime($date_from)));
-		$ci->db->where('DATE(invoice_date) <=', date('Y-m-d', strtotime($date_to)));
+		$ci->db->where('DATE(invoice_date) >=', $date_from);
+		$ci->db->where('DATE(invoice_date) <=', $date_to);
 		}
 
 	$ci->db->group_by('class_id');
