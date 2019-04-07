@@ -89,7 +89,7 @@ class Attendance extends CI_Model
             $result1 = $query1->result();
 
             $date_collection = [];
-            $query = "select * from create_attendance where class_code= ? and DATE_FORMAT(attendance_date, '%Y-%M') = ?";
+            $query = "select * from create_attendance where class_code= ? and DATE_FORMAT(attendance_date, '%Y-%M') = ? order by attendance_date ASC";
             $query = $this->db->query($query, [$class_code, date('Y').'-'.$class_month]);
             $result = $query->result();
 
@@ -321,7 +321,9 @@ class Attendance extends CI_Model
         $class_date = $_GET['class_date'];
 
         $this->db->where(['class_code'  => $class_code, 'attendance_date'    =>  $class_date]);
-        $this->db->delete('attendance');
+		$this->db->delete('attendance');
+		$this->db->where(['class_code'  => $class_code, 'attendance_date'    =>  $class_date]);
+        $this->db->delete('create_attendance');
         echo "success";
     }
 }

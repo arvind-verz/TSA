@@ -2107,11 +2107,11 @@ function send_first_month_invoice($student_id, $class_id)
 	$L = $M = [];
 	$ci->db->select('*');
 	$ci->db->from('create_attendance');
-	$ci->db->where(['student_id' => $student_id, 'class_code' => $result1->class_code]);
+	$ci->db->where(['class_code' => $result1->class_code]);
 	$ci->db->order_by('id', 'asc');
 	$ci->db->limit(1);
 	$query = $ci->db->get();
-	
+	//print_r($ci->db->last_query());
 	if ($query->num_rows() > 0)
 		{
 			$row = $query->row();
@@ -2322,6 +2322,7 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$extra_charges = $result1->extra_charges;
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
+	$deposit = !empty($result1->deposit) ? eval('return '.$result1->deposit.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$result5 = get_invoice_result5();
 	//die(print_r($result5));
@@ -2390,9 +2391,9 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$subject = 'TSA - Invoice #' . get_invoice_no();
 	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
-	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment);
+	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment - $deposit);
 
-	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $previous_month_balance - $previous_month_payment);
+	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $previous_month_balance - $previous_month_payment - $deposit);
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees);
 	/*if ($previous_month_balance > 0)
 		{
