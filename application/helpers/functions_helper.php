@@ -2131,58 +2131,42 @@ function send_first_month_invoice($student_id, $class_id)
 	$subject = 'Invoice #' . get_invoice_no();
 	$message = '<a href="' . $file_path . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
-	$L = $M = [];
-	$ci->db->select('*');
-	$ci->db->from(DB_ATTENDANCE);
-	$ci->db->where(['student_id' => $student_id, 'class_code' => $result1->class_code]);
-	$ci->db->order_by('id', 'asc');
-	$ci->db->limit(1);
-	$query = $ci->db->get();
+    $first_month_attendance_date = getFirstMonthAttendanceDate($student_id, $result1->class_code, $billing_data);
+    
 	
-	
-		
-		
-	//print_r($ci->db->last_query());
-	//die();
-	if ($query->num_rows() > 0)
-		{
-			$row = $query->row();
 			
-		
-				
-				
-		foreach($billing_data as $billing)
-			{
-			if ($billing->working_week != 1)
-				{
-				if ($billing->rest_week != 1)
-					{
-					$dates = explode("-", $billing->date_range);
-					
-					//keep echo "<br>";echo "<br>";
-					//keep print_R($dates);
-					
-			//keep 	echo "<br>";
-				//keep echo "test date".strtotime(str_replace("-", "/", $row->attendance_date));
-					//echo str_replace("-", "/", $row->attendance_date) .' = ' . $dates[1] .'<br/>';
-					//die();
-					if (strtotime(str_replace("-", "/", $row->attendance_date)) <= strtotime($dates[1]))
-						{
-						    //echo $counter1;
-							$counter1+=1;
-						
-						}
-					}
-				}
-			}
+    foreach($billing_data as $billing)
+        {
+        if ($billing->working_week != 1)
+            {
+            if ($billing->rest_week != 1)
+                {
+                $dates = explode("-", $billing->date_range);
+                
+                //keep echo "<br>";echo "<br>";
+                //keep print_R($dates);
+                
+        //keep 	echo "<br>";
+            //keep echo "test date".strtotime(str_replace("-", "/", $row->attendance_date));
+                //echo str_replace("-", "/", $row->attendance_date) .' = ' . $dates[1] .'<br/>';
+                //die();
+                if (strtotime(str_replace("-", "/", $first_month_attendance_date)) <= strtotime($dates[1]))
+                    {
+                        
+                        //echo $counter1;
+                        $counter1+=1;
+                    
+                    }
+                }
+            }
+        }
 			
 			//keep echo "counter".$counter1;
 			//keep echo "book price".$book_charges;
 			//keep echo "stu id".$student_id;
 //keep die();
-				
-				
-		//die();
+        print_r($counter1);
+        die();	
 		$counter = $counter1;
 		$invoice_amount = ((($counter * $fees) / $frequency) + $book_charges + $extra_charges);
 		
@@ -2213,7 +2197,6 @@ function send_first_month_invoice($student_id, $class_id)
 				}
 			}
 		}
-	}
 
 function send_rest_month_invoice($student_id, $class_id)
 	{
@@ -2845,7 +2828,49 @@ function get_invoice_result5()
 					}
 
 	return $invoice_generation_date;
-	}
+    }
+    
+    function getFirstMonthAttendanceDate($student_id, $class_code, $billing_data)
+    {
+        $ci = & get_instance();
+
+        $ci->db->select('*');
+        $ci->db->from(DB_ATTENDANCE);
+        $ci->db->where(['student_id' => $student_id, 'class_code' => $class_code]);
+        $query = $ci->db->get();
+
+        foreach($billing_data as $billing)
+			{
+				if ($billing->working_week != 1)
+				{
+				if ($billing->rest_week != 1)
+					{
+						$dates = explode("-", $billing->date_range);
+						foreach($query->result() as $row)
+						{
+							$status = json_decode($row->status);
+							if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+							{
+								if ($status[0] == 1)
+									{
+									    return $row->attendance_date;
+									}
+
+								if ($status[1] == 1)
+									{
+                                        return $row->attendance_date;
+									}
+
+								if ($status[3] == 1)
+									{
+                                        return $row->attendance_date;
+									}
+							}
+						}
+					}
+				}
+			}
+    }
 
 /* END RESULT FOR INVOICE */
 
