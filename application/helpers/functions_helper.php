@@ -175,7 +175,7 @@ function get_enrollment_type_popup_content_update($student_id, $class_id)
 		$deposit_collected = $result->deposit_collected;
 		$remarks_deposit = $result->remarks_deposit;
 		$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-		$extra_charges = $result->extra_charges;
+		$extra_charges = isset($result->extra_charges) ? $result->extra_charges : 0;
 		$previous_month_payment = eval('return '.$result->previous_month_payment.';');
 		$remarks = $result->remarks;
 ?>
@@ -1379,7 +1379,7 @@ function get_invoice_sheet($class_code = false)
                             <td><input type="checkbox" name="payment_status" value="<?php
 		echo $row->invoice_id; ?>"></td>
                             <td><?php
-		echo isset($row->student_id) ? $row->student_id : '-'; ?></td>
+		echo isset($row->nric) ? $row->nric .', '. $row->firstname . ' ' . $row->lastname : '-'; ?></td>
                             <td><?php
 		echo isset($row->invoice_no) ? $row->invoice_no : '-'; ?></td>
                             <td><?php
@@ -2054,7 +2054,7 @@ function send_cron_invoice()
             $class_code = $row->class_code;
             $emailto = [$row->email, $row->parent_email];
             $fees = $row->monthly_fees;
-            $extra_charges = $row->extra_charges;
+            $extra_charges = isset($row->extra_charges) ? $row->extra_charges : 0;
             $deposit = get_deposit_value_of_class_without_currency($row->class_id);
             $previous_month_balance = get_previous_month_balance($row->student_id, $row->class_id);
             $previous_month_payment = !empty($row->previous_month_payment) ? eval('return '.$row->previous_month_payment.';') : 0;
@@ -2092,8 +2092,8 @@ function send_cron_invoice()
             {
                 echo "restmonth".$row->student_id;echo "</br>";
                 $type = 'rest_month_invoice';
-                $invoice_amount = ($fees + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment);
-                $amount_excluding_material = ($fees + $extra_charges - $previous_month_balance - $previous_month_payment);
+                $invoice_amount = ($fees + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
+                $amount_excluding_material = ($fees + $extra_charges + $previous_month_balance - $previous_month_payment);
                 $lesson_fees = $fees;
 
                 $invoice_data = ['class_code' => $class_code, 'lesson_fee' => $lesson_fees, 'material_fees' => $book_charges, 'extra_charges' => $extra_charges, 'previous_month_payment' => $previous_month_payment, 'previous_month_balance' => $previous_month_balance, ];
@@ -2217,7 +2217,7 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$class_code = $result1->class_code;
 	$emailto = [$result1->email, $result1->parent_email];
 	$fees = $result1->monthly_fees;
-	$extra_charges = $result1->extra_charges;
+	$extra_charges = isset($result1->extra_charges) ? $result1->extra_charges : 0;
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$deposit = get_deposit_value_of_class_without_currency($class_id);
@@ -2289,9 +2289,9 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$subject = 'TSA - Invoice #' . get_invoice_no();
 	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
-	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment - $deposit);
+	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit);
 
-	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $previous_month_balance - $previous_month_payment - $deposit);
+	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit);
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees);
 	/*if ($previous_month_balance > 0)
 		{
@@ -2374,7 +2374,7 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$class_code = $result1->class_code;
 	$emailto = [$result1->email, $result1->parent_email];
 	$fees = $result1->monthly_fees;
-	$extra_charges = $result1->extra_charges;
+	$extra_charges = isset($result1->extra_charges) ? $result1->extra_charges : 0;
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$deposit = get_deposit_value_of_class_without_currency($class_id);
@@ -2446,8 +2446,8 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$subject = 'TSA - Invoice #' . get_invoice_no();
 	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
-	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment - $deposit);
-	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $previous_month_balance - $previous_month_payment - $deposit);
+	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit);
+	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit);
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees);
 	/*if ($previous_month_balance > 0)
 		{
@@ -2512,7 +2512,7 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$class_code = $result1->class_code;
 	$emailto = [$result1->email, $result1->parent_email];
 	$fees = $result1->monthly_fees;
-	$extra_charges = $result1->extra_charges;
+	$extra_charges = isset($result1->extra_charges) ? $result1->extra_charges : 0;
 	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
@@ -2582,8 +2582,8 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$subject = 'TSA - Invoice #' . get_invoice_no();
 	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
-	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges - $previous_month_balance - $previous_month_payment);
-	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges - $previous_month_balance - $previous_month_payment);
+	$invoice_amount = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
+	$amount_excluding_material = ((((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment);
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-count($X)) + count($G) + count($H)) / $frequency) * $fees);
 	/*if ($previous_month_balance > 0)
 		{
