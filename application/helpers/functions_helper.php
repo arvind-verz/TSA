@@ -2239,8 +2239,8 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$X1 = $G1 = [];
 	if($value_since_enrollment)
 	{
-		$X1 = $value_since_enrollment[0];
-		$G1 = $value_since_enrollment[1];
+		$X1 = $value_since_enrollment['X'];
+		$G1 = $value_since_enrollment['G'];
 	}
 	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
 	if ($query->num_rows() > 0)
@@ -2385,12 +2385,14 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$L = $M = $E = $X = $G = $H = [];
 	$value_since_enrollment = get_value_since_enrollment($student_id, $class_code);
 	$X1 = $G1 = [];
+	//die(print_r($value_since_enrollment));
 	if($value_since_enrollment)
 	{
-		$X1 = $value_since_enrollment[0];
-		$G1 = $value_since_enrollment[1];
+		$X1 = $value_since_enrollment['X'];
+		$G1 = $value_since_enrollment['G'];
 	}
 	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
+	//echo $ci->db->last_query();
 	if ($query->num_rows() > 0)
 		{
 		foreach($billing_data as $billing)
@@ -2403,8 +2405,11 @@ function send_final_settlement_invoice($student_id, $class_id)
 						foreach($query->result() as $row)
 							{
 							$status = json_decode($row->status);
-							if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+							//echo str_replace('/', '-', $dates[0]) .' | '. $row->attendance_date .' | '. str_replace('/', '-', $dates[1]).'<br/><br/>';
+							if (strtotime($row->attendance_date) >= strtotime(str_replace('/', '-', $dates[0])) && strtotime($row->attendance_date) <= strtotime(str_replace('/', '-', $dates[1])))
 								{
+									//echo "=======================";
+									//echo str_replace('/', '-', $dates[0]) .' | '. $row->attendance_date .' | '. str_replace('/', '-', $dates[1]).'<br/><br/>';
 								if ($status[0] == 1)
 									{
 									$L[] = $status[0];
@@ -2440,7 +2445,8 @@ function send_final_settlement_invoice($student_id, $class_id)
 					}
 			}
 		}
-    //echo 'Invoice have been generated.';
+	//echo 'Invoice have been generated.';
+	//die(print_r(count($L)));
 	$subject = 'TSA - Invoice #' . get_invoice_no();
 	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
 	$invoice_content = ['subject' => $subject, 'message' => $message, ];
@@ -2512,8 +2518,8 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$X1 = $G1 = [];
 	if($value_since_enrollment)
 	{
-		$X1 = $value_since_enrollment[0];
-		$G1 = $value_since_enrollment[1];
+		$X1 = $value_since_enrollment['X'];
+		$G1 = $value_since_enrollment['G'];
 	}
 	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
 	if ($query->num_rows() > 0)
