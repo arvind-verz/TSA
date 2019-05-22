@@ -91,6 +91,7 @@
                     //alert(data);
                     $("tbody.display_data").html(data);
                     $("table").dataTable({
+						'order': [2, 'asc'],
                         columnDefs: [
                           { targets: 'no-sort', orderable: false }
                         ]
