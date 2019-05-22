@@ -2511,7 +2511,7 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$emailto = [$result1->email, $result1->parent_email];
 	$fees = $result1->monthly_fees;
 	$extra_charges = isset($result1->extra_charges) ? $result1->extra_charges : 0;
-	$previous_month_balance = get_previous_month_balance($student_id, $class_id_id);
+	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
 	
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
@@ -2595,7 +2595,7 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees);
 
 	$invoice_data = ['class_code' => $class_code, 'lesson_fee' => $lesson_fees, 'material_fees' => $book_charges, 'extra_charges' => $extra_charges, 'previous_month_payment' => $previous_month_payment, 'previous_month_balance' => $previous_month_balance, 'returned_deposit'	=>	0];
-		$data = ['invoice_id' => $invoice_id, 'invoice_no' => get_invoice_no() , 'student_id' => $student_id, 'class_id' => $class_id_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data) , 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date, ];
+		$data = ['invoice_id' => $invoice_id, 'invoice_no' => get_invoice_no() , 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data) , 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date, ];
 
 	$query = $ci->db->insert(DB_INVOICE, $data);
 
