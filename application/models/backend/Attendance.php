@@ -164,40 +164,9 @@ class Attendance extends CI_Model
             $this->session->set_flashdata('error', $student_names . ' already exist in class ' . $class_code);
             return 'admin/students';
         }
-
         foreach($student_id as $id) {
+			//echo $id;
             send_class_transfer_invoice($id, $old_class_id, $class_id);
-
-            $data = [
-                'student_id'    =>  $id,
-                'class_id' =>   $class_id,
-                'status'    =>  3,
-                'created_at'    =>  $this->date,
-                'updated_at'    =>  $this->date,
-            ];
-            $data1 = [
-                'student_id'    =>  $id,
-                'class_id' =>   $class_id,
-                'updated_at'    =>  $this->date,
-            ];
-            $this->db->where('student_id', $id);
-            $this->db->where('class_id', $old_class_id);
-            $this->db->update('student_to_class', ['status' =>  5]);
-
-            $query = $this->db->get_where('student_to_class', ['class_id' => $class_id, 'student_id'    =>  $id, 'status'   =>  3]);
-            if($query->num_rows()>0) {
-                //return print_r($this->db->last_query());
-                $this->db->where('student_id', $id);
-                $this->db->where('class_id', $class_id);
-                $this->db->update('student_to_class', ['status' =>  3]);
-            }
-            else {
-                $this->db->insert('student_to_class', $data);
-            }
-
-            $this->db->where('student_id', $id);
-            $this->db->where('class_id', $old_class_id);
-            $this->db->update('student_enrollment', $data1);
         }
         $this->db->trans_complete();
 
