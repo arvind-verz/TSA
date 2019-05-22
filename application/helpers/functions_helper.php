@@ -2265,7 +2265,7 @@ function send_archive_invoice_extend($student_id, $class_id)
 						foreach($query->result() as $row)
 						{
 							$status = json_decode($row->status);
-							if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+							if (strtotime($row->attendance_date) >= strtotime(str_replace('/', '-', $dates[0])) && strtotime($row->attendance_date) <= strtotime(str_replace('/', '-', $dates[1])))
 							{
 								if ($status[0] == 1)
 									{
@@ -2485,6 +2485,7 @@ function send_final_settlement_invoice($student_id, $class_id)
 
 function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	{
+		
 	$ci = & get_instance();
 	$type = 'class_transfer_invoice';
 	$invoice_id = uniqid();
@@ -2499,7 +2500,7 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$ci->db->limit(1);
 	$query1 = $ci->db->get();
 	$result1 = $query1->row();
-	
+	//return $result1;
 	if (!$result1)
 		{
 		return false;
@@ -2510,15 +2511,16 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$emailto = [$result1->email, $result1->parent_email];
 	$fees = $result1->monthly_fees;
 	$extra_charges = isset($result1->extra_charges) ? $result1->extra_charges : 0;
-	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
+	$previous_month_balance = get_previous_month_balance($student_id, $class_id_id);
 	$previous_month_payment = !empty($result1->previous_month_payment) ? eval('return '.$result1->previous_month_payment.';') : 0;
+	
 	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 	$result5 = get_invoice_result5();
 	if (!$result5)
 		{
 		return false;
 		}
-		//print_r($result5);
+		
 	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5]);
 	$result = $query->row();
 	$billing_data = json_decode($result->billing);
@@ -2545,8 +2547,10 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 					foreach($query->result() as $row)
 						{
 						$status = json_decode($row->status);
-						if (strtotime($row->attendance_date) >= strtotime($dates[0]) && strtotime($row->attendance_date) <= strtotime($dates[1]))
+						if (strtotime($row->attendance_date) >= strtotime(str_replace('/', '-', $dates[0])) && strtotime($row->attendance_date) <= strtotime(str_replace('/', '-', $dates[1])))
 							{
+								
+						
 							if ($status[0] == 1)
 								{
 								$L[] = $status[0];
@@ -2591,7 +2595,7 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$lesson_fees = (((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees);
 
 	$invoice_data = ['class_code' => $class_code, 'lesson_fee' => $lesson_fees, 'material_fees' => $book_charges, 'extra_charges' => $extra_charges, 'previous_month_payment' => $previous_month_payment, 'previous_month_balance' => $previous_month_balance, 'returned_deposit'	=>	0];
-		$data = ['invoice_id' => $invoice_id, 'invoice_no' => get_invoice_no() , 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data) , 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date, ];
+		$data = ['invoice_id' => $invoice_id, 'invoice_no' => get_invoice_no() , 'student_id' => $student_id, 'class_id' => $class_id_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data) , 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date, ];
 
 	$query = $ci->db->insert(DB_INVOICE, $data);
 
@@ -2600,32 +2604,32 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 		'student_id'    =>  $student_id,
 		'class_id' =>   $class_id_id,
 		'status'    =>  3,
-		'created_at'    =>  $this->date,
-		'updated_at'    =>  $this->date,
+		'created_at'    =>  $date,
+		'updated_at'    =>  $date,
 	];
 	$data1 = [
 		'student_id'    =>  $student_id,
 		'class_id' =>   $class_id_id,
-		'updated_at'    =>  $this->date,
+		'updated_at'    =>  $date,
 	];
-	$this->db->where('student_id', $student_id);
-	$this->db->where('class_id', $class_id_id);
-	$this->db->update('student_to_class', ['status' =>  5]);
+	$ci->db->where('student_id', $student_id);
+	$ci->db->where('class_id', $class_id);
+	$ci->db->update('student_to_class', ['status' =>  5]);
 
-	$query = $this->db->get_where('student_to_class', ['class_id' => $class_id_id, 'student_id'    =>  $student_id, 'status'   =>  3]);
+	$query = $ci->db->get_where('student_to_class', ['class_id' => $class_id_id, 'student_id'    =>  $student_id, 'status'   =>  3]);
 	if($query->num_rows()>0) {
 		//return print_r($this->db->last_query());
-		$this->db->where('student_id', $student_id);
-		$this->db->where('class_id', $class_id_id);
-		$this->db->update('student_to_class', ['status' =>  3]);
+		$ci->db->where('student_id', $student_id);
+		$ci->db->where('class_id', $class_id_id);
+		$ci->db->update('student_to_class', ['status' =>  3]);
 	}
 	else {
-		$this->db->insert('student_to_class', $data);
+		$ci->db->insert('student_to_class', $data);
 	}
 
-	$this->db->where('student_id', $student_id);
-	$this->db->where('class_id', $class_id);
-	$this->db->update('student_enrollment', $data1);
+	$ci->db->where('student_id', $student_id);
+	$ci->db->where('class_id', $class_id);
+	$ci->db->update('student_enrollment', $data1);
 	/* END TRANSFER STUDENT */ 
 
 	if ($query)
