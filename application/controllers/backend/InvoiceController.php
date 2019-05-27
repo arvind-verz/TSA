@@ -42,5 +42,11 @@ class InvoiceController extends CI_Controller
     public function payment_status_update() {
         $result = $this->invoice->payment_status_update($_GET);
         print_r($result);
+	}
+	
+	public function invoice_remark()
+    {
+        $result = $this->invoice->invoice_remark($_GET);
+        print_r($result);
     }
 }
