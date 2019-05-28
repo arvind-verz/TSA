@@ -33,6 +33,7 @@ $route['students/student-classes-search'] = 'frontend/Cms/student_classes_search
 
 $route['admin/testing_cron_invoice'] = 'backend/CronInvoiceController/index';
 $route['admin/cronjobs_SMS'] = 'backend/CronReservationController/index';
+$route['admin/cronjobs_fee_reminder'] = 'backend/CronFeeReminderController/index';
 $route['admin']                   = 'backend/AccountsController/index';
 $route['admin/login']             = 'backend/AccountsController/index';
 $route['admin/login/process']     = 'backend/AccountsController/process';
@@ -189,6 +190,7 @@ $route['admin/order']                     = 'backend/OrderController/index';
 $route['admin/order/create']              = 'backend/OrderController/create';
 $route['admin/order/store']               = 'backend/OrderController/store';
 $route['admin/order/update_order_status'] = 'backend/OrderController/update_order_status';
+$route['admin/order/update_order_date'] = 'backend/OrderController/update_order_date';
 
 /* REPORTING */
 $route['admin/reporting']                     = 'backend/ReportingController/index';

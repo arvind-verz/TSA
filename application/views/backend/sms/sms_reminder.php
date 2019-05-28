@@ -26,11 +26,11 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label>Fee Reminder</label>
-                            <input class="form-control datepicker" type="text" name="fee_reminder" value="<?php echo isset($fee_reminder->fee_reminder) ? date('Y-m-d', strtotime($fee_reminder->fee_reminder)) : date('Y-m-d'); ?>" placeholder="" autocomplete="off">
+                            <input class="form-control datetimepicker1" type="text" name="fee_reminder" value="<?php echo isset($fee_reminder->fee_reminder) ? date('Y-m-d H:i', strtotime($fee_reminder->fee_reminder)) : date('Y-m-d H:i'); ?>" placeholder="" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label>Late Fee Reminder</label>
-                            <input class="form-control datepicker" type="text" name="late_fee_reminder" value="<?php echo isset($fee_reminder->late_fee_reminder) ? date('Y-m-d', strtotime($fee_reminder->late_fee_reminder)) : date('Y-m-d'); ?>" placeholder="" autocomplete="off">
+                            <input class="form-control datetimepicker1" type="text" name="late_fee_reminder" value="<?php echo isset($fee_reminder->late_fee_reminder) ? date('Y-m-d H:i', strtotime($fee_reminder->late_fee_reminder)) : date('Y-m-d H:i'); ?>" placeholder="" autocomplete="off">
                         </div>
                     </div>
                     <div class="box-footer">
@@ -44,6 +44,9 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+		$(function () {
+			$(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii', weekStart: 1, autoclose: true});
+		});
         $("button.sms_announcement").on("click", function(e) {
             e.preventDefault();
             var ref = $("button.sms_announcement");

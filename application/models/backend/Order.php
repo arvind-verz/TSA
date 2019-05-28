@@ -150,5 +150,22 @@ class Order extends CI_Model
         	$this->session->set_flashdata('success', 'Order ' . MSG_DELETED);
         	return redirect('admin/order/archived');
         }
-    }
+	}
+	
+	public function update_order_date()
+	{
+		$order_id = $_GET['order_id'];
+		$order_date = $_GET['order_date'];
+		//return $order_date;
+		$this->db->trans_start();
+		$this->db->where('order_id', $order_id);
+		$this->db->update(DB_ORDER.'s', array('order_date' => $order_date, 'updated_at' => $this->date));
+		$this->db->trans_complete();
+
+		if ($this->db->trans_status() === false) {
+			return "failed";
+		} else {
+			return "success";
+		}
+	}
 }
