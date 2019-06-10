@@ -2778,7 +2778,7 @@ function get_invoice_result5()
 function fee_reminder()
 	{
 	$ci = & get_instance();
-	$query = $ci->db->get_where('sms_reminder', ['fee_reminder' => date('Y-m-d') ]);
+	$query = $ci->db->get_where('sms_reminder', ['fee_reminder' => date('Y-m-d H:i') ]);
 	$result = $query->row();
 	$message = get_sms_template_content(2);
 	if ($result && $message)
@@ -2791,6 +2791,7 @@ function fee_reminder()
 		$ci->db->group_by('student.phone');
 		$query1 = $ci->db->get();
 		$result1 = $query1->result();
+		
 		if ($result1)
 			{
 			foreach($result1 as $row)
@@ -2821,7 +2822,7 @@ function fee_reminder()
 function late_fee_reminder()
 	{
 	$ci = & get_instance();
-	$query = $ci->db->get_where('sms_reminder', ['late_fee_reminder' => date('Y-m-d') ]);
+	$query = $ci->db->get_where('sms_reminder', ['late_fee_reminder' => date('Y-m-d H:i') ]);
 	$result = $query->row();
 	$message = get_sms_template_content(3);
 	if ($result && $message)
