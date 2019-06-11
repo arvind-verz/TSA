@@ -115,57 +115,68 @@
                                 <?php
                                 if(count($students)) {
                                 foreach($students as $student) {
+									if (current_url() == site_url('admin/students/archived')) {
+										$student_details = get_student_archive_details($student->student_id);
+									}
+									else
+									{
+										$student_details = $student;
+									}
                                     $previous_month_balance = 0;
-                                    if($student->status==3) {$previous_month_balance = get_previous_month_balance($student->student_id, $student->class_id);}
+                                    if(isset($student_details->status)) {if($student_details->status==3) {$previous_month_balance = get_previous_month_balance($student_details->student_id, $student_details->class_id);}}
                                 ?>
-                                <tr class="<?php if(has_enrollment_content($student->student_id, $student->class_id, 'depo_collected')=='No' || $previous_month_balance<0) {echo 'bg-danger';} ?>">
-                                    <?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
-                                    <td><input type="hidden" name="student_id_ref" value="<?php echo $student->student_id; ?>">
-                                <input type="hidden" name="class_id_ref" value="<?php echo $student->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id[]" value="<?php echo $student->student_id;?>"/></td>
-                                <?php } ?>
-                                <?php if (current_url() == site_url('admin/students/archived')) { ?>
-                                        <td>
-                                            <a href="<?php echo site_url('admin/students/delete-archive/' . $student->student_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
-                                        </td>
-                                    <?php } ?>
-                                    <td>
-                                        <div class="form-group">
+                                <tr class="<?php if(isset($student_details->student_id)) {if(has_enrollment_content($student_details->student_id, $student_details->class_id, 'depo_collected')=='No' || $previous_month_balance<0) {echo 'bg-danger';}} ?>">
+									<?php if (!(current_url() == site_url('admin/students/archived'))) { ?>
+										<td><input type="hidden" name="student_id_ref" value="<?php echo $student_details->student_id; ?>">
+										<input type="hidden" name="class_id_ref" value="<?php echo $student_details->class_id; ?>"><input type="checkbox" class="checkbox" name="student_id[]" value="<?php echo $student_details->student_id;?>"/></td>
+									<?php } ?>
+                                	<?php if (current_url() == site_url('admin/students/archived')) { ?>
+									<td>
+										<a href="<?php echo site_url('admin/students/moveto_active_list/' . $student->student_id) ?>" title="Move to active list"><i class="fa fa-reply btn btn-warning" aria-hidden="true"></i></a>
+										<a href="<?php echo site_url('admin/students/delete-archive/' . $student->student_id) ?>" title="Remove Data" onclick="return confirm('Are you sure, you will not be able to recover data?')"><i class="fa fa-trash btn btn-danger" aria-hidden="true"></i></a>
+									</td>
+									<?php } ?>
+									<td>
+									<div class="form-group">
                                             <select name="action" id="action" class="form-control select2 action" style="width: 200px;">
-                                                <option value="">-- Select One --</option>
-                                                <option name="Edit" value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student->student_id;?>">Edit</option>
-                                                <!-- <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student->student_id;?>">Archive</option> -->
-                                                <option name="final_settlement" value="<?php echo base_url();?>index.php/admin/students/final_settlement/<?php echo $student->student_id.'/'.$student->class_id;?>">Final Settlement</option>
-                                                <option value="view_all_details" name="view_all_details" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">View all details</option>
-                                                <?php if($student->status!='') { ?>
-                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student->student_id; ?>" data-class="<?php echo $student->class_id; ?>" data-status="<?php echo $student->status; ?>">Edit Class</option>
-                                                <?php } ?>
+												<option value="">-- Select One --</option>
+												<?php if(isset($student_details->student_id)) { ?>
+                                                <option name="Edit" value="<?php echo base_url();?>index.php/admin/students/edit/<?php echo $student_details->student_id;?>">Edit</option>
+                                                <!-- <option name="Archive" value="<?php echo base_url();?>index.php/admin/students/archive/<?php echo $student_details->student_id;?>">Archive</option> -->
+                                                <option name="final_settlement" value="<?php echo base_url();?>index.php/admin/students/final_settlement/<?php echo $student_details->student_id.'/'.$student_details->class_id;?>">Final Settlement</option>
+                                                <option value="view_all_details" name="view_all_details" data-id="<?php echo $student_details->student_id; ?>" data-class="<?php echo $student_details->class_id; ?>" data-status="<?php echo $student_details->status; ?>">View all details</option>
+                                                <?php if($student_details->status!='') { ?>
+                                                <option value="edit_class" name="edit_class" data-id="<?php echo $student_details->student_id; ?>" data-class="<?php echo $student_details->class_id; ?>" data-status="<?php echo $student_details->status; ?>">Edit Class</option>
+                                                <?php }} ?>
                                             </select>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <select name="material" class="form-control select2">
-                                            <?php echo get_material_associated($student->sid, $student->class_code); ?>
+									</td>
+									<td>
+									<select name="material" class="form-control select2">
+											<?php if(isset($student_details->student_id)) { ?>
+											<?php echo get_material_associated($student_details->sid, $student_details->class_code); ?>
+											<?php } ?>
                                         </select>
-                                    </td>
-                                    <td><?php echo $student->firstname . ' ' . $student->lastname;?></td>
-                                    <td><?php echo $student->email;?></td>
-                                    <td><?php echo isset($student->username) ? $student->username : '-' ?></td>
-                                    <td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
-                                    <td><?php echo get_class_code_by_class($student->class_id); ?></td>
-                                    <td><?php echo isset($student->gender) ? ($student->gender==0) ? 'Male' : 'Female' : '-' ?></td>
-                                    <td><?php echo isset($student->age) ? $student->age : '-' ?></td>
-                                    <td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>
-                                    <td><?php echo isset($student->parent_first_name ) ? $student->parent_first_name . ' ' . $student->parent_last_name  : '-' ?></td>
-                                    <td><?php echo isset($student->parent_email ) ? $student->parent_email  : '-' ?></td>
-                                    <td><?php echo isset($student->parents_phone ) ? $student->parents_phone  : '-' ?></td>
-                                    <td><?php $siblings = json_decode($student->siblings);
+									</td>
+									<td><?php echo $student->firstname . ' ' . $student->lastname;?></td>
+									<td><?php echo $student->email;?></td>
+									<td><?php echo isset($student->username) ? $student->username : '-' ?></td>
+									<td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
+									<td><?php if(isset($student_details->student_id)) { echo get_class_code_by_class($student_details->class_id); } ?></td>
+									<td><?php echo isset($student->gender) ? ($student->gender==0) ? 'Male' : 'Female' : '-' ?></td>
+									<td><?php echo isset($student->age) ? $student->age : '-' ?></td>
+									<td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>
+									<td><?php echo isset($student->parent_first_name ) ? $student->parent_first_name . ' ' . $student->parent_last_name  : '-' ?></td>
+									<td><?php echo isset($student->parent_email ) ? $student->parent_email  : '-' ?></td>
+									<td><?php echo isset($student->parents_phone ) ? $student->parents_phone  : '-' ?></td>
+									<td><?php $siblings = json_decode($student->siblings);
                                     if($siblings) {foreach($siblings as $sibling) {echo $sibling . ', ';}} ?></td>
-                                    <td><?php echo get_enrollment_status($student->status); ?></td>
-                                    <td><?php echo get_student_remark($student->student_id, $student->class_id); ?></td>
-                                    <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'extra_charges'); ?></td>
-                                    <td><?php echo has_enrollment_content($student->student_id, $student->class_id, 'depo_collected'); ?></td>
-                                    <?php if (current_url() == site_url('admin/students/archived')) { ?>
-                                        <td><?php echo get_student_archive_at($student->student_id); ?></td>
+									<td><?php if(isset($student_details->student_id)) { echo get_enrollment_status($student_details->status); } ?></td>
+									<td><?php if(isset($student_details->student_id)) {  echo get_student_remark($student_details->student_id, $student_details->class_id); } ?></td>
+									<td><?php if(isset($student_details->student_id)) { echo has_enrollment_content($student_details->student_id, $student_details->class_id, 'extra_charges'); } ?></td>
+									<td><?php if(isset($student_details->student_id)) { echo has_enrollment_content($student_details->student_id, $student_details->class_id, 'depo_collected'); } ?></td>
+									<?php if (current_url() == site_url('admin/students/archived')) { ?>
+                                        <td><?php if(isset($student_details->student_id)) { echo get_student_archive_at($student_details->student_id); } ?></td>
                                     <?php } ?>
                                 </tr>
                                 <?php
