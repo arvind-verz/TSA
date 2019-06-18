@@ -34,12 +34,14 @@
                             <div class="form-group pull-right">
                                 <select name="status" class="select2">
                                     <option value="">-- Select One --</option>
+									<option value="4">-</option>
                                     <option value="1">Paid</option>
                                     <option value="2">Partial</option>
                                     <option value="3">Overdue</option>
                                 </select>
                                 <select name="payment_method" class="select2">
                                     <option value="">-- Select One --</option>
+									<option value="4">-</option>
                                     <option value="1">Cash</option>
 									<option value="2">Cheque</option>
 									<option value="3">Paynow</option>
