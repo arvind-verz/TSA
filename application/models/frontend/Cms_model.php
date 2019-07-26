@@ -310,7 +310,7 @@ class Cms_model extends CI_Model
         $data       = array(
             'name'         => $fname,
             'email'        => $email_id,
-            'phone_no'     => $phone,
+            'phone_no'     => $phone_no,
             'enquiry_type' => $subject,
             'message'      => $message,
             'create_date'  => $create_date,
@@ -328,7 +328,8 @@ class Cms_model extends CI_Model
     	$fname = $_POST['fname'];
     	$email_id = $_POST['email_id'];
     	$phone_no = $_POST['phone'];
-    	$message = $_POST['message'];
+		$message = $_POST['message'];
+		$subject = "Quick Enquiry";
     	$create_date = date('Y-m-d H:i:s');
         $recaptcha = $_POST['g-recaptcha-response'];
         $query = $this->db->get_where('aauth_users', ['id' => 1]);
@@ -362,7 +363,7 @@ class Cms_model extends CI_Model
         $data       = array(
             'name'         => $fname,
             'email'        => $email_id,
-            'phone_no'     => $phone,
+            'phone_no'     => $phone_no,
             'message'      => $message,
             'create_date'  => $create_date,
         );

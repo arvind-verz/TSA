@@ -126,7 +126,13 @@ class OrderController extends CI_Controller
         $class_code = $_GET['class_code'];
         $status = $_GET['status'];
         print_r(get_order_student_content($order_id, $class_code, $status));
-    }
+	}
+	
+	public function update_order_date()
+	{
+		$result = $this->order->update_order_date($_GET);
+		return print_r($result);
+	}
 
     public function moveto_active_list($id)
 	{

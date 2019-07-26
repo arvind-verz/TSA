@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="box">
-                        <form id="attendance_create">
+					<?php echo form_open('admin/attendance/schedule_store'); ?>
                             <div class="box-body">
                                 <div class="col-lg-12">
                                     <div class="form-group">
@@ -60,11 +60,11 @@
             weekStart: 1,
         });
 
-        $("form#attendance_create").on("submit", function(e) {
-            e.preventDefault();
-            var class_code = $("select[name='class_code'] option:selected").attr("data-id");
-            var attendance_date = $("input[name='attendance_date']").val();
-            window.location.href = '<?php echo site_url('admin/attendance/create-edit/') ?>'+class_code+'/'+attendance_date;
-        });
+        // $("form#attendance_create").on("submit", function(e) {
+        //     e.preventDefault();
+        //     var class_code = $("select[name='class_code'] option:selected").attr("data-id");
+        //     var attendance_date = $("input[name='attendance_date']").val();
+        //     window.location.href = '<?php echo site_url('admin/attendance/create-edit/') ?>'+class_code+'/'+attendance_date;
+        // });
     });
 </script>

@@ -34,16 +34,17 @@
                             <div class="form-group pull-right">
                                 <select name="status" class="select2">
                                     <option value="">-- Select One --</option>
-                                    <option value="1">Cheque Error</option>
-                                    <option value="2">Pending Cheque Payment</option>
-                                    <option value="3">Paid (Cheque)</option>
-                                    <option value="4">Paid (Cash)</option>
-                                    <option value="5">Overdue</option>
+									<option value="4">-</option>
+                                    <option value="1">Paid</option>
+                                    <option value="2">Partial</option>
+                                    <option value="3">Overdue</option>
                                 </select>
                                 <select name="payment_method" class="select2">
                                     <option value="">-- Select One --</option>
+									<option value="4">-</option>
                                     <option value="1">Cash</option>
-                                    <option value="2">Cheque</option>
+									<option value="2">Cheque</option>
+									<option value="3">Paynow</option>
                                 </select>
                                 <button type="button" class="btn btn-info payment_status">Submit</button>
                             </div>
@@ -58,7 +59,8 @@
                                         <th>Invoice Date</th>
                                         <th>View/Download</th>
                                         <th>Status</th>
-                                        <th>Method of Payment</th>
+										<th>Method of Payment</th>
+										<th>Remark</th>
                                     </tr>
                                 </thead>
                                 <tbody class="display_data">
@@ -72,6 +74,7 @@
     </section>
 </div>
 <script type="text/javascript">
+$(document).ready(function() {
     $("body").on("change", "select[name='class_code']", function() {
         var class_code = $("select[name='class_code']").val();
         get_payment_status_sheet(class_code);
@@ -91,6 +94,7 @@
                     //alert(data);
                     $("tbody.display_data").html(data);
                     $("table").dataTable({
+						'order': [2, 'asc'],
                         columnDefs: [
                           { targets: 'no-sort', orderable: false }
                         ]
@@ -138,4 +142,37 @@
                 get_payment_status_sheet(class_code);
         })
     }
+
+	$("body").on("keyup", "textarea[name='remark']", function() {
+		$(this).parent("td").find("button").removeClass("hide");
+	});
+
+	$("body").on("click", "button.save_remark", function() {
+		var ref = $(this);
+		var id = ref.parent("td").find("input[name='id']").val();
+		var remark = ref.parent("td").find("textarea[name='remark']").val();
+		if(id)
+		{
+			$.ajax({
+                type: 'GET',
+                url: '<?php echo site_url('admin/invoice/invoice_remark'); ?>',
+                data: 'remark=' + remark + '&id=' + id,
+                async: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+					if(data.trim()=='success')
+					{
+						ref.parent("td").find("button").addClass("hide");
+					}
+                }
+            });
+		}
+		else
+		{
+			alert("Error! Something went wrong.");
+		}
+	});
+
+});
 </script>

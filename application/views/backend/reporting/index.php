@@ -18,13 +18,13 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Date From</label>
-                                    <input type="text" name="date_from" class="form-control datepicker" value="<?php echo date('d-m-Y'); ?>">
+                                    <input type="text" name="date_from" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Date To</label>
-                                    <input type="text" name="date_to" class="form-control datepicker" value="<?php echo date('d-m-Y'); ?>">
+                                    <input type="text" name="date_to" class="form-control datepicker" value="<?php echo date('Y-m-d'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
 
         $('.datepicker').datepicker({
 			autoclose: true,
-			format: 'dd-mm-yyyy',
+			format: 'yyyy-mm-dd',
 			weekStart: 1
 		})
         $("table").dataTable({

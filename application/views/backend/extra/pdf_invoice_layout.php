@@ -184,7 +184,7 @@ $item_details = json_decode($invoice_data->invoice_data);
             <td></td>
 
             <td>
-               Total Paid: <?php echo '$'.$invoice_data->invoice_amount; ?>
+               Total Paid: <?php echo '$'.number_format($invoice_data->invoice_amount, 2); ?>
             </td>
         </tr>
     </table>

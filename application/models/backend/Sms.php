@@ -73,7 +73,8 @@ class Sms extends CI_Model
 
         $data = [
             'fee_reminder'  =>  $fee_reminder,
-            'late_fee_reminder' =>  $late_fee_reminder,
+			'late_fee_reminder' =>  $late_fee_reminder,
+			'updated_at'	=>	$this->date,
         ];
 
         $query = $this->db->get(DB_SMS_REMINDER);

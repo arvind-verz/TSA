@@ -11,10 +11,8 @@ class CronReservationController extends CI_Controller
 
     public function index()
     {
-        //HOURLY
-        send_student_reservation_sms();
-        send_student_confirmation_sms();
-        fee_reminder();
-        late_fee_reminder();
+		//HOURLY
+		send_student_reservation_sms();
+		send_student_confirmation_sms();
     }
 }

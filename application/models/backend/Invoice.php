@@ -49,5 +49,28 @@ class Invoice extends CI_Model
             $this->session->set_flashdata('success', INVOICE . ' ' . MSG_CREATED);
             return site_url('admin/invoice');
         }
-    }
+	}
+	
+	public function invoice_remark()
+	{
+		$id         = isset($_GET['id']) ? $_GET['id'] : '';
+		$remark = isset($_GET['remark']) ? $_GET['remark'] : '';
+		if($id)
+		{
+			$this->db->trans_start();
+			$this->db->where('id', $id);
+			$this->db->update(DB_INVOICE, ['remark'	=>	$remark]);
+			$this->db->trans_complete();
+			if ($this->db->trans_status() === false) {
+				//$this->session->set_flashdata('error', MSG_ERROR);
+				return "error";
+			} else {
+				//$this->session->set_flashdata('success',  'Remark has been saved. ');
+				return "success";
+			}
+		}
+		
+		//$this->session->set_flashdata('error', MSG_ERROR);
+		return "error";
+	}
 }

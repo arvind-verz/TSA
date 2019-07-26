@@ -78,11 +78,11 @@
                             </select>
                         </div>
                         <div class="col-lg-5">
-                            <label for="">Parent Name</label>
+                            <label for="">Parent First Name</label>
                             <input type="text" name="parent_first_name" class="form-control" value="<?php echo isset($student->parent_first_name) ? $student->parent_first_name : '' ?>">
                         </div>
                         <div class="col-lg-5">
-                            <label for="">Parent Name</label>
+                            <label for="">Parent Last Name</label>
                             <input type="text" name="parent_last_name" class="form-control" value="<?php echo isset($student->parent_last_name) ? $student->parent_last_name : '' ?>">
                         </div>
                 </div>

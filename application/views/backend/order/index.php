@@ -50,6 +50,9 @@
                                     <th>
                                         <?php echo ORDER ?> Date
                                     </th>
+									<th>
+                                        Book Title
+                                    </th>
                                     <th>
                                         <?php echo CLASSES ?> Code
                                     </th>
@@ -89,8 +92,9 @@
                                         <?php echo isset($order->order_id) ? $order->order_id : '-' ?>
                                     </td>
                                     <td>
-                                        <?php echo isset($order->order_date) ? date('d-m-Y H:i A', strtotime($order->order_date)) : '-' ?>
+										<input type="text" class="form-control pull-right datetimepicker1" name="order_date" value="<?php echo date("Y-m-d H:i", strtotime($order->order_date)); ?>" autocomplete="off">
                                     </td>
+									<td><?php echo isset($order->book_id) ? get_book($order->book_id)->book_name : '-'; ?></td>
                                     <td>
                                         <?php echo isset($order->class_code) ? $order->class_code : '-' ?>
                                     </td>
@@ -123,6 +127,11 @@
     </section>
 </div>
 <script type="text/javascript">
+
+	$(function () {
+		$(".datetimepicker1").datetimepicker({format: 'yyyy-mm-dd hh:ii', weekStart: 1, autoclose: true});
+	});
+
     $(document).ready(function() {
         function is_checkbox_checked(count) {
             $("button[type='submit']").find("span").text(count);
@@ -196,6 +205,38 @@
                 $(ref).parents("tr").find('.selectpicker').multiselect('refresh');
             }
         });
+
+		$(".datetimepicker1").datetimepicker().on('changeDate', function(ev){
+			var order_date = $(this).val();
+			var order_id = $(this).parents("tr").find("input[name='order_id']").val();
+			//alert(order_date);
+			if(ev.date)
+			{
+				$.ajax({
+					type: 'GET',
+					url: '<?php echo site_url('admin/order/update_order_date'); ?>',
+					data: 'order_date=' + order_date + '&order_id=' + order_id,
+					async: false,
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						//alert(data);
+						if(data.trim()=='success')
+						{
+							alert("Success! Order Date has been updated.");
+						}
+						else
+						{
+							alert("Failed! Try again.");
+						}
+					}
+				});
+			}
+			else
+			{
+				alert("Error! Something went wrong.");
+			}
+		})
     });
 
 </script>
