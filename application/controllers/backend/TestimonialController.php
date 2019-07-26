@@ -95,6 +95,7 @@ class TestimonialController extends CI_Controller {
 							'title' => $post_data['title'],
 							'image_name' => $post_data['testimonial'],
 							'sort_order' => $post_data['sort_order'],
+							'featured' => ($post_data['featured']==1)?$post_data['featured']:0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
 							'content' => $post_data['content']
@@ -180,6 +181,7 @@ class TestimonialController extends CI_Controller {
 							'title' => $post_data['title'],
 							'image_name' => isset($post_data['testimonial']) ? $post_data['testimonial'] : $post_data['testimonial_exists'],
 							'sort_order' => $post_data['sort_order'],
+							'featured' => ($post_data['featured']==1)?$post_data['featured']:0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
 							'content' => $post_data['content']
