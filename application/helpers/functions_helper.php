@@ -2929,12 +2929,12 @@ function send_mail_contact($email_from, $emailto, $subject, $message)
 	$ci->email->to($emailto);
 	$ci->email->subject($subject);
 	$ci->email->message($message);
-	/*if ($ci->email->send())
+	if ($ci->email->send())
 		{
 		return true;
 		}
 
-	return false;*/
+	return false;
 	return true;
 	}
 

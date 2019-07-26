@@ -101,6 +101,6 @@ define('MSG_TRANSFERRED', ' has been transferred successfully.');
 define('MSG_UPD_FAILED', ' update has been failed.');
 
 
-define('MAIN_SITE_PATH', 'http://localhost/TSA/');
+define('MAIN_SITE_PATH', 'https://www.thescienceacademy.sg/');
 define('MAIN_SITE_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload');
 define('MAIN_SITE_AB_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload/');;

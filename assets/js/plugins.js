@@ -513,6 +513,7 @@ function backgroundResize() {
 }
 $(window).resize(backgroundResize);
 $(window).focus(backgroundResize);
+$(window).load(backgroundResize);
 backgroundResize();
 
 /* set parallax background-position */
@@ -551,6 +552,7 @@ if (!$("html").hasClass("touch")) {
     $(window).resize(parallaxPosition);
     //$(window).focus(parallaxPosition);
     $(window).scroll(parallaxPosition);
+$(window).load(parallaxPosition);
     parallaxPosition();
 }
 

@@ -93,7 +93,7 @@
 								<div class="client-testi">
 									<p><?=substr($test['content'],0,100)?></p>
 									<p class="size18 txt-dark"><strong><?=$test['title']?></strong></p>
-									<a href="<?php echo site_url("testimonial");?>" class="button btn-sm">Read More</a> </div>
+									<a href="<?php echo site_url("testimonials");?>" class="button btn-sm">Read More</a> </div>
 							</div>
 						</div><!-- 
 						                        <div class="home-testimonial-slide">
