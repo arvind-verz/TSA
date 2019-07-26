@@ -45,6 +45,19 @@ function get_all_months()
 	return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	}
 
+function get_all_years()
+{
+	$array_list = [];
+	$start_year = 1990;
+	$current_year = date('Y');
+
+	for($i=$start_year;$i<=$current_year;$i++)
+	{
+		$array_list[] = $i;
+	}
+	return array_reverse($array_list);
+}
+
 function get_tutor_of_class($class_id)
 	{
 	$ci = & get_instance();
@@ -1997,7 +2010,7 @@ function get_student_details_by_sms_history($recipient)
 		$result = $query->row();
 		if ($result)
 			{
-			return ['student_name' => $result->firstname . ' ' . $result->lastname, 'student_id' => $result->student_id, ];
+			return ['student_name' => $result->firstname . ' ' . $result->lastname, 'student_nric' => $result->nric, ];
 			}
 		}
 
@@ -2931,12 +2944,12 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
 	$ci->email->message($message);
 	if ($ci->email->send())
 		{
-		   //send_autoreply_email($email_from, $fname); 
-		 return $ci->email->print_debugger();
+		   send_autoreply_email($email_from, $fname); 
+		 //return $ci->email->print_debugger();
 		return true;
 		}
 
-	return $ci->email->print_debugger();
+	//return $ci->email->print_debugger();
 	//return true;
 	return false;
 	}
@@ -3001,11 +3014,11 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
     	$ci->email->message($message);
     	if ($ci->email->send())
     		{
-    		    return $ci->email->print_debugger();
+    		    //return $ci->email->print_debugger();
     		    return true;
     		}
     
-    return $ci->email->print_debugger();
+    //return $ci->email->print_debugger();
     	return false;
     	//return true;
 	}
@@ -3580,4 +3593,28 @@ function send_student_confirmation_sms()
 				}
 			}
 		}
+	}
+
+	function getContactEnquiry()
+	{
+		$ci = & get_instance();
+		$query = $ci->db->get('contact');
+		$result = $query->result();
+		if($result)
+		{
+			return $result;
+		}
+		return false;
+	}
+
+	function getQuickEnquiry()
+	{
+		$ci = & get_instance();
+		$query = $ci->db->get('quick_enquiry');
+		$result = $query->result();
+		if($result)
+		{
+			return $result;
+		}
+		return false;
 	}

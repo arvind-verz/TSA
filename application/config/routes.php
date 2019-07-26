@@ -262,6 +262,10 @@ $route['admin/manage-footer/update']      = "backend/CmsController/update_footer
 
 /* Tutor Admin */
 
+/* ADMIN ENQUIRY */
+$route['admin/contact-enquiry']      = "backend/EnquiryController/contact_enquiry";
+$route['admin/quick-enquiry']      = "backend/EnquiryController/quick_enquiry";
+
 /* FRONTEND */
 $route['contact-us/submit']           = "frontend/cms/contact_us_form";
 $route['quick-enquiry/submit']           = "frontend/cms/quick_enquiry_form";
