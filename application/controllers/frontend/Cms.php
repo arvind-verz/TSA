@@ -237,6 +237,8 @@ class Cms extends CI_Controller
 
     public function contact_us()
     {
+        //print_r(send_mail_contact('arvind.verz@gmail.com', 'admin@thescienceacademy.sg', 'Test', 'Test.'));die();
+        //print_r(send_autoreply_email('arvind.verz@gmail.com', 'Arvind Purohit'));die();
         $data_msg = array();
         $url      = "contact-us";
         $data_msg['page'] = $page = $this->Cms_model->get_page($url);

@@ -88,7 +88,7 @@ class Tutors extends CI_Model
 		$firstname = isset($_POST['firstname']) ? $_POST['firstname'] : '';
 		$lastname = isset($_POST['lastname']) ? $_POST['lastname'] : '';
 		$perm_id = isset($_POST['tutor_permission']) ? $_POST['tutor_permission'] : '';
-		$login_link = site_url('admin/login');
+		$login_link = site_url('safelogin/login');
 		$this->db->trans_start();
 		$result = $this->aauth->create_user($email, $password, false, 3);
 		if(!$result) {

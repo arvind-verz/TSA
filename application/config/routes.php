@@ -34,9 +34,15 @@ $route['students/student-classes-search'] = 'frontend/Cms/student_classes_search
 $route['admin/testing_cron_invoice'] = 'backend/CronInvoiceController/index';
 $route['admin/cronjobs_SMS'] = 'backend/CronReservationController/index';
 $route['admin/cronjobs_fee_reminder'] = 'backend/CronFeeReminderController/index';
-$route['admin']                   = 'backend/AccountsController/index';
-$route['admin/login']             = 'backend/AccountsController/index';
-$route['admin/login/process']     = 'backend/AccountsController/process';
+$route['safelogin']                   = 'backend/AccountsController/index';
+$route['safelogin/login']             = 'backend/AccountsController/index';
+$route['safelogin/login/process']     = 'backend/AccountsController/process';
+
+$route['safelogin/login/forget_password']             = 'backend/AccountsController/forget_password';
+$route['safelogin/login/reset_password']             = 'backend/AccountsController/reset_password';
+$route['safelogin/login/forget_process']     = 'backend/AccountsController/forget_process';
+$route['safelogin/login/reset_process']     = 'backend/AccountsController/reset_process';
+
 $route['admin/logout']            = 'backend/AccountsController/logout';
 
 /* ROLES AND PERMISSION */

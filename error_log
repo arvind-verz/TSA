@@ -4,3 +4,99 @@
 [01-Nov-2018 11:01:01 Asia/Singapore] PHP Warning:  Unknown: failed to open stream: Cannot allocate memory in Unknown on line 0
 [01-Nov-2018 11:02:02 Asia/Singapore] PHP Warning:  Unknown: failed to open stream: Cannot allocate memory in Unknown on line 0
 [01-Nov-2018 11:03:02 Asia/Singapore] PHP Warning:  Unknown: failed to open stream: Cannot allocate memory in Unknown on line 0
+[10-Jul-2019 10:29:40 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:29:43 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:29 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:31 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:31 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:32 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:33 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:33 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:34 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:35 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:36 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:36 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:37 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:47 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:48 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:48 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:48 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:49 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:49 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:50 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:50 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:50 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:51 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15
+[10-Jul-2019 10:30:51 Asia/Singapore] PHP Fatal error:  Uncaught Error: Class 'Mail' not found in /home/thescien/public_html/mailtest.php:15
+Stack trace:
+#0 {main}
+  thrown in /home/thescien/public_html/mailtest.php on line 15

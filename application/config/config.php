@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Singapore');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://www.thescienceacademy.sg/';
+$config['base_url'] = 'http://localhost/TSA/';
 
 /*
 |--------------------------------------------------------------------------
