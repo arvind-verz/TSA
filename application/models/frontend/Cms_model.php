@@ -278,7 +278,7 @@ class Cms_model extends CI_Model
         $recaptcha = $_POST['g-recaptcha-response'];
         $query = $this->db->get_where('aauth_users', ['id' => 1]);
         $result   = $query->row();
-        $to_email = $result->email;
+        $to_email = 'contactus@thesciacdm.com';
         $message_template = $this->getEnquiryMessage($fname, $email_id, $phone_no, $subject, $message);
 
         if(empty($recaptcha))
@@ -313,7 +313,7 @@ class Cms_model extends CI_Model
         $recaptcha = $_POST['g-recaptcha-response'];
         $query = $this->db->get_where('aauth_users', ['id' => 1]);
         $result   = $query->row();
-        $to_email = $result->email;
+        $to_email = 'contactus@thesciacdm.com';
 
         $message_template = $this->getEnquiryMessage($fname, $email_id, $phone_no, $message);
 

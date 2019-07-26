@@ -2944,12 +2944,12 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
 	$ci->email->message($message);
 	if ($ci->email->send())
 		{
-		   //send_autoreply_email($email_from, $fname); 
-		 return $ci->email->print_debugger();
+		   send_autoreply_email($email_from, $fname); 
+		 //return $ci->email->print_debugger();
 		return true;
 		}
 
-	return $ci->email->print_debugger();
+	//return $ci->email->print_debugger();
 	//return true;
 	return false;
 	}
@@ -3014,11 +3014,11 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
     	$ci->email->message($message);
     	if ($ci->email->send())
     		{
-    		    return $ci->email->print_debugger();
+    		    //return $ci->email->print_debugger();
     		    return true;
     		}
     
-    return $ci->email->print_debugger();
+    //return $ci->email->print_debugger();
     	return false;
     	//return true;
 	}
