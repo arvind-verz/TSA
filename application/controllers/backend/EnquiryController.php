@@ -13,7 +13,7 @@ class EnquiryController extends CI_Controller {
 	
 	public function contact_enquiry()
 	{
-		//$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CONTACT_ENQUIRY', 'views');
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CONTACT_ENQUIRY', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(CONTACT_ENQUIRY, 'admin/contact-enquiry');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
@@ -30,7 +30,7 @@ class EnquiryController extends CI_Controller {
 
 	public function quick_enquiry()
 	{
-		//$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'CONTACT_ENQUIRY', 'views');
+		$this->accounts->is_permission_allowed($this->result['user_id'], $this->result['perm_id'], 'QUICK_ENQUIRY', 'views');
         $this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
         $this->breadcrumbs->push(QUICK_ENQUIRY, 'admin/quick-enquiry');
         $data['breadcrumbs'] = $this->breadcrumbs->show();
