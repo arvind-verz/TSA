@@ -50,6 +50,9 @@ define('SMS_TEMPLATE', 'SMS Template');
 define('SMS_HISTORY', 'SMS History');
 define('SMS_REMINDER', 'SMS Reminder & Announcement');
 define('BILLING', 'Billing');
+define('ENQUIRY', 'Enquiry');
+define('CONTACT_ENQUIRY', 'Contact Enquiry');
+define('QUICK_ENQUIRY', 'Quick Enquiry');
 
 define('PERMISSION', 'Permission');
 define('TESTIMONIAL', 'Testimonial');

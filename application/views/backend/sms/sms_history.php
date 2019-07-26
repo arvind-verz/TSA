@@ -24,7 +24,7 @@
                                         <?php echo STUDENT ?> Name
                                     </th>
                                     <th>
-                                        <?php echo STUDENT ?> ID
+                                        <?php echo STUDENT ?> NRIC
                                     </th>
                                     <th>
                                         SMS Sent Date
@@ -47,13 +47,13 @@
                                 <?php
                                 if($sms_history) {
                                 foreach($sms_history as $history) {
-                                $student_details = get_student_details_by_sms_history(ltrim($history->recipient, '65'));
+								$student_details = get_student_details_by_sms_history(ltrim($history->recipient, '65'));
                                 $pre_condition_template = get_pre_condition_template($history->template_id);
                                 ?>
                                 <tr>
                                     <td><?php echo isset($history->class_code) ? $history->class_code : '-'; ?></td>
                                     <td><?php echo isset($student_details['student_name']) ? $student_details['student_name'] : '-'; ?></td>
-                                    <td><?php echo isset($student_details['student_id']) ? $student_details['student_id'] : '-'; ?></td>
+                                    <td><?php echo isset($student_details['student_nric']) ? $student_details['student_nric'] : '-'; ?></td>
                                     <td><?php echo isset($history->created_at) ? date('d M, Y H:i A', strtotime($history->created_at)) : '-'; ?></td>
                                     <td><?php echo isset($pre_condition_template['pre_condition']) ? $pre_condition_template['pre_condition'] : '-'; ?></td>
                                     <td><?php echo isset($pre_condition_template['template_name']) ? $pre_condition_template['template_name'] : '-'; ?></td>
