@@ -7,7 +7,7 @@ class Accounts extends CI_Model
     {
         if($this->aauth->is_loggedin()==false)
         {
-            redirect('admin/login');
+            redirect('safelogin/login');
         }
     }
 
@@ -17,7 +17,7 @@ class Accounts extends CI_Model
     	$password = isset($_POST['password']) ? $_POST['password'] : '';
     	$remember_me = isset($_POST['remember_me']) ? $_POST['remember_me'] : 0;
     	if($this->aauth->login($email, $password)==false) {
-            redirect('admin/login');
+            redirect('safelogin/login');
         }
         if(empty($remember_me)) {
             if($this->aauth->login($email, $password)) {
@@ -33,7 +33,7 @@ class Accounts extends CI_Model
 
     public function logout() {
         $this->aauth->logout();
-        redirect('admin/login');
+        redirect('safelogin/login');
     }
 
     public function permission_store() {
@@ -202,4 +202,102 @@ class Accounts extends CI_Model
         $this->session->set_flashdata('success', PERMISSION . ' ' . MSG_DELETED);
         return redirect('admin/users');
     }
+    
+    public function check_email_exist($post)
+   {
+	        $sql = $this->db->get_where('aauth_users', ['email'    =>  $post['email']]);
+
+            $item = $sql->row();
+			
+			 $to_email = $post['email'];
+			 
+		
+			//count($result);die;
+            if($sql->num_rows()>0)   
+			{
+				
+				$query = $this->db->get_where('aauth_users', ['id' => 1]);
+
+       		    $result   = $query->row();
+		
+                $admin_email = $result->email;
+				//echo $message;die;
+				$subject="Reset Password: The Science Academy";
+		$message = '<table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; margin: 0; padding: 0; width: 100%;" bgcolor="#F2F4F6">
+      <tr>
+        <td align="center" style="box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; word-break: break-word;">
+          <table class="email-content" width="100%" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; margin: 0; padding: 0; width: 100%;">
+           
+            <tr>
+              <td class="email-body" width="100%" cellpadding="0" cellspacing="0" style="-premailer-cellpadding: 0; -premailer-cellspacing: 0; border-bottom-color: #EDEFF2; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: #EDEFF2; border-top-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; margin: 0; padding: 0; width: 100%; word-break: break-word;" bgcolor="#FFFFFF">
+                <table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; margin: 0 auto; padding: 0; width: 570px;" bgcolor="#FFFFFF">
+                  
+                  <tr>
+                    <td class="content-cell" style="box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; padding: 35px; word-break: break-word;">
+                      <h1 style="box-sizing: border-box; color: #2F3133; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 19px; font-weight: bold; margin-top: 0;" align="left">Dear '.$item->username .'!</h1>
+                      <p style="box-sizing: border-box; color: #74787E; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;" align="left">Please click <a href="'.base_url().'safelogin/login/reset_password?email='.base64_encode($post['email']).'">here</a> to reset your password.</p>
+                      <p style="box-sizing: border-box; color: #74787E; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;" align="left">Thanks,
+                        <br /> The Science Academy Pte Ltd </p>
+                      
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; word-break: break-word;">
+                <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; margin: 0 auto; padding: 0; text-align: center; width: 570px;">
+                  <tr>
+                    <td class="content-cell" align="center" style="box-sizing: border-box; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; padding: 35px; word-break: break-word;">
+                      <p class="sub align-center" style="box-sizing: border-box; color: #AEAEAE; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 12px; line-height: 1.5em; margin-top: 0;" align="center">Copyright &copy; <script>// <![CDATA[
+document.write( new Date().getFullYear() );
+// ]]></script>2019 The Science Academy Pte Ltd <br> All rights reserved.</div></p>
+                      
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>';
+				 $res=send_mail_to_user($admin_email, $to_email, $subject, $message);
+				
+				if($res==true)
+				{
+				$this->session->set_flashdata('success',PASSWORD_RESET_EMAIL);
+				return redirect('safelogin/login/forget_password');	
+				}
+				else
+				{
+				$this->session->set_flashdata('error',MSG_ERROR);
+				return redirect('safelogin/login/forget_password');		
+				}
+			   }
+			    else
+				{
+				$this->session->set_flashdata('error',MSG_EMAIL_NOT_EXIST);
+				return redirect('safelogin/login/forget_password');		
+				}
+   }
+	public function update_user_password($email,$new_password)
+	{
+		//echo $new_password;die;
+		$query = $this->db->get_where('aauth_users', ['email'    =>  $email]);
+        $result = $query->row();
+		  $user_id=$result->id;
+		  //echo $user_id.$new_password;die;
+		 $res=$this->aauth->update_user($user_id, false, $new_password, false);
+		 if($res==true)
+		 {
+		 $this->session->set_flashdata('success', PASSWORD.' ' . MSG_UPDATED);
+		 return redirect('safelogin/login');
+		 }
+		 else
+		 {
+		 $this->session->set_flashdata('error',MSG_ERROR );
+		 return redirect('safelogin/login');
+		 }
+	}
 }

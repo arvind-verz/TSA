@@ -20,6 +20,38 @@ class AccountsController extends CI_Controller
         $this->load->view('backend/accounts/login');
         $this->load->view('backend/include/footer');
 	}
+	
+	public function forget_password() {
+
+        $data['title']       = $this->title;
+
+        $data['page_title']  = FORGOT_PASSWORD;
+
+
+
+        $this->load->view('backend/include/header_login', $data);
+
+        $this->load->view('backend/accounts/forget_password');
+
+        $this->load->view('backend/include/footer');
+
+	}
+	
+	public function reset_password() {
+
+        $data['title']       = $this->title;
+
+        $data['page_title']  = RESET_PASSWORD;
+
+
+
+        $this->load->view('backend/include/header_login', $data);
+
+        $this->load->view('backend/accounts/reset_password');
+
+        $this->load->view('backend/include/footer');
+
+	}
 
 	public function process() {
         $data['title']       = $this->title;
@@ -56,6 +88,134 @@ class AccountsController extends CI_Controller
                 $this->load->view('backend/include/footer');
             }
         }
+	}
+	
+	public function forget_process() {
+
+        $data['title']       = $this->title;
+
+        $data['page_title']  = FORGOT_PASSWORD;
+
+
+
+        $config = [
+
+        	[
+
+        		'field'	=>	'email',
+
+        		'label'	=>	'Email',
+
+        		'rules'	=>	'trim|required|valid_email',
+
+        	]
+
+        ];
+		
+		
+
+
+        $this->form_validation->set_rules($config);
+
+
+		
+        
+
+        if ($this->form_validation->run() == FALSE)
+
+        {
+
+        	
+			$this->load->view('backend/include/header_login', $data);
+
+        	$this->load->view('backend/accounts/forget_password');
+
+        	$this->load->view('backend/include/footer');
+
+        }
+
+        else
+
+        {
+
+        	$result = $this->accounts->check_email_exist($_POST);
+
+
+        }
+
+	}
+	
+	public function reset_process() {
+
+        $data['title']       = $this->title;
+
+        $data['page_title']  = RESET_PASSWORD;
+
+		$data['email']=$email=$_REQUEST['email'];	//print_r($_POST);die;
+		$new_password = isset($_REQUEST['password']) ? $_REQUEST['password'] : '';
+        $config = [
+
+        	[
+
+        		'field'	=>	'password',
+
+        		'label'	=>	'Password',
+
+        		'rules'	=>	'required|min_length[6]',
+
+        	],
+			[
+
+        		'field'	=>	'conf_password',
+
+        		'label'	=>	'Confirm Password',
+
+        		'rules'	=>	'required|matches[password]',
+
+        	]
+
+        ];
+		
+		
+
+
+        $this->form_validation->set_rules($config);
+
+
+        
+
+        if ($this->form_validation->run() == FALSE)
+
+        {
+
+        	 $this->load->view('backend/include/header_login', $data);
+
+                $this->load->view('backend/accounts/reset_password');
+
+                $this->load->view('backend/include/footer');
+               
+                //redirect(base_url()."admin/login/reset_password?email=".$email);
+
+        }
+
+        else
+
+        {
+
+        	$result = $this->accounts->update_user_password($email,$new_password);
+
+            if($result==false) {
+
+                $this->load->view('backend/include/header_login', $data);
+
+                $this->load->view('backend/accounts/login');
+
+                $this->load->view('backend/include/footer');
+
+            }
+
+        }
+
 	}
 
     public function logout() {

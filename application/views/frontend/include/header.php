@@ -14,8 +14,8 @@
 
 	<meta name="dcterms.rightsHolder" content="thescienceacademy.sg – The Science Academy" />
 
-	<link rel="shortcut icon" href="http://thescienceacademy.sg/favicon.ico" />
-	<link rel="icon" type="image/gif" href="http://thescienceacademy.sg/animated_favicon1.gif" />
+	<link rel="shortcut icon" href="https://thescienceacademy.sg/favicon.ico" />
+	<link rel="icon" type="image/gif" href="https://thescienceacademy.sg/animated_favicon1.gif" />
 
 	<link href="<?php echo base_url('assets/css/bootstrap.css'); ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo base_url('assets/css/jcon-font.css'); ?>" rel="stylesheet" type="text/css">

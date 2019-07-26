@@ -63,7 +63,9 @@ define('CMS', 'Cms');
 define('CMS_MANAGE', 'Cms Management');
 define('PAGE', 'Page');
 define('FOOTER', 'Footer');
-
+define('PASSWORD', 'Password');
+define('FORGOT_PASSWORD', 'Forgot Password');
+define('RESET_PASSWORD', 'Reset Password');
 define('ROLE', 'Role');
 
 define('ROLESANDPERMISSION', 'Roles and Permission');
@@ -99,8 +101,10 @@ define('MSG_MOVED', ' has been moved to active list successfully.');
 define('MSG_EXIST', ' already exist within our system.');
 define('MSG_TRANSFERRED', ' has been transferred successfully.');
 define('MSG_UPD_FAILED', ' update has been failed.');
+define('MSG_EMAIL_NOT_EXIST', ' This email id does not exist.');
+define('PASSWORD_RESET_EMAIL', 'Password reset email sent to your email id.');
 
 
-define('MAIN_SITE_PATH', 'https://www.thescienceacademy.sg/');
+define('MAIN_SITE_PATH', 'http://localhost/TSA/');
 define('MAIN_SITE_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload');
 define('MAIN_SITE_AB_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload/');;
