@@ -21,6 +21,7 @@
               <div class="form-group">
                 <label for="page_heading" >Logo</label>
                 <input type="file" name="logo"  value="" class="form-control" />
+                (Image dimension: width:249 height:99)
                 <br/>
                 <img src="<?php echo isset($logo->logo) ? base_url('assets/files/logo/' . $logo->logo) : ''; ?>" width="100px" style="background: blue;">
               </div>

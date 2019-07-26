@@ -81,9 +81,11 @@ class Cms_model extends CI_Model
     public function get_testimonials()
     {
         $this->db->select('*')
-            ->from(DB_TESTIMONIAL);
+            ->from(DB_TESTIMONIAL)
+			->where('featured', 1)
+			->where('status', 1)
+			->order_by('id', 'DESC');
         $query = $this->db->get()->result_array();
-
         return $query;
     }
 

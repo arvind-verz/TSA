@@ -23,7 +23,7 @@
                 </div>
                 <div class="form-group">
                   <label for="location">Content :</label>
-                  <textarea rows="4" class="form-control" cols="90" name="content" id="smallBody" ><?php echo $details[0]['content'];?></textarea>
+                  <textarea rows="4" class="form-control" cols="90" name="content"  id="bodyContent" ><?php echo $details[0]['content'];?></textarea>
                 </div>
                 
                 <p><img src="<?php echo base_url('assets/files/testimonial/').$details[0]['image_name']; ?>" width="50px"/></p>
@@ -31,6 +31,10 @@
                   <label for="location">Pics (200 X 200) : <span>*</span></label>
                   <input type="file" name="testimonial" id="image_name" value="<?php echo $details[0]['image_name'];?>">
                   <input type="hidden" name="testimonial_exists" value="<?php echo $details[0]['image_name']; ?>">
+                </div>
+                <div class="form-group">
+                  <label for="name">Featured :</label>
+                  <input type="checkbox" name="featured" <?php if($details[0]['featured']==1){?>checked="checked"<?php }?>  id="featured" value="1" />
                 </div>
                 <div class="form-group">
                   <label for="name">Sort Order :</label>

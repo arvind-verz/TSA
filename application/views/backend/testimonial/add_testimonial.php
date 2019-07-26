@@ -23,13 +23,16 @@
                 </div>
                 <div class="form-group">
                   <label for="location">Content :</label>
-                  <textarea rows="4" cols="60" class="form-control" name="content" id="smallBody" ><?php echo set_value('content'); ?></textarea>
+                  <textarea rows="4" cols="60" class="form-control" name="content"  id="bodyContent" ><?php echo set_value('content'); ?></textarea>
                 </div>
                <div class="form-group">
                   <label for="location">Banner (200 X 200) : <span>*</span></label>
                   <input type="file" name="testimonial" class="form-control" required id="image_name">
                 </div>
-               
+               <div class="form-group">
+                  <label for="name">Featured :</label>
+                  <input type="checkbox" name="featured" <?php if(set_value('featured')==1){?>checked="checked"<?php }?>  id="featured" value="1" />
+                </div>
                 <div class="form-group">
                   <label for="name">Sort Order :</label>
                   <input type="text" name="sort_order"  id="sort_order" value="<?php echo set_value('sort_order'); ?>" class="form-control" />
