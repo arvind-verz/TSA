@@ -27,6 +27,24 @@ class CmsController extends CI_Controller {
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
 	}
+	
+	 public function system_settings()
+	{
+
+		$this->breadcrumbs->push(DASHBOARD, 'admin/dashboard');
+        $this->breadcrumbs->push(SYSTEM_SETTINGS, 'admin/system-settings');
+        $data['breadcrumbs'] = $this->breadcrumbs->show();
+        $data['title']       = $this->title . ' - ' . SYSTEM_SETTINGS;
+        $data['page_title']  = SYSTEM_SETTINGS;
+		$data['meta_title'] = SYSTEM_SETTINGS;
+		$data['settings'] = get_system_settings();
+
+		$this->load->view('backend/include/header', $data);
+        $this->load->view('backend/include/sidebar');
+        $this->load->view('backend/cms/system_settings');
+        $this->load->view('backend/include/control-sidebar');
+        $this->load->view('backend/include/footer');
+	}
 
 	public function update_footer()
 	{

@@ -16,14 +16,11 @@
             <div class="col-lg-12">
                 <div class="box">
                     
-         <?php echo form_open_multipart('admin/manage-logo/upload'); ?>
+         <?php echo form_open_multipart('admin/manage-footer/update'); ?>
             <div class="box-body">
               <div class="form-group">
-                <label for="page_heading" >Logo</label>
-                <input type="file" name="logo"  value="" class="form-control" />
-                <br/>
-                <img src="<?php echo isset($logo->logo) ? base_url('assets/files/logo/' . $logo->logo) : ''; ?>" width="100px" style="background: blue;">
-                <br />(<strong>NOTE:</strong>Image dimension: width:249 height:99)
+                <label for="page_heading" >Footer Content</label>
+                <textarea name="footer_content" class="form-control" id="bodyContent"><?php echo $footer->content; ?></textarea>
               </div>
               
             </div>
