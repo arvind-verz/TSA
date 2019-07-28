@@ -23,6 +23,17 @@ function get_footer()
 		return $result;
 		}
 	}
+function get_system_settings()
+	{
+	$ci = & get_instance();
+	$query = $ci->db->get_where(DB_SYSTEMSETTINGS, ['id' => 1]);;
+	$result = $query->row();
+	if ($result)
+		{
+		return $result;
+		}
+	}	
+	
 
 function get_salary_scheme($scheme_code)
 	{
@@ -300,7 +311,7 @@ function get_enrollment_type_popup_content($type)
                     </div>
                     <div class="col-sm-2">
                         <label class="radio-inline">
-                            <input name="deposit_collected" value="0" type="radio" checked />No</label</div>
+                            <input name="deposit_collected" value="0" type="radio" checked />No</label></div>
                     </div>
                 </div>
                 <div class="form-group">

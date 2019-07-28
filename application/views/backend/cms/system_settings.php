@@ -16,11 +16,23 @@
             <div class="col-lg-12">
                 <div class="box">
                     
-         <?php echo form_open_multipart('admin/manage-footer/update'); ?>
+         <?php echo form_open_multipart('admin/system-settings/update'); ?>
             <div class="box-body">
               <div class="form-group">
-                <label for="page_heading" >Footer Content</label>
-                <textarea name="footer_content" class="form-control" id="bodyContent"><?php echo $footer->content; ?></textarea>
+                <label for="page_heading" >From Email</label>
+                <input name="from_email" class="form-control" value="<?=$settings->from_email?>">
+              </div>
+               <div class="form-group">
+                <label for="page_heading" >Inquiry Email</label>
+                <input name="inquiry_email" class="form-control" value="<?=$settings->inquiry_email?>">
+              </div>
+               <div class="form-group">
+                <label for="page_heading" >Facebook Link</label>
+                <input name="facebook_link" class="form-control" value="<?=$settings->facebook_link?>">
+              </div>
+               <div class="form-group">
+                <label for="page_heading" >Instagram Link</label>
+                <input name="instagram_link" class="form-control" value="<?=$settings->instagram_link?>">
               </div>
               
             </div>

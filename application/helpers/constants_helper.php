@@ -32,6 +32,7 @@ define('TBL_CMS' ,'pages');
 define('DB_MODULES' ,'modules');
 define('DB_ADMIN_USER' ,'admin');
 define('DB_TESTIMONIAL' ,'testimonial');
+define('DB_SYSTEMSETTINGS' ,'system_setting');
 
 /* MODULES */
 define('LOGIN', 'Login');

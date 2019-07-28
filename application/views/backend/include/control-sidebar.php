@@ -32,6 +32,11 @@
         'icon'  => '<i class="menu-icon fa fa-check"></i>',
         'url'   => 'admin/manage-footer',
         ],
+		[
+        'title' => SYSTEM_SETTINGS,
+        'icon'  => '<i class="menu-icon fa fa-check"></i>',
+        'url'   => 'admin/system-settings',
+        ],
         ];
     ?>
     <!-- Create the tabs -->

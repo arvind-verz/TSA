@@ -45,6 +45,11 @@ class CmsController extends CI_Controller {
         $this->load->view('backend/include/control-sidebar');
         $this->load->view('backend/include/footer');
 	}
+	
+	public function update_system_settings()
+	{
+		$this->Cms_model->update_system_settings($_POST);
+	}
 
 	public function update_footer()
 	{
