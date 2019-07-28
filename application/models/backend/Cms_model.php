@@ -506,4 +506,30 @@
             }
             return redirect('admin/manage-footer');
           }
+		  
+		  
+		  public function update_system_settings()
+          {
+            $from_email = isset($_POST['from_email']) ? $_POST['from_email'] : '';
+			$inquiry_email = isset($_POST['inquiry_email']) ? $_POST['inquiry_email'] : '';
+			$facebook_link = isset($_POST['facebook_link']) ? $_POST['facebook_link'] : '';
+			$instagram_link = isset($_POST['instagram_link']) ? $_POST['instagram_link'] : '';
+            $data = [
+              'from_email' =>  $from_email,
+              'inquiry_email'  =>  $inquiry_email,
+			  'facebook_link' =>  $facebook_link,
+              'instagram_link'  =>  $instagram_link
+            ];
+            
+
+           /* $query = $this->db->get('footer');
+            if($query->num_rows()>0)*/
+            
+              $this->db->where('id' , 1);
+			  $this->db->update(DB_SYSTEMSETTINGS, $data);
+              $this->session->set_flashdata('success', SYSTEM_SETTINGS . ' ' . MSG_UPDATED);
+            
+            
+            return redirect('admin/system-settings');
+          }
   }
