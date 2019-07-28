@@ -75,6 +75,7 @@ define('ROLESANDPERMISSION', 'Roles and Permission');
 define('USERS', 'Users');
 define('REPORTING', 'Reporting');
 define('PROFILE', 'Profile');
+define('SYSTEM_SETTINGS', 'System Settings');
 
 
 

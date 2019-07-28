@@ -262,6 +262,8 @@ $route['admin/del-gallery/(:any)']  = "backend/GalleryController/del_gallery/$1"
 
 $route['admin/manage-footer']      = "backend/CmsController/manage_footer";
 $route['admin/manage-footer/update']      = "backend/CmsController/update_footer";
+$route['admin/system-settings']      = "backend/CmsController/system_settings";
+$route['admin/system-settings/update']      = "backend/CmsController/update_system_settings";
 /* CMS Admin */
 
 /* Tutor Admin */
