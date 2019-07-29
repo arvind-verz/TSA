@@ -38,6 +38,19 @@
                                     }}
                                     ?>
                                 </select>
+							</div>
+							<div class="form-group">
+                                <label for="">Year</label>
+                                <select name="class_year" class="form-control select2">
+                                    <option value="">-- Select One --</option>
+                                    <?php
+                                    foreach(get_all_years() as $year) {
+                                    ?>
+                                    <option value="<?php echo $year ?>" <?php if(date('Y')==$year) {echo 'selected';} ?>><?php echo $year ?></option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="">Month</label>
@@ -74,7 +87,7 @@
             window.location.href = '<?php echo site_url("admin/attendance/create-edit/") ?>' + class_id + '/' + date;
         });
 
-        $("select[name='class_code'], select[name='class_month']").on("change", function() {
+        $("select[name='class_code'], select[name='class_month'], select[name='class_year']").on("change", function() {
             refresh_summary();
         });
 
@@ -82,13 +95,14 @@
             if ($.fn.DataTable.isDataTable(".display_data")) {
                 $('.display_data').DataTable().clear().destroy();
             }
-            var class_code = $("select[name='class_code']").val();
+			var class_code = $("select[name='class_code']").val();
+			var class_year = $("select[name='class_year']").val();
             var class_month = $("select[name='class_month']").val();
-            if(class_month!='' && class_code!='') {
+            if(class_month!='' && class_code!='' && class_year!='') {
                 $.ajax({
                     type: 'GET',
                     url: '<?php echo site_url('admin/attendance/get_attendance_summary'); ?>',
-                    data: 'class_code=' + class_code + '&class_month=' + class_month,
+                    data: 'class_code=' + class_code + '&class_month=' + class_month + '&class_year=' + class_year,
                     async: false,
                     processData: false,
                     contentType: false,

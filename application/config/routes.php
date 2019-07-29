@@ -45,6 +45,10 @@ $route['safelogin/login/reset_process']     = 'backend/AccountsController/reset_
 
 $route['admin/logout']            = 'backend/AccountsController/logout';
 
+/* ADMIN ENQUIRY */
+$route['admin/contact-enquiry']      = "backend/EnquiryController/contact_enquiry";
+$route['admin/quick-enquiry']      = "backend/EnquiryController/quick_enquiry";
+
 /* ROLES AND PERMISSION */
 $route['admin/users/user_details/update']                     = 'backend/AccountsController/userDetailsUpdate';
 $route['admin/users/profile']                            = 'backend/AccountsController/profile';
@@ -263,6 +267,8 @@ $route['admin/system-settings/update']      = "backend/CmsController/update_syst
 /* CMS Admin */
 
 /* Tutor Admin */
+
+
 
 /* FRONTEND */
 $route['contact-us/submit']           = "frontend/cms/contact_us_form";
