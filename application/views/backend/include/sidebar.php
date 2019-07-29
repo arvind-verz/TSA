@@ -103,6 +103,19 @@
 			],
 			],
 			],
+			[
+			ENQUIRY => [
+			'icon' => '<i class="fa fa-envelope"></i>',
+			[
+			'title' => CONTACT_ENQUIRY,
+			'url'   => 'admin/contact-enquiry',
+			],
+			[
+			'title' => QUICK_ENQUIRY,
+			'url'   => 'admin/quick-enquiry',
+			],
+			],
+			],
 			];
 			?>
 		<ul class="sidebar-menu" data-widget="tree">
@@ -118,7 +131,7 @@
 				</li>
 				<?php
 				} else {
-				$child_menu_array = ['SMS'];
+				$child_menu_array = ['SMS', ENQUIRY];
 				$url_array        = [];
 				foreach ($child_menu_array as $value) {
 				if (array_key_exists($value, $menu)) {

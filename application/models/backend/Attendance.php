@@ -75,7 +75,8 @@ class Attendance extends CI_Model
     }
 
     public function get_attendance_summary() {
-        $class_code = $_GET['class_code'];
+		$class_code = $_GET['class_code'];
+		$class_year = $_GET['class_year'];
         $class_month = $_GET['class_month'];
 
 
@@ -90,7 +91,7 @@ class Attendance extends CI_Model
 
             $date_collection = [];
             $query = "select * from create_attendance where class_code= ? and DATE_FORMAT(attendance_date, '%Y-%M') = ? order by attendance_date ASC";
-            $query = $this->db->query($query, [$class_code, date('Y').'-'.$class_month]);
+            $query = $this->db->query($query, [$class_code, $class_year.'-'.$class_month]);
             $result = $query->result();
 
             foreach($result as $row) {
