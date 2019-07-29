@@ -11,14 +11,10 @@
 <footer class="footer-wrapper" style="opacity: 1;"> 
 <div class="footer"> <div class="container"> <div class="inner-container-xs"> 
 <div class="social-bar">
-<?php if(get_system_settings()->instagram_link=="" || get_system_settings()->instagram_link=="#" ){?>
-<a><i class="jcon-instagram"></i></a>
-<?php }else{?>
+<?php if(get_system_settings()->instagram_link!="" && get_system_settings()->instagram_link!="#" ){?>
 <a href="<?=get_system_settings()->instagram_link?>" target="_blank"><i class="jcon-instagram"></i></a>
 <?php }?>
-<?php if(get_system_settings()->facebook_link=="" || get_system_settings()->facebook_link=="#" ){?>
-<a><i class="jcon-facebook"></i></a>
-<?php }else{?>
+<?php if(get_system_settings()->facebook_link!="" && get_system_settings()->facebook_link!="#" ){?>
 <a href="<?=get_system_settings()->facebook_link?>" target="_blank"><i class="jcon-facebook"></i></a>
 <?php }?>
 <!--<a href="#"><i class="jcon-linkedin"></i></a><a href="#"><i class="jcon-twitter"></i></a> --></div> 
