@@ -28,6 +28,7 @@
                <div class="form-group">
                   <label for="location">Pics : <span>*</span></label>
                   <input type="file" name="gallery" class="form-control" required id="image_name">
+                  <p><strong>Note:</strong> Preferred Image Dimension Width:600, Height:400 or  Width:6000, Height:4000 or same ratio (W:H=3:2)</p>
                 </div>
                
                 <div class="form-group">
