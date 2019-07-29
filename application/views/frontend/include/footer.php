@@ -7,7 +7,7 @@
 
 </div>
 <!-- Footer -->
-<?php //$footer = get_footer();echo $footer->content; ?>
+
 <footer class="footer-wrapper" style="opacity: 1;"> 
 <div class="footer"> <div class="container"> <div class="inner-container-xs"> 
 <div class="social-bar">
@@ -22,7 +22,7 @@
 <a href="<?=get_system_settings()->facebook_link?>" target="_blank"><i class="jcon-facebook"></i></a>
 <?php }?>
 <!--<a href="#"><i class="jcon-linkedin"></i></a><a href="#"><i class="jcon-twitter"></i></a> --></div> 
-<div class="copyright">Copyright &copy; <script>// <![CDATA[ document.write( new Date().getFullYear() ); // ]]></script>  The Science Academy Pte Ltd <br /> All rights reserved.</div> 
+<?php $footer = get_footer();echo $footer->content; ?> 
 <div class="clear"></div> 
 </div> 
 </div> 
