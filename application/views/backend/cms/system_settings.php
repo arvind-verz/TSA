@@ -25,6 +25,7 @@
                <div class="form-group">
                 <label for="page_heading" >Inquiry Email</label>
                 <input name="inquiry_email" class="form-control" value="<?=$settings->inquiry_email?>">
+                <p><strong>Note:</strong> Add multiple email id separated by comma(,).</p>
               </div>
                <div class="form-group">
                 <label for="page_heading" >Facebook Link</label>
