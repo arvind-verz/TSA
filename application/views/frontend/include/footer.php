@@ -7,7 +7,27 @@
 
 </div>
 <!-- Footer -->
-<?php $footer = get_footer();echo $footer->content; ?>
+<?php //$footer = get_footer();echo $footer->content; ?>
+<footer class="footer-wrapper" style="opacity: 1;"> 
+<div class="footer"> <div class="container"> <div class="inner-container-xs"> 
+<div class="social-bar">
+<?php if(get_system_settings()->facebook_link=="" || get_system_settings()->facebook_link=="#" ){?>
+<i class="jcon-instagram"></i>
+<?php }else{?>
+<a href="<?=get_system_settings()->facebook_link?>" target="_blank"><i class="jcon-instagram"></i></a>
+<?php }?>
+<?php if(get_system_settings()->facebook_link=="" || get_system_settings()->facebook_link=="#" ){?>
+<i class="jcon-facebook"></i>
+<?php }else{?>
+<a href="<?=get_system_settings()->facebook_link?>" target="_blank"><i class="jcon-facebook"></i></a>
+<?php }?>
+<!--<a href="#"><i class="jcon-linkedin"></i></a><a href="#"><i class="jcon-twitter"></i></a> --></div> 
+<div class="copyright">Copyright &copy; <script>// <![CDATA[ document.write( new Date().getFullYear() ); // ]]></script>  The Science Academy Pte Ltd <br /> All rights reserved.</div> 
+<div class="clear"></div> 
+</div> 
+</div> 
+</div> 
+</footer>
 <!-- Footer END -->
 <!-- Get In Touch -->
 <div class="get-in-touch">
