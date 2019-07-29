@@ -48,11 +48,39 @@ class CmsController extends CI_Controller {
 	
 	public function update_system_settings()
 	{
-		$this->Cms_model->update_system_settings($_POST);
+		
+		$this->load->library('form_validation');
+        $config = array(
+               array(
+                     'field'   => 'from_email',
+                     'label'   => 'From Email',
+                     'rules'   => 'trim|required|valid_email'
+                  ),  
+				array(
+                     'field'   => 'inquiry_email',
+                     'label'   => 'Inquiry Email',
+                     'rules'   => 'required'
+                  )
+			   
+            );
+			$this->form_validation->set_rules($config);
+			if ($this->form_validation->run() == FALSE)
+			{
+				$error = strip_tags(validation_errors());
+				$this->session->set_flashdata('error', $error);
+        	    return redirect('admin/system-settings');
+				
+				
+			}
+			else
+			{
+		     $this->Cms_model->update_system_settings($_POST);
+			}
 	}
 
 	public function update_footer()
 	{
+		
 		$this->Cms_model->update_footer($_POST);
 	}
 

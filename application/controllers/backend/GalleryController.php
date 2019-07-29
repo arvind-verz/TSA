@@ -95,12 +95,12 @@ class GalleryController extends CI_Controller {
             	$_POST['gallery'] = upload_image_file($image_file, $file_name_placeholder[0], 340, 550);
             	$post_data = $_POST;
 						$data = array(
-							'title' => $post_data['title'],
+							'title' => ($post_data['title']!="") ? $post_data['title'] : "",
 							'image_name' => $post_data['gallery'],
-							'sort_order' => $post_data['sort_order'],
+							'sort_order' => ($post_data['sort_order']!="") ? $post_data['sort_order'] : 0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
-							'content' => $post_data['content']
+							'content' => ($post_data['content']!="") ? $post_data['content'] : ""
 						); 
 					$this->Gallery->add_gallery($data);	
 					return redirect("admin/manage-gallery");
@@ -154,7 +154,7 @@ class GalleryController extends CI_Controller {
 				array(
                      'field'   => 'content',
                      'label'   => 'Content',
-                     'rules'   => ''
+                     'rules'   => 'required'
                   )
 			   
             );
@@ -179,12 +179,12 @@ class GalleryController extends CI_Controller {
 	            } 
 	            $post_data = $_POST;											 
 						$data = array(
-							'title' => $post_data['title'],
+							'title' => ($post_data['title']!="") ? $post_data['title'] : "",
 							'image_name' => isset($post_data['gallery']) ? $post_data['gallery'] : $post_data['gallery_exist'],
-							'sort_order' => $post_data['sort_order'],
+							'sort_order' => ($post_data['sort_order']!="") ? $post_data['sort_order'] : 0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
-							'content' => $post_data['content'],
+							'content' => ($post_data['content']!="") ? $post_data['content'] : ""
 						);
 					$this->Gallery->update_page_cms($data,  $id);	
 					$this->session->set_flashdata('success', 'Gallery ' . MSG_UPDATED);
