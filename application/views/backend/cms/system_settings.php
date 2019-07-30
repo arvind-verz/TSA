@@ -24,7 +24,7 @@
               </div>
                <div class="form-group">
                 <label for="page_heading" >Inquiry Email</label>
-                <input name="inquiry_email" class="form-control" value="<?=$settings->inquiry_email?>">
+                <input name="inquiry_email" onkeypress="this.value=removeSpaces(this.value);" class="form-control" value="<?=$settings->inquiry_email?>">
                 <p><strong>Note:</strong> Add multiple email id separated by comma(,).</p>
               </div>
                <div class="form-group">
@@ -46,3 +46,8 @@
         </div>
     </section>
 </div>
+<script>
+function removeSpaces(string) {
+ return string.split(' ').join('');
+}
+</script>
