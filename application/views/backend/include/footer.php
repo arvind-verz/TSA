@@ -83,5 +83,6 @@ $.widget.bridge('uibutton', $.ui.button);
 
 	});
 </script>
+<?php $this->aauth->clear_errors(); ?>
 </body>
 </html>
