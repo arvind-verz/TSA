@@ -84,7 +84,19 @@ class Cms_model extends CI_Model
             ->from(DB_TESTIMONIAL)
 			->where('featured', 1)
 			->where('status', 1)
+			->order_by('id', 'DESC')
+			->limit(10);
+        $query = $this->db->get()->result_array();
+        return $query;
+    }
+	
+	public function get_all_testimonials()
+    {
+        $this->db->select('*')
+            ->from(DB_TESTIMONIAL)
+			->where('status', 1)
 			->order_by('id', 'DESC');
+
         $query = $this->db->get()->result_array();
         return $query;
     }
@@ -280,8 +292,10 @@ class Cms_model extends CI_Model
         $recaptcha = $_POST['g-recaptcha-response'];
         $query = $this->db->get_where('aauth_users', ['id' => 1]);
         $result   = $query->row();
-        $to_email = 'contactus@thesciacdm.com';
+
+        $to_email = get_system_settings()->inquiry_email;
         $message_template = $this->getEnquiryMessage($fname, $email_id, $phone_no, $subject, $message);
+
 
         if(empty($recaptcha))
         {

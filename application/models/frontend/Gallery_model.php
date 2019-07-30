@@ -7,7 +7,8 @@
 			function get_gallery()
 			{
 				$this->db->select('*')
-					 ->from(DB_GALLERY);
+					 ->from(DB_GALLERY)
+					 ->order_by('sort_order','ASC');
 				 
 				$query = $this->db->get()->result_array();
 			    return $query;

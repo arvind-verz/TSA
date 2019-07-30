@@ -86,7 +86,15 @@ class TestimonialController extends CI_Controller {
 			}else{
 				$post_data = $_POST;
 				$error = FALSE;	
-						$file_name_placeholder = array_keys($_FILES);
+				$featured_testi=$this->Testimonial->count_testimonials();
+				if($post_data['featured']==1 && $featured_testi>=10)
+				{
+				$this->session->set_flashdata('error', 'Maximum featured limit is 10.');		
+				return redirect("admin/add-testimonial");	
+				}
+				
+				
+			$file_name_placeholder = array_keys($_FILES);
             $image_file = $_FILES['testimonial']['name'];
 
             $_POST['testimonial'] = upload_image_file($image_file, $file_name_placeholder[0], 200, 200);
@@ -94,7 +102,7 @@ class TestimonialController extends CI_Controller {
 						$data = array(
 							'title' => $post_data['title'],
 							'image_name' => $post_data['testimonial'],
-							'sort_order' => $post_data['sort_order'],
+							'sort_order' => ($post_data['sort_order']==1)?$post_data['sort_order']:0,
 							'featured' => ($post_data['featured']==1)?$post_data['featured']:0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
@@ -171,6 +179,13 @@ class TestimonialController extends CI_Controller {
 			}else{	
 				$post_data = $_POST;
 				$error = FALSE;
+				
+				$featured_testi=$this->Testimonial->count_testimonials();
+				if($post_data['featured']==1 && $featured_testi>=10)
+				{
+				$this->session->set_flashdata('error', 'Maximum featured limit is 10.');		
+				return redirect("admin/edit-testimonial/".$id);	
+				}
 								$file_name_placeholder = array_keys($_FILES);
             $image_file = $_FILES['testimonial']['name'];
             if($image_file) {
@@ -180,7 +195,7 @@ class TestimonialController extends CI_Controller {
 						$data = array(
 							'title' => $post_data['title'],
 							'image_name' => isset($post_data['testimonial']) ? $post_data['testimonial'] : $post_data['testimonial_exists'],
-							'sort_order' => $post_data['sort_order'],
+							'sort_order' => ($post_data['sort_order']==1)?$post_data['sort_order']:0,
 							'featured' => ($post_data['featured']==1)?$post_data['featured']:0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
