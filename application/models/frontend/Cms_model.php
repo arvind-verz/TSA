@@ -89,6 +89,17 @@ class Cms_model extends CI_Model
         $query = $this->db->get()->result_array();
         return $query;
     }
+	
+	public function get_all_testimonials()
+    {
+        $this->db->select('*')
+            ->from(DB_TESTIMONIAL)
+			->where('status', 1)
+			->order_by('id', 'DESC');
+
+        $query = $this->db->get()->result_array();
+        return $query;
+    }
 
     public function get_attendance($student_id = false)
     {

@@ -131,9 +131,10 @@ class Cms extends CI_Controller
             $this->load->view('frontend/subjects');
             $this->load->view('frontend/include/footer');
 
-        } else if ($url == 'testimonial') {
+        } else if ($url == 'testimonials') {
             $this->breadcrumbs2->push('Home', 'home');
             $this->breadcrumbs2->push('Testimonial', 'testimonial');
+			$data_msg['testimonials'] = $this->Cms_model->get_all_testimonials();
             $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();
             $this->load->view('frontend/include/header', $data_msg);
             $this->load->view('frontend/testimonial');

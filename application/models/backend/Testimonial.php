@@ -18,6 +18,17 @@
                   $query = $this->db->get();
                   return $query;
           }
+		  
+	public function count_testimonials()
+    {
+        $this->db->select('*')
+            ->from(DB_TESTIMONIAL)
+			->where('featured', 1)
+			->where('status', 1);
+		$query = $this->db->get();
+        	
+        return $query->num_rows();
+    }
 		
 
           function get_testimonial_details($id) {
