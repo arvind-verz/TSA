@@ -84,7 +84,7 @@ class Cms_model extends CI_Model
             ->from(DB_TESTIMONIAL)
 			->where('featured', 1)
 			->where('status', 1)
-			->order_by('id', 'DESC')
+			->order_by('sort_order' , 'ASC')
 			->limit(10);
         $query = $this->db->get()->result_array();
         return $query;
@@ -95,7 +95,7 @@ class Cms_model extends CI_Model
         $this->db->select('*')
             ->from(DB_TESTIMONIAL)
 			->where('status', 1)
-			->order_by('id', 'DESC');
+			->order_by('sort_order' , 'ASC');
 
         $query = $this->db->get()->result_array();
         return $query;

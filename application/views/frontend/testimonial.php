@@ -1,4 +1,3 @@
-<?php echo $page[0]['page_content']; ?>
 
 <div class="main-container"><!-- Section -->
 <div class="fullcontainer">
