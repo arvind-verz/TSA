@@ -124,7 +124,7 @@
 				foreach ($menu_array as $menu) {
 				if (count($menu) > 1) {
 				?>
-				<li class="<?php if (current_url() == site_url($menu['url'])) {echo 'active';}?>">
+				<li class="<?php if (current_url() == site_url($menu['url']) || strpos(current_url(), $menu['url']) !== false) {echo 'active';}?>">
 					<a href="<?php echo site_url($menu['url']); ?>">
 						<?php echo $menu['icon']; ?> <span><?php echo $menu['title']; ?></span>
 					</a>
