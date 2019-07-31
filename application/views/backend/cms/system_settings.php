@@ -19,7 +19,7 @@
          <?php echo form_open_multipart('admin/system-settings/update'); ?>
             <div class="box-body">
               <div class="form-group">
-                <label for="page_heading" >From Email</label>
+                <label for="page_heading" >Reply Email</label>
                 <input name="from_email" class="form-control" value="<?=$settings->from_email?>">
               </div>
                <div class="form-group">

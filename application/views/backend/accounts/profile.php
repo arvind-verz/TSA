@@ -36,7 +36,7 @@
 								<input class="form-control" type="text" name="username" value="<?php echo $user_data->username; ?>" placeholder="">
 							</div>
 							<div class="form-group">
-								<label>Email <span class="text-muted">Note: This email will be used for sending email from TSA</span></label>
+								<label>Email <span class="text-muted">Note: This email will be used for sending as reply email from TSA for Invoices</span></label>
 								<input class="form-control" type="text" name="email" value="<?php echo $user_data->email; ?>" placeholder="">
 							</div>
 						</div>
