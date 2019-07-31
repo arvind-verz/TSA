@@ -847,7 +847,7 @@ a:focus {
 .control-sidebar-dark .control-sidebar-subheading {
   color: #fff;
 }
-.control-sidebar-dark .control-sidebar-menu > li > a:hover {
+.control-sidebar-dark .control-sidebar-menu > li > a:hover, .control-sidebar-dark .control-sidebar-menu > li.active {
   background: #1e282c;
 }
 .control-sidebar-dark .control-sidebar-menu > li > a .menu-info > p {
