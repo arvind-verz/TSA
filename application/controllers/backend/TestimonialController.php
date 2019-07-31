@@ -181,7 +181,7 @@ class TestimonialController extends CI_Controller {
 				$error = FALSE;
 				
 				$featured_testi=$this->Testimonial->count_testimonials();
-				if($post_data['featured']==1 && $featured_testi>=10)
+				if($post_data['featured']==1 && $featured_testi>=10 && $details[0]['featured']==0)
 				{
 				$this->session->set_flashdata('error', 'Maximum featured limit is 10.');		
 				return redirect("admin/edit-testimonial/".$id);	
