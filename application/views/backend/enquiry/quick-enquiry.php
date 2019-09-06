@@ -22,6 +22,7 @@
 										<th>Email</th>
 										<th>Phone No.</th>
 										<th>Message</th>
+										<th style="display: none">Message</th>
 										<th>Created At</th>
 									</tr>
 								</thead>
@@ -31,12 +32,18 @@
 								{
 									foreach($quick_enquiry as $enquiry)
 									{
+										$message = '-';
+										if(isset($enquiry->message)){
+											$message = strip_tags($enquiry->message);
+											$message = preg_replace("/(\/\*[\w\'\s\r\n\*\+\,\"\-\.]*\*\/)/", "", $message);
+										}
 								?>
 									<tr>
 										<td><?php echo isset($enquiry->name) ? $enquiry->name : '-'; ?></td>
 										<td><?php echo isset($enquiry->email) ? $enquiry->email : '-'; ?></td>
 										<td><?php echo isset($enquiry->phone_no) ? $enquiry->phone_no : '-'; ?></td>
 										<td><?php echo isset($enquiry->message) ? $enquiry->message : '-'; ?></td>
+										<td style="display: none;"><?php echo $message; ?></td>
 										<td
 											data-order="<?php echo isset($enquiry->create_date) ? $enquiry->create_date : ''; ?>">
 											<?php echo isset($enquiry->create_date) ? date('Y-m-d h:i A', strtotime($enquiry->create_date)) : '-'; ?>
@@ -59,7 +66,17 @@
 	$(document).ready(function () {
 		$(".datatable").DataTable({
 			"order": [
-				[4, "desc"]
+				[5, "desc"]
+			],
+			dom: 'Bfrtip',
+			buttons: [
+
+				{
+					extend: 'excelHtml5',
+					exportOptions: {
+						columns: [0, 1, 2, 4, 5]
+					}
+				}
 			]
 		});
 	});

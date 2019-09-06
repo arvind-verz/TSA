@@ -110,6 +110,6 @@ define('MSG_EMAIL_NOT_EXIST', ' This email id does not exist.');
 define('PASSWORD_RESET_EMAIL', 'Password reset email sent to your email id.');
 
 
-define('MAIN_SITE_PATH', 'http://localhost/TSA/');
+define('MAIN_SITE_PATH', 'https://www.thescienceacademy.sg/');
 define('MAIN_SITE_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload');
 define('MAIN_SITE_AB_UPLOAD_PATH', MAIN_SITE_PATH . 'assets/upload/');;
