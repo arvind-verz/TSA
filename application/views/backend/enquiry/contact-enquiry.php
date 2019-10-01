@@ -57,11 +57,7 @@
 <script>
 $(document).ready(function() {
 	$(".datatable").DataTable({
-		"order": [[ 5, "desc" ]],
-		dom: 'Bfrtip',
-		buttons: [
-			'excel'
-		]
+		"order": [[ 5, "desc" ]]
 	});
 });
 </script>

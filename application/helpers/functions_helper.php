@@ -2906,12 +2906,12 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
 	$result = $query->row();
 	$ci->load->library('email');
 	$config['protocol'] = 'smtp';
-	$config['smtp_host'] = 'thescienceacademy.sg';
-	$config['smtp_port'] = '465';
-	$config['smtp_user'] = 'no-reply@thescienceacademy.sg';
+	$config['smtp_host'] = 'smtp.gmail.com';
+	$config['smtp_port'] = '587';
+	$config['smtp_user'] = 'no-reply@thesciacdm.com';
 	$config['smtp_pass'] = 'dev@thesciacdm';
 	$config['mailpath'] = '/usr/sbin/sendmail';
-	$config['smtp_crypto'] = "ssl";
+	$config['smtp_crypto'] = "tls";
 	$config['smtp_timeout'] = "5";
 	$config['charset'] = 'iso-8859-1';
 	$config['wordwrap'] = true;
@@ -2935,15 +2935,15 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
 	{
 	$ci = & get_instance();
 	$ci->load->library('email');
-	$config['protocol'] = 'mail';
-	$config['smtp_host'] = 'thescienceacademy.sg';
-	$config['smtp_port'] = '995';
-	$config['smtp_user'] = 'no-reply@thescienceacademy.sg';
+	$config['protocol'] = 'smtp';
+	$config['smtp_host'] = 'smtp.gmail.com';
+	$config['smtp_port'] = '587';
+	$config['smtp_user'] = 'no-reply@thesciacdm.com';
 	$config['smtp_pass'] = 'dev@thesciacdm';
 	$config['mailpath'] = '/usr/sbin/sendmail';
-	$config['smtp_crypto'] = "ssl";
+	$config['smtp_crypto'] = "tls";
 	$config['smtp_timeout'] = "5";
-	$config['charset'] = 'utf-8';
+	$config['charset'] = 'iso-8859-1';
 	$config['wordwrap'] = true;
 	$config['mailtype'] = 'html';
 	$config['crlf'] = "\r\n";
@@ -2955,9 +2955,16 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
 	$ci->email->message($message);
 	if ($ci->email->send())
 		{
-		   send_autoreply_email($email_from, $fname); 
-		 //return $ci->email->print_debugger();
-		return true;
+		    if($fname)
+		    {
+		        $message = getAutoReplyMessage($fname);
+		        if(send_autoreply_email($email_from, $fname, $message)==true)
+		        {
+    		        return true;
+		        }
+		        
+		    }
+		    //return $ci->email->print_debugger();
 		}
 
 	//return $ci->email->print_debugger();
@@ -2965,27 +2972,28 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
 	return false;
 	}
 	
-	function send_autoreply_email($email_to, $fname)
+	function send_autoreply_email($email_to, $fname, $message)
 	{
-	    $subject = "Enquiry Response";
-	    $message = getAutoReplyMessage($fname);
 	    $ci = & get_instance();
-    	$ci->load->library('email');
+	    $ci->load->library('email');
+	    $query = $ci->db->get_where('system_setting', ['id' => 1]);
+	    $result = $query->row();
+	    $subject = "Enquiry Response";
     	$config['protocol'] = 'smtp';
-    	$config['smtp_host'] = 'thescienceacademy.sg';
-    	$config['smtp_port'] = '465';
-    	$config['smtp_user'] = 'no-reply@thescienceacademy.sg';
+    	$config['smtp_host'] = 'smtp.gmail.com';
+    	$config['smtp_port'] = '587';
+    	$config['smtp_user'] = 'no-reply@thesciacdm.com';
     	$config['smtp_pass'] = 'dev@thesciacdm';
     	$config['mailpath'] = '/usr/sbin/sendmail';
-    	$config['smtp_crypto'] = "ssl";
+    	$config['smtp_crypto'] = "tls";
     	$config['smtp_timeout'] = "5";
-    	$config['charset'] = 'utf-8';
+    	$config['charset'] = 'iso-8859-1';
     	$config['wordwrap'] = true;
     	$config['mailtype'] = 'html';
     	$config['crlf'] = "\r\n";
     	$config['newline'] = "\r\n";
     	$ci->email->initialize($config);
-    	$ci->email->from($config['smtp_user'], 'The Science Academy');
+    	$ci->email->from($result->from_email, 'The Science Academy');
     	$ci->email->to($email_to);
     	$ci->email->subject($subject);
     	$ci->email->message($message);
@@ -3006,12 +3014,12 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
     	$ci = & get_instance();
     	$ci->load->library('email');
     	$config['protocol'] = 'smtp';
-    	$config['smtp_host'] = 'thescienceacademy.sg';
-    	$config['smtp_port'] = '465';
-    	$config['smtp_user'] = 'no-reply@thescienceacademy.sg';
+    	$config['smtp_host'] = 'smtp.gmail.com';
+    	$config['smtp_port'] = '587';
+    	$config['smtp_user'] = 'no-reply@thesciacdm.com';
     	$config['smtp_pass'] = 'dev@thesciacdm';
     	$config['mailpath'] = '/usr/sbin/sendmail';
-    	$config['smtp_crypto'] = "ssl";
+    	$config['smtp_crypto'] = "tls";
     	$config['smtp_timeout'] = "5";
     	$config['charset'] = 'iso-8859-1';
     	$config['wordwrap'] = true;
@@ -3036,10 +3044,10 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
 	
 	function getAutoReplyMessage($fname)
 	{
-	    return '<html xmlns="http://www.w3.org/1999/xhtml"><head>
+	    $message = '<html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>The Science Academy</title>
+    <title>Enquiry - The Science Academy</title>
     <!-- 
     The style block is collapsed on page load to save you some scrolling.
     Postmark automatically inlines all CSS properties for maximum email client 
@@ -3421,20 +3429,20 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
       font-size: 12px;
     }
     
-    p.center {[Product Name]
+    p.center {
       text-align: center;
     }
     </style>
   </head>
   <body>
-    <span class="preheader">Thank You! We have received your enquiry.</span>
+    <span class="preheader">Enquiry - Response</span>
     <table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0">
       <tbody><tr>
         <td align="center">
           <table class="email-content" width="100%" cellpadding="0" cellspacing="0">
             <tbody><tr>
               <td class="email-masthead">
-                <a href="https://www.thescienceacademy.sg/" class="email-masthead_name">The Science Academy</a>
+                <a href="https://www.thescienceacademy.sg/" class="email-masthead_name">Enquiry - Response</a>
               </td>
             </tr>
             <!-- Email Body -->
@@ -3444,20 +3452,10 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
                   <!-- Body content -->
                   <tbody><tr>
                     <td class="content-cell">
-                      <h1>Dear, '.$fname.'</h1>
-                      <p>Thank You! We have received your enquiry.</p>
-                      <p>Our faculty member will reply at the soonest.</p>
-                      <!-- Action -->
-                      
-                      
-                      
-                      
-                      
-                      
-                      <p>Regards,<br>The Science Academy</p>
-                      
-                      
-                      
+                      <p>Dear, '.$fname.'</p>
+                        <p>Thank You! We have received your enquiry.</p>
+                        <p>Our faculty member will reply at the soonest.</p>
+                        <p>Regards,<br>The Science Academy</p>
                     </td>
                   </tr>
                 </tbody></table>
@@ -3470,6 +3468,7 @@ function send_mail_contact($email_from, $emailto, $subject, $message, $fname = n
     </tbody></table>
   
 </body></html>';
+return $message;
 	}
 
 function send_sms($recipient, $message, $template_id = false, $class_code = false)
@@ -3628,4 +3627,25 @@ function send_student_confirmation_sms()
 			return $result;
 		}
 		return false;
+	}
+
+	function getEnrollmentStatus($student_id, $class_id)
+	{
+		$ci = & get_instance();
+
+		if($class_id && $student_id)
+		{
+			$ci->db->select('*');
+			$ci->db->from('student_enrollment');
+			$ci->db->where('student_id', $student_id);
+			$ci->db->where('class_id', $class_id);
+			$query = $ci->db->get();
+			$result = $query->row();
+			if($result)
+			{
+				return date('d M, Y', strtotime($result->enrollment_date));
+			}
+		}
+		return '-';
+
 	}

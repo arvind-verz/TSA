@@ -64,12 +64,6 @@ class GalleryController extends CI_Controller {
                      'field'   => 'status',
                      'label'   => 'Status',
                      'rules'   => 'required'
-                  ),
-			   
-			  array(
-                     'field'   => 'content',
-                     'label'   => 'Content',
-                     'rules'   => ''
                   )
 			   
             );
@@ -97,6 +91,7 @@ class GalleryController extends CI_Controller {
 						$data = array(
 							'title' => ($post_data['title']!="") ? $post_data['title'] : "",
 							'image_name' => $post_data['gallery'],
+							'featured' => ($post_data['featured']==1)?$post_data['featured']:0,
 							'sort_order' => ($post_data['sort_order']!="") ? $post_data['sort_order'] : 0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
@@ -150,11 +145,6 @@ class GalleryController extends CI_Controller {
                      'field'   => 'status',
                      'label'   => 'Status',
                      'rules'   => 'required'
-                  ),
-				array(
-                     'field'   => 'content',
-                     'label'   => 'Content',
-                     'rules'   => 'required'
                   )
 			   
             );
@@ -181,6 +171,7 @@ class GalleryController extends CI_Controller {
 						$data = array(
 							'title' => ($post_data['title']!="") ? $post_data['title'] : "",
 							'image_name' => isset($post_data['gallery']) ? $post_data['gallery'] : $post_data['gallery_exist'],
+							'featured' => ($post_data['featured']==1)?$post_data['featured']:0,
 							'sort_order' => ($post_data['sort_order']!="") ? $post_data['sort_order'] : 0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],

@@ -33,7 +33,7 @@ class Accounts extends CI_Model
 
     public function logout() {
         $this->aauth->logout();
-        redirect('safelogin/login');
+        redirect('safelogin');
     }
 
     public function permission_store() {

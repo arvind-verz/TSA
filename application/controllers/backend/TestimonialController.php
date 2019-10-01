@@ -103,7 +103,7 @@ class TestimonialController extends CI_Controller {
 							'title' => $post_data['title'],
 							'image_name' => $post_data['testimonial'],
 							'sort_order' => ($post_data['sort_order']==1)?$post_data['sort_order']:0,
-							'featured' => ($post_data['featured']==1)?$post_data['featured']:0,
+							'featured' => ($post_data['featured'])?$post_data['featured']:0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
 							'content' => $post_data['content']
@@ -181,7 +181,7 @@ class TestimonialController extends CI_Controller {
 				$error = FALSE;
 				
 				$featured_testi=$this->Testimonial->count_testimonials();
-				if($post_data['featured']==1 && $featured_testi>=10 && $details[0]['featured']==0)
+			if($post_data['featured']==1 && $featured_testi>=10 && $details[0]['featured']==0)
 				{
 				$this->session->set_flashdata('error', 'Maximum featured limit is 10.');		
 				return redirect("admin/edit-testimonial/".$id);	
@@ -196,7 +196,7 @@ class TestimonialController extends CI_Controller {
 							'title' => $post_data['title'],
 							'image_name' => isset($post_data['testimonial']) ? $post_data['testimonial'] : $post_data['testimonial_exists'],
 							'sort_order' => ($post_data['sort_order']==1)?$post_data['sort_order']:0,
-							'featured' => ($post_data['featured']==1)?$post_data['featured']:0,
+							'featured' => ($post_data['featured'])?$post_data['featured']:0,
 							'date' => date('Y-m-d'),
 							'status' => $post_data['status'],
 							'content' => $post_data['content']

@@ -7,7 +7,6 @@
 
 </div>
 <!-- Footer -->
-
 <footer class="footer-wrapper" style="opacity: 1;"> 
 <div class="footer"> <div class="container"> <div class="inner-container-xs"> 
 <div class="social-bar">
@@ -66,7 +65,7 @@
 			<textarea required name="message" id="message" placeholder="Message" class="gt-input"></textarea>
 		</div>
 		<div class="form-group">
-			<div class="g-recaptcha" data-sitekey="6LfLyqwUAAAAAFEdmXCzDSSg7XQ66l-_4ounyalr"></div>
+			<div class="g-recaptcha" data-sitekey="6Lc-G7AUAAAAAIXMi5dMy7e9DGoqwR6pbfjUbLJC"></div>
 		</div>
 		<div class="form-group">
 			<button type="submit" class="button btn-md btn-block">Submit</button>

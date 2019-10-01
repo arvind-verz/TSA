@@ -85,7 +85,6 @@ tinymce.init({
    convert_urls: false,
    allow_script_urls: true,
    valid_elements : '*[*]',
-    valid_children: "+body[a],+a[div|h1|h2|h3|h4|h5|h6|p|#text]",
    external_filemanager_path:"<?php echo base_url();?>editor/filemanager/",
    filemanager_title:"Filemanager" ,
    filemanager_access_key:'',

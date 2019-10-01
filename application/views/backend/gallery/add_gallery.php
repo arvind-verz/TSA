@@ -30,7 +30,10 @@
                   <input type="file" name="gallery" class="form-control" required id="image_name">
                   <p><strong>Note:</strong> Preferred Image Dimension Width:600, Height:400 or  Width:6000, Height:4000 or same ratio (W:H=3:2)</p>
                 </div>
-               
+               <div class="form-group">
+                  <label for="name">Featured :</label>
+                  <input type="checkbox" name="featured" <?php if(set_value('featured')==1){?>checked="checked"<?php }?>  id="featured" value="1" />
+                </div>
                 <div class="form-group">
                   <label for="name">Sort Order :</label>
                   <input type="text" name="sort_order"  id="sort_order" value="<?php echo set_value('sort_order'); ?>" class="form-control" />

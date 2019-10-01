@@ -46,7 +46,7 @@ class CmsController extends CI_Controller {
         $this->load->view('backend/include/footer');
 	}
 	
-	public function update_system_settings()
+    public function update_system_settings()
 	{
 		
 		$this->load->library('form_validation');
@@ -80,7 +80,6 @@ class CmsController extends CI_Controller {
 
 	public function update_footer()
 	{
-		
 		$this->Cms_model->update_footer($_POST);
 	}
 

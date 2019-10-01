@@ -69,6 +69,9 @@
                                     </th>
                                     <th>
                                         Enrolled <br />classes
+									</th>
+									<th>
+                                        Enrolled <br />Date
                                     </th>
                                     <th>
                                         Student <br/> Gender
@@ -163,6 +166,7 @@
 									<td><?php echo isset($student->username) ? $student->username : '-' ?></td>
 									<td><?php echo isset($student->nric) ? $student->nric : '-' ?></td>
 									<td><?php if(isset($student_details->student_id)) { echo get_class_code_by_class($student_details->class_id); } ?></td>
+									<td><?php if(isset($student_details->class_id)) { echo getEnrollmentStatus($student_details->student_id, $student_details->class_id); } else {echo '-';} ?></td>
 									<td><?php echo isset($student->gender) ? ($student->gender==0) ? 'Male' : 'Female' : '-' ?></td>
 									<td><?php echo isset($student->age) ? $student->age : '-' ?></td>
 									<td><?php echo isset($student->phone) ? $student->phone : '-' ?></td>
@@ -207,6 +211,9 @@
                                     </th>
                                     <th>
                                         Enrolled <br />classes
+									</th>
+									<th>
+                                        Enrolled <br />Date
                                     </th>
                                     <th>
                                         Student <br/> Gender
