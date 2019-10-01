@@ -94,11 +94,6 @@
 			$("textarea#message").val('Hi, I\'m intrested in ' + my_values.reverse().join(', '));
 		});
 
-		function recursive(ref)
-		{
-			return decodeHtml(ref.html());
-		}
-
 		function decodeHtml(html) {
 			var div = document.createElement("div");
 			div.innerHTML = html;
