@@ -13,6 +13,8 @@ function get_invoice_no()
 	}
 }
 
+
+// CRON INVOICE *************************************************************************************/
 function send_cron_invoice()
 {
 	$ci = &get_instance();
@@ -20,7 +22,7 @@ function send_cron_invoice()
 	$invoice_billing_date = date('Y-m-d H:i');
 
 
-	// ACTIVE STUDENT
+	// ACTIVE STUDENT DATA
 	$ci->db->select('*, student.id as sid');
 	$ci->db->from(DB_STUDENT);
 	$ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
@@ -42,8 +44,7 @@ function send_cron_invoice()
 			$result2 = $query2;
 
 			// BILLING DATA
-			$query3 = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y')  =  DATE_FORMAT('$invoice_billing_date', '%d-%m-%Y')");
-
+			$query3 = $ci->db->query("select * from billing where DATE_FORMAT(invoice_generation_date, '%d-%m-%Y %H:%i')  =  DATE_FORMAT('$invoice_billing_date', '%d-%m-%Y %H:%i')");
 			$result3 = $query3->row();
 			// var_dump($query2);
 			// die();
@@ -65,14 +66,14 @@ function send_cron_invoice()
 			$class_code = $result1->class_code;
 			$emailto = [$result1->email, $result1->parent_email];
 			$fees = $result1->monthly_fees;
-			$extra_charges = isset($result2->extra_charges) ? number_format($result2->extra_charges, 2) : number_format(0, 2);
+			$extra_charges = isset($result2->extra_charges) ? $result2->extra_charges : 0;
 			$deposit = $result1->deposit_fees;
-			$previous_month_balance = isset($result2->previous_month_balance) ? number_format($result2->previous_month_balance, 2) : number_format(0, 2);
-			$previous_month_payment = isset($result2->previous_month_payment) ? number_format($result2->previous_month_payment, 2) : number_format(0, 2);
+			$previous_month_balance = isset($result2->previous_month_balance) ? $result2->previous_month_balance : 0;
+			$previous_month_payment = isset($result2->previous_month_payment) ? $result2->previous_month_payment : 0;
 			$counter = 0;
 			$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 			$book_price_amount = get_invoice_result2($student_id, $invoice_generation_date, $class_code);
-			$book_charges = number_format($book_price_amount, 2);
+			$book_charges = $book_price_amount;
 			$billing_data = json_decode($result3->billing);
 
 			// INVOICE EMAIL DATA
@@ -89,15 +90,15 @@ function send_cron_invoice()
 			$query4 = $ci->db->get()->result();
 			//var_dump($query4);
 			if ($query4) {
-				// GENERATE REST MONTH INVOICE
-				//$status = 1;
+				// GENERATE REST MONTH INVOICE ***************************/
+				$status = 1;
 				$type = 'rest_month_invoice';
-				$invoice_amount = number_format(($fees + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment), 2);
-				$amount_excluding_material = number_format(($invoice_amount - $book_charges), 2);
-				$lesson_fees = number_format($fees, 2);
-				$returned_deposit = number_format(0, 2);
+				$invoice_amount = ($fees + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
+				$amount_excluding_material = ($invoice_amount - $book_charges);
+				$lesson_fees = $fees;
+				$returned_deposit = 0;
 			} else {
-				// GENERATE FIRST MONTH INVOICE
+				// GENERATE FIRST MONTH INVOICE ***************************/
 				$type = 'first_month_invoice';
 				$first_month_attendance_data = getFirstMonthAttendanceDate($student_id, $class_code);
 				//var_dump($first_month_attendance_data);
@@ -115,11 +116,11 @@ function send_cron_invoice()
 					}
 					//die();
 
-					$invoice_amount = number_format(((($counter * $fees) / $frequency) + $book_charges + $extra_charges), 2);
-					//var_dump($invoice_amount);
-					$amount_excluding_material = number_format(($invoice_amount - $book_charges), 2);
-					$lesson_fees = number_format((($counter * $fees) / $frequency), 2);
-					$returned_deposit = number_format(0, 2);
+					$invoice_amount = ((($counter * $fees) / $frequency) + $book_charges + $extra_charges);
+					
+					$amount_excluding_material = ($invoice_amount - $book_charges);
+					$lesson_fees =(($counter * $fees) / $frequency);
+					$returned_deposit = 0;
 					$status = 1;
 				}
 			}
@@ -128,27 +129,27 @@ function send_cron_invoice()
 				$invoice_data = ['class_code' => $class_code, 'lesson_fee' => $lesson_fees, 'material_fees' => $book_charges, 'extra_charges' => $extra_charges, 'previous_month_payment' => $previous_month_payment, 'previous_month_balance' => $previous_month_balance, 'returned_deposit'	=>	$returned_deposit];
 
 				$invoice = ['invoice_id' => $invoice_id, 'invoice_no' => $invoice_no, 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date];
-				var_dump($invoice);
+				
 
-				// // INSERT INVOICE DATA
+				// INSERT INVOICE DATA
 				$query5 = $ci->db->insert(DB_INVOICE, $invoice);
 
 
-				// // UPDATE EXTRA CHARGE AND PREVIOUS MONTH PAYMENT TO ZERO
+				// UPDATE EXTRA CHARGE AND PREVIOUS MONTH PAYMENT TO ZERO
 				$ci->db->where('student_id', $student_id);
 				$ci->db->where('class_id', $class_id);
 				$ci->db->update('student_enrollment', ['extra_charges' => 0, 'previous_month_payment' => 0]);
 
-				// // SEND MAIL AND GENERATE PDF
-				// if ($query5) {
-				// 	//$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
-				// 	$ci->load->library('M_pdf');
-				// 	$ci->m_pdf->download_my_mPDF($invoice_file);
-				// 	echo "<br> Invoice has been generated.";
-				// 	// if ($mail == true) {
-				// 	// 	echo "<br> Email Sent.";
-				// 	// }
-				// }
+				// SEND MAIL AND GENERATE PDF
+				if ($query5) {
+					$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
+					$ci->load->library('M_pdf');
+					$ci->m_pdf->download_my_mPDF($invoice_file);
+					echo "<br> Invoice has been generated.";
+					if ($mail == true) {
+						echo "<br> Email Sent.";
+					}
+				}
 			}
 		}
 	}
