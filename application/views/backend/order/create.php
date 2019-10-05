@@ -8,7 +8,9 @@
     </section>
 
     <?php $this->load->view('backend/include/messages') ?>
-    
+    <style>
+      .form-inline .multiselect-container li.disabled label.checkbox {background: #262626; color: #fff;}
+    </style>
     <!-- Main content -->
     <section class="content">
         <!-- Small boxes (Stat box) -->
@@ -47,7 +49,7 @@
                             </div>
                             <div class="form-group">
                                 <label for=""><?php echo STUDENT ?></label>
-                                <select name="student[]" class="form-control select2 students" multiple="multiple">
+                                <select name="student[]" class="form-control selectpicker students" multiple="multiple" style="width: 100%;">
                                 </select>
                             </div>
                             <div class="form-group">
@@ -82,6 +84,7 @@
                 success: function(data) {
                     //alert(data);
                     $(".students").html(data);
+					$('.selectpicker').multiselect('refresh');
                 }
             })
         });
@@ -103,11 +106,35 @@
         });
 
         $("select.students").on("change", function() {
-            var student = $(this).val();
+			var ref = $(this);
+            var student = ref.val();
+				
             if(student.indexOf('all')>-1)
             {
-                $(this).val('all');
+				// Enable all checkboxes.
+				ref.multiselect('deselectAll', true);
+            	ref.multiselect('updateButtonText');
+
+				ref.multiselect('select', ['all']);
+				var nonSelectedOptions = $('select.students option').filter(function() {
+					return !$(this).is(':selected');
+				});
+
+				nonSelectedOptions.each(function() {
+					var input = $('input[value="' + $(this).val() + '"]');
+					input.prop('disabled', true);
+					
+					input.parent('li').addClass('disabled');
+				});
             }
+			else {
+				// Enable all checkboxes.
+				$('select.students option').each(function() {
+					var input = $('input[value="' + $(this).val() + '"]');
+					input.prop('disabled', false);
+					input.parent('li').addClass('disabled');
+				});
+			}
         });
     });
 </script>

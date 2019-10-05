@@ -117,6 +117,7 @@ $route['admin/students/get_view_all_contents']        = 'backend/StudentControll
 $route['admin/students/final_settlement/(:any)/(:any)']            = 'backend/StudentController/final_settlement/$1/$2';
 $route['admin/students/delete-archive/(:any)'] = 'backend/StudentController/delete_archive/$1';
 $route['admin/students/get_p_content'] = 'backend/StudentController/get_p_content';
+$route['admin/students/generate-invoice'] = 'backend/StudentController/generate_invoice';
 
 
 /* ORDER */

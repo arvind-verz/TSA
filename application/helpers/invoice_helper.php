@@ -33,8 +33,8 @@ function send_cron_invoice()
 	// die();
 	if ($query1) {
 		foreach ($query1 as $result1) {
-			$student_id = "5d9440f83e5f1";
-			$class_id = "5cfdb230e0a3b";
+			$student_id = $result1->student_id;
+			$class_id = $result1->class_id;
 
 			// ENROLLMENT DATA
 			$ci->db->select('*');
@@ -126,7 +126,7 @@ function send_cron_invoice()
 			}
 			if ($status === 1) {
 
-				$invoice_data = ['class_code' => $class_code, 'lesson_fee' => $lesson_fees, 'material_fees' => $book_charges, 'extra_charges' => $extra_charges, 'previous_month_payment' => $previous_month_payment, 'previous_month_balance' => $previous_month_balance, 'returned_deposit'	=>	$returned_deposit];
+				$invoice_data = ['class_code' => $class_code, 'lesson_fee' => number_format($lesson_fees, 2), 'material_fees' => number_format($book_charges, 2), 'extra_charges' => number_format($extra_charges, 2), 'previous_month_payment' => number_format($previous_month_payment, 2), 'previous_month_balance' => number_format($previous_month_balance, 2), 'returned_deposit'	=>	number_format($returned_deposit, 2)];
 
 				$invoice = ['invoice_id' => $invoice_id, 'invoice_no' => $invoice_no, 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date];
 				
@@ -167,7 +167,6 @@ function send_archived_invoice($student_id)
 	$query = $ci->db->get();
 	$result = $query->result();
 	foreach ($result as $row) {
-
 		send_archive_invoice_extend($student_id, $row->class_id);
 	}
 
@@ -180,11 +179,7 @@ function send_archive_invoice_extend($student_id, $class_id)
 {
 
 	$ci = &get_instance();
-	$type = 'archive_invoice';
-	$invoice_id = uniqid();
-	$date = date('Y-m-d H:i:s');
-	$invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
-	$file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
+
 	$ci->db->select('*, student.id as sid');
 	$ci->db->from(DB_CLASSES);
 	$ci->db->join('student_enrollment', 'class.class_id = student_enrollment.class_id');
@@ -193,42 +188,65 @@ function send_archive_invoice_extend($student_id, $class_id)
 	$ci->db->limit(1);
 	$query1 = $ci->db->get();
 	$result1 = $query1->row();
-	if (!$result1) {
-		return false;
-	}
+	if($result1)
+	{
+		$type = 'archive_invoice';
 
-	$frequency = $result1->frequency;
-	$class_code = $result1->class_code;
-	$emailto = [$result1->email, $result1->parent_email];
-	$fees = $result1->monthly_fees;
-	$extra_charges = isset($result1->extra_charges) ? number_format($result1->extra_charges, 2) : '0.00';
-	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-	$previous_month_payment = isset($result1->previous_month_payment) ? number_format($result1->previous_month_payment, 2) : '0.00';
-	$deposit = get_deposit_value_of_class_without_currency($class_id);
-	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
-	$result5 = get_invoice_result5();
-	//die(print_r($result5));
-	if (!$result5) {
-		return false;
-	}
+		// ENROLLMENT DATA
+		$ci->db->select('*');
+		$ci->db->from('student_enrollment');
+		$ci->db->where(['student_id'	=>	$student_id, 'class_id'	=>	$class_id]);
+		$query2 = $ci->db->get()->row();
+		$result2 = $query2;
+	
+		// DEFINE VARIABLES
+	
+		$invoice_id = uniqid();
+		$invoice_no = get_invoice_no();
+		$date = date('Y-m-d H:i:s');
+		$invoice_file = $invoice_id . '__invoice_pdf-' . $date . '.pdf';
+		$file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
+	
+		$frequency = $result1->frequency;
+		$class_code = $result1->class_code;
+		$emailto = [$result1->email, $result1->parent_email];
+		$fees = $result1->monthly_fees;
+		$extra_charges = isset($result2->extra_charges) ? $result2->extra_charges : 0;
+		$deposit = $result1->deposit_fees;
+		$previous_month_balance = isset($result2->previous_month_balance) ? $result2->previous_month_balance : 0;
+		$previous_month_payment = isset($result2->previous_month_payment) ? $result2->previous_month_payment : 0;
+		$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 
-	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5]);
-	$result = $query->row();
-	$billing_data = json_decode($result->billing);
-	$book_price_amount = get_invoice_result2($result1->sid, $result5, $class_code);
-	$book_charges = number_format($book_price_amount, 2);
-	$L = $M = $E = $X = $G = $H = [];
-	$value_since_enrollment = get_value_since_enrollment($student_id, $class_code);
-	$X1 = $G1 = [];
-	if ($value_since_enrollment) {
-		$X1 = $value_since_enrollment['X'];
-		$G1 = $value_since_enrollment['G'];
-	}
-	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
-	if ($query->num_rows() > 0) {
-		foreach ($billing_data as $billing) {
-			if ($billing->working_week != 1) {
-				if ($billing->rest_week != 1) {
+		// INVOICE GENERATION DATE
+		$result3 = get_invoice_result5();
+		$query4 = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result3]);
+		$result4 = $query4->row();
+		$billing_data = json_decode($result4->billing);
+
+		$book_price_amount = get_invoice_result2($student_id, $result3, $class_code);
+		$book_charges = $book_price_amount;
+		
+	
+		// INVOICE EMAIL DATA
+		$subject = 'Invoice #' . $invoice_no;
+		$message = '<a href="' . $file_path . '">Click here </a> to view invoice.';
+		$invoice_content = ['subject' => $subject, 'message' => $message];
+
+		$L = $M = $E = $X = $G = $H = [];
+		$value_since_enrollment = get_value_since_enrollment($student_id, $class_code);
+		$X1 = $G1 = [];
+		if ($value_since_enrollment) {
+			$X1 = $value_since_enrollment['X'];
+			$G1 = $value_since_enrollment['G'];
+		}
+	
+
+	
+		$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $class_code]);
+		if ($query->num_rows() > 0) {
+			foreach ($billing_data as $billing) {
+				$no_week_count = [$billing->working_week, $billing->rest_week];
+				if (in_array(1, $no_week_count) == false) {
 					$dates = explode("-", $billing->date_range);
 					foreach ($query->result() as $row) {
 						$status = json_decode($row->status);
@@ -261,29 +279,30 @@ function send_archive_invoice_extend($student_id, $class_id)
 				}
 			}
 		}
-	}
-	//echo 'Invoice have been generated.';
-	$subject = 'TSA - Invoice #' . get_invoice_no();
-	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
-	$invoice_content = ['subject' => $subject, 'message' => $message,];
-	$invoice_amount = number_format(((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit), 2);
+		$L = array_sum($L);
+		$M = array_sum($M);
+		$X = array_sum($X);
+		$H = array_sum($H);
+		$returned_deposit = 0;
 
-	$amount_excluding_material = number_format(((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit), 2);
-	$lesson_fees = number_format((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees), 2);
+		$invoice_amount = (((($L + $M + abs(-$X) + (-$X1) + $G1 + $H) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit);
 
-	$invoice_data = ['class_code' => $class_code, 'lesson_fee' => $lesson_fees, 'material_fees' => $book_charges, 'extra_charges' => $extra_charges, 'previous_month_payment' => $previous_month_payment, 'previous_month_balance' => $previous_month_balance, 'returned_deposit'	=>	'0.00'];
-	$data = ['invoice_id' => $invoice_id, 'invoice_no' => get_invoice_no(), 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date,];
+		$amount_excluding_material = ($invoice_amount - $book_charges);
+		$lesson_fees = ((($L + $M + abs(-$X) + (-$X1) + $G1 + $H) / $frequency) * $fees);
 
-	$query = $ci->db->insert(DB_INVOICE, $data);
-	if ($query) {
-		$ci->load->library('M_pdf');
-		$ci->m_pdf->download_my_mPDF($invoice_file);
-		$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
-		if ($mail == true) {
+		$invoice_data = ['class_code' => $class_code, 'lesson_fee' => number_format($lesson_fees, 2), 'material_fees' => number_format($book_charges, 2), 'extra_charges' => number_format($extra_charges, 2), 'previous_month_payment' => number_format($previous_month_payment, 2), 'previous_month_balance' => number_format($previous_month_balance, 2), 'returned_deposit'	=>	number_format($returned_deposit, 2)];
 
-			// die(print_r($query));
-			// return true;
+		$invoice = ['invoice_id' => $invoice_id, 'invoice_no' => $invoice_no, 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date];
 
+		$query = $ci->db->insert(DB_INVOICE, $invoice);
+		if ($query) {
+			$ci->load->library('M_pdf');
+			$ci->m_pdf->download_my_mPDF($invoice_file);
+			$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
+			echo "<br> Invoice has been generated.";
+			if ($mail == true) {
+				echo "<br> Email Sent.";
+			}
 		}
 	}
 }
@@ -291,12 +310,7 @@ function send_archive_invoice_extend($student_id, $class_id)
 function send_final_settlement_invoice($student_id, $class_id)
 {
 	$ci = &get_instance();
-	$type = 'final_settlement_invoice';
-	$invoice_id = uniqid();
-	$date = date('Y-m-d H:i:s');
 
-	$invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
-	$file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
 	$ci->db->select('*, student.id as sid');
 	$ci->db->from(DB_CLASSES);
 	$ci->db->join('student_enrollment', 'class.class_id = student_enrollment.class_id');
@@ -305,52 +319,69 @@ function send_final_settlement_invoice($student_id, $class_id)
 	$ci->db->limit(1);
 	$query1 = $ci->db->get();
 	$result1 = $query1->row();
-	//die(print_r($ci->db->last_query()));
-	if (!$result1) {
-		return false;
-	}
+	if($result1)
+	{
+		$type = 'final_settlement_invoice';
 
-	$frequency = $result1->frequency;
-	$class_code = $result1->class_code;
-	$emailto = [$result1->email, $result1->parent_email];
-	$fees = $result1->monthly_fees;
-	$extra_charges = isset($result1->extra_charges) ? number_format($result1->extra_charges, 2) : '0.00';
-	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-	$previous_month_payment = isset($result1->previous_month_payment) ? number_format($result1->previous_month_payment, 2) : '0.00';
-	$deposit = get_deposit_value_of_class_without_currency($class_id);
-	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
-	$result5 = get_invoice_result5();
-	//die(print_r(gettype($previous_month_payment)));
-	if (!$result5) {
-		return false;
-	}
+		// ENROLLMENT DATA
+		$ci->db->select('*');
+		$ci->db->from('student_enrollment');
+		$ci->db->where(['student_id'	=>	$student_id, 'class_id'	=>	$class_id]);
+		$query2 = $ci->db->get()->row();
+		$result2 = $query2;
+	
+		// DEFINE VARIABLES
+	
+		$invoice_id = uniqid();
+		$invoice_no = get_invoice_no();
+		$date = date('Y-m-d H:i:s');
+		$invoice_file = $invoice_id . '__invoice_pdf-' . $date . '.pdf';
+		$file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
+	
+		$frequency = $result1->frequency;
+		$class_code = $result1->class_code;
+		$emailto = [$result1->email, $result1->parent_email];
+		$fees = $result1->monthly_fees;
+		$extra_charges = isset($result2->extra_charges) ? $result2->extra_charges : 0;
+		$deposit = $result1->deposit_fees;
+		$previous_month_balance = isset($result2->previous_month_balance) ? $result2->previous_month_balance : 0;
+		$previous_month_payment = isset($result2->previous_month_payment) ? $result2->previous_month_payment : 0;
+		$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 
-	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5]);
-	$result = $query->row();
-	$billing_data = json_decode($result->billing);
-	$book_price_amount = get_invoice_result2($result1->sid, $result5, $class_code);
-	$book_charges = number_format($book_price_amount, 2);
-	$L = $M = $E = $X = $G = $H = [];
-	$value_since_enrollment = get_value_since_enrollment($student_id, $class_code);
-	$X1 = $G1 = [];
-	//die(print_r($value_since_enrollment));
-	if ($value_since_enrollment) {
-		$X1 = $value_since_enrollment['X'];
-		$G1 = $value_since_enrollment['G'];
-	}
-	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
-	//echo $ci->db->last_query();
-	if ($query->num_rows() > 0) {
-		foreach ($billing_data as $billing) {
-			if ($billing->working_week != 1) {
-				if ($billing->rest_week != 1) {
+		// INVOICE GENERATION DATE
+		$result3 = get_invoice_result5();
+		$query4 = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result3]);
+		$result4 = $query4->row();
+		$billing_data = json_decode($result4->billing);
+
+		$book_price_amount = get_invoice_result2($student_id, $result3, $class_code);
+		$book_charges = $book_price_amount;
+		
+	
+		// INVOICE EMAIL DATA
+		$subject = 'Invoice #' . $invoice_no;
+		$message = '<a href="' . $file_path . '">Click here </a> to view invoice.';
+		$invoice_content = ['subject' => $subject, 'message' => $message];
+
+		$L = $M = $E = $X = $G = $H = [];
+		$value_since_enrollment = get_value_since_enrollment($student_id, $class_code);
+		$X1 = $G1 = [];
+		if ($value_since_enrollment) {
+			$X1 = $value_since_enrollment['X'];
+			$G1 = $value_since_enrollment['G'];
+		}
+	
+
+	
+		$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $class_code]);
+		if ($query->num_rows() > 0) {
+			foreach ($billing_data as $billing) {
+				$no_week_count = [$billing->working_week, $billing->rest_week];
+				if (in_array(1, $no_week_count) == false) {
 					$dates = explode("-", $billing->date_range);
 					foreach ($query->result() as $row) {
 						$status = json_decode($row->status);
-						//echo str_replace('/', '-', $dates[0]) .' | '. $row->attendance_date .' | '. str_replace('/', '-', $dates[1]).'<br/><br/>';
 						if (strtotime($row->attendance_date) >= strtotime(str_replace('/', '-', $dates[0])) && strtotime($row->attendance_date) <= strtotime(str_replace('/', '-', $dates[1]))) {
-							//echo "=======================";
-							//echo str_replace('/', '-', $dates[0]) .' | '. $row->attendance_date .' | '. str_replace('/', '-', $dates[1]).'<br/><br/>';
 							if ($status[0] == 1) {
 								$L[] = $status[0];
 							}
@@ -379,42 +410,39 @@ function send_final_settlement_invoice($student_id, $class_id)
 				}
 			}
 		}
-	}
-	//echo 'Invoice have been generated.';
-	//die(print_r($X1));
-	$subject = 'TSA - Invoice #' . get_invoice_no();
-	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
-	$invoice_content = ['subject' => $subject, 'message' => $message,];
-	$invoice_amount = number_format(((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit), 2);
-	$amount_excluding_material = number_format(((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit), 2);
-	$lesson_fees = number_format((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees), 2);
-	//die(print_r($invoice_amount));
-	$invoice_data = ['class_code' => $class_code, 'lesson_fee' => $lesson_fees, 'material_fees' => $book_charges, 'extra_charges' => $extra_charges, 'previous_month_payment' => $previous_month_payment, 'previous_month_balance' => $previous_month_balance, 'returned_deposit'	=>	$deposit];
-	$data = ['invoice_id' => $invoice_id, 'invoice_no' => get_invoice_no(), 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date,];
+		$L = array_sum($L);
+		$M = array_sum($M);
+		$X = array_sum($X);
+		$H = array_sum($H);
+		$returned_deposit = 0;
 
-	$query = $ci->db->insert(DB_INVOICE, $data);
-	if ($query) {
-		$ci->load->library('M_pdf');
-		$ci->m_pdf->download_my_mPDF($invoice_file);
-		$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
-		if ($mail == true) {
+		$invoice_amount = (((($L + $M + abs(-$X) + (-$X1) + $G1 + $H) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment - $deposit);
 
-			// die(print_r($query));
-			// return true;
+		$amount_excluding_material = ($invoice_amount - $book_charges);
 
+		$lesson_fees = ((($L + $M + abs(-$X) + (-$X1) + $G1 + $H) / $frequency) * $fees);
+
+		$invoice_data = ['class_code' => $class_code, 'lesson_fee' => number_format($lesson_fees, 2), 'material_fees' => number_format($book_charges, 2), 'extra_charges' => number_format($extra_charges, 2), 'previous_month_payment' => number_format($previous_month_payment, 2), 'previous_month_balance' => number_format($previous_month_balance, 2), 'returned_deposit'	=>	number_format($returned_deposit, 2)];
+
+		$invoice = ['invoice_id' => $invoice_id, 'invoice_no' => $invoice_no, 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date];
+
+		$query = $ci->db->insert(DB_INVOICE, $invoice);
+		if ($query) {
+			$ci->load->library('M_pdf');
+			$ci->m_pdf->download_my_mPDF($invoice_file);
+			$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
+			echo "<br> Invoice has been generated.";
+			if ($mail == true) {
+				echo "<br> Email Sent.";
+			}
 		}
 	}
 }
 
 function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 {
-
 	$ci = &get_instance();
-	$type = 'class_transfer_invoice';
-	$invoice_id = uniqid();
-	$date = date('Y-m-d H:i:s');
-	$invoice_file = uniqid() . '__invoice_pdf-' . date('Y-m-d') . '.pdf';
-	$file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
+
 	$ci->db->select('*, student.id as sid');
 	$ci->db->from(DB_CLASSES);
 	$ci->db->join('student_enrollment', 'class.class_id = student_enrollment.class_id');
@@ -423,48 +451,69 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 	$ci->db->limit(1);
 	$query1 = $ci->db->get();
 	$result1 = $query1->row();
-	//return $result1;
-	if (!$result1) {
-		return false;
-	}
+	if($result1)
+	{
+		$type = 'class_transfer_invoice';
 
-	$frequency = $result1->frequency;
-	$class_code = $result1->class_code;
-	$emailto = [$result1->email, $result1->parent_email];
-	$fees = $result1->monthly_fees;
-	$extra_charges = isset($result1->extra_charges) ? number_format($result1->extra_charges, 2) : '0.00';
-	$previous_month_balance = get_previous_month_balance($student_id, $class_id);
-	$previous_month_payment = isset($result1->previous_month_payment) ? number_format($result1->previous_month_payment, 2) : '0.00';
+		// ENROLLMENT DATA
+		$ci->db->select('*');
+		$ci->db->from('student_enrollment');
+		$ci->db->where(['student_id'	=>	$student_id, 'class_id'	=>	$class_id]);
+		$query2 = $ci->db->get()->row();
+		$result2 = $query2;
+	
+		// DEFINE VARIABLES
+	
+		$invoice_id = uniqid();
+		$invoice_no = get_invoice_no();
+		$date = date('Y-m-d H:i:s');
+		$invoice_file = $invoice_id . '__invoice_pdf-' . $date . '.pdf';
+		$file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
+	
+		$frequency = $result1->frequency;
+		$class_code = $result1->class_code;
+		$emailto = [$result1->email, $result1->parent_email];
+		$fees = $result1->monthly_fees;
+		$extra_charges = isset($result2->extra_charges) ? $result2->extra_charges : 0;
+		$deposit = $result1->deposit_fees;
+		$previous_month_balance = isset($result2->previous_month_balance) ? $result2->previous_month_balance : 0;
+		$previous_month_payment = isset($result2->previous_month_payment) ? $result2->previous_month_payment : 0;
+		$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
 
-	$invoice_amount = $amount_excluding_material = $lesson_fees = 0;
-	$result5 = get_invoice_result5();
-	if (!$result5) {
-		return false;
-	}
+		// INVOICE GENERATION DATE
+		$result3 = get_invoice_result5();
+		$query4 = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result3]);
+		$result4 = $query4->row();
+		$billing_data = json_decode($result4->billing);
 
-	$query = $ci->db->get_where(DB_BILLING, ['invoice_generation_date' => $result5]);
-	$result = $query->row();
-	$billing_data = json_decode($result->billing);
-	$book_price_amount = get_invoice_result2($result1->sid, $result5, $class_code);
-	$book_charges = number_format($book_price_amount, 2);
-	$L = $M = $E = $X = $G = $H = [];
-	$value_since_enrollment = get_value_since_enrollment($student_id, $class_code);
-	$X1 = $G1 = [];
-	if ($value_since_enrollment) {
-		$X1 = $value_since_enrollment['X'];
-		$G1 = $value_since_enrollment['G'];
-	}
-	$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $result1->class_code]);
-	if ($query->num_rows() > 0) {
-		foreach ($billing_data as $billing) {
-			if ($billing->working_week != 1) {
-				if ($billing->rest_week != 1) {
+		$book_price_amount = get_invoice_result2($student_id, $result3, $class_code);
+		$book_charges = $book_price_amount;
+		
+	
+		// INVOICE EMAIL DATA
+		$subject = 'Invoice #' . $invoice_no;
+		$message = '<a href="' . $file_path . '">Click here </a> to view invoice.';
+		$invoice_content = ['subject' => $subject, 'message' => $message];
+
+		$L = $M = $E = $X = $G = $H = [];
+		$value_since_enrollment = get_value_since_enrollment($student_id, $class_code);
+		$X1 = $G1 = [];
+		if ($value_since_enrollment) {
+			$X1 = $value_since_enrollment['X'];
+			$G1 = $value_since_enrollment['G'];
+		}
+	
+
+	
+		$query = $ci->db->get_where(DB_ATTENDANCE, ['student_id' => $student_id, 'class_code' => $class_code]);
+		if ($query->num_rows() > 0) {
+			foreach ($billing_data as $billing) {
+				$no_week_count = [$billing->working_week, $billing->rest_week];
+				if (in_array(1, $no_week_count) == false) {
 					$dates = explode("-", $billing->date_range);
 					foreach ($query->result() as $row) {
 						$status = json_decode($row->status);
 						if (strtotime($row->attendance_date) >= strtotime(str_replace('/', '-', $dates[0])) && strtotime($row->attendance_date) <= strtotime(str_replace('/', '-', $dates[1]))) {
-
-
 							if ($status[0] == 1) {
 								$L[] = $status[0];
 							}
@@ -493,61 +542,64 @@ function send_class_transfer_invoice($student_id, $class_id, $class_id_id)
 				}
 			}
 		}
-	}
-	//echo 'Invoice have been generated.';
-	$subject = 'TSA - Invoice #' . get_invoice_no();
-	$message = '<a href="' . base_url($file_path) . '">Click here </a> to view invoice.';
-	$invoice_content = ['subject' => $subject, 'message' => $message,];
-	$invoice_amount = number_format(((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment), 2);
-	$amount_excluding_material = number_format(((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees) + $extra_charges + $previous_month_balance - $previous_month_payment), 2);
-	$lesson_fees = number_format((((count($L) + count($M) + abs(-count($X)) + (-$X1) + ($G1) + count($H)) / $frequency) * $fees), 2);
+		$L = array_sum($L);
+		$M = array_sum($M);
+		$X = array_sum($X);
+		$H = array_sum($H);
+		$returned_deposit = 0;
 
-	$invoice_data = ['class_code' => $class_code, 'lesson_fee' => $lesson_fees, 'material_fees' => $book_charges, 'extra_charges' => $extra_charges, 'previous_month_payment' => $previous_month_payment, 'previous_month_balance' => $previous_month_balance, 'returned_deposit'	=>	'0.00'];
-	$data = ['invoice_id' => $invoice_id, 'invoice_no' => get_invoice_no(), 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date,];
+		$invoice_amount = (((($L + $M + abs(-$X) + (-$X1) + $G1 + $H) / $frequency) * $fees) + $book_charges + $extra_charges + $previous_month_balance - $previous_month_payment);
 
-	$query = $ci->db->insert(DB_INVOICE, $data);
+		$amount_excluding_material = ($invoice_amount - $book_charges);
 
-	/* TRANSFER STUDENT */
-	$data = [
-		'student_id'    =>  $student_id,
-		'class_id' =>   $class_id_id,
-		'status'    =>  3,
-		'created_at'    =>  $date,
-		'updated_at'    =>  $date,
-	];
-	$data1 = [
-		'student_id'    =>  $student_id,
-		'class_id' =>   $class_id_id,
-		'updated_at'    =>  $date,
-	];
-	$ci->db->where('student_id', $student_id);
-	$ci->db->where('class_id', $class_id);
-	$ci->db->update('student_to_class', ['status' =>  5]);
+		$lesson_fees = ((($L + $M + abs(-$X) + (-$X1) + $G1 + $H) / $frequency) * $fees);
 
-	$query = $ci->db->get_where('student_to_class', ['class_id' => $class_id_id, 'student_id'    =>  $student_id, 'status'   =>  3]);
-	if ($query->num_rows() > 0) {
-		//return print_r($this->db->last_query());
+		$invoice_data = ['class_code' => $class_code, 'lesson_fee' => number_format($lesson_fees, 2), 'material_fees' => number_format($book_charges, 2), 'extra_charges' => number_format($extra_charges, 2), 'previous_month_payment' => number_format($previous_month_payment, 2), 'previous_month_balance' => number_format($previous_month_balance, 2), 'returned_deposit'	=>	number_format($returned_deposit, 2)];
+
+		$invoice = ['invoice_id' => $invoice_id, 'invoice_no' => $invoice_no, 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date];
+
+		$query = $ci->db->insert(DB_INVOICE, $invoice);
+
+		/* TRANSFER STUDENT */
+		$data = [
+			'student_id'    =>  $student_id,
+			'class_id' =>   $class_id_id,
+			'status'    =>  3,
+			'created_at'    =>  $date,
+			'updated_at'    =>  $date,
+		];
+		$data1 = [
+			'student_id'    =>  $student_id,
+			'class_id' =>   $class_id_id,
+			'updated_at'    =>  $date,
+		];
 		$ci->db->where('student_id', $student_id);
-		$ci->db->where('class_id', $class_id_id);
-		$ci->db->update('student_to_class', ['status' =>  3]);
-	} else {
-		$ci->db->insert('student_to_class', $data);
-	}
+		$ci->db->where('class_id', $class_id);
+		$ci->db->update('student_to_class', ['status' =>  5]);
 
-	$ci->db->where('student_id', $student_id);
-	$ci->db->where('class_id', $class_id);
-	$ci->db->update('student_enrollment', $data1);
-	/* END TRANSFER STUDENT */
+		$query = $ci->db->get_where('student_to_class', ['class_id' => $class_id_id, 'student_id'    =>  $student_id, 'status'   =>  3]);
+		if ($query->num_rows() > 0) {
+			//return print_r($this->db->last_query());
+			$ci->db->where('student_id', $student_id);
+			$ci->db->where('class_id', $class_id_id);
+			$ci->db->update('student_to_class', ['status' =>  3]);
+		} else {
+			$ci->db->insert('student_to_class', $data);
+		}
 
-	if ($query) {
-		$ci->load->library('M_pdf');
-		$ci->m_pdf->download_my_mPDF($invoice_file);
-		$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
-		if ($mail == true) {
+		$ci->db->where('student_id', $student_id);
+		$ci->db->where('class_id', $class_id);
+		$ci->db->update('student_enrollment', $data1);
+		/* END TRANSFER STUDENT */
 
-			// die(print_r($query));
-			// return true;
-
+		if ($query) {
+			$ci->load->library('M_pdf');
+			$ci->m_pdf->download_my_mPDF($invoice_file);
+			$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
+			echo "<br> Invoice has been generated.";
+			if ($mail == true) {
+				echo "<br> Email Sent.";
+			}
 		}
 	}
 }
@@ -652,7 +704,7 @@ function get_value_since_enrollment($student_id, $class_code)
 		}
 	}
 	return [
-		'X'	=>	count($X),
-		'G'	=>	count($G),
+		'X'	=>	array_sum($X),
+		'G'	=>	array_sum($G),
 	];
 }
