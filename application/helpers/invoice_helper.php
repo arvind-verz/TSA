@@ -28,10 +28,11 @@ function send_cron_invoice()
 	$ci->db->join('student_to_class', 'student.student_id = student_to_class.student_id');
 	$ci->db->join(DB_CLASSES, 'student_to_class.class_id = class.class_id');
 	$ci->db->where(['student_to_class.status' => 3, DB_STUDENT . '.is_archive' => 0, DB_STUDENT . '.is_active' => 1]);
-	$query1 = $ci->db->get()->result();
+	$query1 = $ci->db->get();
 	// var_dump($query1);
 	// die();
-	if ($query1) {
+	if ($query1->num_rows()>0) {
+		$query1 = $query1->result();
 		foreach ($query1 as $result1) {
 			$student_id = $result1->student_id;
 			$class_id = $result1->class_id;
@@ -87,9 +88,9 @@ function send_cron_invoice()
 			$ci->db->where('student_id', $student_id);
 			$ci->db->where('class_id', $class_id);
 			$ci->db->where('type', 'first_month_invoice');
-			$query4 = $ci->db->get()->result();
+			$query4 = $ci->db->get();
 			//var_dump($query4);
-			if ($query4) {
+			if ($query4->num_rows()<1) {
 				// GENERATE REST MONTH INVOICE ***************************/
 				$status = 1;
 				$type = 'rest_month_invoice';

@@ -421,31 +421,31 @@
 						</div>
 						<div class="form-group">
 							<label>Deposit</label>
-							<input type="text" class="form-control" name="deposit" id="">
+							<input type="text" class="form-control" name="deposit" id="" required>
 						</div>
 						<div class="form-group">
 							<label>Lesson Fees</label>
-							<input type="text" class="form-control" name="lesson_fees" id="">
+							<input type="text" class="form-control" name="lesson_fees" id="" required>
 						</div>
 						<div class="form-group">
 							<label>Material Fees</label>
-							<input type="text" class="form-control" name="material_fees" id="">
+							<input type="text" class="form-control" name="material_fees" id="" required>
 						</div>
 						<div class="form-group">
 							<label>Extra Charges</label>
-							<input type="text" class="form-control" name="extra_charges" id="">
+							<input type="text" class="form-control" name="extra_charges" id="" required>
 						</div>
 						<div class="form-group">
 							<label>Previous Month Payment</label>
-							<input type="text" class="form-control" name="previous_month_payment" id="">
+							<input type="text" class="form-control" name="previous_month_payment" id="" required>
 						</div>
 						<div class="form-group">
 							<label>Previous Month Balance</label>
-							<input type="text" class="form-control" name="previous_month_balance" id="">
+							<input type="text" class="form-control" name="previous_month_balance" id="" required>
 						</div>
 						<div class="form-group">
 							<label>Returned Deposit</label>
-							<input type="text" class="form-control" name="returned_deposit" id="">
+							<input type="text" class="form-control" name="returned_deposit" id="" required>
 						</div>
 					</div>
 				</div>
