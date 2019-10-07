@@ -197,12 +197,12 @@
                     contentType: false,
                     success: function(data) {
                         $(ref).parents("tr").find("select[name='order_student_id']").html(data);
-                        $(ref).parents("tr").find('.selectpicker').multiselect('refresh');
+                        $(ref).parents("tr").find('.selectpicker').multiselect('rebuild');
                     }
                 });
             }
             else {
-                $(ref).parents("tr").find('.selectpicker').multiselect('refresh');
+                $(ref).parents("tr").find('.selectpicker').multiselect('rebuild');
             }
         });
 
