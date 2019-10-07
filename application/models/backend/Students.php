@@ -647,28 +647,37 @@ class Students extends CI_Model
 		
 			// DEFINE VARIABLES
 		
-			// $invoice_id = uniqid();
-			// $invoice_no = get_invoice_no();
-			// $date = date('Y-m-d H:i:s');
-			// $invoice_file = $invoice_id . '__invoice_pdf-' . $date . '.pdf';
-			// $file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
+			$invoice_id = uniqid();
+			$invoice_no = get_invoice_no();
+			$date = date('Y-m-d H:i:s');
+			$invoice_file = $invoice_id . '__invoice_pdf-' . $date . '.pdf';
+			$file_path = base_url('assets/files/pdf/invoice/' . $invoice_file);
 		
-			// $emailto = [$result1->email, $result1->parent_email];
+			$class_code = $result1->class_code;
+			$emailto = [$result1->email, $result1->parent_email];
 
-			// $invoice_data = ['class_code' => $class_code, 'lesson_fee' => number_format($lesson_fees, 2), 'material_fees' => number_format($book_charges, 2), 'extra_charges' => number_format($extra_charges, 2), 'previous_month_payment' => number_format($previous_month_payment, 2), 'previous_month_balance' => number_format($previous_month_balance, 2), 'returned_deposit'	=>	number_format($returned_deposit, 2)];
+			// INVOICE EMAIL DATA
+			$subject = 'Invoice #' . $invoice_no;
+			$message = '<a href="' . $file_path . '">Click here </a> to view invoice.';
+			$invoice_content = ['subject' => $subject, 'message' => $message];
 
-			// $invoice = ['invoice_id' => $invoice_id, 'invoice_no' => $invoice_no, 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $book_charges, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date];
+			$invoice_amount = ($lesson_fees + $material_fees + $extra_charges + $previous_month_balance - $previous_month_payment);
+			$amount_excluding_material = ($invoice_amount - $material_fees);
 
-			// $query = $this->db->insert(DB_INVOICE, $invoice);
-			// if ($query) {
-			// 	$this->load->library('M_pdf');
-			// 	$this->m_pdf->download_my_mPDF($invoice_file);
-			// 	$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
-			// 	echo "<br> Invoice has been generated.";
-			// 	if ($mail == true) {
-			// 		echo "<br> Email Sent.";
-			// 	}
-			// }
+			$invoice_data = ['class_code' => $class_code, 'lesson_fee' => number_format($lesson_fees, 2), 'material_fees' => number_format($material_fees, 2), 'extra_charges' => number_format($extra_charges, 2), 'previous_month_payment' => number_format($previous_month_payment, 2), 'previous_month_balance' => number_format($previous_month_balance, 2), 'returned_deposit'	=>	number_format($returned_deposit, 2)];
+
+			$invoice = ['invoice_id' => $invoice_id, 'invoice_no' => $invoice_no, 'student_id' => $student_id, 'class_id' => $class_id, 'invoice_date' => $date, 'invoice_amount' => $invoice_amount, 'amount_excluding_material' => $amount_excluding_material, 'material_amount' => $material_fees, 'invoice_data' => json_encode($invoice_data), 'invoice_file' => $invoice_file, 'type' => $type, 'created_at' => $date, 'updated_at' => $date];
+
+			$query = $this->db->insert(DB_INVOICE, $invoice);
+			if ($query) {
+				$this->load->library('M_pdf');
+				$this->m_pdf->download_my_mPDF($invoice_file);
+				$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message);
+				echo "<br> Invoice has been generated.";
+				if ($mail == true) {
+					echo "<br> Email Sent.";
+				}
+			}
 		}
 	}
 
