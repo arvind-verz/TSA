@@ -84,7 +84,7 @@
                 success: function(data) {
                     //alert(data);
                     $(".students").html(data);
-					$('.selectpicker').multiselect('refresh');
+					$('.selectpicker').multiselect('rebuild');
                 }
             })
         });
