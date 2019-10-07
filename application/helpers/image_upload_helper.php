@@ -18,7 +18,10 @@ function upload_image_file($image_file, $image_placeholder, $width, $height)
     if ($ci->upload->do_upload($image_placeholder)) {
 		$width=372;
 		$height=249;
+		$width2=515;
+		$height2=290;
         upload_image_resize($config['file_name'], $width, $height, $image_placeholder,$file_name);
+        upload_image_resize2 ($config['file_name'], $width2, $height2, $image_placeholder,$file_name);
         return $ci->upload->data('file_name');
     }
 }
@@ -30,6 +33,27 @@ function upload_image_resize($image_file, $width, $height, $image_placeholder,$f
     $config['image_library']  = 'gd2';
     $config['source_image']   = './assets/files/'. $image_placeholder .'/' . $image_file;
 	$config['new_image']   = './assets/files/'. $image_placeholder .'/thumb-' . $image_file;
+    $config['overwrite']      = true;
+    $config['maintain_ratio'] = false;
+    $config['width']          = $width;
+    $config['height']         = $height;
+
+
+    $ci->load->library('image_lib', $config);
+    $ci->image_lib->initialize($config);
+	if ( ! $ci->image_lib->resize())
+	{
+	echo $ci->image_lib->display_errors();die;
+	}
+}
+
+function upload_image_resize2($image_file, $width, $height, $image_placeholder,$file_name)
+{
+    $ci = &get_instance();
+	
+    $config['image_library']  = 'gd2';
+    $config['source_image']   = './assets/files/'. $image_placeholder .'/' . $image_file;
+	$config['new_image']   = './assets/files/'. $image_placeholder .'/featured-' . $image_file;
     $config['overwrite']      = true;
     $config['maintain_ratio'] = false;
     $config['width']          = $width;

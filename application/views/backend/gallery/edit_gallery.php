@@ -30,9 +30,13 @@
                 <?php endif;?>
                 <input type="hidden" name="gallery_exist" value="<?php echo $details[0]['image_name']; ?>">
                 <div class="form-group">
-                  <label for="location">Pics : <span>*</span></label>
+                  <label for="location">Pics  : <span>*</span></label>
                   <input type="file" name="gallery" id="image_name" value="<?php echo $details[0]['image_name'];?>">
                   <p><strong>Note:</strong> Preferred Image Dimension Width:600, Height:400 or  Width:6000, Height:4000 or same ratio (W:H=3:2)</p>
+                </div>
+                <div class="form-group">
+                  <label for="name">Featured :</label>
+                  <input type="checkbox" name="featured" <?php if($details[0]['featured']==1){?>checked="checked"<?php }?>  id="featured" value="1" />
                 </div>
                 <div class="form-group">
                   <label for="name">Sort Order :</label>

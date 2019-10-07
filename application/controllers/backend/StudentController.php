@@ -309,5 +309,12 @@ class StudentController extends CI_Controller
     public function get_p_content()
     {
       print_r(get_p_content());
-    }
+	}
+	
+	public function generate_invoice()
+	{
+		$result = $this->students->generate_invoice($_POST);
+		var_dump($result);
+		die();
+	}
 }

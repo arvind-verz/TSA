@@ -515,7 +515,7 @@ body, #wrapper, .footer-wrapper { opacity: 0; }
 .excellence-within a { padding-left: 33px; background: url(../images/verz-logo.png) no-repeat left 3px; font-size: 13px; line-height: 15px; }
 
 /*---*/
-.social-bar{ float:right; margin-top:10px;}
+.social-bar{ float:right; margin-top:10px; margin-right:20px;}
 .social-bar a{ color:#959595; margin:0px 5px; font-size:15px;}
 .navigation { position: relative; display: block; color: #252525; font-size:18px; font-weight: 600; text-transform: uppercase; margin-bottom: 0px; line-height: 50px; cursor: pointer; padding:0px 0px; display:none;}
 .navigation::after { position: absolute; right: 0px; top: 0px; font-family: 'jcon-font'; content: '\f0c9'; text-align: center; font-size: 23px; color: #252525; font-weight: 400;}

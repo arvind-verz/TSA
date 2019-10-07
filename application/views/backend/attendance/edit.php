@@ -142,21 +142,21 @@ $("body").on("change", "select[name='class_code']", function() {
         $("select[name='class_code_transfer']").html('<option value="">-- Select One --</option>');
     }
 });
-$("body").on("change", ".attendance", function() {
-    var current = $(this).parents("td").find("input.attendance");
-    var check_storage = [];
-    current.each(function() {
-        if ($(this).val() > 1) {
-            current.val(0);
-        }
-        if ($(this).val() == 1) {
-            check_storage.push(1);
-        }
-        if ($(this).val() == 1 && check_storage.length > 1) {
-            current.val(0);
-        }
-    });
-});
+// $("body").on("change", ".attendance", function() {
+//     var current = $(this).parents("td").find("input.attendance");
+//     var check_storage = [];
+//     current.each(function() {
+//         if ($(this).val() > 1) {
+//             current.val(0);
+//         }
+//         if ($(this).val() == 1) {
+//             check_storage.push(1);
+//         }
+//         if ($(this).val() == 1 && check_storage.length > 1) {
+//             current.val(0);
+//         }
+//     });
+// });
 
 $("body").on("click", "button.copy_fist_line", function() {
     var current_value = $("input[name='attendance_value1[]']");

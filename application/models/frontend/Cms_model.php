@@ -83,7 +83,7 @@ class Cms_model extends CI_Model
         $this->db->select('*')
             ->from(DB_TESTIMONIAL)
 			->where('featured', 1)
-			->where('status', 1)
+			->where('status', '1')
 			->order_by('sort_order' , 'ASC')
 			->limit(10);
         $query = $this->db->get()->result_array();
@@ -139,10 +139,12 @@ class Cms_model extends CI_Model
     public function get_gallery()
     {
         $this->db->select('*')
-            ->from(DB_GALLERY);
+            ->from(DB_GALLERY)
+            ->where('featured', 1)
+            ->where('status', '1');
 
         $query = $this->db->get()->result_array();
-
+//echo $this->db->last_query();
         return $query;
     }
 
@@ -292,10 +294,8 @@ class Cms_model extends CI_Model
         $recaptcha = $_POST['g-recaptcha-response'];
         $query = $this->db->get_where('aauth_users', ['id' => 1]);
         $result   = $query->row();
-
         $to_email = get_system_settings()->inquiry_email;
         $message_template = $this->getEnquiryMessage($fname, $email_id, $phone_no, $subject, $message);
-
 
         if(empty($recaptcha))
         {
@@ -313,7 +313,8 @@ class Cms_model extends CI_Model
 
 
         $this->db->insert(DB_CONTACT, $data);
-        $var = send_mail_contact($email_id, $to_email, $subject, $message_template);
+       
+        $var = send_mail_contact($email_id, $to_email, $subject, $message_template,$fname);
         //print_r($var);  exit;
         return redirect("thank-you");
     }
@@ -324,14 +325,14 @@ class Cms_model extends CI_Model
     	$email_id = $_POST['email_id'];
     	$phone_no = $_POST['phone'];
 		$message = $_POST['message'];
-		$subject = "Quick Enquiry";
+		$subject = $subject1 = "Quick Enquiry";
     	$create_date = date('Y-m-d H:i:s');
         $recaptcha = $_POST['g-recaptcha-response'];
         $query = $this->db->get_where('aauth_users', ['id' => 1]);
         $result   = $query->row();
-        $to_email = 'contactus@thesciacdm.com';
+        $to_email = get_system_settings()->inquiry_email;
 
-        $message_template = $this->getEnquiryMessage($fname, $email_id, $phone_no, $message);
+        $message_template = $this->getEnquiryMessage($fname, $email_id, $phone_no, $subject = null, $message);
 
         if(empty($recaptcha))
         {
@@ -347,12 +348,12 @@ class Cms_model extends CI_Model
         );
 
 	    $this->db->insert(DB_ENQUIRY, $data);
-	    send_mail_contact($email_id, $to_email, $subject, $message_template, $fname);
+	    send_mail_contact($email_id, $to_email, $subject1, $message_template, $fname);
 
         return redirect("thank-you");
     }
     
-    public function getEnquiryMessage($fname, $email_id, $phone_no, $subject = null, $message)
+    public function getEnquiryMessage($fname, $email_id, $phone_no, $subject, $message)
     {
         $subject_content = '';
         if($subject) {
@@ -768,7 +769,7 @@ class Cms_model extends CI_Model
                     <td class="content-cell">
                       <p>Enquiry Details specified below:</p>
                       <p>Name: <strong> '.$fname.' </strong></p>
-					  <p>Email: <strong> '.$email.' </strong></p>
+					  <p>Email: <strong> '.$email_id.' </strong></p>
 					  <p>Phone No: <strong> '.$phone_no.' </strong></p>
 					  '.$subject_content.'
 					  <p>Message: <strong> '.$message.' </strong></p>

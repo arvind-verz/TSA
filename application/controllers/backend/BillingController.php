@@ -9,7 +9,7 @@ class BillingController extends CI_Controller
         parent::__construct();
         //is_logged_in();
         $this->load->model('backend/billing', 'billing');
-        $this->load->model('backend/accounts', 'accounts');
+		$this->load->model('backend/accounts', 'accounts');
         $this->accounts->is_logged_in();
         $this->result = $this->accounts->get_login_user_id();
         $this->title = ADMINPANEL . ' | ' . BILLING;

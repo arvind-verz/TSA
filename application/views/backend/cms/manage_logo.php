@@ -23,7 +23,7 @@
                 <input type="file" name="logo"  value="" class="form-control" />
                 <br/>
                 <img src="<?php echo isset($logo->logo) ? base_url('assets/files/logo/' . $logo->logo) : ''; ?>" width="100px" style="background: blue;">
-                <br />(<strong>NOTE:</strong>Image dimension: width:249 height:99)
+                <br />(<strong>NOTE:</strong>Image size should be 250*100 for better display)
               </div>
               
             </div>

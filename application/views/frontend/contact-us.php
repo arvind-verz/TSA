@@ -111,7 +111,7 @@
 							<div class="row">
 								<div class="col-sm-9 col-sm-offset-3">
 									<div class="text-center pt30">
-										<div class="g-recaptcha" data-sitekey="6LfLyqwUAAAAAFEdmXCzDSSg7XQ66l-_4ounyalr"></div>
+										<div class="g-recaptcha" data-sitekey="6Lc-G7AUAAAAAIXMi5dMy7e9DGoqwR6pbfjUbLJC"></div>
 									</div>
 								</div>
 							</div>

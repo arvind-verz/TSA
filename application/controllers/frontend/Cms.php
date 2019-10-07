@@ -131,7 +131,9 @@ class Cms extends CI_Controller
             $this->load->view('frontend/subjects');
             $this->load->view('frontend/include/footer');
 
-        } else if ($url == 'testimonials') {
+        }
+        
+        else if ($url == 'testimonials') {
             $this->breadcrumbs2->push('Home', 'home');
             $this->breadcrumbs2->push('Testimonial', 'testimonial');
 			$data_msg['testimonials'] = $this->Cms_model->get_all_testimonials();
@@ -140,7 +142,8 @@ class Cms extends CI_Controller
             $this->load->view('frontend/testimonial');
             $this->load->view('frontend/include/footer');
 
-        } else if ($url == 'login') {
+        } 
+        else if ($url == 'login') {
             $this->breadcrumbs2->push('Home', 'home');
             $this->breadcrumbs2->push('Login', 'login');
             $data_msg['breadcrumbs'] = $this->breadcrumbs2->show();
@@ -238,7 +241,8 @@ class Cms extends CI_Controller
 
     public function contact_us()
     {
-        //print_r(send_mail_contact('arvind.verz@gmail.com', 'admin@thescienceacademy.sg', 'Test', 'Test.'));die();
+        //mail("arvind.verz@gmail.com", 'Test', 'Test.');die();
+        //print_r(send_mail_contact('arvind.verz@gmail.com', 'purohitarvind77@gmail.com', 'Thank you', 'Thank you for your mail.', 'Arvind'));die();
         //print_r(send_autoreply_email('arvind.verz@gmail.com', 'Arvind Purohit'));die();
         $data_msg = array();
         $url      = "contact-us";
@@ -311,6 +315,7 @@ class Cms extends CI_Controller
 
     public function quick_enquiry_form()
     {
+        
         $configForm = array(
             array(
                 'field' => 'fname',
@@ -355,6 +360,7 @@ class Cms extends CI_Controller
             $this->load->view('frontend/include/footer');
         }
         else{
+            
             $this->Cms_model->quick_enquiry_form($_POST);
         }
     }
