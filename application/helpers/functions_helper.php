@@ -1278,34 +1278,42 @@ function get_attendance_sheet($class_code = false, $attendance_date)
         <?php
 	foreach($query as $result)
 		{
+			$ci->db->select('*');
+			$ci->db->from('student_enrollment');
+			$ci->db->where(['student_id'	=>	$result->student_id, 'class_id'	=>	$result->class_id]);
+			$query2 = $ci->db->get()->row();
+			$result2 = $query2;
+			if(strtotime(date('Y-m-d', strtotime($result2->enrollment_date))) <= strtotime(date('Y-m-d')))
+			{
 ?>
             <tr>
                 <td><input type="checkbox" name="student_id_transfer" value="<?php
-		echo $result->student_id; ?>"></td>
-                <td><?php
-		echo $result->nric; ?></td>
-                <td><?php
-		echo $result->firstname . ' ' . $result->lastname; ?></td>
-                <td>
-                    <input type="hidden" name="student_id[]" class="form-control" value="<?php
-		echo $result->student_id; ?>">
-                    <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="L">
-                    <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="M">
-                    <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="E">
-                    <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="X">
-                    <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="G">
-                    <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="H">
-                </td>
-                <td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
-            </tr>
-            <?php
-		$i++;
+			echo $result->student_id; ?>"></td>
+					<td><?php
+			echo $result->nric; ?></td>
+					<td><?php
+			echo $result->firstname . ' ' . $result->lastname; ?></td>
+					<td>
+						<input type="hidden" name="student_id[]" class="form-control" value="<?php
+			echo $result->student_id; ?>">
+						<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="L">
+						<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="M">
+						<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="E">
+						<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="X">
+						<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="G">
+						<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="0" placeholder="H">
+					</td>
+					<td><input type="text" name="attendance_remark[]" class="form-control" value="" placeholder="Remark"></td>
+				</tr>
+				<?php
+			$i++;
+			}
 		}
 	}
 
@@ -2146,7 +2154,7 @@ function late_fee_reminder()
 		}
 	}
 
-function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoice_amount = false, $type = false, $subject, $message)
+function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoice_amount = false, $type = false, $subject, $message, $attachment)
 	{
 	$ci = & get_instance();
 	$query = $ci->db->get_where('aauth_users', ['id' => 1]);
@@ -2170,6 +2178,7 @@ function send_mail($emailto, $invoice_id = false, $invoice_date = false, $invoic
 	$ci->email->to($emailto);
 	$ci->email->subject($subject);
 	$ci->email->message($message);
+	$ci->email->attach($attachment);
 	if ($ci->email->send())
 		{
 		return true;
