@@ -113,7 +113,7 @@ class Tutors extends CI_Model
 		$this->db->insert('tutor', $data);
 		$subject = "Welcome to The Science Academy";
 		$message = tutor_registration_template($firstname.' '.$lastname, $email, $password, $login_link);
-		send_mail($email, false, false, false, false, $subject, $message);
+		send_mail($email, false, false, false, false, $subject, $message, false);
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === false) {

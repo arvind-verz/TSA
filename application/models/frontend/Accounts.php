@@ -96,7 +96,7 @@ class Accounts extends CI_Model
                 $emailto    = $result->email;
                 $subject    = "Reset Password";
                 $message    = password_reset_template($reset_link, $name);
-                $mail       = send_mail($emailto, false, false, false, false, $subject, $message);
+                $mail       = send_mail($emailto, false, false, false, false, $subject, $message, false);
                 if ($mail) {
                     $this->session->set_flashdata('success', 'Password reset link has been sent to email.');
                     return redirect('reset-password');

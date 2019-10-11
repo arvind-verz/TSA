@@ -314,13 +314,17 @@ class StudentController extends CI_Controller
 	public function generate_invoice()
 	{
 		$result = $this->students->generate_invoice($_POST);
-		if($result==true)
+		if($result=="success")
 		{
 		    $this->session->set_flashdata('success', 'Invoice has been generated.');
             return redirect('admin/students');
 		}
-		else {
-		    $this->session->set_flashdata('error', 'Invoice for first month exist within system or student is not enrolled to class.');
+		elseif($result=='enrollment_date') {
+		    $this->session->set_flashdata('error', 'Enrollment Date is out of range.');
+            return redirect('admin/students');
+		}
+		elseif($result=='no_class') {
+		    $this->session->set_flashdata('error', 'Invoice for first month exist within system');
             return redirect('admin/students');
 		}
 	}
