@@ -1283,7 +1283,7 @@ function get_attendance_sheet($class_code = false, $attendance_date)
 			$ci->db->where(['student_id'	=>	$result->student_id, 'class_id'	=>	$result->class_id]);
 			$query2 = $ci->db->get()->row();
 			$result2 = $query2;
-			if(strtotime(date('Y-m-d', strtotime($result2->enrollment_date))) <= strtotime(date('Y-m-d')))
+			if(strtotime(date('Y-m-d', strtotime($result2->enrollment_date))) <= strtotime(date('Y-m-d', strtotime($attendance_date))))
 			{
 ?>
             <tr>
@@ -1346,45 +1346,55 @@ function get_attendance_edit_sheet($class_code, $attendance_date)
             <?php
 	foreach($query as $result)
 		{
-			$query1 = $ci->db->get_where(DB_ATTENDANCE, ['DATE(attendance.attendance_date)' => $attendance_date, 'student_id'	=>	$result->student_id, 'class_code'	=>	$result->class_code]);
-			$result1 = $query1->row();
-?>
-                <tr>
-                    <td><input type="checkbox" name="student_id_transfer" value="<?php
-		echo $result->student_id; ?>"></td>
-                    <td><?php
-		echo $result->nric; ?></td>
-                    <td><?php
-		echo $result->firstname . ' ' . $result->lastname; ?></td>
-                    <td>
-                        <input type="hidden" name="student_id[]" class="form-control" value="<?php
-		echo $result->student_id; ?>">
-                        <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		if($result1) {echo (get_attendance_status($result1->status) == 'L') ? 1 : 0;}else {echo "0";} ?>" placeholder="L">
-                        <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		if($result1) {echo (get_attendance_status($result1->status) == 'M') ? 1 : 0;}else {echo "0";} ?>" placeholder="M">
-                        <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		if($result1) {echo (get_attendance_status($result1->status) == 'E' && $result1->attendance_date==$attendance_date) ? 1 : 0;}else {echo "0";} ?>" placeholder="E">
-                        <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		if($result1) {echo (get_attendance_status($result1->status) == 'X' && $result1->attendance_date==$attendance_date) ? 1 : 0;}else {echo "0";} ?>" placeholder="X">
-                        <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		if($result1) {echo (get_attendance_status($result1->status) == 'G' && $result1->attendance_date==$attendance_date) ? 1 : 0;}else {echo "0";} ?>" placeholder="G">
-                        <input type="text" name="attendance_value<?php
-		echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
-		if($result1) {echo (get_attendance_status($result1->status) == 'H' && $attendance_date==$result1->attendance_date) ? 1 : 0;}else {echo "0";} ?>" placeholder="H">
-                    </td>
-                    <td><input type="text" name="attendance_remark[]" class="form-control" value="<?php
-		echo isset($result->remark) ? $result->remark : ''; ?>" placeholder="Remark">
-                        <p class="text-muted">Student Reason: <strong><?php
-		echo isset($result->reason_for_absent) ? $result->reason_for_absent : '-'; ?></strong></p></td>
-                    </tr>
-                    <?php
-		$i++;
+			$ci->db->select('*');
+			$ci->db->from('student_enrollment');
+			$ci->db->where(['student_id'	=>	$result->student_id, 'class_id'	=>	$result->class_id]);
+			$query2 = $ci->db->get()->row();
+			$result2 = $query2;
+			var_dump($result2->enrollment_date);
+			if(strtotime(date('Y-m-d', strtotime($result2->enrollment_date))) <= strtotime(date('Y-m-d', strtotime($attendance_date))))
+			{
+				$query1 = $ci->db->get_where(DB_ATTENDANCE, ['DATE(attendance.attendance_date)' => $attendance_date, 'student_id'	=>	$result->student_id, 'class_code'	=>	$result->class_code]);
+				$result1 = $query1->row();
+				$attendance_status = json_decode($result1->status);
+	?>
+					<tr>
+						<td><input type="checkbox" name="student_id_transfer" value="<?php
+			echo $result->student_id; ?>"></td>
+						<td><?php
+			echo $result->nric; ?></td>
+						<td><?php
+			echo $result->firstname . ' ' . $result->lastname; ?></td>
+						<td>
+							<input type="hidden" name="student_id[]" class="form-control" value="<?php
+			echo $result->student_id; ?>">
+							<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
+			if($result1) {echo $attendance_status[0];}else {echo "0";} ?>" placeholder="L">
+							<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
+			if($result1) {echo $attendance_status[1];}else {echo "0";} ?>" placeholder="M">
+							<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
+			if($result1) {echo $attendance_status[2];}else {echo "0";} ?>" placeholder="E">
+							<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
+			if($result1) {echo $attendance_status[3];}else {echo "0";} ?>" placeholder="X">
+							<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
+			if($result1) {echo $attendance_status[4];}else {echo "0";} ?>" placeholder="G">
+							<input type="text" name="attendance_value<?php
+			echo $i; ?>[]" class="form-control text-center w-50 d-inline attendance" value="<?php
+			if($result1) {echo $attendance_status[5];}else {echo "0";} ?>" placeholder="H">
+						</td>
+						<td><input type="text" name="attendance_remark[]" class="form-control" value="<?php
+			echo isset($result->remark) ? $result->remark : ''; ?>" placeholder="Remark">
+							<p class="text-muted">Student Reason: <strong><?php
+			echo isset($result->reason_for_absent) ? $result->reason_for_absent : '-'; ?></strong></p></td>
+						</tr>
+						<?php
+			$i++;
+			}
 		}
 	}
 
