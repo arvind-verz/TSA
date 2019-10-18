@@ -256,7 +256,12 @@ function get_enrollment_type_popup_content_update($student_id, $class_id)
             <label for="">Remarks</label>
             <input type="text" name="remarks" class="form-control" value="<?php
 		echo $remarks; ?>">
-          </div>
+		  </div>
+		  <script>
+			$(".datepicker").datepicker({
+				format: 'yyyy-mm-dd'
+			});
+		  </script>
         <?php
 		}
 	}
