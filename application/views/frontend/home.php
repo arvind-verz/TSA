@@ -92,22 +92,11 @@
 									<div class="testi-img"><img src="<?php echo base_url("assets/files/testimonial/".$test['image_name']);?>" alt="" class="responsive"></div>
 								</div>
 								<div class="client-testi">
-									<p><?=substr($test['content'],0,100)?></p>
+									<p><?php if(strlen($test['content'])>100) {echo substr($test['content'], 0, 100).'...';}else {echo $test['content'];} ?></p>
 									<p class="size18 txt-dark"><strong><?=$test['title']?></strong></p>
 									<a href="<?php echo site_url("testimonials");?>" class="button btn-sm">Read More</a> </div>
 							</div>
-						</div><!-- 
-						                        <div class="home-testimonial-slide">
-							<div class="htbox">
-								<div class="testi-img-holder">
-									<div class="testi-img"><img src="<?php echo base_url("assets/files/testimonial/".$test['image_name']);?>" alt="" class="responsive"></div>
-								</div>
-								<div class="client-testi">
-									<p><?=substr($test['content'],0,100)?></p>
-									<p class="size18 txt-dark"><strong><?=$test['title']?></strong></p>
-									<a href="<?php echo site_url("testimonial");?>" class="button btn-sm">Read More</a> </div>
-							</div>
-						</div> -->
+						</div>
                         <?php endforeach;?>	
 					</div>
 				</div>

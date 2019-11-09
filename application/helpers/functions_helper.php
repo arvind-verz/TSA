@@ -88,6 +88,29 @@ function get_tutor_of_class($class_id)
 	return "-";
 	}
 
+	function getPageList($array, $position, $parent_id = 0, $indent = 0)
+    {
+        $data = '';
+        if ($array) {
+            foreach ($array as $key => $value) {
+                if ($value['parent_id'] == $parent_id) {
+                    $data .= '<tr>';
+                    $data .= '<td>';
+                    $data .= str_repeat('<i class="fa fa-minus"></i> &nbsp;', $indent);
+                    $data .= $value['menu_title'] . '</td>';
+					$data .= '<td>' . $value['sort_order'] . '</td>';
+					$data .= '<td>';
+                    $data .= '<a href="' . site_url('admin/edit-menu-item/'.$position.'/'.$value['id']) . '"><span class="glyphicon glyphicon-edit"></span></a>';
+                    $data .= '<a href="' . site_url('admin/del-menu-item/'.$position.'/'.$value['id']) . '" onClick="return confirm(\'Are you sure want to delete?\');"><span class="glyphicon glyphicon-trash"></span></a>';
+                    $data .= '</td>';
+                    $data .= '</tr>';
+                    $data .= getPageList($array, $position, $value['id'], $indent + 1);
+                }
+            }
+        }
+        return $data;
+    }
+
 function get_user_type($user_type)
 	{
 	$user_type_arr = ['Super Admin', 'Admin', 'Tutor'];
@@ -1393,9 +1416,9 @@ function get_attendance_edit_sheet($class_code, $attendance_date)
 			if($result1) {echo $attendance_status[5];}else {echo "0";} ?>" placeholder="H">
 						</td>
 						<td><input type="text" name="attendance_remark[]" class="form-control" value="<?php
-			echo isset($result->remark) ? $result->remark : ''; ?>" placeholder="Remark">
+			echo $result1->remark ?? ''; ?>" placeholder="Remark">
 							<p class="text-muted">Student Reason: <strong><?php
-			echo isset($result->reason_for_absent) ? $result->reason_for_absent : '-'; ?></strong></p></td>
+			echo $result1->reason_for_absent ?? '-'; ?></strong></p></td>
 						</tr>
 						<?php
 			$i++;

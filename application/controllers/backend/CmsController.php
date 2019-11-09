@@ -143,7 +143,7 @@ class CmsController extends CI_Controller {
         $data['page_title']  = MENU_MANAGE;
 		$data['meta_title'] = MENU_MANAGE;
 		$data['position'] = $position;
-		$get_value = $this->Cms_model->get_custom_menu_page($position);
+		$get_value = $this->Cms_model->get_all_custom_menu_page($position);
 		$data['display_result'] = $get_value->result_array();
 		$this->load->view('backend/include/header', $data);
 		$this->load->view('backend/include/sidebar');
