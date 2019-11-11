@@ -9,9 +9,14 @@
 				</ul>
 			</div>
 		</div> -->
+		<div class="fullcontainer">
+			<div class="container">
 		<?=$page[0]['page_content']?>
+		</div>
+		</div>
 		<!-- Section END --> 
 		<!-- Section -->
+		<?php if($page[0]['footer']) { ?>
 		<div class="fullcontainer bottom background parallax" style="background-image:url(assets/images/bottom-bg.jpg);" data-img-width="1400" data-img-height="400" data-diff="100">
 			<div class="container">
 				<div class="inner-container-md animatedParent">
@@ -20,4 +25,5 @@
 				</div>
 			</div>
 		</div>
+		<?php } ?>
 		<!-- Section END --> 

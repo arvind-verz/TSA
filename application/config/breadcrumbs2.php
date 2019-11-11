@@ -18,8 +18,8 @@
 $config['tag_open'] = '<ul class="breadcrumbs">';
 $config['tag_close'] = '</ul>';
 $config['crumb_open'] = '<li>';
-$config['crumb_last_open'] = '<li><strong>';
-$config['crumb_close'] = '</<strong></li>';
+$config['crumb_last_open'] = '<li>';
+$config['crumb_close'] = '</li>';
 
 
 /* End of file breadcrumbs.php */

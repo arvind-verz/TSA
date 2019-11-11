@@ -95,7 +95,17 @@
 
                   $query = $this->db->get();
                   return $query;
-          }
+	  }
+	  
+	  function get_all_custom_menu_page($position) {
+		$this->db->select('*')
+			->from(TBL_MENU)->where('position' , $position);
+
+		$this->db->order_by('sort_order' , 'ASC');
+
+		$query = $this->db->get();
+		return $query;
+	}
 		  function count_cms_filter($FlterData) {
                   $this->db->select('count(cp.id) as `TotalNum`')
                           ->from(TBL_CMS . ' as `cp`');

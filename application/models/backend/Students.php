@@ -685,11 +685,11 @@ class Students extends CI_Model
 					if ($query) {
 						$this->load->library('M_pdf');
 						$pdf_download = $this->m_pdf->download_my_mPDF($invoice_file);
-						$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message, $file_path);
+						/*$mail = send_mail($emailto, $invoice_id, $date, $invoice_amount, $type, $subject, $message, $file_path);
 						
 						if ($mail == true) {
 							return "success";
-						}
+						}*/
 						return "success";
 					}
 				}
