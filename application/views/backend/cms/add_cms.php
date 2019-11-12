@@ -99,14 +99,14 @@
                 <textarea class="form-control" name="seo_description" id="seo_description"><?php echo set_value('seo_description'); ?></textarea>
 							</div>
 							<div class="form-group">
-							<label for="">Footer</label>
+							<label for="">Footer Banner Display?</label>
 							<label class="radio-inline"><input type="radio" name="footer" <?php if(set_value(['footer'])==1) {echo 'checked';} ?> value="1">Yes</label>
 							<label class="radio-inline"><input type="radio" name="footer" <?php if(set_value(['footer'])==0) {echo 'checked';} ?> value="0">No</label>
 						</div>
               </div>
             <div class="box-footer">
               <div class="form-group">
-                <button class="btn btn-info" type="reset" >Cancel</button>
+							<a href="<?php echo site_url('admin/manage-cms'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                 <button type="submit" class="btn btn-info pull-right" value="update_form" name="update_form" onClick="return cms_form_valid();">Submit</button>
               </div>
             </div>
