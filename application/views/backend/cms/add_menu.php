@@ -69,7 +69,7 @@
               </div>
             <div class="box-footer">
              
-                <button class="btn btn-info" type="reset">Cancel</button>
+						<a href="<?php echo site_url('admin/manage-menu-list/'.$menu_pos); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                 <button type="submit" class="btn btn-info pull-right" value="update_form" name="update_form">Submit</button>
              
             </div>

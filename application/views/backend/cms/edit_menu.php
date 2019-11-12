@@ -88,8 +88,8 @@
               </div>
             <div class="box-footer">
               <div class="form-group">
-                <button type="reset" >Cancel</button>
-                <button type="submit" value="update_form" name="update_form" onClick="return menu_form_valid();">Submit</button>
+								<a href="<?php echo site_url('admin/manage-menu-list/'.$menu_pos); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
+                <button type="submit" class="btn btn-default" value="update_form" name="update_form" onClick="return menu_form_valid();">Submit</button>
               </div>
             </div>
           <?php echo form_close(); ?>

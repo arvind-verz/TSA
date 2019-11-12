@@ -92,7 +92,16 @@
 									<div class="testi-img"><img src="<?php echo base_url("assets/files/testimonial/".$test['image_name']);?>" alt="" class="responsive"></div>
 								</div>
 								<div class="client-testi">
-									<p><?php if(strlen($test['content'])>100) {echo substr($test['content'], 0, 100).'...';}else {echo $test['content'];} ?></p>
+									<p>
+										<?php
+											if($test['content'])
+											{
+												$word = wordwrap($test['content'], 100, '@#@');
+												$word_explode = explode('@#@', $word);
+												echo $word_explode[0].'...';
+											}
+										?>
+									</p>
 									<p class="size18 txt-dark"><strong><?=$test['title']?></strong></p>
 									<a href="<?php echo site_url("testimonials");?>" class="button btn-sm">Read More</a> </div>
 							</div>

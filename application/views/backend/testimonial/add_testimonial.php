@@ -47,7 +47,7 @@
                   </label>
                 </div>
                 <div class="form-group">
-                  <button type="reset" class="btn btn-info">Cancel</button>
+								<a href="<?php echo site_url('admin/manage-testimonial'); ?>" class="btn btn-default"><?php echo CANCEL ?></a>
                   <button type="submit" value="update_form" name="update_form" class="btn btn-info pull-right" onClick="return banner_form_valid();">Submit</button>
                 </div>
               </div>
