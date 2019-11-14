@@ -396,7 +396,6 @@ function student_registration_template($name, $username, $email, $password, $log
 		</style>
 	</head>
 	<body>
-		<span class='preheader'>Thanks for trying out [Product Name]. We've pulled together some information and resources to help you get started.</span>
 		<table class='email-wrapper' width='100%' cellpadding='0' cellspacing='0'>
 			<tr>
 				<td align='center'>
@@ -430,7 +429,7 @@ function student_registration_template($name, $username, $email, $password, $log
 																	<table border='0' cellspacing='0' cellpadding='0'>
 																		<tr>
 																			<td>
-																				<a href='" . $login_link . "' class='button button--' target='_blank'>Login</a>
+																				<a href='" . $login_link . "' class='button' target='_blank'>Login</a>
 																			</td>
 																		</tr>
 																	</table>
